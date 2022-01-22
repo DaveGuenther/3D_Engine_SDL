@@ -3,8 +3,10 @@
 #include <vector>
 #include <sstream> // used for stringstream
 #include <algorithm> // used for std::remove_if() string ops
+#include "Vec3d.h"
+#include "Triangle.h"
 #include "Mesh.h"
-#include "vec3d.h"
+
 
 
 Mesh::Mesh(void) {
@@ -28,7 +30,7 @@ std::vector<float> Mesh::string_to_float_vector(std::string input_string){
 	return tri_points;
 } 
 
-std::vector<Mesh::triangle> Mesh::get_tris(){
+std::vector<Triangle> Mesh::get_tris(){
 	return mesh.tris;
 }
 
@@ -57,10 +59,11 @@ void Mesh::Load_Mesh(std::string filename){
 					std::cout << tri_points.at(i) << std::endl;
 				}
 				// Add float vector values to a triangle using right hand rule
-				vec3d pt1(tri_points.at(0), tri_points.at(1), tri_points.at(2));
-				vec3d pt2(tri_points.at(3), tri_points.at(4),tri_points.at(5));
-				vec3d pt3(tri_points.at(6),tri_points.at(7),tri_points.at(8));
-				add_3D_triangle(pt1, pt2, pt3);
+				Vec3d pt1(tri_points.at(0), tri_points.at(1), tri_points.at(2));
+				Vec3d pt2(tri_points.at(3), tri_points.at(4),tri_points.at(5));
+				Vec3d pt3(tri_points.at(6),tri_points.at(7),tri_points.at(8));
+				Triangle this_tri(pt1, pt2, pt3);
+				add_3D_triangle(this_tri);
 
 			}else if (line.empty()){
 				// Empty line, do nothing
@@ -76,6 +79,6 @@ void Mesh::Load_Mesh(std::string filename){
 
 }
 
-void Mesh::add_3D_triangle(vec3d pt1, vec3d pt2, vec3d pt3){
-	mesh.tris.push_back({pt1, pt2, pt3});
+void Mesh::add_3D_triangle(Triangle this_tri){
+	mesh.tris.push_back(this_tri);
 }

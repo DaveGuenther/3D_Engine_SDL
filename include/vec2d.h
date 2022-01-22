@@ -1,12 +1,12 @@
 #ifndef VEC2D_H
 #define VEC2D_H
 
-class vec2d{
+class Vec2d{
 
     public:
 		float x;
 		float y;
-        vec2d();
+        Vec2d();
 };
 
 #endif

@@ -6,8 +6,8 @@
 #include <SDL2/SDL.h>
 
 #include "Mesh.h"
-#include "vec2d.h"
-#include "mat4x4.h"
+#include "Vec2d.h"
+#include "Mat4x4.h"
 #include "Renderer.h"
 
 
@@ -33,9 +33,9 @@ class Renderer{
         float fAspectRatio;
         float fFOV_rad;
 
-        mat4x4 matProj, mat_XRot, mat_ZRot;  //[row][column]
+        Mat4x4 matProj, mat_XRot, mat_ZRot;  //[row][column]
 
-        vec2d cart_to_screen(vec2d this_point);
+        Vec2d cart_to_screen(Vec2d this_point);
 
     public:
 

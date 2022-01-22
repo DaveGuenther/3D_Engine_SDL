@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include "Renderer.h"
+#include "Triangle.h"
 
 //Public Methods
 Renderer::Renderer(void){
@@ -41,13 +42,13 @@ Renderer::Renderer(void){
 //void UpdateScreen(std::vector<Mesh>& mesh_pipe)
 void Renderer::UpdateScreen(const std::vector<Mesh> &mesh_pipe){
 	for (auto this_mesh: mesh_pipe){
-		std::vector<Mesh::triangle> tris = this_mesh.get_tris();
+		std::vector<Triangle> tris = this_mesh.get_tris();
 
 	}
 } 
 
 //Private Methods
-vec2d Renderer::cart_to_screen(vec2d this_point)
+Vec2d Renderer::cart_to_screen(Vec2d this_point)
 {
 	float HALF_SCREEN_W = (SCREEN_W)/2;
 	float scaled_x = this_point.x*(HALF_SCREEN_W);
