@@ -31,7 +31,7 @@ std::vector<float> Mesh::string_to_float_vector(std::string input_string){
 } 
 
 std::vector<Triangle> Mesh::get_tris(){
-	return mesh.tris;
+	return tris;
 }
 
 void Mesh::Load_Mesh(std::string filename){
@@ -80,5 +80,5 @@ void Mesh::Load_Mesh(std::string filename){
 }
 
 void Mesh::add_3D_triangle(Triangle this_tri){
-	mesh.tris.push_back(this_tri);
+	tris.push_back(this_tri);
 }

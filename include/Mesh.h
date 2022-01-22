@@ -9,23 +9,20 @@
 
 class Mesh {
 
-		
+	private:
+		std::vector<Triangle> tris; 		
+		std::vector<float> string_to_float_vector(std::string input_string);
+		void add_3D_triangle(Triangle this_tri);
+				
 	public:
 		
-		struct mesh_of_tris
-		{
-			std::vector<Triangle> tris;
-		};
 
+		
 		Mesh();
 		void Load_Mesh(std::string filename);
 		std::vector<Triangle> get_tris(); 
 		
-	private: 		
-		mesh_of_tris mesh;	
 
-		std::vector<float> string_to_float_vector(std::string input_string);
-		void add_3D_triangle(Triangle this_tri);
 		
 };
 
