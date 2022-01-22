@@ -9,6 +9,7 @@
 #include "Vec2d.h"
 #include "Mat4x4.h"
 #include "Renderer.h"
+#include "Mesh_Pipeline.h"
 
 
 
@@ -40,7 +41,7 @@ class Renderer{
     public:
 
         Renderer();
-        void UpdateScreen(const std::vector<Mesh> &mesh_pipe);
+        void UpdateScreen(Mesh_Pipeline &this_mesh_pipeline);
         void shutdown();
 };
 

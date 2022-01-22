@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include "Renderer.h"
 #include "Triangle.h"
+#include "Mesh_Pipeline.h"
 
 //Public Methods
 Renderer::Renderer(void){
@@ -39,9 +40,9 @@ Renderer::Renderer(void){
 	SDL_RenderClear(renderer);
 
 }
-//void UpdateScreen(std::vector<Mesh>& mesh_pipe)
-void Renderer::UpdateScreen(const std::vector<Mesh> &mesh_pipe){
-	for (auto this_mesh: mesh_pipe){
+//void UpdateScreen(std::vector<Mesh> &mesh_pipe)
+void Renderer::UpdateScreen(Mesh_Pipeline &this_mesh_pipeline){
+	for (auto this_mesh: this_mesh_pipeline.Get_Meshes()){
 		std::vector<Triangle> tris = this_mesh.get_tris();
 
 	}

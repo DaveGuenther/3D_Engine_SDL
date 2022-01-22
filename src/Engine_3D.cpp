@@ -14,11 +14,8 @@ Engine_3D::Engine_3D(void){
 }
 
 void Engine_3D::load_meshes(){
-
-    
-	mesh_pipeline.push_back(Mesh());
-    mesh_pipeline.back().Load_Mesh("block.mesh");
-
+    // Eventually allow this function to read a list of mesh file referenes and load them
+    mesh_pipeline.Add_Mesh_to_Pipeline("block.mesh");
 }
 
 bool Engine_3D::is_running(){
