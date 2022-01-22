@@ -1,36 +1,31 @@
+
 #include <iostream>
+#include <string>
 #include <vector>
+#include <filesystem>
+#include <unistd.h>
+
 #include <SDL2/SDL.h>
 
+#include "Engine_3D.h"
 
-int SCREEN_W = 640;
-int SCREEN_H = 360;
 
-struct vec3d
-{
-	float x,y,z;
-};
 
-struct triangle
-{
-	vec3d p[3];
-};
 
-struct mesh
-{
-	std::vector<triangle> tris;
-};
 
-struct mat4x4
+
+/*
+		
+typedef struct mat4x4
 {
 	float m[4][4]={0};
-};
+} mat4x4;
+*/
 
-struct vec2d
-{
-	float x;
-	float y;
-};
+
+
+
+/*
 
 vec2d cart_to_screen(vec2d this_point)
 {
@@ -76,69 +71,91 @@ void DrawTriangle(SDL_Renderer *renderer, vec2d vert1, vec2d vert2, vec2d vert3,
 	SDL_RenderDrawLineF(renderer, vert2.x, vert2.y, vert3.x, vert3.y);
 	SDL_RenderDrawLineF(renderer, vert3.x, vert3.y, vert1.x, vert1.y);
 }
-
+*/
 int main(int argv, char** args)
 {
-	SDL_Init(SDL_INIT_EVERYTHING);
+	//std::cout << "Current working directory: " << std::filesystem::current_path() << std::endl;
 
-	float fTheta, tTheta=45.0f;
+	//std::cout.flush();
+	//std::cout << "Current Working Directory: "<< std::filesystem::current_path() << std::endl;
+	
+	Engine_3D Game_Engine;
+	Game_Engine.load_meshes();
+
+	while(Game_Engine.is_running()){
+		Game_Engine.engine_update();
+	}
+	
+	Game_Engine.shutdown();
+	
+	//SDL_DestroyRenderer(renderer);
+	//SDL_DestroyWindow(window);
+	//SDL_Quit();
+	
+	
+	/*
+	//SDL_Init(SDL_INIT_EVERYTHING);
+
+	//float fTheta, tTheta=45.0f;
 
 	// Projection Matrix
-	float fNear = 0.1;
-	float fFar = 1000.0;
-	float fFOV=90.0;
-	float fAspectRatio = (float)SCREEN_H/(float)SCREEN_W;
-	float fFOV_rad = 1.0/(SDL_tanf((fFOV/2)*(3.14159265/180.0)));
+	//float fNear = 0.1;
+	//float fFar = 1000.0;
+	//float fFOV=90.0;
+	//float fAspectRatio = (float)SCREEN_H/(float)SCREEN_W;
+	//float fFOV_rad = 1.0/(SDL_tanf((fFOV/2)*(3.14159265/180.0)));
 
-	mat4x4 matProj, mat_XRot, mat_ZRot;  //[row][column]
-	matProj.m[0][0] = fAspectRatio*fFOV_rad;
-	matProj.m[1][0] = 0.0;
-	matProj.m[2][0] = 0.0;
-	matProj.m[3][0] = 0.0;
-	matProj.m[0][1] = 0.0;
-	matProj.m[1][1] = fFOV_rad;
-	matProj.m[2][1] = 0.0;
-	matProj.m[3][1] = 0.0;
-	matProj.m[0][2] = 0.0;
-	matProj.m[1][2] = 0.0;
-	matProj.m[2][2] = fFar/(fFar-fNear);
-	matProj.m[3][2] = (-fFar*fNear)/(fFar-fNear);
-	matProj.m[0][3] = 0.0;
-	matProj.m[1][3] = 0.0;
-	matProj.m[2][3] = 1.0;
-	matProj.m[3][3] = 0.0;
+	//mat4x4 matProj, mat_XRot, mat_ZRot;  //[row][column]
+	//matProj.m[0][0] = fAspectRatio*fFOV_rad;
+	//matProj.m[1][0] = 0.0;
+	//matProj.m[2][0] = 0.0;
+	//matProj.m[3][0] = 0.0;
+	//matProj.m[0][1] = 0.0;
+	//matProj.m[1][1] = fFOV_rad;
+	//matProj.m[2][1] = 0.0;
+	//matProj.m[3][1] = 0.0;
+	//matProj.m[0][2] = 0.0;
+	//matProj.m[1][2] = 0.0;
+	//matProj.m[2][2] = fFar/(fFar-fNear);
+	//matProj.m[3][2] = (-fFar*fNear)/(fFar-fNear);
+	//matProj.m[0][3] = 0.0;
+	//matProj.m[1][3] = 0.0;
+	//matProj.m[2][3] = 1.0;
+	//matProj.m[3][3] = 0.0;
 	
 
-
-
+*/
+	
 	// define cube in 3D space made up of triangles.  tris are drawn in clockwise order when facing the triangle
-	mesh meshCube;
-	meshCube.tris = {
-		//South
-		{0,0,0,		0,1,0,		1,1,0},
-		{0,0,0,		1,1,0,		1,0,0},
+/*
+	std::vector<Mesh> mesh_pipeline;
+	mesh_pipeline.push_back(Mesh());
 
-		//East
-		{1,0,0,		1,1,0,		1,1,1},
-		{1,0,0,		1,1,1,		1,0,1},
+	//South
+	mesh_pipeline.back().Add_3D_triangle(0.0f, 0.0f, 0.0f,		0.0f, 1.0f, 0.0f,		1.0f, 1.0f, 0.0f);
+	mesh_pipeline.back().Add_3D_triangle(0.0f, 0.0f, 0.0f,		1.0f, 1.0f, 0.0f,		1.0f, 0.0f, 0.0f);
+	
+	//East
+	mesh_pipeline.back().Add_3D_triangle(1.0f, 0.0f, 0.0f,		1.0f, 1.0f, 0.0f,		1.0f, 1.0f, 1.0f);
+	mesh_pipeline.back().Add_3D_triangle(1.0f, 0.0f, 0.0f,		1.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f);
 
-		//North
-		{1,0,1,		1,1,1,		0,1,1},
-		{1,0,1,		0,1,1,		0,0,1},
+	//North
+	mesh_pipeline.back().Add_3D_triangle(1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f);
+	mesh_pipeline.back().Add_3D_triangle(1.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f);
 
-		//West
-		{0,0,1,		0,1,1,		0,1,0},
-		{0,0,1,		0,1,0,		0,0,0},
+	//West
+	mesh_pipeline.back().Add_3D_triangle(0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 1.0f, 0.0f);
+	mesh_pipeline.back().Add_3D_triangle(0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 0.0f);
 
-		//Top
-		{0,1,0,		0,1,1,		1,1,1},
-		{0,1,0,		1,1,1,		1,1,0},
+	//Top
+	mesh_pipeline.back().Add_3D_triangle(0.0f, 1.0f, 0.0f,		0.0f, 1.0f, 1.0f,		1.0f, 1.0f, 1.0f);
+	mesh_pipeline.back().Add_3D_triangle(0.0f, 1.0f, 0.0f,		1.0f, 1.0f, 1.0f,		1.0f, 1.0f, 0.0f);
 
-		//Bottom
-		{1,0,0,		1,0,1,		0,0,1},
-		{1,0,0,		0,0,1,		0,0,0}
-	};
-
+	//Bottom
+	mesh_pipeline.back().Add_3D_triangle(1.0f, 0.0f, 0.0f,		1.0f, 0.0f, 1.0f,		0.0f, 0.0f, 1.0f);
+	mesh_pipeline.back().Add_3D_triangle(1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f, 0.0f);
+	*/
+/*
 	SDL_Window *window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -276,6 +293,6 @@ int main(int argv, char** args)
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
-
+*/
 	return 0;
 }

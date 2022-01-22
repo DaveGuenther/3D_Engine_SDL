@@ -4,7 +4,9 @@
             "name": "GCC",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/SDL/SDL2-2.0.18/x86_64-w64-mingw32/include"
+                "C:/SDL/SDL2-2.0.18/x86_64-w64-mingw32/include",
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/src"
             ],
             "defines": [
                 "_DEBUG",
