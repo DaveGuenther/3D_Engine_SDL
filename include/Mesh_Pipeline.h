@@ -30,12 +30,16 @@ class Mesh_Pipeline{
      */
     void Add_Mesh_to_Pipeline(Mesh this_mesh);
 
+
+
     /**
      * @brief 
      * 
      * @return std::vector<Mesh> 
      */
     std::vector<Mesh> Get_Meshes();
+
+    void Set_Rot_Angle_Changes_for_Pipeline(float fTheta_in, float tTheta_in);
 
 };
 

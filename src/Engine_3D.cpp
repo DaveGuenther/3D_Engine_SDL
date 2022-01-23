@@ -3,6 +3,8 @@
 #include "Mesh.h"
 #include "Renderer.h"
 #include "Engine_3D.h"
+#include "Rotator_Service.h"
+#include "Mesh_Pipeline.h"
 
 Engine_3D::Engine_3D(void){
 
@@ -44,30 +46,37 @@ void Engine_3D::engine_update(){
             {
                 fTheta +=1;
                 
+                mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(fTheta, 0);
+                
             }
             
             if (event.key.keysym.sym == SDLK_LEFT)
             {
                 fTheta -=1;
+                mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(fTheta, 0);
                 
             }
 
             if (event.key.keysym.sym == SDLK_UP)
             {
                 tTheta +=1;
-                
+                mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(0, tTheta);
             }
             
             if (event.key.keysym.sym == SDLK_DOWN)
             {
                 tTheta -=1;
+                mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(0, tTheta);
                 
             }
         }
     }
-    // Calculate Tranlations
+
 
     // Calculate Rotations
+    Rotator_Service::Rotate_Pipeline(mesh_pipeline);
+
+    // Calculate Tranlations
 
     // Establish Projection on mesh pipeline
     Engine_Renderer.Refresh_Screen(mesh_pipeline);

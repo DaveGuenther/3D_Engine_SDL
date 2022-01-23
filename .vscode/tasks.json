@@ -18,6 +18,7 @@
 				"${workspaceFolder}\\src\\Triangle.cpp",
 				"${workspaceFolder}\\src\\Mesh_Pipeline.cpp",
 				"${workspaceFolder}\\src\\Multiply_Matrix_Service.cpp",
+				"${workspaceFolder}\\src\\Rotator_Service.cpp",
 				"-I",
 				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\include",
 				"-I",

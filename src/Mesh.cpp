@@ -10,8 +10,23 @@
 
 
 Mesh::Mesh(void) {
-
+	fTheta=0.0f;
+	tTheta=0.0f;
 }
+
+float Mesh::get_fTheta(){
+	return fTheta;
+}
+
+float Mesh::get_tTheta(){
+	return tTheta;
+}
+
+void Mesh::Set_Rot_Angles(float fTheta_in, float tTheta_in){
+	fTheta=fTheta_in;
+	tTheta=tTheta_in;
+}
+
 
 std::vector<float> Mesh::string_to_float_vector(std::string input_string){
 	/*
