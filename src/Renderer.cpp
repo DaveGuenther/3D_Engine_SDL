@@ -2,8 +2,8 @@
 #include "Renderer.h"
 #include "Triangle.h"
 #include "Mesh_Pipeline.h"
+#include "Multiply_Matrix_Service.h"
 
-//Public Methods
 Renderer::Renderer(void){
     // SDL and Screen initializing
 	SCREEN_W = 640;
@@ -40,16 +40,73 @@ Renderer::Renderer(void){
 	SDL_RenderClear(renderer);
 
 }
-//void UpdateScreen(std::vector<Mesh> &mesh_pipe)
-void Renderer::UpdateScreen(Mesh_Pipeline &this_mesh_pipeline){
+
+void Renderer::Draw_Triangle_2d(Vec2d vert1, Vec2d vert2, Vec2d vert3, SDL_Color col)
+{
+	
+	SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
+
+	vert1 = Cartesian_to_Screen(vert1);
+	vert2 = Cartesian_to_Screen(vert2);
+	vert3 = Cartesian_to_Screen(vert3);
+	SDL_RenderDrawLineF(renderer, vert1.x, vert1.y, vert2.x, vert2.y);
+	SDL_RenderDrawLineF(renderer, vert2.x, vert2.y, vert3.x, vert3.y);
+	SDL_RenderDrawLineF(renderer, vert3.x, vert3.y, vert1.x, vert1.y);
+}
+
+void Renderer::Project_Triangle_3d(Triangle &tri){
+	// Apply Perspective Projection Matrix
+	Triangle triProjected;
+	
+	Multiply_Matrix_Service::MultiplyMatrixVector(tri.p[0], triProjected.p[0], matProj);
+	Multiply_Matrix_Service::MultiplyMatrixVector(tri.p[1], triProjected.p[1], matProj);
+	Multiply_Matrix_Service::MultiplyMatrixVector(tri.p[2], triProjected.p[2], matProj);
+
+	// Drop 3D to 2D
+	Vec2d point1, point2, point3;
+
+	point1.x = triProjected.p[0].x;
+	point1.y = triProjected.p[0].y;
+
+	point2.x = triProjected.p[1].x;
+	point2.y = triProjected.p[1].y;
+
+	point3.x = triProjected.p[2].x;
+	point3.y = triProjected.p[2].y;			
+
+	SDL_Color col;
+	col.r=255; col.g=0; col.b=0; col.a = 255;
+
+	Draw_Triangle_2d(point1, point2, point3, col);
+}
+
+void Renderer::Refresh_Screen(Mesh_Pipeline &this_mesh_pipeline){
 	for (auto this_mesh: this_mesh_pipeline.Get_Meshes()){
 		std::vector<Triangle> tris = this_mesh.get_tris();
-
+		for (auto tri: tris)
+		{
+			Project_Triangle_3d(tri);
+		
+		}
 	}
+	Draw_Reticle();
+	SDL_RenderPresent(renderer);
 } 
 
+void Renderer::Draw_Reticle(){
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+	// Draw Reticle
+	Vec2d single_point;
+	single_point.x=0;
+	single_point.y=0;
+	single_point = Cartesian_to_Screen(single_point);
+
+	SDL_RenderDrawPointF(renderer, single_point.x, single_point.y);
+}
+
 //Private Methods
-Vec2d Renderer::cart_to_screen(Vec2d this_point)
+Vec2d Renderer::Cartesian_to_Screen(Vec2d this_point)
 {
 	float HALF_SCREEN_W = (SCREEN_W)/2;
 	float scaled_x = this_point.x*(HALF_SCREEN_W);

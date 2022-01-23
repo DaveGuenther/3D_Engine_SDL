@@ -7,6 +7,7 @@
 
 #include "Mesh.h"
 #include "Vec2d.h"
+#include "Vec3d.h"
 #include "Mat4x4.h"
 #include "Renderer.h"
 #include "Mesh_Pipeline.h"
@@ -36,12 +37,15 @@ class Renderer{
 
         Mat4x4 matProj, mat_XRot, mat_ZRot;  //[row][column]
 
-        Vec2d cart_to_screen(Vec2d this_point);
+        void Draw_Reticle();
+        Vec2d Cartesian_to_Screen(Vec2d this_point);
+        void Project_Triangle_3d(Triangle &tri);
+        void Draw_Triangle_2d(Vec2d vert1, Vec2d vert2, Vec2d vert3, SDL_Color col);
 
     public:
 
         Renderer();
-        void UpdateScreen(Mesh_Pipeline &this_mesh_pipeline);
+        void Refresh_Screen(Mesh_Pipeline &this_mesh_pipeline);
         void shutdown();
 };
 

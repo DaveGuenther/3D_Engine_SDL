@@ -70,7 +70,7 @@ void Engine_3D::engine_update(){
     // Calculate Rotations
 
     // Establish Projection on mesh pipeline
-    Engine_Renderer.UpdateScreen(mesh_pipeline);
+    Engine_Renderer.Refresh_Screen(mesh_pipeline);
     ///  Find a way to pass mesh_pipeline to Renderer::Updatecreen wihout errors...
 
 }
