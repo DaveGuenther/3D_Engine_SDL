@@ -6,12 +6,13 @@
 #include "Vec3d.h"
 #include "Triangle.h"
 #include "Mesh.h"
+#include <filesystem>
 
 
 
 Mesh::Mesh(void) {
-	fTheta=0.0f;
-	tTheta=0.0f;
+	fTheta=45.0f;
+	tTheta=45.0f;
 }
 
 float Mesh::get_fTheta(){
@@ -45,7 +46,7 @@ std::vector<float> Mesh::string_to_float_vector(std::string input_string){
 	return tri_points;
 } 
 
-std::vector<Triangle> Mesh::get_tris(){
+std::vector<Triangle>& Mesh::get_tris(){
 	return tris;
 }
 
@@ -53,6 +54,7 @@ void Mesh::Load_Mesh(std::string filename){
 	std::ifstream myfile;
 	filename = "Meshes/"+filename;
 	//std::cout << filename << std::endl;
+	std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
 	myfile.open (filename);
 
 	if (myfile.is_open()) {

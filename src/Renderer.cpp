@@ -81,6 +81,8 @@ void Renderer::Project_Triangle_3d(Triangle &tri){
 }
 
 void Renderer::Refresh_Screen(Mesh_Pipeline &this_mesh_pipeline){
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);	
 	for (auto this_mesh: this_mesh_pipeline.Get_Meshes()){
 		std::vector<Triangle> tris = this_mesh.get_tris();
 		for (auto tri: tris)

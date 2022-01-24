@@ -4,6 +4,10 @@
 #include "Mesh_Pipeline.h"
 #include "Mat4x4.h"
 
+/**
+ * @brief This class will be used to direct rotation operations over the entire mesh pipeline
+ * 
+ */
 class Rotator_Service {
     public: 
         static void Rotate_Pipeline(Mesh_Pipeline &this_mesh_pipeline);

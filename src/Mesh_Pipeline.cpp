@@ -8,7 +8,7 @@ Mesh_Pipeline::Mesh_Pipeline(){
 
 }
 
-std::vector<Mesh> Mesh_Pipeline::Get_Meshes(){
+std::vector<Mesh>& Mesh_Pipeline::Get_Meshes(){
     return Meshes;
 }
 

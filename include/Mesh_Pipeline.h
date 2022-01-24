@@ -11,6 +11,10 @@
 class Mesh_Pipeline{
     private:
 
+    /**
+     * @brief The Meshes vector of the Mesh_Pipeline class is really the ky data object itself.
+     * 
+     */
     std::vector<Mesh> Meshes;
 
     public:
@@ -24,7 +28,7 @@ class Mesh_Pipeline{
     void Add_Mesh_to_Pipeline(std::string filename);
 
     /**
-     * @brief this function adds a Mesh to the Meshes pipeline
+     * @brief this function adds a Mesh to the Meshes vector (the pipeline)
      * 
      * @param this_mesh this is an instance of the Mesh class
      */
@@ -33,12 +37,18 @@ class Mesh_Pipeline{
 
 
     /**
-     * @brief 
+     * @brief This getter method is intended for mutability downstream by returning a reference to the mesh vector rather than the vector itself.  This way when the returned value is used in a for (auto& element: collection) expression, when each element is changed, those changes will be reflected back to the Meshes vector in this class.
      * 
-     * @return std::vector<Mesh> 
+     * @return std::vector<Mesh>& 
      */
-    std::vector<Mesh> Get_Meshes();
+    std::vector<Mesh>& Get_Meshes();
 
+    /**
+     * @brief Calling this method will add the fTheta and tTheta values to the fTheta and tTheta values of EVERY Mesh in the Mesh vector.  It is used to apply a rotation to the whole pipeline.
+     * 
+     * @param fTheta_in X Rotation angle (degrees)
+     * @param tTheta_in Z Rotation angle (degrees)
+     */
     void Set_Rot_Angle_Changes_for_Pipeline(float fTheta_in, float tTheta_in);
 
 };

@@ -30,11 +30,18 @@ Mat4x4 Rotator_Service::Calculate_Rotation_X_Matrix(float fTheta, float tTheta){
 
 
 void Rotator_Service::Rotate_Pipeline(Mesh_Pipeline &this_mesh_pipeline){
-    for (auto this_mesh: this_mesh_pipeline.Get_Meshes()){
+    
+    //  Currently all rotations made here are lost at the end because this_mesh_pipeline is not being updated.  Fix this bug.
+
+
+    // Figure out how to get it so that edits made to this_mesh make it back to this_mesh_pipeline
+    std::vector<Mesh>& Meshes = this_mesh_pipeline.Get_Meshes();
+    for (auto& this_mesh: Meshes){
         float fTheta = this_mesh.get_fTheta();
         float tTheta = this_mesh.get_tTheta();
-        std::vector<Triangle> tris = this_mesh.get_tris();
-        for (auto tri: tris)
+        std::vector<Triangle>& tris = this_mesh.get_tris();
+        // figure out how to get it so that edits made to tri or tris gets updated into this_mesh and then into this_mesh_pipeline.
+        for (auto& tri: tris)
         {
             Mat4x4 mat_ZRot, mat_XRot;
             mat_ZRot = Calculate_Rotation_Z_Matrix(fTheta, tTheta);
