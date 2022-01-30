@@ -1,6 +1,8 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
+#include <string>
 #include "Vec3d.h"
+
 
 // Triangles are always defined in the 3D space
 class Triangle{
@@ -22,7 +24,7 @@ class Triangle{
         void setTrianglePoint(int point, const Vec3d &vec);
         Vec3d getTrianglePoint(int point);
         
-        void print();
+        std::string toString();
 
         
 

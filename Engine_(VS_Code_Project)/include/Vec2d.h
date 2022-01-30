@@ -1,6 +1,7 @@
 #ifndef VEC2D_H
 #define VEC2D_H
-#include <iostream>
+#include <string>
+
 
 class Vec2d{
   public:
@@ -24,8 +25,9 @@ class Vec2d{
 
     float getY(){ return y; }
 
-    void print(){
-      std::cout << "Vec2d (" << x << ", " << y << ")" << std::endl;
+    std::string toString(){
+      std::string ret_val = "Vec2d(" + std::to_string(x)+ ", "+std::to_string(y)+")";
+      return ret_val;
     }
 
     friend bool operator== (const Vec2d & vec1, const Vec2d & vec2){ return (vec1.x==vec2.x && vec1.y==vec2.y);}

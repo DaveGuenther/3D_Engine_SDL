@@ -4,7 +4,7 @@
 
  void print_vector(const std::vector<Vec2d> &this_vector){
      for (auto vec:this_vector){
-        vec.print();
+        std::cout << vec.toString() << std::endl;
      }
  }
 
@@ -12,19 +12,19 @@ int main(){
     int x=1;
     int y=1;
     Vec2d my_vec(x, y);
-    my_vec.print();
+    std::cout << my_vec.toString() << std::endl;
 
     Vec2d copy_vec(my_vec);
-    copy_vec.print();
+    std::cout << copy_vec.toString() << std::endl;
 
     Vec2d empty_vec;
-    empty_vec.print();
+    std::cout << empty_vec.toString() << std::endl;
 
     float u = 2.5f;
     float v = -1.3f;
 
     Vec2d float_vec(u,v);
-    float_vec.print();
+    std::cout << float_vec.toString() << std::endl;
 
     std::vector<Vec2d> my_points = {my_vec, empty_vec,Vec2d(1,4)};
     print_vector(my_points);
@@ -32,7 +32,7 @@ int main(){
     Vec2d incremental_vec;
     incremental_vec.setX(0);
     incremental_vec.setY(-5);
-    incremental_vec.print();
+    std::cout << incremental_vec.toString() << std::endl;
 
     // testing getters
     if (incremental_vec.getX()==0 && incremental_vec.getY()==-5){

@@ -1,6 +1,8 @@
 #ifndef VEC3D_H
 #define VEC3D_H
+#include <string>
 #include "Vec2d.h"
+
 
 class Vec3d:public Vec2d{
   private:
@@ -21,8 +23,9 @@ class Vec3d:public Vec2d{
       z=V.z;
     }
 
-    void print(){
-      std::cout << "Vec3d (" << x << ", " << y << ", " << z << ")" << std::endl;
+    std::string toString(){
+      std::string ret_val = "Vec3d(" + std::to_string(x)+ ", "+std::to_string(y)+ ", "+std::to_string(z)+")";
+      return ret_val;
     }
 
     void setZ(const float &z_in){ z=z_in; }

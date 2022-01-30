@@ -24,11 +24,12 @@ void Triangle::setTrianglePoint(int point, const Vec3d &vec){
     p[point]=vec;
 }
 
-void Triangle::print(){
-    std::cout << "Triangle Points:" << std::endl;
-    p[0].print();
-    p[1].print();
-    p[2].print();
+std::string Triangle::toString(){
+    std::string point1 = p[0].toString();
+    std::string point2 = p[1].toString();
+    std::string point3 = p[2].toString();
+    std::string ret_val = "Triangle(" + point1 + ", " + point2 + ", " + point3 + ")";
+    return ret_val;
 }
 
 Vec3d Triangle::getTrianglePoint(int point){
