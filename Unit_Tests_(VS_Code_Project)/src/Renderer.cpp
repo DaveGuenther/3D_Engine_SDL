@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include "Vec2d.h"
 #include "Renderer.h"
 #include "Triangle.h"
 #include "Mesh_Pipeline.h"
@@ -49,30 +50,40 @@ void Renderer::Draw_Triangle_2d(Vec2d vert1, Vec2d vert2, Vec2d vert3, SDL_Color
 	vert1 = Cartesian_to_Screen(vert1);
 	vert2 = Cartesian_to_Screen(vert2);
 	vert3 = Cartesian_to_Screen(vert3);
-	SDL_RenderDrawLineF(renderer, vert1.x, vert1.y, vert2.x, vert2.y);
-	SDL_RenderDrawLineF(renderer, vert2.x, vert2.y, vert3.x, vert3.y);
-	SDL_RenderDrawLineF(renderer, vert3.x, vert3.y, vert1.x, vert1.y);
+	SDL_RenderDrawLineF(renderer, vert1.getX(), vert1.getY(), vert2.getX(), vert2.getY());
+	SDL_RenderDrawLineF(renderer, vert2.getX(), vert2.getY(), vert3.getX(), vert3.getY());
+	SDL_RenderDrawLineF(renderer, vert3.getX(), vert3.getY(), vert1.getX(), vert1.getY());
 }
 
 void Renderer::Project_Triangle_3d(Triangle &tri){
 	// Apply Perspective Projection Matrix
 	Triangle triProjected;
+	Vec3d pt0; 
+	Vec3d pt1; 
+	Vec3d pt2;
 	
-	Multiply_Matrix_Service::MultiplyMatrixVector(tri.p[0], triProjected.p[0], matProj);
-	Multiply_Matrix_Service::MultiplyMatrixVector(tri.p[1], triProjected.p[1], matProj);
-	Multiply_Matrix_Service::MultiplyMatrixVector(tri.p[2], triProjected.p[2], matProj);
+	Vec3d TriPoint0 = tri.getTrianglePoint(0);
+	Vec3d TriPoint1 = tri.getTrianglePoint(1);
+	Vec3d TriPoint2 = tri.getTrianglePoint(2);
+
+	Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint0, pt0, matProj);
+	Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint1, pt1, matProj);
+	Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint2, pt2, matProj);
+	triProjected.setTrianglePoint(0,pt0);
+	triProjected.setTrianglePoint(1,pt1);
+	triProjected.setTrianglePoint(2,pt2);
 
 	// Drop 3D to 2D
 	Vec2d point1, point2, point3;
 
-	point1.x = triProjected.p[0].x;
-	point1.y = triProjected.p[0].y;
+	point1.setX(triProjected.getTrianglePoint(0).getX());
+	point1.setY(triProjected.getTrianglePoint(0).getY());
 
-	point2.x = triProjected.p[1].x;
-	point2.y = triProjected.p[1].y;
+	point2.setX(triProjected.getTrianglePoint(1).getX());
+	point2.setY(triProjected.getTrianglePoint(1).getY());
 
-	point3.x = triProjected.p[2].x;
-	point3.y = triProjected.p[2].y;			
+	point3.setX(triProjected.getTrianglePoint(2).getX());
+	point3.setY(triProjected.getTrianglePoint(2).getY());			
 
 	SDL_Color col;
 	col.r=255; col.g=0; col.b=0; col.a = 255;
@@ -97,26 +108,28 @@ void Renderer::Refresh_Screen(Mesh_Pipeline &this_mesh_pipeline){
 
 void Renderer::Draw_Reticle(){
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
+	
 	// Draw Reticle
 	Vec2d single_point;
-	single_point.x=0;
-	single_point.y=0;
+	single_point.setX(0);
+	single_point.setY(0);
 	single_point = Cartesian_to_Screen(single_point);
 
-	SDL_RenderDrawPointF(renderer, single_point.x, single_point.y);
+	float x = single_point.getX();
+	float y = single_point.getY();
+	SDL_RenderDrawPointF(renderer, x, y);
 }
 
 //Private Methods
 Vec2d Renderer::Cartesian_to_Screen(Vec2d this_point)
 {
 	float HALF_SCREEN_W = (SCREEN_W)/2;
-	float scaled_x = this_point.x*(HALF_SCREEN_W);
-	this_point.x = scaled_x+(HALF_SCREEN_W);
+	float scaled_x = this_point.getX()*(HALF_SCREEN_W);
+	this_point.setX(scaled_x+(HALF_SCREEN_W));
 
 	float HALF_SCREEN_H = (SCREEN_H)/2;
-	float scaled_y = this_point.y*(HALF_SCREEN_H);
-	this_point.y = SCREEN_H-(scaled_y+(HALF_SCREEN_H));
+	float scaled_y = this_point.getY()*(HALF_SCREEN_H);
+	this_point.setY(SCREEN_H-(scaled_y+(HALF_SCREEN_H)));
 	return this_point;
 } 
 
