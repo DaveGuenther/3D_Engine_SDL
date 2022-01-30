@@ -2,9 +2,9 @@
 
 Triangle::Triangle(){
 
-    p[0]=Vec3d{0, 0, 0};
-    p[1]=Vec3d{0, 0, 0};
-    p[2]=Vec3d{0, 0, 0};
+    p[0]=Vec3d(0,0,0);
+    p[1]=Vec3d(0,0,0);
+    p[2]=Vec3d(0,0,0);
 
 }
 
