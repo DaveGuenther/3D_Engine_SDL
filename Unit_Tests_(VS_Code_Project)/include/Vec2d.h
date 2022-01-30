@@ -28,6 +28,10 @@ class Vec2d{
       std::cout << "Vec2d (" << x << ", " << y << ")" << std::endl;
     }
 
+    friend bool operator== (const Vec2d & vec1, const Vec2d & vec2){ return (vec1.x==vec2.x && vec1.y==vec2.y);}
+
+    friend bool operator!= (const Vec2d & vec1, const Vec2d & vec2){ return !(vec1.x==vec2.x && vec1.y==vec2.y);}
+
   protected:
 		float x;
 		float y;

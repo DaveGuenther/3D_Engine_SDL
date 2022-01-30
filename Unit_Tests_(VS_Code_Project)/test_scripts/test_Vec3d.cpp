@@ -31,6 +31,20 @@ int main(){
     std::vector<Vec3d> my_points = {my_vec, empty_vec,Vec3d(1,4,5)};
     print_vector(my_points);
 
+    // Equality Test
+    if (Vec3d(0,5,1)==Vec3d(0,5,1))
+    {
+        std::cout << "Vectors Matched!" << std::endl;
+    }else{
+        std::cout << "Vectors are Different" << std::endl;
+    }
 
+    //Inequality Test
+    if (Vec3d(0,5,1)!=Vec3d(0,5,-1))
+    {
+        std::cout << "Vectors are Different" << std::endl;
+    }else{
+        std::cout << "Vectors Matched!" << std::endl;
+    }    
     return 0;
 }

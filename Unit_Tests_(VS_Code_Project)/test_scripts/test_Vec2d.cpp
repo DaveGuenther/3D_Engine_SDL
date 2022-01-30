@@ -29,6 +29,21 @@ int main(){
     std::vector<Vec2d> my_points = {my_vec, empty_vec,Vec2d(1,4)};
     print_vector(my_points);
 
+    // Equality Test
+    if (Vec2d(0,5)==Vec2d(0,5))
+    {
+        std::cout << "Vectors Matched!" << std::endl;
+    }else{
+        std::cout << "Vectors are Different" << std::endl;
+    }
+
+    //Inequality Test
+    if (Vec2d(0,5)!=Vec2d(0,6))
+    {
+        std::cout << "Vectors are Different" << std::endl;
+    }else{
+        std::cout << "Vectors Matched!" << std::endl;
+    }    
 
     return 0;
 }
