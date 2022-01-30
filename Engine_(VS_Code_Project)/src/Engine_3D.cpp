@@ -5,14 +5,16 @@
 #include "Engine_3D.h"
 #include "Rotator_Service.h"
 #include "Mesh_Pipeline.h"
+#include "Triangle_Modifier.h"
 
 Engine_3D::Engine_3D(void){
 
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
+    fTheta=50.0f;
+    tTheta=45.0f;
     
     
-
 }
 
 void Engine_3D::load_meshes(){
@@ -26,7 +28,7 @@ bool Engine_3D::is_running(){
 
 void Engine_3D::engine_update(){
     
-    float fTheta, tTheta=45.0f;
+//    float fTheta, tTheta=45.0f;
 
     while (SDL_PollEvent(&event))
     {
@@ -45,28 +47,31 @@ void Engine_3D::engine_update(){
             if (event.key.keysym.sym == SDLK_RIGHT)
             {
                 fTheta +=1;
-                
-                mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(fTheta, 0);
+                //tri_modifications.Add_Rotation(fTheta,0,Vec3d(0,0,0));
+                //mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(fTheta, 0);
                 
             }
             
             if (event.key.keysym.sym == SDLK_LEFT)
             {
                 fTheta -=1;
-                mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(fTheta, 0);
+                //tri_modifications.Add_Rotation(fTheta,0,Vec3d(0,0,0));
+                //mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(fTheta, 0);
                 
             }
 
             if (event.key.keysym.sym == SDLK_UP)
             {
                 tTheta +=1;
-                mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(0, tTheta);
+                //tri_modifications.Add_Rotation(0,tTheta,Vec3d(0,0,0));
+                //mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(0, tTheta);
             }
             
             if (event.key.keysym.sym == SDLK_DOWN)
             {
                 tTheta -=1;
-                mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(0, tTheta);
+                //tri_modifications.Add_Rotation(0,tTheta,Vec3d(0,0,0));
+                //mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(0, tTheta);
                 
             }
         }
@@ -74,7 +79,7 @@ void Engine_3D::engine_update(){
 
 
     // Calculate Rotations
-    Rotator_Service::Rotate_Pipeline(mesh_pipeline);
+    // Rotator_Service::Rotate_Pipeline(mesh_pipeline);
 
     // Calculate Tranlations
 

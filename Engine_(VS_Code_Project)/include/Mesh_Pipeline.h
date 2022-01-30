@@ -3,6 +3,9 @@
 
 #include <vector>
 #include "Mesh.h"
+//#include "Mesh_Pipeline.h"
+#include "Triangle_Modifications_Pipeline.h"
+
 
 /**
  * @brief The Mesh_Pipeline class will hold a vector of Mesh objects.  It's instances will be passes to the Translator, Rotator, and Renderer classes
@@ -16,6 +19,9 @@ class Mesh_Pipeline{
      * 
      */
     std::vector<Mesh> Meshes;
+
+    //std::vector<Triangle_Modifier> tri_modifications; // Contains a vector of all translations and rotations that need to be applied to each triangle of each mesh
+    
 
     public:
     Mesh_Pipeline();
@@ -35,7 +41,6 @@ class Mesh_Pipeline{
     void Add_Mesh_to_Pipeline(Mesh this_mesh);
 
 
-
     /**
      * @brief This getter method is intended for mutability downstream by returning a reference to the mesh vector rather than the vector itself.  This way when the returned value is used in a for (auto& element: collection) expression, when each element is changed, those changes will be reflected back to the Meshes vector in this class.
      * 
@@ -50,6 +55,8 @@ class Mesh_Pipeline{
      * @param tTheta_in Z Rotation angle (degrees)
      */
     void Set_Rot_Angle_Changes_for_Pipeline(float fTheta_in, float tTheta_in);
+
+    void Apply_Modifications(Triangle_Modifications_Pipeline &tri_mods_pipe);
 
 };
 

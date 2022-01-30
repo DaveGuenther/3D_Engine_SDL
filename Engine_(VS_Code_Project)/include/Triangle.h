@@ -7,7 +7,7 @@ class Triangle{
         Vec3d p[3];
         Triangle();
         Triangle(Vec3d pt1, Vec3d pt2, Vec3d pt3);
-
+    
 };
 
 #endif

@@ -27,3 +27,10 @@ void Mesh_Pipeline::Set_Rot_Angle_Changes_for_Pipeline(float fTheta_in, float tT
         this_mesh.Set_Rot_Angles(this_mesh.get_fTheta()+fTheta_in, this_mesh.get_tTheta()+tTheta_in);
     }
 }
+
+void Mesh_Pipeline::Apply_Modifications(Triangle_Modifications_Pipeline &tri_mods_pipe){
+    /*auto &tri_mods = tri_mods_pipe.getModifications();
+    for (auto mesh:Meshes){
+        mesh.PerformModifications(tri_mods);
+    }*/
+}

@@ -2,6 +2,7 @@
 #define ENGINE_3D_H
 #include "Renderer.h"
 #include "Mesh_Pipeline.h"
+#include "Triangle_Modifications_Pipeline.h"
 
 /**
  * @brief This is the base class of the 3D engine.  It initializes the other key systems like Renderer and Input classes.  It manages updates of the various subsystems.
@@ -13,6 +14,8 @@ class Engine_3D{
         bool isRunning; //If set to false, this will end the 3D engine during the next engine_update()
         SDL_Event event;
         Mesh_Pipeline mesh_pipeline; // contains all of the objects that the engine will need to render
+        //Triangle_Modifications_Pipeline tri_modifications;
+        float fTheta, tTheta;
         
     public:
         Engine_3D(void);

@@ -6,6 +6,7 @@
 #include "Vec2d.h"
 #include "Vec3d.h"
 #include "Triangle.h"
+#include "Triangle_Modifier.h"
 
 /**
  * @brief This class contains a single mesh object constructed of trianges in a 3D cartesian space.
@@ -65,6 +66,9 @@ class Mesh {
 		 * @return std::vector<Triangle>& 
 		 */
 		std::vector<Triangle>& get_tris(); 
+
+		
+		void PerformModifications(std::vector<Triangle_Modifier> triMods);
 
 		/**
 		 * @brief Get the fTheta object
