@@ -6,7 +6,7 @@ class Vec2d{
   public:
     Vec2d(){ x=0.0f; y=0.0f;}
 
-    Vec2d(float x_in, float y_in){
+    Vec2d(const float &x_in, const float &y_in){
       x=x_in;
       y=y_in;
     }
@@ -16,9 +16,9 @@ class Vec2d{
       y=V.y;
     }
 
-    void setX(float x_in){ x=x_in; }
+    void setX(const float &x_in){ x=x_in; }
 
-    void setY(float y_in){ y=y_in; }
+    void setY(const float &y_in){ y=y_in; }
 
     float getX(){ return x; }
 

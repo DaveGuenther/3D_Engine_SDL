@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include "Vec2d.h"
 #include "Renderer.h"
 #include "Triangle.h"
 #include "Mesh_Pipeline.h"
@@ -57,22 +58,32 @@ void Renderer::Draw_Triangle_2d(Vec2d vert1, Vec2d vert2, Vec2d vert3, SDL_Color
 void Renderer::Project_Triangle_3d(Triangle &tri){
 	// Apply Perspective Projection Matrix
 	Triangle triProjected;
+	Vec3d pt0; 
+	Vec3d pt1; 
+	Vec3d pt2;
 	
-	Multiply_Matrix_Service::MultiplyMatrixVector(tri.p[0], triProjected.p[0], matProj);
-	Multiply_Matrix_Service::MultiplyMatrixVector(tri.p[1], triProjected.p[1], matProj);
-	Multiply_Matrix_Service::MultiplyMatrixVector(tri.p[2], triProjected.p[2], matProj);
+	Vec3d TriPoint0 = tri.getTrianglePoint(0);
+	Vec3d TriPoint1 = tri.getTrianglePoint(1);
+	Vec3d TriPoint2 = tri.getTrianglePoint(2);
+
+	Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint0, pt0, matProj);
+	Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint1, pt1, matProj);
+	Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint2, pt2, matProj);
+	triProjected.setTrianglePoint(0,pt0);
+	triProjected.setTrianglePoint(1,pt1);
+	triProjected.setTrianglePoint(2,pt2);
 
 	// Drop 3D to 2D
 	Vec2d point1, point2, point3;
 
-	point1.setX(triProjected.p[0].getX());
-	point1.setY(triProjected.p[0].getY());
+	point1.setX(triProjected.getTrianglePoint(0).getX());
+	point1.setY(triProjected.getTrianglePoint(0).getY());
 
-	point2.setX(triProjected.p[1].getX());
-	point2.setY(triProjected.p[1].getY());
+	point2.setX(triProjected.getTrianglePoint(1).getX());
+	point2.setY(triProjected.getTrianglePoint(1).getY());
 
-	point3.setX(triProjected.p[2].getX());
-	point3.setY(triProjected.p[2].getY());			
+	point3.setX(triProjected.getTrianglePoint(2).getX());
+	point3.setY(triProjected.getTrianglePoint(2).getY());			
 
 	SDL_Color col;
 	col.r=255; col.g=0; col.b=0; col.a = 255;
@@ -97,14 +108,16 @@ void Renderer::Refresh_Screen(Mesh_Pipeline &this_mesh_pipeline){
 
 void Renderer::Draw_Reticle(){
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
+	
 	// Draw Reticle
 	Vec2d single_point;
 	single_point.setX(0);
 	single_point.setY(0);
 	single_point = Cartesian_to_Screen(single_point);
 
-	SDL_RenderDrawPointF(renderer, single_point.getX(), single_point.getY());
+	float x = single_point.getX();
+	float y = single_point.getY();
+	SDL_RenderDrawPointF(renderer, x, y);
 }
 
 //Private Methods

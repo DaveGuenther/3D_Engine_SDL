@@ -31,6 +31,26 @@ int main(){
     std::vector<Vec3d> my_points = {my_vec, empty_vec,Vec3d(1,4,5)};
     print_vector(my_points);
 
+
+    Vec3d incremental_vec;
+    incremental_vec.setX(0);
+    incremental_vec.setY(-5);
+    incremental_vec.setZ(-100.0f);
+    incremental_vec.print();
+    
+    // testing getters
+    if (incremental_vec.getX()==0 && incremental_vec.getY()==-5 && incremental_vec.getZ()==-100){
+        std::cout << "Getters working" << std::endl;
+    }else{
+        std::cout << "Getter broken" << std::endl;
+    }
+
+        if (incremental_vec.getX()==-1 && incremental_vec.getY()==-5 && incremental_vec.getZ()==-100){
+        std::cout << "Getters broken" << std::endl;
+    }else{
+        std::cout << "Getters working" << std::endl;
+    }
+
     // Equality Test
     if (Vec3d(0,5,1)==Vec3d(0,5,1))
     {
