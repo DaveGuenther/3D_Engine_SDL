@@ -68,7 +68,7 @@ class Mesh {
 		std::vector<Triangle>& get_tris(); 
 
 		
-		void PerformModifications(std::vector<Triangle_Modifier> triMods);
+		void PerformModifications(std::vector<Triangle_Modifier*> triMods);
 
 		/**
 		 * @brief Get the fTheta object

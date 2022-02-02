@@ -100,10 +100,11 @@ void Mesh::add_3D_triangle(Triangle this_tri){
 	tris.push_back(this_tri);
 }
 
-void Mesh::PerformModifications(std::vector<Triangle_Modifier> triMods){
-	/*for (auto triMod:triMods){
+void Mesh::PerformModifications(std::vector<Triangle_Modifier*> triMods){
+	for (auto triMod:triMods){
 		for (auto tri:tris){
-			triMod.ModifyTri(tri);
+			triMod->ModifyTri(tri);
 		}
-	}*/
+	}
+
 }

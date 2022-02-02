@@ -6,7 +6,6 @@
 
 class Triangle_Modifier{
     public: 
-        Triangle_Modifier();
         virtual void ModifyTri(Triangle &tri)=0;
 
 };
