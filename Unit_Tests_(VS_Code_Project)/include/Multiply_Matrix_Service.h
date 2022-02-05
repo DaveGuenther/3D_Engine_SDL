@@ -18,6 +18,8 @@ class Multiply_Matrix_Service {
      * @param m This is the 4x4 Matrix that we'll use to multiply by the input vector i.  Mat4x4 could be a projetion matrix, rotation matrix, or translation matrix.
      */
     static void MultiplyMatrixVector(Vec3d &i, Vec3d &o, const Mat4x4 &m);
+
+
 };
 
 #endif

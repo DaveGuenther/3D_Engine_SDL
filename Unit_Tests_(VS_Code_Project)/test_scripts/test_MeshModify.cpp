@@ -34,8 +34,10 @@ int main(int argc, char *argv[]){
 
     for (auto tri:tri_vec){
         tri->ModifyTri(my_triangle);
+        
     }
-    
+
+  
     SDL_Quit();
     return 0;
 }

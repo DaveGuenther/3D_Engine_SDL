@@ -53,16 +53,43 @@ Rotator::Rotator(float x_degrees, float z_degrees, Vec3d center){
 
 }
 
+
+
 void Rotator::ModifyTri(Triangle &tri){
     std::cout << "Rotating Triangle" << std::endl;
     std::cout << tri.toString() << std::endl;
     std::cout << "Done Rotating Triangle" << std::endl;
-    Triangle triRotated;
+    //Triangle start_tri;
+    //start_tri.setTrianglePoint(0,tri.getTrianglePoint(0));
+    //start_tri.setTrianglePoint(1,tri.getTrianglePoint(1));
+    //start_tri.setTrianglePoint(2,tri.getTrianglePoint(2));
+    Vec3d pt1_i = tri.getTrianglePoint(0);
+    Vec3d pt1_o = pt1_i;
+    Vec3d pt2_i = tri.getTrianglePoint(1);
+    Vec3d pt2_o = pt2_i;
+    Vec3d pt3_i = tri.getTrianglePoint(2);
+    Vec3d pt3_o = pt3_i;
+    //Triangle triRotated;
     if (z_degs!=0){
-        MultiplyMatrixVector(tri.getTrianglePoint(0), triRotated.getTrianglePoint(0), mat_ZRot);
-        MultiplyMatrixVector(tri.getTrianglePoint(1), triRotated.getTrianglePoint(1), mat_ZRot);
-        MultiplyMatrixVector(tri.getTrianglePoint(2), triRotated.getTrianglePoint(2), mat_ZRot);
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt1_i, pt1_o, mat_ZRot);
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt2_i, pt2_o, mat_ZRot);
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt3_i, pt3_o, mat_ZRot);
+        pt1_i=pt1_o;
+        pt2_i=pt2_o;
+        pt3_i=pt3_o;
     }
+
+     if (x_degs!=0){
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt1_i, pt1_o, mat_ZRot);
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt2_i, pt2_o, mat_ZRot);
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt3_i, pt3_o, mat_ZRot);
+        pt1_i=pt1_o;
+        pt2_i=pt2_o;
+        pt3_i=pt3_o;
+    }   
+    tri.setTrianglePoint(0,pt1_i);
+    tri.setTrianglePoint(1,pt2_i);
+    tri.setTrianglePoint(2,pt3_i);
 }
 
 Translator::Translator(float x_distance, float z_distance){
@@ -70,7 +97,7 @@ Translator::Translator(float x_distance, float z_distance){
     z_dist = z_distance;
 }
 
-void Translator::ModifyTri(Triangle &tri){
+void Translator::ModifyTri(Triangle& tri){
     std::cout << "Translating Triangle" << std::endl;
     std::cout << tri.toString() << std::endl;
     std::cout << "Done Translating Triangle" << std::endl;
