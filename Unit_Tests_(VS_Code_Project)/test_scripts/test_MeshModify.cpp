@@ -14,13 +14,13 @@ int main(int argc, char *argv[]){
     Mesh myMesh;
     myMesh.Load_Mesh("block.mesh");
 
-
+/*
     std::vector<Triangle> tris = myMesh.get_tris();
     for (auto tri:tris){
         std::cout << tri.toString() << std::endl;
     }
+*/
 
-    Triangle my_triangle(Vec3d(0,0,0),Vec3d(1,1,1), Vec3d(2,2,2));
 
     float x_deg=5;
     float z_deg=45;
@@ -28,14 +28,19 @@ int main(int argc, char *argv[]){
 	//Triangle_Modifier my_tri = new Rotator(x_deg, z_deg, center);
     //std::vector<IFunnyInterface*> ifVec;
 
-    std::vector<Triangle_Modifier*> tri_vec;
-    tri_vec.push_back(new Rotator(x_deg, z_deg, center));
-    tri_vec.push_back(new Translator(10,5));
+    std::vector<Triangle_Modifier*> modifications;
+    modifications.push_back(new Rotator(x_deg, z_deg, center));
+    modifications.push_back(new Translator(10,5));
 
-    for (auto tri:tri_vec){
-        tri->ModifyTri(my_triangle);
+    Triangle my_triangle(Vec3d(0,0,0),Vec3d(1,1,1), Vec3d(2,2,2));
+    std::cout << my_triangle.toString() << std::endl;
+
+    for (auto triMod:modifications){
+        triMod->ModifyTri(my_triangle);
         
     }
+    std::cout << my_triangle.toString() << std::endl;
+    
 
   
     SDL_Quit();
