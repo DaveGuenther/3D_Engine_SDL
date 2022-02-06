@@ -3,8 +3,9 @@
 #include "Multiply_Matrix_Service.h"
 
 
-Rotator::Rotator(float x_degrees, float z_degrees, Vec3d center){
+Rotator::Rotator(float x_degrees, float y_degrees, float z_degrees, Vec3d center){
     x_degs = x_degrees;
+    y_degs = y_degrees;
     z_degs = z_degrees;
     center_of_rotation = center;
 
@@ -28,6 +29,27 @@ Rotator::Rotator(float x_degrees, float z_degrees, Vec3d center){
     mat_XRot.m[3][0] = 0;
     mat_XRot.m[3][2] = 0;
     mat_XRot.m[3][3] = 1;
+
+    //Y Rotation MAtrix
+    mat_YRot.m[0][0] = SDL_cosf(y_degs*(3.14159265/180.0));
+    mat_YRot.m[0][1] = 0;
+    mat_YRot.m[0][2] = -SDL_sinf(y_degs*(3.14159265/180.0));
+    mat_YRot.m[0][3] = 0;
+
+    mat_YRot.m[0][0] = 0;
+    mat_YRot.m[1][1] = 1;
+    mat_YRot.m[2][2] = 0;
+    mat_YRot.m[3][3] = 0;
+
+    mat_YRot.m[0][0] = SDL_sinf(y_degs*(3.14159265/180.0));
+    mat_YRot.m[1][1] = 0;
+    mat_YRot.m[2][2] = SDL_cosf(y_degs*(3.14159265/180.0));
+    mat_YRot.m[3][3] = 0;
+
+    mat_YRot.m[0][0] = 0;
+    mat_YRot.m[1][1] = 0;
+    mat_YRot.m[2][2] = 0;
+    mat_YRot.m[3][3] = 1;
 
     //Z Rotation Matrix
     mat_ZRot.m[0][0] = SDL_cosf(z_degs*(3.14159265/180.0));
@@ -57,19 +79,14 @@ Rotator::Rotator(float x_degrees, float z_degrees, Vec3d center){
 
 void Rotator::ModifyTri(Triangle &tri){
     std::cout << "Rotating Triangle" << std::endl;
-    std::cout << tri.toString() << std::endl;
-    std::cout << "Done Rotating Triangle" << std::endl;
-    //Triangle start_tri;
-    //start_tri.setTrianglePoint(0,tri.getTrianglePoint(0));
-    //start_tri.setTrianglePoint(1,tri.getTrianglePoint(1));
-    //start_tri.setTrianglePoint(2,tri.getTrianglePoint(2));
+
     Vec3d pt1_i = tri.getTrianglePoint(0);
     Vec3d pt1_o = pt1_i;
     Vec3d pt2_i = tri.getTrianglePoint(1);
     Vec3d pt2_o = pt2_i;
     Vec3d pt3_i = tri.getTrianglePoint(2);
     Vec3d pt3_o = pt3_i;
-    //Triangle triRotated;
+
     if (z_degs!=0){
         Multiply_Matrix_Service::MultiplyMatrixVector(pt1_i, pt1_o, mat_ZRot);
         Multiply_Matrix_Service::MultiplyMatrixVector(pt2_i, pt2_o, mat_ZRot);
@@ -90,15 +107,26 @@ void Rotator::ModifyTri(Triangle &tri){
     tri.setTrianglePoint(0,pt1_i);
     tri.setTrianglePoint(1,pt2_i);
     tri.setTrianglePoint(2,pt3_i);
+    std::cout << tri.toString() << std::endl;
+    std::cout << "Done Rotating Triangle" << std::endl;
 }
 
-Translator::Translator(float x_distance, float z_distance){
+Translator::Translator(float x_distance, float y_distance,  float z_distance){
     x_dist = x_distance;
     z_dist = z_distance;
 }
 
 void Translator::ModifyTri(Triangle& tri){
     std::cout << "Translating Triangle" << std::endl;
+
+    for (int i=0;i<3;i++){
+        Vec3d point = tri.getTrianglePoint(i);
+        if (x_dist!=0){ point.setX(point.getX()+x_dist);}
+        if (y_dist!=0){ point.setY(point.getY()+y_dist);}
+        if (z_dist!=0){ point.setZ(point.getZ()+z_dist);}
+        tri.setTrianglePoint(i,point);
+    
+    }
     std::cout << tri.toString() << std::endl;
     std::cout << "Done Translating Triangle" << std::endl;
 }
