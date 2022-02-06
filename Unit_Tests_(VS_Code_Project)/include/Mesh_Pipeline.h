@@ -21,7 +21,7 @@ class Mesh_Pipeline{
     std::vector<Mesh> Meshes;
 
     //std::vector<Triangle_Modifier> tri_modifications; // Contains a vector of all translations and rotations that need to be applied to each triangle of each mesh
-    
+    int total_mesh_ids;
 
     public:
     Mesh_Pipeline();
@@ -56,8 +56,8 @@ class Mesh_Pipeline{
      */
     void Set_Rot_Angle_Changes_for_Pipeline(float fTheta_in, float tTheta_in);
 
-    void Apply_Modifications(Triangle_Modifications_Pipeline &tri_mods_pipe);
-
+    void Apply_Modifications(std::vector<Triangle_Modifier*> tri_mods_pipe);
+    int GetSize();
 };
 
 #endif

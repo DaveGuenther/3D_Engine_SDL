@@ -38,6 +38,7 @@ class Mesh {
 		 * 
 		 */
 		float fTheta, tTheta;
+		int id;
 
 	public:
 		
@@ -69,6 +70,7 @@ class Mesh {
 
 		
 		void PerformModifications(std::vector<Triangle_Modifier*> triMods);
+		void PerformModifications(Triangle_Modifier* triMod);
 
 		/**
 		 * @brief Get the fTheta object
@@ -84,7 +86,9 @@ class Mesh {
 		 */
 		float get_tTheta();
 		
-
+		void set_ID(int in_id);
+		int get_ID();
+		std::string toString();
 		
 };
 

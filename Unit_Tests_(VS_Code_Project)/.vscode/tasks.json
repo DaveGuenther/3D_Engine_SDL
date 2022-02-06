@@ -14,7 +14,7 @@
 //				"${workspaceFolder}\\src\\Engine_3D.cpp",
 				"${workspaceFolder}\\src\\Mat4x4.cpp",
 				"${workspaceFolder}\\src\\Triangle.cpp",
-//				"${workspaceFolder}\\src\\Mesh_Pipeline.cpp",
+				"${workspaceFolder}\\src\\Mesh_Pipeline.cpp",
 				"${workspaceFolder}\\src\\Multiply_Matrix_Service.cpp",
 				"${workspaceFolder}\\src\\Triangle_Modifier.cpp",
 //				"${workspaceFolder}\\src\\Rotator_Service.cpp",

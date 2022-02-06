@@ -1,6 +1,7 @@
 #ifndef TRIANGLE_MODIFIER_H
 #define TRIANGLE_MODIFIER_H
 #include <iostream>
+#include <vector>
 #include "Vec3d.h"
 #include "Triangle.h"
 #include "Mat4x4.h"
@@ -8,7 +9,12 @@
 class Triangle_Modifier{
     public: 
         virtual void ModifyTri(Triangle &tri)=0;
-
+        void AssignToMesh(int mesh_id);
+        const std::vector<int> GetAssignedMeshIDs();
+        bool IsModifiable(int mesh_id);
+    protected:
+        std::vector<int> mesh_ids;
+        
 };
 
 class Rotator: public Triangle_Modifier{
@@ -24,6 +30,7 @@ class Rotator: public Triangle_Modifier{
         Rotator(float x_degrees, float y_degrees, float z_degrees, Vec3d center);
         void ModifyTri(Triangle &tri);
 
+
 };
 
 class Translator: public Triangle_Modifier{
@@ -34,6 +41,7 @@ class Translator: public Triangle_Modifier{
     public:
         Translator(float x_distance, float y_distance, float z_distance);
         void ModifyTri(Triangle &tri);
+
 
 };
 

@@ -30,7 +30,7 @@ class Mesh {
 		 * 
 		 * @param this_tri A single Triangle object with points represented in the 3D cartesian space
 		 */
-		void add_3D_triangle(Triangle this_tri);
+		void add_3D_triangle(Triangle &this_tri);
 		
 		/**
 		 * @brief fTheta and tTheta represent the current angles (in degrees) that this mesh will rotate during next refresh.  
@@ -68,7 +68,7 @@ class Mesh {
 		std::vector<Triangle>& get_tris(); 
 
 		
-		void PerformModifications(std::vector<Triangle_Modifier> triMods);
+		void PerformModifications(std::vector<Triangle_Modifier*> triMods);
 
 		/**
 		 * @brief Get the fTheta object

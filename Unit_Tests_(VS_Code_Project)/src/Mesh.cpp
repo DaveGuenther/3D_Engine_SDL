@@ -102,10 +102,39 @@ void Mesh::add_3D_triangle(Triangle &this_tri){
 }
 
 void Mesh::PerformModifications(std::vector<Triangle_Modifier*> triMods){
-	for (auto triMod:triMods){
-		for (auto tri:tris){
-			triMod->ModifyTri(tri);
-		}
-	}
+
+    for (auto triMod:triMods){
+        for (auto &tri:tris){
+            //std::cout << "Preparing to modify: " << tri.toString() << std::endl;
+            triMod->ModifyTri(tri);
+            
+        }
+    }
 
 }
+
+void Mesh::PerformModifications(Triangle_Modifier* triMod){
+	for (auto &tri:tris){
+		//std::cout << "Preparing to modify: " << tri.toString() << std::endl;
+		triMod->ModifyTri(tri);
+	}
+
+
+}
+
+void Mesh::set_ID(int in_id){
+	id=in_id;
+}
+
+int Mesh::get_ID(){
+	return id;
+}
+
+std::string Mesh::toString(){
+    std::string ret_val;
+	for (Triangle tri:tris){
+		ret_val += tri.toString() + "\n";
+	}
+    
+	return ret_val;
+}	

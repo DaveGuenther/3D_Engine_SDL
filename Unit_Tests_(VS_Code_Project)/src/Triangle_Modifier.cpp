@@ -1,7 +1,23 @@
 #include <SDL2/SDL.h>
+#include <algorithm>
 #include "Triangle_Modifier.h"
 #include "Multiply_Matrix_Service.h"
 
+void Triangle_Modifier::AssignToMesh(int mesh_id){
+    mesh_ids.push_back(mesh_id);
+}
+
+bool Triangle_Modifier::IsModifiable(int mesh_id){
+    bool ret_val = false;
+    if (std::find(mesh_ids.begin(), mesh_ids.end(), mesh_id) != mesh_ids.end()) {
+        ret_val=true;
+    }
+    return ret_val;
+}
+
+const std::vector<int> Triangle_Modifier::GetAssignedMeshIDs(){
+    return mesh_ids;
+}
 
 Rotator::Rotator(float x_degrees, float y_degrees, float z_degrees, Vec3d center){
     x_degs = x_degrees;
@@ -110,6 +126,8 @@ void Rotator::ModifyTri(Triangle &tri){
     std::cout << tri.toString() << std::endl;
     std::cout << "Done Rotating Triangle" << std::endl;
 }
+
+
 
 Translator::Translator(float x_distance, float y_distance,  float z_distance){
     x_dist = x_distance;
