@@ -7,14 +7,6 @@ void Triangle_Modifier::AssignToMesh(int mesh_id){
     mesh_ids.push_back(mesh_id);
 }
 
-bool Triangle_Modifier::IsModifiable(int mesh_id){
-    bool ret_val = false;
-    if (std::find(mesh_ids.begin(), mesh_ids.end(), mesh_id) != mesh_ids.end()) {
-        ret_val=true;
-    }
-    return ret_val;
-}
-
 const std::vector<int> Triangle_Modifier::GetAssignedMeshIDs(){
     return mesh_ids;
 }

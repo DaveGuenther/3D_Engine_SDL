@@ -8,12 +8,6 @@ Triangle::Triangle(){
 
 }
 
-/*Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3){
-    p[0]=pt1;
-    p[1]=pt2;
-    p[2]=pt3;
-}*/
-
 Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id){
     p[0]=pt1;
     p[1]=pt2;

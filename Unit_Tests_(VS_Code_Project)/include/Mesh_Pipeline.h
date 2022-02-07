@@ -4,23 +4,26 @@
 #include <vector>
 #include "Mesh.h"
 //#include "Mesh_Pipeline.h"
-#include "Triangle_Modifications_Pipeline.h"
+//#include "Triangle_Modifications_Pipeline.h"
 
 
 /**
- * @brief The Mesh_Pipeline class will hold a vector of Mesh objects.  It's instances will be passes to the Translator, Rotator, and Renderer classes
+ * @brief The Mesh_Pipeline class will hold a vector of Mesh objects.  It is responsible for loading and managing meshes.  It is also responsible for applying mesh modifications
  * 
  */
 class Mesh_Pipeline{
     private:
 
     /**
-     * @brief The Meshes vector of the Mesh_Pipeline class is really the ky data object itself.
+     * @brief The Meshes vector of the Mesh_Pipeline class is the key data object of the class.
      * 
      */
     std::vector<Mesh> Meshes;
 
-    //std::vector<Triangle_Modifier> tri_modifications; // Contains a vector of all translations and rotations that need to be applied to each triangle of each mesh
+    /**
+     * @brief this integer is always set to the maximum number of meshes in the pipeline.  Every time a mesh is added, this number is incremented.
+     * 
+     */
     int total_mesh_ids;
 
     public:
@@ -40,24 +43,26 @@ class Mesh_Pipeline{
      */
     void Add_Mesh_to_Pipeline(Mesh this_mesh);
 
+    /**
+     * @brief This function applies a vector of Triangle_Modifiers (Rotations or Translations) to the meshes that each of them target.  
+     * 
+     * @param tri_mods_pipe Each Triangle_Modifier in this vector can apply to one or more Meshes as determined by that modifier.
+     */
+    void Apply_Modifications(std::vector<Triangle_Modifier*> tri_mods_pipe);
+    
+    /**
+     * @brief Get the total number of meshes in the mesh pipeline
+     * 
+     * @return int 
+     */
+    int GetSize();
 
     /**
-     * @brief This getter method is intended for mutability downstream by returning a reference to the mesh vector rather than the vector itself.  This way when the returned value is used in a for (auto& element: collection) expression, when each element is changed, those changes will be reflected back to the Meshes vector in this class.
+     * @brief Get the vector of Meshes for use when rendering the mesh pipeline
      * 
      * @return std::vector<Mesh>& 
      */
     std::vector<Mesh>& Get_Meshes();
-
-    /**
-     * @brief Calling this method will add the fTheta and tTheta values to the fTheta and tTheta values of EVERY Mesh in the Mesh vector.  It is used to apply a rotation to the whole pipeline.
-     * 
-     * @param fTheta_in X Rotation angle (degrees)
-     * @param tTheta_in Z Rotation angle (degrees)
-     */
-    void Set_Rot_Angle_Changes_for_Pipeline(float fTheta_in, float tTheta_in);
-
-    void Apply_Modifications(std::vector<Triangle_Modifier*> tri_mods_pipe);
-    int GetSize();
 };
 
 #endif

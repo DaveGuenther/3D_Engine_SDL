@@ -10,7 +10,7 @@
 				"-g",
 				"${file}",
 				"${workspaceFolder}\\src\\Mesh.cpp",
-//				"${workspaceFolder}\\src\\Renderer.cpp",
+				"${workspaceFolder}\\src\\Renderer.cpp",
 //				"${workspaceFolder}\\src\\Engine_3D.cpp",
 				"${workspaceFolder}\\src\\Mat4x4.cpp",
 				"${workspaceFolder}\\src\\Triangle.cpp",
