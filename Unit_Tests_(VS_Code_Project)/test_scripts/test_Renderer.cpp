@@ -18,10 +18,10 @@ int main (int argc, char *argv[]){
     Vec3d center=Vec3d(0,0,0);
     int i;
     std::vector<Triangle_Modifier*> modifications;
-    modifications.push_back(new Translator(1, 0, 1));
-    modifications.back()->AssignToMesh(1);
-    for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
-    modifications.push_back(new Rotator(x_deg, y_deg, z_deg, center));
+    //modifications.push_back(new Translator(1, 0, 1));
+    
+    //for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+    //modifications.push_back(new Rotator(x_deg, y_deg, z_deg, center));
 
 
 
@@ -46,21 +46,19 @@ int main (int argc, char *argv[]){
 					isRunning = false;
 				}
 
-				if (event.key.keysym.sym == SDLK_RIGHT)
+				if (event.key.keysym.sym == SDLK_d)
 				{
 					modifications.clear();
                     modifications.push_back(new Translator(.1,0,0));
                     for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
-                    //modifications.push_back(new Rotator(0,10,0,Vec3d(0,0,0)));
-                    //modifications.back()->AssignToMesh(0);
-                    //modifications.push_back(new Rotator(0,-10,0,Vec3d(0,0,0)));
-                    //modifications.back()->AssignToMesh(1);
+
                     my_pipeline.Apply_Modifications(modifications);
 
 					
 				}
-				
-				if (event.key.keysym.sym == SDLK_LEFT)
+
+
+				if (event.key.keysym.sym == SDLK_a)
 				{
 					modifications.clear();
                     modifications.push_back(new Translator(-.1,0,0));		
@@ -74,7 +72,7 @@ int main (int argc, char *argv[]){
 					
 				}
 
-				if (event.key.keysym.sym == SDLK_UP)
+				if (event.key.keysym.sym == SDLK_w)
 				{
 					modifications.clear();
                     modifications.push_back(new Translator(0,0,-.1));	
@@ -88,7 +86,7 @@ int main (int argc, char *argv[]){
 					
 				}
 				
-				if (event.key.keysym.sym == SDLK_DOWN)
+				if (event.key.keysym.sym == SDLK_s)
 				{
 					modifications.clear();
                     modifications.push_back(new Translator(0,0,0.1));		
@@ -101,6 +99,50 @@ int main (int argc, char *argv[]){
 
 					
 				}
+
+				if (event.key.keysym.sym == SDLK_UP)
+				{
+					modifications.clear();
+                    modifications.push_back(new Rotator(2,0,0,Vec3d(0,0,0)));
+                    //for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+                    modifications.back()->AssignToMesh(1);
+                    my_pipeline.Apply_Modifications(modifications);
+
+					
+				}                
+				if (event.key.keysym.sym == SDLK_DOWN)
+				{
+					modifications.clear();
+                    modifications.push_back(new Rotator(-2,0,0,Vec3d(0,0,0)));
+                    //for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+                    modifications.back()->AssignToMesh(1);
+
+                    my_pipeline.Apply_Modifications(modifications);
+
+					
+				}     
+				if (event.key.keysym.sym == SDLK_LEFT)
+				{
+					modifications.clear();
+                    modifications.push_back(new Rotator(0,-2,0,Vec3d(0,0,0)));
+                    //for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+                    modifications.back()->AssignToMesh(1);
+
+                    my_pipeline.Apply_Modifications(modifications);
+
+					
+				}     
+				if (event.key.keysym.sym == SDLK_RIGHT)
+				{
+					modifications.clear();
+                    modifications.push_back(new Rotator(0,2,0,Vec3d(0,0,0)));
+                    //for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+                    modifications.back()->AssignToMesh(1);
+
+                    my_pipeline.Apply_Modifications(modifications);
+
+					
+				}                     
 			}
 		}
 			
