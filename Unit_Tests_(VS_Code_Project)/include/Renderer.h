@@ -36,7 +36,7 @@ class Renderer{
         float fAspectRatio;
         float fFOV_rad;
 
-        Mat4x4 matProj, mat_XRot, mat_ZRot;  //[row][column]
+        Mat4x4 matProj;  //[row][column]
 
         /**
          * @brief Draw a point (or specific icon) at the center of the screen to represent the player's reticle

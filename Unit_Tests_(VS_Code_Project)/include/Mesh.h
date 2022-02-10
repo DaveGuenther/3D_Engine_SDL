@@ -30,28 +30,23 @@ class Mesh {
 		 * 
 		 * @param this_tri A single Triangle object with points represented in the 3D cartesian space
 		 */
-		void add_3D_triangle(Triangle this_tri);
+		void add_3D_triangle(Triangle &this_tri);
 		
 		/**
 		 * @brief fTheta and tTheta represent the current angles (in degrees) that this mesh will rotate during next refresh.  
 		 * Both angles are set to 0.0f after a refresh is complete.
 		 * 
 		 */
-		float fTheta, tTheta;
+		
+		int id;
 
 	public:
 		
 
 		
-		Mesh();
+		Mesh(int mesh_id);
 
-		/**
-		 * @brief This method assigns an x and z rotation angle in degrees for the mesh object to be rotated at the next Engine_3d::engine_update()
-		 * 
-		 * @param fTheta_in X Rotation Angle
-		 * @param tTheta_in Z Rotation Angle
-		 */
-		void Set_Rot_Angles(float fTheta_in, float tTheta_in);
+		
 
 		/**
 		 * @brief loads a proprietary .mesh file into the tris vector for this Mesh.  This method will eventually be replaced with functionality to read an stl file
@@ -67,24 +62,42 @@ class Mesh {
 		 */
 		std::vector<Triangle>& get_tris(); 
 
-		
-		void PerformModifications(std::vector<Triangle_Modifier> triMods);
+		/**
+		 * @brief This function will accept a single Triangle_Modifier and will apply the modification (Rotation or Translation) on the selected meshes as determined by the Triangle_Modifier.GetAssignedMeshIDs()
+		 * 
+		 * @param triMod This is a single Triangle_Modifier object (either a Translation or Rotation) which contains instructions on rotating all triangles in a number of meshes in the mesh pipeline
+		 */
+		void PerformModifications(Triangle_Modifier* triMod);
 
 		/**
-		 * @brief Get the fTheta object
+		 * @brief Not used in the engine, and may be removed..  This function will accept a vector of Triangle_Modifiers and for each Triangle_Modifier, perform the modifications (Transformation or Rotation) of a list of meshes as determined in the Triangle_Modifier object.
 		 * 
-		 * @return float 
+		 * @param triMods vector of Triangle_Modifiers (either a rotation or a translation) to be applied to meshes in the mesh pipeline
 		 */
-		float get_fTheta();
+		void PerformModifications(std::vector<Triangle_Modifier*> triMods);
+
+
 
 		/**
-		 * @brief Get the tTheta object
+		 * @brief Setter for the IID value of this Mesh
 		 * 
-		 * @return float 
+		 * @param in_id 
 		 */
-		float get_tTheta();
+		void set_ID(int in_id);
 		
+		/**
+		 * @brief Getter function to retrieve the ID of this mesh
+		 * 
+		 * @return int 
+		 */
+		int get_ID();
 
+		/**
+		 * @brief This function returns a print friendly string of all Triangle information in this mesh.
+		 * 
+		 * @return std::string 
+		 */
+		std::string toString();
 		
 };
 
