@@ -18,11 +18,9 @@ class Vec2d{
     }
 
     void setX(const float &x_in){ x=x_in; }
-
     void setY(const float &y_in){ y=y_in; }
 
     float getX(){ return x; }
-
     float getY(){ return y; }
 
     std::string toString(){
@@ -31,7 +29,6 @@ class Vec2d{
     }
 
     friend bool operator== (const Vec2d & vec1, const Vec2d & vec2){ return (vec1.x==vec2.x && vec1.y==vec2.y);}
-
     friend bool operator!= (const Vec2d & vec1, const Vec2d & vec2){ return !(vec1.x==vec2.x && vec1.y==vec2.y);}
 
   protected:

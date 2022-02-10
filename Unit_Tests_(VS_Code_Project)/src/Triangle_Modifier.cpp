@@ -7,14 +7,6 @@ void Triangle_Modifier::AssignToMesh(int mesh_id){
     mesh_ids.push_back(mesh_id);
 }
 
-bool Triangle_Modifier::IsModifiable(int mesh_id){
-    bool ret_val = false;
-    if (std::find(mesh_ids.begin(), mesh_ids.end(), mesh_id) != mesh_ids.end()) {
-        ret_val=true;
-    }
-    return ret_val;
-}
-
 const std::vector<int> Triangle_Modifier::GetAssignedMeshIDs(){
     return mesh_ids;
 }
@@ -42,7 +34,7 @@ Rotator::Rotator(float x_degrees, float y_degrees, float z_degrees, Vec3d center
     mat_XRot.m[2][3] = 0;
 
     mat_XRot.m[3][0] = 0;
-    mat_XRot.m[3][0] = 0;
+    mat_XRot.m[3][1] = 0;
     mat_XRot.m[3][2] = 0;
     mat_XRot.m[3][3] = 1;
 
@@ -52,41 +44,41 @@ Rotator::Rotator(float x_degrees, float y_degrees, float z_degrees, Vec3d center
     mat_YRot.m[0][2] = -SDL_sinf(y_degs*(3.14159265/180.0));
     mat_YRot.m[0][3] = 0;
 
-    mat_YRot.m[0][0] = 0;
+    mat_YRot.m[1][0] = 0;
     mat_YRot.m[1][1] = 1;
-    mat_YRot.m[2][2] = 0;
-    mat_YRot.m[3][3] = 0;
+    mat_YRot.m[1][2] = 0;
+    mat_YRot.m[1][3] = 0;
 
-    mat_YRot.m[0][0] = SDL_sinf(y_degs*(3.14159265/180.0));
-    mat_YRot.m[1][1] = 0;
+    mat_YRot.m[2][0] = SDL_sinf(y_degs*(3.14159265/180.0));
+    mat_YRot.m[2][1] = 0;
     mat_YRot.m[2][2] = SDL_cosf(y_degs*(3.14159265/180.0));
-    mat_YRot.m[3][3] = 0;
+    mat_YRot.m[2][3] = 0;
 
-    mat_YRot.m[0][0] = 0;
-    mat_YRot.m[1][1] = 0;
-    mat_YRot.m[2][2] = 0;
+    mat_YRot.m[3][0] = 0;
+    mat_YRot.m[3][1] = 0;
+    mat_YRot.m[3][2] = 0;
     mat_YRot.m[3][3] = 1;
 
     //Z Rotation Matrix
     mat_ZRot.m[0][0] = SDL_cosf(z_degs*(3.14159265/180.0));
     mat_ZRot.m[0][1] = SDL_sinf(z_degs*(3.14159265/180.0));
-    mat_XRot.m[0][2] = 0;
-    mat_XRot.m[0][3] = 0;
+    mat_ZRot.m[0][2] = 0;
+    mat_ZRot.m[0][3] = 0;
 
     mat_ZRot.m[1][0] = -SDL_sinf(z_degs*(3.14159265/180.0));
     mat_ZRot.m[1][1] = SDL_cosf(z_degs*(3.14159265/180.0));
-    mat_XRot.m[1][2] = 0;
-    mat_XRot.m[1][3] = 0;
+    mat_ZRot.m[1][2] = 0;
+    mat_ZRot.m[1][3] = 0;
 
-    mat_XRot.m[2][0] = 0;
-    mat_XRot.m[2][1] = 0;
-    mat_XRot.m[2][2] = 1;
-    mat_XRot.m[2][3] = 0;
+    mat_ZRot.m[2][0] = 0;
+    mat_ZRot.m[2][1] = 0;
+    mat_ZRot.m[2][2] = 1;
+    mat_ZRot.m[2][3] = 0;
 
-    mat_XRot.m[3][0] = 0;
-    mat_XRot.m[3][0] = 0;
-    mat_XRot.m[3][2] = 0;
-    mat_XRot.m[3][3] = 1;
+    mat_ZRot.m[3][0] = 0;
+    mat_ZRot.m[3][1] = 0;
+    mat_ZRot.m[3][2] = 0;
+    mat_ZRot.m[3][3] = 1;
     		
 
 }
@@ -113,9 +105,18 @@ void Rotator::ModifyTri(Triangle &tri){
     }
 
      if (x_degs!=0){
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt1_i, pt1_o, mat_ZRot);
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt2_i, pt2_o, mat_ZRot);
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt3_i, pt3_o, mat_ZRot);
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt1_i, pt1_o, mat_XRot);
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt2_i, pt2_o, mat_XRot);
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt3_i, pt3_o, mat_XRot);
+        pt1_i=pt1_o;
+        pt2_i=pt2_o;
+        pt3_i=pt3_o;
+    }   
+
+     if (y_degs!=0){
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt1_i, pt1_o, mat_YRot);
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt2_i, pt2_o, mat_YRot);
+        Multiply_Matrix_Service::MultiplyMatrixVector(pt3_i, pt3_o, mat_YRot);
         pt1_i=pt1_o;
         pt2_i=pt2_o;
         pt3_i=pt3_o;
