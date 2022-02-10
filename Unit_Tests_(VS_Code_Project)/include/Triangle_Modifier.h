@@ -12,8 +12,13 @@
  */
 class Triangle_Modifier{
     public: 
-
+        /**
+         * @brief Cannot instantiate directly.  Must use either Rotator or Translator
+         * 
+         * @param tri 
+         */
         virtual void ModifyTri(Triangle &tri)=0;
+        
         /**
          * @brief This function assigns the modifier to a particular mesh in the mesh pipeline identified by the mesh's ID value
          * 

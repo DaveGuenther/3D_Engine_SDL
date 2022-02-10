@@ -9,7 +9,7 @@ Renderer::Renderer(void){
     // SDL and Screen initializing
 	SCREEN_W = 640;
     SCREEN_H = 360;
-	window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, screen_mode);
+	window = SDL_CreateWindow("3D Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, screen_mode);
 	renderer = SDL_CreateRenderer(window, -1, 0);
     
 

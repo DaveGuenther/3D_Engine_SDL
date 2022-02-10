@@ -37,7 +37,7 @@ class Mesh {
 		 * Both angles are set to 0.0f after a refresh is complete.
 		 * 
 		 */
-		float fTheta, tTheta;
+		
 		int id;
 
 	public:
@@ -63,18 +63,20 @@ class Mesh {
 		std::vector<Triangle>& get_tris(); 
 
 		/**
-		 * @brief Not widely used in the engine, but here just in case..  This function will accept a vector of Triangle_Modifiers and for each Triangle_Modifier, perform the modifications (Transformation or Rotation) of a list of meshes as determined in the Triangle_Modifier object.
-		 * 
-		 * @param triMods vector of Triangle_Modifiers (either a rotation or a translation) to be applied to meshes in the mesh pipeline
-		 */
-		void PerformModifications(std::vector<Triangle_Modifier*> triMods);
-
-		/**
 		 * @brief This function will accept a single Triangle_Modifier and will apply the modification (Rotation or Translation) on the selected meshes as determined by the Triangle_Modifier.GetAssignedMeshIDs()
 		 * 
 		 * @param triMod This is a single Triangle_Modifier object (either a Translation or Rotation) which contains instructions on rotating all triangles in a number of meshes in the mesh pipeline
 		 */
 		void PerformModifications(Triangle_Modifier* triMod);
+
+		/**
+		 * @brief Not used in the engine, and may be removed..  This function will accept a vector of Triangle_Modifiers and for each Triangle_Modifier, perform the modifications (Transformation or Rotation) of a list of meshes as determined in the Triangle_Modifier object.
+		 * 
+		 * @param triMods vector of Triangle_Modifiers (either a rotation or a translation) to be applied to meshes in the mesh pipeline
+		 */
+		void PerformModifications(std::vector<Triangle_Modifier*> triMods);
+
+
 
 		/**
 		 * @brief Setter for the IID value of this Mesh

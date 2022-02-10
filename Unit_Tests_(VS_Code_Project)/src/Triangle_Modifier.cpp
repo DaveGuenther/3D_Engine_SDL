@@ -132,6 +132,7 @@ void Rotator::ModifyTri(Triangle &tri){
 
 Translator::Translator(float x_distance, float y_distance,  float z_distance){
     x_dist = x_distance;
+    y_dist = y_distance;
     z_dist = z_distance;
 }
 

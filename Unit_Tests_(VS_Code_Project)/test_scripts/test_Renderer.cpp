@@ -18,8 +18,12 @@ int main (int argc, char *argv[]){
     Vec3d center=Vec3d(0,0,0);
     int i;
     std::vector<Triangle_Modifier*> modifications;
-    //modifications.push_back(new Translator(1, 0, 1));
-    
+    modifications.push_back(new Translator(-1.5, -0.5, 1.5));
+    modifications.back()->AssignToMesh(0);
+    modifications.push_back(new Translator(0, -1, -1));
+    modifications.back()->AssignToMesh(1);
+    my_pipeline.Apply_Modifications(modifications);
+    modifications.clear();
     //for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
     //modifications.push_back(new Rotator(x_deg, y_deg, z_deg, center));
 
@@ -44,6 +48,27 @@ int main (int argc, char *argv[]){
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 				{
 					isRunning = false;
+				}
+				if (event.key.keysym.sym == SDLK_q)
+				{
+					modifications.clear();
+                    modifications.push_back(new Translator(0,0.1,0));
+                    for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+
+                    my_pipeline.Apply_Modifications(modifications);
+
+					
+				}
+
+				if (event.key.keysym.sym == SDLK_e)
+				{
+					modifications.clear();
+                    modifications.push_back(new Translator(0,-0.1,0));
+                    for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+
+                    my_pipeline.Apply_Modifications(modifications);
+
+					
 				}
 
 				if (event.key.keysym.sym == SDLK_d)
