@@ -13,9 +13,8 @@ class Engine_3D{
         Renderer Engine_Renderer;
         bool isRunning; //If set to false, this will end the 3D engine during the next engine_update()
         SDL_Event event;
-        Mesh_Pipeline mesh_pipeline; // contains all of the objects that the engine will need to render
-        //Triangle_Modifications_Pipeline tri_modifications;
-        float fTheta, tTheta;
+        Mesh_Pipeline my_pipeline;
+        std::vector<Triangle_Modifier*> modifications;
         
     public:
         Engine_3D(void);

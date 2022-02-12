@@ -11,15 +11,15 @@ Engine_3D::Engine_3D(void){
 
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
-    fTheta=50.0f;
-    tTheta=45.0f;
+
     
     
 }
 
 void Engine_3D::load_meshes(){
     // Eventually allow this function to read a list of mesh file referenes and load them
-    mesh_pipeline.Add_Mesh_to_Pipeline("block.mesh");
+    my_pipeline.Add_Mesh_to_Pipeline("block.mesh");
+    my_pipeline.Add_Mesh_to_Pipeline("pyramid.mesh");
 }
 
 bool Engine_3D::is_running(){
@@ -28,8 +28,7 @@ bool Engine_3D::is_running(){
 
 void Engine_3D::engine_update(){
     
-//    float fTheta, tTheta=45.0f;
-
+    int i;
     while (SDL_PollEvent(&event))
     {
         switch (event.type)
@@ -43,38 +42,126 @@ void Engine_3D::engine_update(){
             {
                 isRunning = false;
             }
-
-            if (event.key.keysym.sym == SDLK_RIGHT)
+            if (event.key.keysym.sym == SDLK_q)
             {
-                fTheta +=1;
-                //tri_modifications.Add_Rotation(fTheta,0,Vec3d(0,0,0));
-                //mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(fTheta, 0);
+                modifications.clear();
+                modifications.push_back(new Translator(0,0.1,0));
+                for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+
+                my_pipeline.Apply_Modifications(modifications);
+
+                
+            }
+
+            if (event.key.keysym.sym == SDLK_e)
+            {
+                modifications.clear();
+                modifications.push_back(new Translator(0,-0.1,0));
+                for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+
+                my_pipeline.Apply_Modifications(modifications);
+
+                
+            }
+
+            if (event.key.keysym.sym == SDLK_d)
+            {
+                modifications.clear();
+                modifications.push_back(new Translator(.1,0,0));
+                for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+
+                my_pipeline.Apply_Modifications(modifications);
+
+                
+            }
+
+
+            if (event.key.keysym.sym == SDLK_a)
+            {
+                modifications.clear();
+                modifications.push_back(new Translator(-.1,0,0));		
+                for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}	
+                //modifications.push_back(new Rotator(0,-10,0,Vec3d(0,0,0)));
+                //modifications.back()->AssignToMesh(0);
+                //modifications.push_back(new Rotator(0,10,0,Vec3d(0,0,0)));
+                //modifications.back()->AssignToMesh(1);	
+                my_pipeline.Apply_Modifications(modifications);
+
+                
+            }
+
+            if (event.key.keysym.sym == SDLK_w)
+            {
+                modifications.clear();
+                modifications.push_back(new Translator(0,0,-.1));	
+                for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}	
+                //modifications.push_back(new Rotator(-10,0,0,Vec3d(0,0,0)));
+                //modifications.back()->AssignToMesh(0);
+                //modifications.push_back(new Rotator(10,0,0,Vec3d(0,0,0)));
+                //modifications.back()->AssignToMesh(1);				
+                my_pipeline.Apply_Modifications(modifications);
+
                 
             }
             
-            if (event.key.keysym.sym == SDLK_LEFT)
+            if (event.key.keysym.sym == SDLK_s)
             {
-                fTheta -=1;
-                //tri_modifications.Add_Rotation(fTheta,0,Vec3d(0,0,0));
-                //mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(fTheta, 0);
+                modifications.clear();
+                modifications.push_back(new Translator(0,0,0.1));		
+                for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+                //modifications.push_back(new Rotator(10,0,0,Vec3d(0,0,0)));
+                //modifications.back()->AssignToMesh(0);
+                //modifications.push_back(new Rotator(-10,0,0,Vec3d(0,0,0)));
+                //modifications.back()->AssignToMesh(1);				
+                my_pipeline.Apply_Modifications(modifications);
+
                 
             }
 
             if (event.key.keysym.sym == SDLK_UP)
             {
-                tTheta +=1;
-                //tri_modifications.Add_Rotation(0,tTheta,Vec3d(0,0,0));
-                //mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(0, tTheta);
-            }
-            
+                modifications.clear();
+                modifications.push_back(new Rotator(2,0,0,Vec3d(0,0,0)));
+                //for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+                modifications.back()->AssignToMesh(1);
+                my_pipeline.Apply_Modifications(modifications);
+
+                
+            }                
             if (event.key.keysym.sym == SDLK_DOWN)
             {
-                tTheta -=1;
-                //tri_modifications.Add_Rotation(0,tTheta,Vec3d(0,0,0));
-                //mesh_pipeline.Set_Rot_Angle_Changes_for_Pipeline(0, tTheta);
+                modifications.clear();
+                modifications.push_back(new Rotator(-2,0,0,Vec3d(0,0,0)));
+                //for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+                modifications.back()->AssignToMesh(1);
+
+                my_pipeline.Apply_Modifications(modifications);
+
                 
-            }
-        }
+            }     
+            if (event.key.keysym.sym == SDLK_LEFT)
+            {
+                modifications.clear();
+                modifications.push_back(new Rotator(0,-2,0,Vec3d(0,0,0)));
+                //for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+                modifications.back()->AssignToMesh(1);
+
+                my_pipeline.Apply_Modifications(modifications);
+
+                
+            }     
+            if (event.key.keysym.sym == SDLK_RIGHT)
+            {
+                modifications.clear();
+                modifications.push_back(new Rotator(0,2,0,Vec3d(0,0,0)));
+                //for(i=0;i<my_pipeline.GetSize();i++){ modifications.back()->AssignToMesh(i);}
+                modifications.back()->AssignToMesh(1);
+
+                my_pipeline.Apply_Modifications(modifications);
+
+                
+            }                     
+        }		
     }
 
 
@@ -82,10 +169,10 @@ void Engine_3D::engine_update(){
     // Rotator_Service::Rotate_Pipeline(mesh_pipeline);
 
     // Calculate Tranlations
+    Engine_Renderer.Refresh_Screen(my_pipeline);		
 
     // Establish Projection on mesh pipeline
-    Engine_Renderer.Refresh_Screen(mesh_pipeline);
-    ///  Find a way to pass mesh_pipeline to Renderer::Updatecreen wihout errors...
+    //  Find a way to pass mesh_pipeline to Renderer::Updatecreen wihout errors...
 
 }
 

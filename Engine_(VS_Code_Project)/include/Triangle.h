@@ -13,7 +13,6 @@ class Triangle{
     public:
         
         Triangle();
-        //Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3);
         Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id);
         Triangle (const Triangle &T);
 
@@ -24,6 +23,12 @@ class Triangle{
          * @param vec:  Vec3d value fo the point in 3d space
          */
         void setTrianglePoint(int point, const Vec3d &vec);
+        
+        /**
+         * @brief this function provides an id value for this triangle in the mesh.  It isn't readily used by the engine except to print the triangle string.
+         * 
+         * @param tri_id 
+         */
         void setID(int tri_id);
         Vec3d getTrianglePoint(int point);
         
