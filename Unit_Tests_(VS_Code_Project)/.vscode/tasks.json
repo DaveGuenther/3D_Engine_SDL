@@ -17,6 +17,7 @@
 				"${workspaceFolder}\\src\\Mesh_Pipeline.cpp",
 				"${workspaceFolder}\\src\\Multiply_Matrix_Service.cpp",
 				"${workspaceFolder}\\src\\Triangle_Modifier.cpp",
+				"${workspaceFolder}\\src\\Event_Scanner.cpp",
 //				"${workspaceFolder}\\src\\Rotator_Service.cpp",
 				"-I",
 				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\include",

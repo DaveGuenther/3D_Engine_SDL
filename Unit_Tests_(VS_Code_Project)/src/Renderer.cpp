@@ -133,6 +133,9 @@ Vec2d Renderer::Cartesian_to_Screen(Vec2d this_point)
 	return this_point;
 } 
 
+const int Renderer::getWindow_Width()const { return SCREEN_W; }
+const int Renderer::getWindow_Height()const { return SCREEN_H; }
+
 void Renderer::shutdown(){
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
