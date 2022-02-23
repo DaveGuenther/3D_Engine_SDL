@@ -14,6 +14,7 @@ Event_Scanner::Event_Scanner(SDL_Event &my_event, Renderer &my_renderer){
 
 void Event_Scanner::scanInput(){
     prev_key_matrix=curr_key_matrix;
+    //if (!prev_key_matrix.empty() && !curr_key_matrix.empty()) { prev_key_matrix=curr_key_matrix; }
     while( SDL_PollEvent( &event ) ){
         
         // This loop will run for each key currently pressed

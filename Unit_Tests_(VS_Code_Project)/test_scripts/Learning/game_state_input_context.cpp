@@ -175,7 +175,9 @@ int main(int argc, char *argv[]){
     
 
     bool is_running = true;
+
     Event_Scanner input_events(event, Engine_Renderer );
+
     while (is_running){
         input_events.scanInput();
         switch (GameState.getState()){

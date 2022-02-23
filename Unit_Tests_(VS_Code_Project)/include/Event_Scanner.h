@@ -24,6 +24,7 @@ class Event_Scanner{
 
 
     public:
+    Event_Scanner();
     Event_Scanner(SDL_Event &my_event, Renderer &my_renderer);
     void scanInput();
     //void setIsRunning(bool running);
