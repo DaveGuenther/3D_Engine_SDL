@@ -4,16 +4,27 @@
 #include "GameState_Observer_Pattern.h"
 #include <iostream>
 
-class Game_Engine:IGameStateObserver{
+class Game_Engine_State_Observer:IGameStateObserver{
+    private:
+        GameStateSubject my_subject;
+        game_state state;
+    public:
+        Game_Engine_State_Observer(GameStateSubject &subject);
+        void updateGameState(game_state state);
+        game_state getGameState();
+
+};
+
+class Game_Engine{
     private:
         Renderer Engine_Renderer;
         bool isRunning; //If set to false, this will end the 3D engine during the next engine_update()
-        game_state state;
         SDL_Event event;
         Mesh_Pipeline mesh_pipeline; // contains all of the objects that the engine will need to render
         //Triangle_Modifications_Pipeline tri_modifications;
         
-        GameStateSubject my_subject;
+        GameStateSubject game_state_subject;
+        Game_Engine_State_Observer* Engine_State;
         float fTheta, tTheta;
         Bindings in_world_bindings;
         Event_Scanner* input_events =NULL;
@@ -21,7 +32,7 @@ class Game_Engine:IGameStateObserver{
         
         
     public:
-        Game_Engine(GameStateSubject &subject);
+        Game_Engine();
         ~Game_Engine(void);
         /**
          * @brief This Getter method tells the main game loop the status of the engine, it should be used to terminate the game loop in main()
@@ -34,8 +45,6 @@ class Game_Engine:IGameStateObserver{
          */
         void engine_update();
 
-        void updateGameState(game_state state);
-
         /**
          * @brief Used to shutdown the SDL systems.
          * 
@@ -44,19 +53,31 @@ class Game_Engine:IGameStateObserver{
 
 };
 
-Game_Engine::Game_Engine(GameStateSubject &subject){
+Game_Engine_State_Observer::Game_Engine_State_Observer(GameStateSubject &subject){
+    this->my_subject = subject;
+    this->my_subject.addSubscriber(this);
+}
+
+void Game_Engine_State_Observer::updateGameState(game_state state){
+    this->state = state;
+}
+
+game_state Game_Engine_State_Observer::getGameState(){ return state; }
+
+Game_Engine::Game_Engine(){
 
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
     fTheta=50.0f;
     tTheta=45.0f;
-    this->my_subject=subject;
-    this->my_subject.addSubscriber(this);
-    my_subject.setState(MENU);
+    //this->game_state_subject = new GameStateSubject;
+    this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
+    //this->my_subject.addSubscriber(this);
+    game_state_subject.setState(MENU);
     in_world_bindings.loadBinding("config.cfg");
 
     input_events = new Event_Scanner(event, Engine_Renderer );
-    my_subject.setState(IN_WORLD);
+    game_state_subject.setState(IN_WORLD);
 
 }
 
@@ -66,10 +87,6 @@ Game_Engine::~Game_Engine(void){
     
 }
 
-void Game_Engine::updateGameState(game_state state){
-    this->state = state;
-}
-
 bool Game_Engine::is_running(){
     return isRunning;
 }
@@ -77,7 +94,7 @@ bool Game_Engine::is_running(){
 void Game_Engine::engine_update(){
     
     input_events->scanInput();
-    switch (this->state){
+    switch (this->game_state_subject.getState()){
         case IN_WORLD:
             if (input_events->getMap(PREVIOUS_MAP)!=input_events->getMap(CURRENT_MAP)){
                 std::unordered_map<Uint32, bool> curr_key_map = input_events->getMap(CURRENT_MAP);
@@ -117,8 +134,8 @@ void Game_Engine::print_map(const std::unordered_map<std::string,bool> this_map)
 
 int main(int argc, char *argv[]){
     
-    GameStateSubject subject;
-    Game_Engine game_engine(subject);
+    //GameStateSubject subject;
+    Game_Engine game_engine;
 	//game_engine.load_meshes();
 
 	while(game_engine.is_running()){

@@ -11,6 +11,7 @@ class IGameStateObserver{
     public:
     //virtual ~IGameStateObserver(){};
     virtual void updateGameState(game_state state)=0;
+    virtual game_state getGameState()=0;
 
 
     
