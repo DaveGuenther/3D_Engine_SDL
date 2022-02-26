@@ -1,7 +1,13 @@
 #include "GameState_Observer_Pattern.h"
 #include <algorithm> //std::find
 
-void GameStateSubject::setState(game_state state){ this->state = state; }
+void GameStateSubject::setState(game_state state){ 
+    this->state = state;
+    for (auto subscriber:this->subscriber_list){
+            subscriber->updateGameState(this->state);
+    }
+    
+}
 
 game_state GameStateSubject::getState() { return this->state; }
 
@@ -14,3 +20,4 @@ void GameStateSubject::removeSubscriber(IGameStateObserver* observer){
         subscriber_list.erase(it);
     }
 }
+
