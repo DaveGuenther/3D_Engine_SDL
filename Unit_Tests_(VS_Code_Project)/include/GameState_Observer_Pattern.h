@@ -47,9 +47,15 @@ class GameStateObserver:public IGameStateObserver{
     game_state state;
 }; 
 
+class Game_Engine_State_Observer:IGameStateObserver{
+    private:
+        GameStateSubject my_subject;
+        game_state state;
+    public:
+        Game_Engine_State_Observer(GameStateSubject &subject);
+        void updateGameState(game_state state);
+        game_state getGameState();
 
-
-
-
+};
 
 #endif

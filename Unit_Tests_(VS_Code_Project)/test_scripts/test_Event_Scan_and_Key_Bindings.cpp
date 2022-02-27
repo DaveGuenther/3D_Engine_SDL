@@ -4,16 +4,7 @@
 #include "GameState_Observer_Pattern.h"
 #include <iostream>
 
-class Game_Engine_State_Observer:IGameStateObserver{
-    private:
-        GameStateSubject my_subject;
-        game_state state;
-    public:
-        Game_Engine_State_Observer(GameStateSubject &subject);
-        void updateGameState(game_state state);
-        game_state getGameState();
 
-};
 
 class Game_Engine{
     private:
@@ -52,17 +43,6 @@ class Game_Engine{
         void shutdown();
 
 };
-
-Game_Engine_State_Observer::Game_Engine_State_Observer(GameStateSubject &subject){
-    this->my_subject = subject;
-    this->my_subject.addSubscriber(this);
-}
-
-void Game_Engine_State_Observer::updateGameState(game_state state){
-    this->state = state;
-}
-
-game_state Game_Engine_State_Observer::getGameState(){ return state; }
 
 Game_Engine::Game_Engine(){
 
@@ -134,9 +114,8 @@ void Game_Engine::print_map(const std::unordered_map<std::string,bool> this_map)
 
 int main(int argc, char *argv[]){
     
-    //GameStateSubject subject;
+
     Game_Engine game_engine;
-	//game_engine.load_meshes();
 
 	while(game_engine.is_running()){
 		game_engine.engine_update();
