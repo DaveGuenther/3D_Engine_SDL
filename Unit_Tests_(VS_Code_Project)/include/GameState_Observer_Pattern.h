@@ -4,7 +4,7 @@
 #include <vector>
 
 
-enum game_state {IN_WORLD, MENU, CONSOLE };
+enum game_state {IN_WORLD, MENU, QUIT, CONSOLE };
 
 
 class IGameStateObserver{
@@ -38,14 +38,15 @@ class GameStateSubject:IGameStateObservableSubject{
     std::vector<IGameStateObserver *> subscriber_list;  
 };
 
-class GameStateObserver:public IGameStateObserver{
+/*
+class Game_Input_State_Observer:public IGameStateObserver{
     public:
-    GameStateObserver(GameStateSubject &subject);
+    Game_Input_State_Observer(GameStateSubject &subject);
     void updateGameState(game_state state);
     private:
     GameStateSubject my_subject;
     game_state state;
-}; 
+}; */
 
 class Game_Engine_State_Observer:IGameStateObserver{
     private:

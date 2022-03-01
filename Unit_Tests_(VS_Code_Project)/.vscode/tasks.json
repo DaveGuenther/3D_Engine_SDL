@@ -20,7 +20,7 @@
 				"${workspaceFolder}\\src\\Event_Scanner.cpp",
 				"${workspaceFolder}\\src\\KeyBindings.cpp",		
 				"${workspaceFolder}\\src\\GameState_Observer_Pattern.cpp",			
-
+				"${workspaceFolder}\\src\\Input_Parser.cpp",
 //				"${workspaceFolder}\\src\\Rotator_Service.cpp",
 				"-I",
 				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\include",
