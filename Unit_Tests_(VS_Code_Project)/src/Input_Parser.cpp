@@ -18,20 +18,31 @@ Input_Parser::~Input_Parser(void){
     
 }
 
+const std::unordered_map<std::string,bool> Input_Parser::getCurrentCommands(){ return curr_commands; }
+
+const std::unordered_map<std::string,float> Input_Parser::getRangeInput(){ return curr_range_input; }
+
+
+
 void Input_Parser::scanInput(){
 
     input_events->scanInput();
-    if (input_events->getMap(PREVIOUS_MAP)!=input_events->getMap(CURRENT_MAP)){
-        std::unordered_map<Uint32, bool> curr_key_map = input_events->getMap(CURRENT_MAP);
-        std::unordered_map<Uint32, bool> prev_key_map = input_events->getMap(PREVIOUS_MAP);
+    if ((input_events->getTactileMap(PREVIOUS_MAP)!=input_events->getTactileMap(CURRENT_MAP))||(input_events->getRangeMap(PREVIOUS_MAP)!=input_events->getRangeMap(CURRENT_MAP))){
+        std::unordered_map<std::string, bool> curr_key_map = input_events->getTactileMap(CURRENT_MAP);
+        std::unordered_map<std::string, float> curr_range_input_map = input_events->getRangeMap(CURRENT_MAP);
+        //std::unordered_map<std::string, bool> prev_key_map = input_events->getTactileMap(PREVIOUS_MAP);
+        //std::unordered_map<std::string, bool> curr_button_map = input_events->getTactileMap(MOUSE_BUTTON_MAP);
         std::unordered_map<std::string, bool> curr_command_map = bindings.getCommandMapFromKeycodes(curr_key_map);
-        std::unordered_map<std::string, bool> prev_command_map = bindings.getCommandMapFromKeycodes(prev_key_map);
+        //std::unordered_map<std::string, bool> prev_command_map = bindings.getCommandMapFromKeycodes(prev_key_map);
+        this->curr_range_input = curr_range_input_map;
+        this->curr_commands = curr_command_map;
 
-        if (curr_key_map.find(SDLK_ESCAPE)!=curr_key_map.end()){ game_state_subject.setState(QUIT); }
 
-        std::cout << "Prev: ";
-        print_map(prev_command_map);
-        std::cout << "Curr: ";
+        //if (curr_key_map.find(SDLK_ESCAPE)!=curr_key_map.end()){ game_state_subject.setState(QUIT); }
+
+        //std::cout << "Prev: ";
+        //print_map(prev_command_map);
+        //std::cout << "Curr: ";
         print_map(curr_command_map);
     }
 }

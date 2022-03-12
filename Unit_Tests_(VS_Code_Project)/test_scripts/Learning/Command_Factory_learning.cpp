@@ -5,6 +5,7 @@
 #include "Input_Parser.h"
 #include <iostream>
 #include <unordered_map>
+#include "Frame_Rate_Manager.h"
 
 
 class Game_Engine{
@@ -59,6 +60,7 @@ Game_Engine::Game_Engine(){
     this->MENU_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "menu_bindings.cfg");
     this->INWORLD_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "in_game_bindings.cfg");
     game_state_subject.setState(MENU);
+    game_state_subject.setState(IN_WORLD);
     
 
     
@@ -85,14 +87,16 @@ void Game_Engine::engine_update(){
             break;
         case IN_WORLD:{
             INWORLD_Input_Parser->scanInput();
-            std::unordered_map<std::string,bool> command_map = INWORLD_Input_Parser->getCurrentCommands();
-            
+            std::unordered_map<std::string,bool> my_commands= INWORLD_Input_Parser->getCurrentCommands();
+            //for (auto comm:my_commands){
+            //    std::cout << comm.first << ":" << comm.second << "    ";
+            //}
+            //std::cout << std::endl;
             break;
         }
-        case MENU:{
+        case MENU:
             MENU_Input_Parser->scanInput();
             break;
-        }
         default:
             break;
     }
