@@ -27,3 +27,7 @@ If you did it right, you should have the following active path: c:\SDL\SDL2-2.0.
 
 
 
+## Repo Structure:
+There are two VS Code project directories:
+- Engine (VS Code Project): This project folder include all the source, meshes, etc for the engine itself
+- Unit Tests (VS Code Project): This project folder is intended for various unit test scripts for the various classes
