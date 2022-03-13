@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include "Event_Scanner.h"
+#include "input/Event_Scanner.h"
 #include <iostream>
 #include <algorithm> // std::find()
 #include <vector>  //std::vector

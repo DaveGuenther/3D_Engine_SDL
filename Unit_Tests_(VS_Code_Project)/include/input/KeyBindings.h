@@ -40,11 +40,11 @@ class Bindings{
      * @param keycodes 
      * @return const std::unordered_map<std::string,bool> 
      */
-    const std::unordered_map<std::string,bool> getCommandMapFromKeycodes(const std::unordered_map<Uint32,bool> &keycodes);
+    const std::unordered_map<std::string,bool> getCommandMapFromKeycodes(const std::unordered_map<std::string,bool> &keycodes);
 
     private: 
-    std::unordered_map<Uint32, std::string> bindings;   
-    std::string getCommand(Uint32 key_code); 
+    std::unordered_map<std::string, std::string> bindings;   
+    std::string getCommand(std::string key_code); 
 
 };
 

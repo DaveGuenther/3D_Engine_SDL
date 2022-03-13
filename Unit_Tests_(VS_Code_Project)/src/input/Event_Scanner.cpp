@@ -1,0 +1,84 @@
+#include "input/Event_Scanner.h"
+#include "Renderer.h"
+
+Event_Scanner::Event_Scanner(SDL_Event &my_event, Renderer &my_renderer){
+    event=my_event;
+    curr_mouse_x=0;
+    curr_mouse_y=0;
+    prev_mouse_x=0;
+    delta_mouse_x=0;
+    delta_mouse_y=0;
+    SCREEN_H=my_renderer.getWindow_Height();
+    SCREEN_W=my_renderer.getWindow_Width();
+}
+
+void Event_Scanner::scanInput(){
+    prev_key_matrix=curr_key_matrix;
+    prev_range_input_matrix=curr_range_input_matrix;
+    //if (!prev_key_matrix.empty() && !curr_key_matrix.empty()) { prev_key_matrix=curr_key_matrix; }
+    while( SDL_PollEvent( &event ) ){
+        
+        // This loop will run for each key currently pressed
+        switch( event.type ){
+
+            case SDL_KEYDOWN:
+                //curr_key_matrix.clear();
+                curr_key_matrix.insert_or_assign("KEY:"+std::to_string(event.key.keysym.sym),true);
+                break;
+
+            case SDL_KEYUP:
+                //prev_key_matrix=curr_key_matrix;
+                
+                curr_key_matrix.erase("KEY:"+std::to_string(event.key.keysym.sym));   
+                break;
+
+            case SDL_MOUSEMOTION:
+                prev_mouse_x=curr_mouse_x;
+                prev_mouse_y=curr_mouse_y;
+                curr_mouse_x=(float(event.motion.x)-(float(SCREEN_W)/2))/(float(SCREEN_W)/2);
+                curr_mouse_y=-(float(event.motion.y)-(float(SCREEN_H)/2))/(float(SCREEN_H)/2);
+                delta_mouse_x = curr_mouse_x-prev_mouse_x;
+                delta_mouse_y = curr_mouse_y-prev_mouse_y;
+
+                curr_range_input_matrix.insert_or_assign("MOUSE_X",event.motion.x);
+                curr_range_input_matrix.insert_or_assign("MOUSE_Y",event.motion.y);
+
+                curr_range_input_matrix.insert_or_assign("MOUSE_X_DELTA",delta_mouse_x);
+                curr_range_input_matrix.insert_or_assign("MOUSE_Y_DELTA",delta_mouse_y);
+
+                //std::cout<< "Mouse_X: " << delta_mouse_x << "   Mouse_Y: " << delta_mouse_y << "  " << std::endl;
+                //std::cout<< "Mouse_X: " << event.motion.x << "   Mouse_Y: " << event.motion.y << "  " << std::endl;
+
+
+                break;
+
+            case SDL_MOUSEBUTTONDOWN:{
+                int button_value=0;
+                button_value= event.button.button;
+                curr_key_matrix.insert_or_assign("MOUSE:"+std::to_string(event.button.button), true);
+                
+                break;
+            }
+            case SDL_MOUSEBUTTONUP:
+               curr_key_matrix.erase("MOUSE:"+std::to_string(event.button.button));
+                break; 
+
+            default:
+                break;
+        }
+    }       
+}
+
+const std::unordered_map<std::string,bool>& Event_Scanner::getTactileMap(input_map this_map){
+
+    if(this_map==CURRENT_MAP){ return curr_key_matrix;}
+    else if(this_map==PREVIOUS_MAP) { return prev_key_matrix;}
+    else if(this_map==MOUSE_BUTTON_MAP) { return mouse_button_matrix; }
+    else{ throw std::invalid_argument("Invalid arguement.  Possible values are PREVIOUS_MAP, CURRENT_MAP, or MOUSE_BUTTON_MAP"); }
+}
+
+const std::unordered_map<std::string,float>& Event_Scanner::getRangeMap(input_map this_map){
+    if(this_map==CURRENT_MAP){ return curr_range_input_matrix;}
+    else if(this_map==PREVIOUS_MAP) { return prev_range_input_matrix;}
+    else{ throw std::invalid_argument("Invalid arguement.  Possible values are PREVIOUS_MAP, CURRENT_MAP"); }
+}
