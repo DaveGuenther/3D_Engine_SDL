@@ -1,4 +1,4 @@
-#include "Event_Scanner.h"
+#include "input/Event_Scanner.h"
 #include "Renderer.h"
 
 Event_Scanner::Event_Scanner(SDL_Event &my_event, Renderer &my_renderer){

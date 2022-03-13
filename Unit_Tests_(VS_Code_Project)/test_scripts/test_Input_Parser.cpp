@@ -1,8 +1,8 @@
 #include <SDL2/SDL.h>
-#include "Event_Scanner.h"
-#include "KeyBindings.h"
+#include "input/Event_Scanner.h"
+#include "input/KeyBindings.h"
 #include "GameState_Observer_Pattern.h"
-#include "Input_Parser.h"
+#include "input/Input_Parser.h"
 #include <iostream>
 #include <unordered_map>
 
@@ -86,7 +86,7 @@ void Game_Engine::engine_update(){
         case IN_WORLD:{
             INWORLD_Input_Parser->scanInput();
             std::unordered_map<std::string,bool> command_map = INWORLD_Input_Parser->getCurrentCommands();
-            
+
             break;
         }
         case MENU:{

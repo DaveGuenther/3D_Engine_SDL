@@ -1,4 +1,4 @@
-#include "KeyBindings.h"
+#include "input/KeyBindings.h"
 #include <string>
 #include <unordered_map>
 #include <filesystem> // loading key bindings

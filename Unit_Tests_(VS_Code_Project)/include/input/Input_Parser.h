@@ -3,8 +3,8 @@
 
 #include <SDL2/SDL.h>
 #include "Gamestate_Observer_Pattern.h"
-#include "Event_Scanner.h"
-#include "KeyBindings.h"
+#include "input/Event_Scanner.h"
+#include "input/KeyBindings.h"
 
 
 class Input_Parser{

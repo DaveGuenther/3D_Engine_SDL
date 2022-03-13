@@ -1,8 +1,8 @@
 #include <SDL2/SDL.h>
-#include "Event_Scanner.h"
-#include "KeyBindings.h"
+#include "input/Event_Scanner.h"
+#include "input/KeyBindings.h"
 #include "GameState_Observer_Pattern.h"
-#include "Input_Parser.h"
+#include "input/Input_Parser.h"
 #include <iostream>
 #include <unordered_map>
 #include "Frame_Rate_Manager.h"

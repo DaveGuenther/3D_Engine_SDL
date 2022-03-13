@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
-#include "Event_Scanner.h"
-#include "KeyBindings.h"
+#include "input/Event_Scanner.h"
+#include "input/KeyBindings.h"
 #include "GameState_Observer_Pattern.h"
 #include <iostream>
 
