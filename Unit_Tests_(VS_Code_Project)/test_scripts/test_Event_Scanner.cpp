@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include "Event_Scanner.h"
+#include "input/Event_Scanner.h"
 #include <iostream>
 
 void print_map(std::unordered_map<Uint32,bool> this_map);
