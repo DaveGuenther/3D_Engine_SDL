@@ -5,6 +5,11 @@
 #include "input/Input_Parser.h"
 #include <iostream>
 #include <unordered_map>
+#include "Frame_Rate_Manager.h"
+#include "actions/Action_Interface.h"
+#include "actions/Action_Updater.h"
+
+
 
 
 class Game_Engine{
@@ -20,8 +25,12 @@ class Game_Engine{
         float fTheta, tTheta;
         Input_Parser* MENU_Input_Parser;
         Input_Parser* INWORLD_Input_Parser; 
-        
-        
+
+        Action_Updater* INWORLD_Action_Updater;
+
+        float FPS;
+        Frame_Rate_Manager* VariableFrameRate; 
+        std::unordered_map<std::string, IAction*> action_map;
 
         
         
@@ -51,18 +60,19 @@ Game_Engine::Game_Engine(){
 
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
-    fTheta=50.0f;
-    tTheta=45.0f;
+
     //this->game_state_subject = new GameStateSubject;
     this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
     //this->my_subject.addSubscriber(this);
     this->MENU_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "menu_bindings.cfg");
     this->INWORLD_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "in_game_bindings.cfg");
     game_state_subject.setState(MENU);
+    this->FPS=60;
+    this->VariableFrameRate = new Frame_Rate_Manager(FPS);
     
-
-    
-    //game_state_subject.setState(IN_WORLD);
+    this->INWORLD_Action_Updater = new Action_Updater(FPS);
+      
+    game_state_subject.setState(IN_WORLD);
 
 }
 
@@ -77,7 +87,7 @@ bool Game_Engine::is_running(){
 }
 
 void Game_Engine::engine_update(){
-    
+    VariableFrameRate->setFrameStart();
     //input_events->scanInput();
     switch (this->game_state_subject.getState()){
         case QUIT:
@@ -85,8 +95,9 @@ void Game_Engine::engine_update(){
             break;
         case IN_WORLD:{
             INWORLD_Input_Parser->scanInput();
-            std::unordered_map<std::string,bool> command_map = INWORLD_Input_Parser->getCurrentCommands();
-
+            INWORLD_Action_Updater->AddTactileInputMap(INWORLD_Input_Parser->getCurrentCommands());
+            INWORLD_Action_Updater->AddRangeInputMap(INWORLD_Input_Parser->getRangeInput());
+            INWORLD_Action_Updater->update();
             break;
         }
         case MENU:{
@@ -96,7 +107,8 @@ void Game_Engine::engine_update(){
         default:
             break;
     }
-
+    VariableFrameRate->setFrameEnd();
+    VariableFrameRate->delay();
 }
 
 void Game_Engine::shutdown(){
