@@ -80,6 +80,9 @@ class Renderer{
          */
         void Refresh_Screen(Mesh_Pipeline &this_mesh_pipeline);
 
+        const int getWindow_Width() const;
+        const int getWindow_Height() const;
+
         /**
          * @brief this method is mainly used to shut down the SDL renderer and window objects
          * 
