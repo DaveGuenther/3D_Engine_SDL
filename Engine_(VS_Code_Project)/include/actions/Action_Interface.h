@@ -3,7 +3,7 @@
 
 #include <string>
 #include <unordered_map>
-
+#include "Triangle_Modifier.h"
 
 enum ActionCommandState {OFF, TRIG_ATTACK, ATTACK, SUSTAIN, TRIG_RELEASE, RELEASE};
 
@@ -15,12 +15,14 @@ class IAction{
         const bool isRunning();
         const bool isReadyToDestroy();
         const std::string getName();
+        Triangle_Modifier* getMeshModification() const;
     protected: 
         bool is_running;
         bool is_key_pressed;
         std::string command_name;
         bool readyToDestroy;
         std::string name;
+        Triangle_Modifier* mesh_modification;
 };
 
 class TwoAxisRangeCommand:public IAction{
@@ -45,12 +47,15 @@ class MoveAction:public IAction{
         ActionCommandState action_state;
         void setActionState();
         
+        Vec3d direction;
+        
 
     public:
-        MoveAction(std::string command_name, float attack, float release, float max_speed, float FPS);
+        MoveAction(std::string command_name, Vec3d direction, float attack, float release, float max_speed, float FPS);
         void setAttack(float attack);
         void setRelease(float release);
         void update(bool key_pressed);
-
+        
+        
 };
 #endif

@@ -91,10 +91,11 @@ void Renderer::Project_Triangle_3d(Triangle &tri){
 	Draw_Triangle_2d(point1, point2, point3, col);
 }
 
-void Renderer::Refresh_Screen(Mesh_Pipeline &this_mesh_pipeline){
+void Renderer::Refresh_Screen(Mesh_Pipeline* this_mesh_pipeline){
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
-	for (auto this_mesh: this_mesh_pipeline.Get_Meshes()){
+	Mesh_Pipeline mesh_pipeline = *this_mesh_pipeline;
+	for (auto this_mesh: mesh_pipeline.Get_Meshes()){  //Issues with mesh_pipeline.Get_Meshes() if I try to make this_mesh_pipeline a const ptr
 		std::vector<Triangle> tris = this_mesh.get_tris();
 		for (auto tri: tris)
 		{

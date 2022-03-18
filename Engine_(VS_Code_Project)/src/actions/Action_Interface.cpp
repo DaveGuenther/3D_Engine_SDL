@@ -14,6 +14,9 @@ void IAction::trigger(){
     this->is_running=true; 
 }
 
+Triangle_Modifier* IAction::getMeshModification() const{
+    return mesh_modification;
+}
 
 
 
@@ -37,7 +40,7 @@ void TwoAxisRangeCommand::update(bool key_pressed){
 
 
 
-MoveAction::MoveAction(std::string command_name, float attack, float release, float max_speed, float FPS){
+MoveAction::MoveAction(std::string command_name, Vec3d direction, float attack, float release, float max_speed, float FPS){
     this->speed=0;
     this->is_running=false;
     this->FPS=FPS;
@@ -50,6 +53,8 @@ MoveAction::MoveAction(std::string command_name, float attack, float release, fl
     this->max_speed=max_speed;
     this->command_name = command_name;
     this->readyToDestroy=false;
+    this-> direction = direction;
+    this->mesh_modification = NULL;
 
 }
 
@@ -116,6 +121,7 @@ void MoveAction::update(bool key_pressed){
     }
     case TRIG_ATTACK:{
         is_running=true;
+        speed+=1;
         break;
     }
     case ATTACK:{
@@ -137,7 +143,16 @@ void MoveAction::update(bool key_pressed){
         break;
     }
 
+    if (speed>0){ 
+        Vec3d translation_vector;
+        translation_vector.setX(direction.getX()*speed);
+        translation_vector.setY(direction.getY()*speed);
+        translation_vector.setZ(direction.getZ()*speed);
+        mesh_modification = new Translator(translation_vector.getX(), translation_vector.getY(), translation_vector.getZ());
+        }
+
     // use speed to update meshes here
 
-    std::cout << "    " << command_name << ": " << this->speed;
+    //std::cout << "    " << command_name << ": " << this->speed;
 }
+

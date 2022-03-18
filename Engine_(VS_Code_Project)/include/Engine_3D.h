@@ -3,6 +3,11 @@
 #include "Renderer.h"
 #include "Mesh_Pipeline.h"
 #include "Triangle_Modifications_Pipeline.h"
+#include "GameState_Observer_Pattern.h"
+#include "input/Input_Parser.h"
+#include "actions/Action_Updater.h"
+#include "Frame_Rate_Manager.h"
+
 
 /**
  * @brief This is the base class of the 3D engine.  It initializes the other key systems like Renderer and Input classes.  It manages updates of the various subsystems.
@@ -10,12 +15,38 @@
  */
 class Engine_3D{
     private:
+
         Renderer Engine_Renderer;
+
+
         bool isRunning; //If set to false, this will end the 3D engine during the next engine_update()
-        SDL_Event event;
-        Mesh_Pipeline mesh_pipeline; // contains all of the objects that the engine will need to render
+        
+        // MIGHT NEED TO UNCOMMENT THIS
+        Mesh_Pipeline* mesh_pipeline; // contains all of the objects that the engine will need to render
+        // MIGHT NEED TO UNCOMMENT THIS
+
+
         //Triangle_Modifications_Pipeline tri_modifications;
+        
+        GameStateSubject game_state_subject;
+        Game_Engine_State_Observer* Engine_State;
         float fTheta, tTheta;
+        Input_Parser* MENU_Input_Parser;
+        Input_Parser* INWORLD_Input_Parser; 
+
+        InGame_Action_Updater* INWORLD_Action_Updater;
+
+        float FPS;
+        Frame_Rate_Manager* VariableFrameRate; 
+        std::unordered_map<std::string, IAction*> action_map;
+
+        //Renderer Engine_Renderer;
+        //bool isRunning; //If set to false, this will end the 3D engine during the next engine_update()
+        SDL_Event event;
+        //Mesh_Pipeline mesh_pipeline; // contains all of the objects that the engine will need to render
+        //Triangle_Modifications_Pipeline tri_modifications;
+        //float fTheta, tTheta;
+        
         std::vector<Triangle_Modifier*> modifications;
         
     public:

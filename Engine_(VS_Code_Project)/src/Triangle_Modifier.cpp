@@ -124,8 +124,8 @@ void Rotator::ModifyTri(Triangle &tri){
     tri.setTrianglePoint(0,pt1_i);
     tri.setTrianglePoint(1,pt2_i);
     tri.setTrianglePoint(2,pt3_i);
-    std::cout << tri.toString() << std::endl;
-    std::cout << "Done Rotating Triangle" << std::endl;
+    //std::cout << tri.toString() << std::endl;
+    //std::cout << "Done Rotating Triangle" << std::endl;
 }
 
 
@@ -147,7 +147,7 @@ void Translator::ModifyTri(Triangle& tri){
         tri.setTrianglePoint(i,point);
     
     }
-    std::cout << tri.toString() << std::endl;
-    std::cout << "Done Translating Triangle" << std::endl;
+    //std::cout << tri.toString() << std::endl;
+    //std::cout << "Done Translating Triangle" << std::endl;
 }
 

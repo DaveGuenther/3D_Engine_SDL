@@ -78,7 +78,7 @@ class Renderer{
          * 
          * @param this_mesh_pipeline 
          */
-        void Refresh_Screen(Mesh_Pipeline &this_mesh_pipeline);
+        void Refresh_Screen(Mesh_Pipeline* this_mesh_pipeline);  // Why can't I make this a const pointer?
 
         const int getWindow_Width() const;
         const int getWindow_Height() const;

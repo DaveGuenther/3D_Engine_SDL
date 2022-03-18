@@ -45,7 +45,7 @@ void Input_Parser::scanInput(){
         //std::cout << "Prev: ";
         //print_map(prev_command_map);
         //std::cout << "Curr: ";
-        print_map(curr_command_map);
+        //print_map(curr_command_map);
     }
 }
 

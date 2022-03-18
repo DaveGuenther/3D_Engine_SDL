@@ -32,7 +32,7 @@ void Mesh_Pipeline::Apply_Modifications(std::vector<Triangle_Modifier*> tri_mods
     for (auto triMod:tri_mods_pipe){
         std::vector<int> mesh_ids = triMod->GetAssignedMeshIDs();
         for (int this_mesh_id:mesh_ids){
-            std::cout << "Preparing to modify: " << Meshes[this_mesh_id].toString() << std::endl;
+            //std::cout << "Preparing to modify: " << Meshes[this_mesh_id].toString() << std::endl;
             Meshes[this_mesh_id].PerformModifications(triMod);
             
         }
