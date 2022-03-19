@@ -11,6 +11,10 @@ const std::vector<int> Triangle_Modifier::GetAssignedMeshIDs(){
     return mesh_ids;
 }
 
+void Triangle_Modifier::ClearMeshAssignments(){
+    this->mesh_ids.clear();
+}
+
 Rotator::Rotator(float x_degrees, float y_degrees, float z_degrees, Vec3d center){
     x_degs = x_degrees;
     y_degs = y_degrees;
@@ -150,4 +154,5 @@ void Translator::ModifyTri(Triangle& tri){
     //std::cout << tri.toString() << std::endl;
     //std::cout << "Done Translating Triangle" << std::endl;
 }
+
 

@@ -21,15 +21,21 @@ Triangle_Modifier* IAction::getMeshModification() const{
 JumpAction::JumpAction(std::string command_name){
     //passthrough
     this->command_name=command_name;
+    this->is_key_pressed=false;
+    this->is_running=false;
+    this->readyToDestroy=false;
+    this->mesh_modification = NULL;
 }
 
 void JumpAction::update(bool key_pressed){
     // Place Holder
-   if (is_running){
+    if (key_pressed){ is_running=true; } else { is_running=false; }
+    if (is_running){
 
         std::cout << "Jump Pressed!";
     }
     is_running=false;
+    this->readyToDestroy=true;
 }
 
 TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, float x_range, float y_range):x_range(x_range),y_range(y_range){    
@@ -76,6 +82,7 @@ void MoveAction::setActionState(){
     {
     case OFF:{
         if (is_key_pressed) { action_state=TRIG_ATTACK; }
+        
         break;
     }
     case TRIG_ATTACK:{
@@ -106,7 +113,10 @@ void MoveAction::setActionState(){
     case RELEASE:{
         if (is_key_pressed){ action_state=TRIG_ATTACK; }
         else{
-            if(speed<=0){ action_state=OFF; }
+            if(speed<=0){ 
+                action_state=OFF; 
+                this->mesh_modification = NULL;
+            }
             else { action_state=RELEASE; }
         }
         break;
@@ -122,6 +132,7 @@ void MoveAction::setRelease(float release){ this->release_speed_delta = (release
   
     
 void MoveAction::update(bool key_pressed){
+    if (this->mesh_modification!=NULL){ this->mesh_modification->ClearMeshAssignments();}
     this->is_key_pressed=key_pressed;
     setActionState();
     switch (action_state)

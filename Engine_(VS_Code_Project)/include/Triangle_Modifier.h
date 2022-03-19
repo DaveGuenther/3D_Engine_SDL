@@ -33,6 +33,11 @@ class Triangle_Modifier{
          */
         const std::vector<int> GetAssignedMeshIDs();
         
+        /**
+         * @brief Removes all assignments of this modifier to any existing meshes
+         * 
+         */
+        void ClearMeshAssignments();
         
 
     protected:
