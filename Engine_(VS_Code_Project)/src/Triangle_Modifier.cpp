@@ -137,7 +137,7 @@ Translator::Translator(float x_distance, float y_distance,  float z_distance){
 }
 
 void Translator::ModifyTri(Triangle& tri){
-    std::cout << "Translating Triangle" << std::endl;
+    //std::cout << "Translating Triangle" << std::endl;
 
     for (int i=0;i<3;i++){
         Vec3d point = tri.getTrianglePoint(i);

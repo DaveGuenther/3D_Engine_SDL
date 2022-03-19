@@ -25,6 +25,12 @@ class IAction{
         Triangle_Modifier* mesh_modification;
 };
 
+class JumpAction:public IAction{
+    public:
+    JumpAction(std::string command_name);
+    void update(bool key_pressed);
+};
+
 class TwoAxisRangeCommand:public IAction{
     private:
         float x_range;

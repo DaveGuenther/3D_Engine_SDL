@@ -30,14 +30,14 @@ int IAction_Updater::numberOfActiveCommands(const std::unordered_map<std::string
 
 
 InGame_Action_Updater::InGame_Action_Updater(Mesh_Pipeline* mesh_pipeline, int FPS){
-    action_map.insert_or_assign("MOVE_FORWARD", new MoveAction("MOVE_FORWARD", Vec3d{0,0,1}, 0.01f, 0.01f, 2.0f, FPS));
-    action_map.insert_or_assign("MOVE_BACKWARD", new MoveAction("MOVE_BACKWARD", Vec3d{0,0,-1}, 0.01f, 0.01f, 2.0f, FPS));
-    action_map.insert_or_assign("STRAFE_LEFT", new MoveAction("STRAFE_LEFT", Vec3d{1,0,0}, 0.01f, 0.01f, 2.0f, FPS));
-    action_map.insert_or_assign("STRAFE_RIGHT", new MoveAction("STRAFE_RIGHT", Vec3d{-1,0,0}, 0.01f, 0.01f, 2.0f, FPS));
+    action_map.insert_or_assign("MOVE_FORWARD", new MoveAction("MOVE_FORWARD", Vec3d{0,0,-1}, 1.0f, 1.0f, 0.5f, FPS));
+    action_map.insert_or_assign("MOVE_BACKWARD", new MoveAction("MOVE_BACKWARD", Vec3d{0,0,1}, 1.0f, 1.0f, 0.5f, FPS));
+    action_map.insert_or_assign("STRAFE_LEFT", new MoveAction("STRAFE_LEFT", Vec3d{1,0,0}, 1.0f, 1.0f, 0.5f, FPS));
+    action_map.insert_or_assign("STRAFE_RIGHT", new MoveAction("STRAFE_RIGHT", Vec3d{-1,0,0}, 1.0f, 1.0f, 0.5f, FPS));
+    //action_map.insert_or_assign("JUMP", new JumpAction("JUMP"));
     this->mesh_pipeline = mesh_pipeline;  // I know this is bad coding practice and tightly couples code..  Not sure how else to do it yet.  I might eventually try some kind of observer where ActionUpdater is the subject and mesh_pipeline is the observer, updating itself when the time comes...
 
 }
-
 
 void InGame_Action_Updater::update(){
     modifications.clear();
@@ -80,7 +80,7 @@ void InGame_Action_Updater::update(){
             }
             
         }
-        //std::cout << std::endl;
+        std::cout << std::endl;
         
         //Add modifications to tri_modifier
         for (auto this_command:action_map){

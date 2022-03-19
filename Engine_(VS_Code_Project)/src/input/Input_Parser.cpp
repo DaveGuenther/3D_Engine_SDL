@@ -31,7 +31,7 @@ void Input_Parser::scanInput(){
     std::unordered_map<std::string, float> curr_range_input_map = input_events->getRangeMap(CURRENT_MAP);
     std::unordered_map<std::string, bool> prev_key_map = input_events->getTactileMap(PREVIOUS_MAP);
     std::unordered_map<std::string, float> prev_range_input_map = input_events->getRangeMap(PREVIOUS_MAP);    
-    std::cout << (curr_key_map!=prev_key_map) << "   " << (curr_range_input_map!=prev_range_input_map) << std::endl;
+    //std::cout << (curr_key_map!=prev_key_map) << "   " << (curr_range_input_map!=prev_range_input_map) << std::endl;
     if ((curr_key_map!=prev_key_map)||(curr_range_input_map!=prev_range_input_map)){
         std::unordered_map<std::string, bool> curr_key_map = input_events->getTactileMap(CURRENT_MAP);
         std::unordered_map<std::string, float> curr_range_input_map = input_events->getRangeMap(CURRENT_MAP);

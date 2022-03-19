@@ -18,7 +18,19 @@ Triangle_Modifier* IAction::getMeshModification() const{
     return mesh_modification;
 }
 
+JumpAction::JumpAction(std::string command_name){
+    //passthrough
+    this->command_name=command_name;
+}
 
+void JumpAction::update(bool key_pressed){
+    // Place Holder
+   if (is_running){
+
+        std::cout << "Jump Pressed!";
+    }
+    is_running=false;
+}
 
 TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, float x_range, float y_range):x_range(x_range),y_range(y_range){    
     is_running=true;
@@ -45,8 +57,8 @@ MoveAction::MoveAction(std::string command_name, Vec3d direction, float attack, 
     this->is_running=false;
     this->FPS=FPS;
     this->max_speed = max_speed;
-    this->attack_speed_delta = (attack * FPS)/max_speed;
-    this->release_speed_delta = (release * FPS)/max_speed;
+    this->attack_speed_delta = max_speed/(attack * FPS);
+    this->release_speed_delta = max_speed/(release * FPS);
     this->speed;
     this->is_key_pressed=false;
     this->action_state=OFF;
@@ -120,22 +132,26 @@ void MoveAction::update(bool key_pressed){
         break;
     }
     case TRIG_ATTACK:{
+        std::cout << "TRIG_ATTACK  ";
         is_running=true;
-        speed+=1;
         break;
     }
     case ATTACK:{
+        std::cout << "ATTACK  ";
         speed+=attack_speed_delta;
         break;
     }
     case SUSTAIN:{
+        std::cout << "SUSTAIN  ";
         speed=speed;
         break;
     }
     case TRIG_RELEASE:
+        std::cout << "TRIG_RELEASE  ";
         //Place Holder
         break;
     case RELEASE:{
+        std::cout << "RELEASE  ";
         speed-=release_speed_delta;
         break;
     }
@@ -149,6 +165,7 @@ void MoveAction::update(bool key_pressed){
         translation_vector.setY(direction.getY()*speed);
         translation_vector.setZ(direction.getZ()*speed);
         mesh_modification = new Translator(translation_vector.getX(), translation_vector.getY(), translation_vector.getZ());
+        std::cout << "    " << command_name << ": " << translation_vector.getX() << "," << translation_vector.getY() << ", " << translation_vector.getZ() << ": " << this->speed;
         }
 
     // use speed to update meshes here
