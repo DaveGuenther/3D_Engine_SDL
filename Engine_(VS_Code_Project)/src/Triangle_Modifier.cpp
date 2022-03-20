@@ -90,7 +90,7 @@ Rotator::Rotator(float x_degrees, float y_degrees, float z_degrees, Vec3d center
 
 
 void Rotator::ModifyTri(Triangle &tri){
-    std::cout << "Rotating Triangle" << std::endl;
+    //std::cout << "Rotating Triangle" << std::endl;
 
     Vec3d pt1_i = tri.getTrianglePoint(0);
     Vec3d pt1_o = pt1_i;

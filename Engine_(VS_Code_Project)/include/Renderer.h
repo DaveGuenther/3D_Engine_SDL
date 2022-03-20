@@ -71,8 +71,16 @@ class Renderer{
 
     public:
 
-        Renderer();
-
+        Renderer(int SCREEN_W, int SCREEN_H);
+        
+        /**
+         * @brief This function will reset the mouse X and Y values to the center of the window.  It requires the window object to call so must occur in the Renderer class
+         * 
+         */
+        void resetMouseXY();
+        
+        
+        
         /**
          * @brief This method directs the projection operations over the entire mesh pipeline.  It iterates through each mesh and it's tris in order to apply projections and direct screen page drawing
          * 

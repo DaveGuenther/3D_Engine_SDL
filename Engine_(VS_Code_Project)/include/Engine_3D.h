@@ -16,7 +16,7 @@
 class Engine_3D{
     private:
 
-        Renderer Engine_Renderer;
+        Renderer* Engine_Renderer;
 
 
         bool isRunning; //If set to false, this will end the 3D engine during the next engine_update()

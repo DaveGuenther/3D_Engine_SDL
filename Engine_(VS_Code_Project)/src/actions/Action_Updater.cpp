@@ -7,8 +7,9 @@ void IAction_Updater::AddTactileInputMap(const std::unordered_map<std::string,bo
     this->input_tactile_map=input_tactile_map;
 }
 
-void IAction_Updater::AddRangeInputMap(const std::unordered_map<std::string,float> &input_range_map){
+void IAction_Updater::AddRangeInputMap(const std::unordered_map<std::string,float> &input_range_map, const bool didRangeInputChange){
     this->input_range_map = input_range_map;
+    this->didRangeInputChange=didRangeInputChange;
 }
 
 /**
@@ -48,15 +49,18 @@ void InGame_Action_Updater::update(){
     
     } // Tactile Input
     float prev_range_x, prev_range_y, range_x, range_y;
+    int mouse_x, mouse_y, prev_mouse_x, prev_mouse_y;
     for (auto range_input:input_range_map) {  
         if (range_input.first.find("MOUSE_X_DELTA") != std::string::npos){ range_x=range_input.second; }
         if (range_input.first.find("MOUSE_Y_DELTA") != std::string::npos){ range_y=range_input.second; }
     }
-    if (range_x>0.00001||range_y>0.00001){
+    if (this->didRangeInputChange){
         
         //NEED TO Uncomment this eventully to allow mouse input once keys are working...
-        //action_map.insert_or_assign("LOOK_XY", new TwoAxisRangeCommand("LOOK_XY", range_x, range_y));
+        action_map.insert_or_assign("LOOK_XY", new TwoAxisRangeCommand("LOOK_XY", range_x, range_y));
     }
+    prev_mouse_x=mouse_x;
+    prev_mouse_y=mouse_y;
 
     // for each active command, update the command's action loop
     int num_commands_active = numberOfActiveCommands(action_map);

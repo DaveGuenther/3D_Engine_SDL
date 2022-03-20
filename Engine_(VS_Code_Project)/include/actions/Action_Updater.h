@@ -11,7 +11,7 @@ class IAction_Updater{
     public:
     virtual void update()=0;    
     void AddTactileInputMap(const std::unordered_map<std::string,bool> &input_tactile_map);
-    void AddRangeInputMap(const std::unordered_map<std::string,float> &input_range_map);
+    void AddRangeInputMap(const std::unordered_map<std::string,float> &input_range_map, const bool didRangeInputChange);
     
     protected:
     int numberOfActiveCommands(const std::unordered_map<std::string, IAction*> &action_map) const;
@@ -19,6 +19,7 @@ class IAction_Updater{
     std::unordered_map<std::string, IAction*> action_map;
     std::unordered_map<std::string,bool> input_tactile_map;
     std::unordered_map<std::string,float> input_range_map;
+    bool didRangeInputChange;
 
 
 };

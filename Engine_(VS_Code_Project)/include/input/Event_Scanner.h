@@ -24,14 +24,15 @@ class Event_Scanner{
     float curr_mouse_x, curr_mouse_y, prev_mouse_x, prev_mouse_y, delta_mouse_x, delta_mouse_y;
 
     int SCREEN_W, SCREEN_H;
+    Renderer* my_renderer;
 
     //void screenToCart()
-
+    void captureMouseMovement();
 
 
     public:
     Event_Scanner();
-    Event_Scanner(SDL_Event &my_event, Renderer &my_renderer);
+    Event_Scanner(SDL_Event &my_event, Renderer* my_renderer);
     void scanInput();
     //void setIsRunning(bool running);
     const std::unordered_map<std::string,bool>& getTactileMap(input_map this_map);

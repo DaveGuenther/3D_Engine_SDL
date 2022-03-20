@@ -5,10 +5,10 @@
 #include "Mesh_Pipeline.h"
 #include "Multiply_Matrix_Service.h"
 
-Renderer::Renderer(void){
+Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
     // SDL and Screen initializing
-	SCREEN_W = 640;
-    SCREEN_H = 360;
+	this->SCREEN_W = SCREEN_W;
+    this->SCREEN_H = SCREEN_H;
 	window = SDL_CreateWindow("3D Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, screen_mode);
 	renderer = SDL_CreateRenderer(window, -1, 0);
     
@@ -16,7 +16,7 @@ Renderer::Renderer(void){
 	// Projection Matrix
     fNear = 0.1f;
 	fFar = 1000.0f;
-	fFOV=90.0f;
+	fFOV=80.0f;
 	fAspectRatio = (float)SCREEN_H/(float)SCREEN_W;
 	fFOV_rad = 1.0/(SDL_tanf((fFOV/2)*(3.14159265f/180.0f)));
 
@@ -39,7 +39,12 @@ Renderer::Renderer(void){
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
+	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 
+}
+
+void Renderer::resetMouseXY(){
+	SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 }
 
 void Renderer::Draw_Triangle_2d(Vec2d vert1, Vec2d vert2, Vec2d vert3, SDL_Color col)
@@ -92,6 +97,7 @@ void Renderer::Project_Triangle_3d(Triangle &tri){
 }
 
 void Renderer::Refresh_Screen(Mesh_Pipeline* this_mesh_pipeline){
+	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
 	Mesh_Pipeline mesh_pipeline = *this_mesh_pipeline;
@@ -105,6 +111,7 @@ void Renderer::Refresh_Screen(Mesh_Pipeline* this_mesh_pipeline){
 	}
 	Draw_Reticle();
 	SDL_RenderPresent(renderer);
+	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 } 
 
 void Renderer::Draw_Reticle(){

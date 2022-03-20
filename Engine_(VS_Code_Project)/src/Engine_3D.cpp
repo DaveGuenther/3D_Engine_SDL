@@ -19,7 +19,7 @@ Engine_3D::Engine_3D(void){
 
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
-
+    this->Engine_Renderer = new Renderer(640,380);
     //this->game_state_subject = new GameStateSubject;
     this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
     //this->my_subject.addSubscriber(this);
@@ -30,6 +30,7 @@ Engine_3D::Engine_3D(void){
     this->VariableFrameRate = new Frame_Rate_Manager(FPS);
     this->mesh_pipeline = new Mesh_Pipeline;
     this->INWORLD_Action_Updater = new InGame_Action_Updater(mesh_pipeline, FPS);
+    
       
     game_state_subject.setState(IN_WORLD);
     
@@ -38,8 +39,8 @@ Engine_3D::Engine_3D(void){
 
 void Engine_3D::load_meshes(){
     // Eventually allow this function to read a list of mesh file referenes and load them
-    mesh_pipeline->Add_Mesh_to_Pipeline("block.mesh");
-    mesh_pipeline->Add_Mesh_to_Pipeline("pyramid.mesh");
+    mesh_pipeline->Add_Mesh_to_Pipeline("block.mesh", Vec3d(-1.5,0.5,2));
+    mesh_pipeline->Add_Mesh_to_Pipeline("pyramid.mesh", Vec3d(1,-2,6));
 }
 
 bool Engine_3D::is_running(){
@@ -55,9 +56,11 @@ void Engine_3D::engine_update(){
             isRunning=false;
             break;
         case IN_WORLD:{
+            SDL_SetRelativeMouseMode(SDL_TRUE);
+            
             INWORLD_Input_Parser->scanInput();
             INWORLD_Action_Updater->AddTactileInputMap(INWORLD_Input_Parser->getCurrentCommands());
-            INWORLD_Action_Updater->AddRangeInputMap(INWORLD_Input_Parser->getRangeInput());
+            INWORLD_Action_Updater->AddRangeInputMap(INWORLD_Input_Parser->getRangeInput(), INWORLD_Input_Parser->didRangeInputChange());
             INWORLD_Action_Updater->update();
             mesh_pipeline->Apply_Modifications(INWORLD_Action_Updater->getModifications());
             break;
@@ -70,11 +73,14 @@ void Engine_3D::engine_update(){
             break;
     }
 
+//Call Renderer
+    Engine_Renderer->Refresh_Screen(mesh_pipeline);
+
+    // Update Timing Loop to add delay if necessary
     VariableFrameRate->setFrameEnd();
     VariableFrameRate->delay();
 
-    //Call Renderer
-    Engine_Renderer.Refresh_Screen(mesh_pipeline);
+    
 
 
 
