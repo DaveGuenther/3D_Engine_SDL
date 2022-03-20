@@ -5,10 +5,10 @@
 #include "Mesh_Pipeline.h"
 #include "Multiply_Matrix_Service.h"
 
-Renderer::Renderer(void){
+Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
     // SDL and Screen initializing
-	SCREEN_W = 640;
-    SCREEN_H = 360;
+	this->SCREEN_W = SCREEN_W;
+    this->SCREEN_H = SCREEN_H;
 	window = SDL_CreateWindow("3D Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, screen_mode);
 	renderer = SDL_CreateRenderer(window, -1, 0);
     
@@ -16,7 +16,7 @@ Renderer::Renderer(void){
 	// Projection Matrix
     fNear = 0.1f;
 	fFar = 1000.0f;
-	fFOV=90.0f;
+	fFOV=80.0f;
 	fAspectRatio = (float)SCREEN_H/(float)SCREEN_W;
 	fFOV_rad = 1.0/(SDL_tanf((fFOV/2)*(3.14159265f/180.0f)));
 
@@ -39,7 +39,12 @@ Renderer::Renderer(void){
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
+	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 
+}
+
+void Renderer::resetMouseXY(){
+	SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 }
 
 void Renderer::Draw_Triangle_2d(Vec2d vert1, Vec2d vert2, Vec2d vert3, SDL_Color col)
@@ -91,10 +96,12 @@ void Renderer::Project_Triangle_3d(Triangle &tri){
 	Draw_Triangle_2d(point1, point2, point3, col);
 }
 
-void Renderer::Refresh_Screen(Mesh_Pipeline &this_mesh_pipeline){
+void Renderer::Refresh_Screen(Mesh_Pipeline* this_mesh_pipeline){
+	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
-	for (auto this_mesh: this_mesh_pipeline.Get_Meshes()){
+	Mesh_Pipeline mesh_pipeline = *this_mesh_pipeline;
+	for (auto this_mesh: mesh_pipeline.Get_Meshes()){  //Issues with mesh_pipeline.Get_Meshes() if I try to make this_mesh_pipeline a const ptr
 		std::vector<Triangle> tris = this_mesh.get_tris();
 		for (auto tri: tris)
 		{
@@ -104,6 +111,7 @@ void Renderer::Refresh_Screen(Mesh_Pipeline &this_mesh_pipeline){
 	}
 	Draw_Reticle();
 	SDL_RenderPresent(renderer);
+	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 } 
 
 void Renderer::Draw_Reticle(){
@@ -132,6 +140,9 @@ Vec2d Renderer::Cartesian_to_Screen(Vec2d this_point)
 	this_point.setY(SCREEN_H-(scaled_y+(HALF_SCREEN_H)));
 	return this_point;
 } 
+
+const int Renderer::getWindow_Width()const { return SCREEN_W; }
+const int Renderer::getWindow_Height()const { return SCREEN_H; }
 
 void Renderer::shutdown(){
 	SDL_DestroyRenderer(renderer);

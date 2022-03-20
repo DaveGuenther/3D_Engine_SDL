@@ -11,6 +11,10 @@ const std::vector<int> Triangle_Modifier::GetAssignedMeshIDs(){
     return mesh_ids;
 }
 
+void Triangle_Modifier::ClearMeshAssignments(){
+    this->mesh_ids.clear();
+}
+
 Rotator::Rotator(float x_degrees, float y_degrees, float z_degrees, Vec3d center){
     x_degs = x_degrees;
     y_degs = y_degrees;
@@ -86,7 +90,7 @@ Rotator::Rotator(float x_degrees, float y_degrees, float z_degrees, Vec3d center
 
 
 void Rotator::ModifyTri(Triangle &tri){
-    std::cout << "Rotating Triangle" << std::endl;
+    //std::cout << "Rotating Triangle" << std::endl;
 
     Vec3d pt1_i = tri.getTrianglePoint(0);
     Vec3d pt1_o = pt1_i;
@@ -124,8 +128,8 @@ void Rotator::ModifyTri(Triangle &tri){
     tri.setTrianglePoint(0,pt1_i);
     tri.setTrianglePoint(1,pt2_i);
     tri.setTrianglePoint(2,pt3_i);
-    std::cout << tri.toString() << std::endl;
-    std::cout << "Done Rotating Triangle" << std::endl;
+    //std::cout << tri.toString() << std::endl;
+    //std::cout << "Done Rotating Triangle" << std::endl;
 }
 
 
@@ -137,7 +141,7 @@ Translator::Translator(float x_distance, float y_distance,  float z_distance){
 }
 
 void Translator::ModifyTri(Triangle& tri){
-    std::cout << "Translating Triangle" << std::endl;
+    //std::cout << "Translating Triangle" << std::endl;
 
     for (int i=0;i<3;i++){
         Vec3d point = tri.getTrianglePoint(i);
@@ -147,7 +151,8 @@ void Translator::ModifyTri(Triangle& tri){
         tri.setTrianglePoint(i,point);
     
     }
-    std::cout << tri.toString() << std::endl;
-    std::cout << "Done Translating Triangle" << std::endl;
+    //std::cout << tri.toString() << std::endl;
+    //std::cout << "Done Translating Triangle" << std::endl;
 }
+
 

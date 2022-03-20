@@ -33,8 +33,9 @@ class Mesh_Pipeline{
      * @brief This function loads data from a file into a Mesh object and adds it to the mesh pipeline
      * 
      * @param filename this is a file name of the mesh such as "block.mesh"
+     * @param origin this is a Vec3d that represents the x, y, and z location to initially place the mesh in 3D space
      */
-    void Add_Mesh_to_Pipeline(std::string filename);
+    void Add_Mesh_to_Pipeline(std::string filename, Vec3d origin);
 
     /**
      * @brief this function adds a Mesh to the Meshes vector (the pipeline)

@@ -71,14 +71,25 @@ class Renderer{
 
     public:
 
-        Renderer();
-
+        Renderer(int SCREEN_W, int SCREEN_H);
+        
+        /**
+         * @brief This function will reset the mouse X and Y values to the center of the window.  It requires the window object to call so must occur in the Renderer class
+         * 
+         */
+        void resetMouseXY();
+        
+        
+        
         /**
          * @brief This method directs the projection operations over the entire mesh pipeline.  It iterates through each mesh and it's tris in order to apply projections and direct screen page drawing
          * 
          * @param this_mesh_pipeline 
          */
-        void Refresh_Screen(Mesh_Pipeline &this_mesh_pipeline);
+        void Refresh_Screen(Mesh_Pipeline* this_mesh_pipeline);  // Why can't I make this a const pointer?
+
+        const int getWindow_Width() const;
+        const int getWindow_Height() const;
 
         /**
          * @brief this method is mainly used to shut down the SDL renderer and window objects
