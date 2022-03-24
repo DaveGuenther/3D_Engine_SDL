@@ -46,7 +46,7 @@ TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, float x_range
 
 
 void TwoAxisRangeCommand::update(bool key_pressed){
-    if (this->mesh_modification!=NULL){ this->mesh_modification->ClearMeshAssignments();}
+    if (this->mesh_modification!=NULL){ this->mesh_modification->clearMeshAssignments();}
     if (is_running){
         std::cout<< "  Applying TwoAxisMovement X: " << x_range << " Y: " << y_range;
         Vec3d rotation_vector;
@@ -141,7 +141,7 @@ void MoveAction::setRelease(float release){ this->release_speed_delta = (release
   
     
 void MoveAction::update(bool key_pressed){
-    if (this->mesh_modification!=NULL){ this->mesh_modification->ClearMeshAssignments();}
+    if (this->mesh_modification!=NULL){ this->mesh_modification->clearMeshAssignments();}
     this->is_key_pressed=key_pressed;
     setActionState();
     switch (action_state)

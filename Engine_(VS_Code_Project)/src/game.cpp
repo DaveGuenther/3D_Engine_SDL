@@ -1,14 +1,6 @@
-
-#include <iostream>
-#include <string>
-#include <vector>
-#include <filesystem>
-#include <unistd.h>
-
 #include <SDL2/SDL.h>
 
-#include "Engine_3D.h"
-
+#include "core/Engine_3D.h"
 
 int main(int argv, char** args)
 {

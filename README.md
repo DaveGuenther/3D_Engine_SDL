@@ -1,6 +1,6 @@
-# SDL-Template
+# SDL based 3D Engine
 
-Use this to create a basic started SDL project in VS Code using MinGW64 (Msys)
+This project is based on mingw (g++) and SDL (Simplified DirectMedia Layer) and includes VSCode project files
 
 
 ## Mingw Configuration:

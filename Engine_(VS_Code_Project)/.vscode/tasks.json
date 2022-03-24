@@ -9,21 +9,29 @@
 				"-fdiagnostics-color=always",
 				"-g",
 				"${file}",
-				"${workspaceFolder}\\src\\Mesh.cpp",
-				"${workspaceFolder}\\src\\Renderer.cpp",
-				"${workspaceFolder}\\src\\Engine_3D.cpp",
-				"${workspaceFolder}\\src\\Mat4x4.cpp",
-				"${workspaceFolder}\\src\\Triangle.cpp",
-				"${workspaceFolder}\\src\\Mesh_Pipeline.cpp",
-				"${workspaceFolder}\\src\\Multiply_Matrix_Service.cpp",
-				"${workspaceFolder}\\src\\Triangle_Modifier.cpp",
+				//utility source code
+				"${workspaceFolder}\\src\\utility\\Mesh.cpp",
+				"${workspaceFolder}\\src\\utility\\Mat4x4.cpp",
+				"${workspaceFolder}\\src\\utility\\Triangle.cpp",
+				"${workspaceFolder}\\src\\utility\\Mesh_Pipeline.cpp",
+				"${workspaceFolder}\\src\\utility\\Multiply_Matrix_Service.cpp",
+				"${workspaceFolder}\\src\\utility\\Triangle_Modifier.cpp",
+				
+				//core source code
+				"${workspaceFolder}\\src\\core\\Engine_3D.cpp",
+				"${workspaceFolder}\\src\\core\\GameState_Observer_Pattern.cpp",
+
+				//input source code
 				"${workspaceFolder}\\src\\input\\Event_Scanner.cpp",
 				"${workspaceFolder}\\src\\input\\KeyBindings.cpp",		
-				"${workspaceFolder}\\src\\GameState_Observer_Pattern.cpp",			
 				"${workspaceFolder}\\src\\input\\Input_Parser.cpp",
+
+				//action source code
 				"${workspaceFolder}\\src\\actions\\Action_Interface.cpp",
 				"${workspaceFolder}\\src\\actions\\Action_Updater.cpp",
-//				"${workspaceFolder}\\src\\Rotator_Service.cpp",
+
+				//render source code
+				"${workspaceFolder}\\src\\render\\Renderer.cpp",
 				"-I",
 				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\include",
 				"-I",

@@ -1,5 +1,5 @@
 #include "input/Event_Scanner.h"
-#include "Renderer.h"
+#include "render/Renderer.h"
 
 Event_Scanner::Event_Scanner(SDL_Event &my_event, Renderer* my_renderer){
     event=my_event;
@@ -8,8 +8,8 @@ Event_Scanner::Event_Scanner(SDL_Event &my_event, Renderer* my_renderer){
     prev_mouse_x=0;
     delta_mouse_x=0;
     delta_mouse_y=0;
-    SCREEN_H=my_renderer->getWindow_Height();
-    SCREEN_W=my_renderer->getWindow_Width();
+    SCREEN_H=my_renderer->getWindowHeight();
+    SCREEN_W=my_renderer->getWindowWidth();
     this->my_renderer = my_renderer;
     SDL_PollEvent( &event );
     my_renderer->resetMouseXY();

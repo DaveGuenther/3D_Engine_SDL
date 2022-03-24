@@ -91,9 +91,9 @@ void InGame_Action_Updater::update(){
             
             if (this_command.second->getMeshModification()!=NULL){
                 Triangle_Modifier* this_mod = this_command.second->getMeshModification();
-                for(int i=0;i<mesh_pipeline->GetSize();i++){ this_mod->AssignToMesh(i); }
+                for(int i=0;i<mesh_pipeline->GetSize();i++){ this_mod->assignToMesh(i); }
                 modifications.push_back(this_command.second->getMeshModification());
-                //for(int i=0;i<mesh_pipeline->GetSize();i++){ modifications.back().AssignToMesh(i); }
+                //for(int i=0;i<mesh_pipeline->GetSize();i++){ modifications.back().assignToMesh(i); }
             }
         }
 
