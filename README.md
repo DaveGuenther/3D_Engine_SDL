@@ -2,6 +2,9 @@
 
 This project is based on mingw (g++) and SDL (Simplified DirectMedia Layer) and includes VSCode project files
 
+<p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/2022-03-23.png">
+  <br><i>Engine Screenshot from 3/23/2022</i>
+</p>
 
 ## Installation
 ### Mingw Configuration:
