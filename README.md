@@ -34,3 +34,6 @@ If you did it right, you should have the following active path: c:\SDL\SDL2-2.0.
 1. Once in VS Code, open the 'Engine_(VS_Code_Project)' folder
 2. Verify that the paths in the .json files in your .vscode folder are valid particulartly for mingw and SDL
 3. Open src/game.cpp and run the file (Ctrl+F5)
+
+## Documentation
+UML diagrams were build on a freeware tool called Dia.  It can be found here: http://dia-installer.de/download/index.html.en
