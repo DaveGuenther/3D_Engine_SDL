@@ -36,4 +36,4 @@ If you did it right, you should have the following active path: c:\SDL\SDL2-2.0.
 3. Open src/game.cpp and run the file (Ctrl+F5)
 
 ## Documentation
-UML diagrams were build on a freeware tool called Dia.  It can be found here: http://dia-installer.de/download/index.html.en
+UML diagrams were built on a freeware tool called Dia using out-of-the-box shapes.  It can be found here: http://dia-installer.de/download/index.html.en.  As adjustments are made to the UML diagram, it will also be exported as a multi-page PDF in the Design Diagrams folder
