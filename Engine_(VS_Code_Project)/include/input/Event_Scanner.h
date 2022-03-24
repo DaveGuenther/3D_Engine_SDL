@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <unordered_map>
-#include "Renderer.h"
+#include "render/Renderer.h"
 
 enum input_map{PREVIOUS_MAP, CURRENT_MAP, MOUSE_BUTTON_MAP};
 
@@ -17,8 +17,18 @@ class Event_Scanner{
 
     std::unordered_map<std::string, bool> mouse_button_matrix;
 
-
+    /**
+     * @brief This map contain four elements with keys: "MOUSE_X", "MOUSE_Y", "MOUSE_X_DELTA", "MOUSE_Y_DELTA" for the CURRENT input frame. 
+     * MOUSE_X, MOUSE_Y, MOUSE_X_DELTA, and MOUSE_Y_DELTA range are all [-1.0, 1.0] unit scale
+     * 
+     */
     std::unordered_map<std::string, float> curr_range_input_matrix;
+
+        /**
+     * @brief This map contain four elements with keys: "MOUSE_X", "MOUSE_Y", "MOUSE_X_DELTA", "MOUSE_Y_DELTA" for the PREVIOUS input frame. 
+     * MOUSE_X, MOUSE_Y, MOUSE_X_DELTA, and MOUSE_Y_DELTA range are all [-1.0, 1.0] unit scale
+     * 
+     */
     std::unordered_map<std::string, float> prev_range_input_matrix;
 
     float curr_mouse_x, curr_mouse_y, prev_mouse_x, prev_mouse_y, delta_mouse_x, delta_mouse_y;
@@ -26,16 +36,45 @@ class Event_Scanner{
     int SCREEN_W, SCREEN_H;
     Renderer* my_renderer;
 
-    //void screenToCart()
+    /**
+     * @brief This function is used by the getRangeMap() method and it used to establish the current mouse X and Y values as well as the delta between the X and Y values from the current and previous frame
+     * 
+     * It doesn't return anything, but sets the curr_range_input_matrix with updated MouseX, MouseY, DeltaX, and DeltaY values
+     */
     void captureMouseMovement();
 
 
     public:
-    Event_Scanner();
+    Event_Scanner(); // Note used
+
+    /**
+     * @brief Construct a new Event_Scanner object.
+     * 
+     * @param my_event 
+     * @param my_renderer Used in order to capture the SCREEN_W and SCREEN_H values in order to get Mouse delta values on a [-1.0,1.0] unit scale
+     */
     Event_Scanner(SDL_Event &my_event, Renderer* my_renderer);
+    
+    /**
+     * @brief This method is used to capture updates to the current and previous range and tactile input maps
+     * 
+     */
     void scanInput();
-    //void setIsRunning(bool running);
+
+    /**
+     * @brief Get the Tactile Map object
+     * 
+     * @param this_map enumerated data type with the following possible values ["PREVIOUS_MAP","CURRENT_MAP","MOUSE_BUTTON_MAP"]
+     * @return const std::unordered_map<std::string,bool>&  
+     */
     const std::unordered_map<std::string,bool>& getTactileMap(input_map this_map);
+
+    /**
+     * @brief Get the Range Map object
+     * 
+     * @param this_map enumerated data type with the following possible values ["PREVIOUS_MAP","CURRENT_MAP","MOUSE_BUTTON_MAP"]
+     * @return const std::unordered_map<std::string,bool>& 
+     */
     const std::unordered_map<std::string,float>& getRangeMap(input_map this_map);
     
 

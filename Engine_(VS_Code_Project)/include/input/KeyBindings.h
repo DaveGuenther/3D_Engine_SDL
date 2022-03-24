@@ -43,7 +43,22 @@ class Bindings{
     const std::unordered_map<std::string,bool> getCommandMapFromKeycodes(const std::unordered_map<std::string,bool> &keycodes);
 
     private: 
+
+    /**
+     * @brief this is a command map formatted with a string:string pair as follows:
+     * std::string(<Device>:<Scancode>) , std::string(<Command Name>)
+     * Why is the scancode a string and now a Uint64?  Because the mouse and Keyboard both have a scancode "1" with different inputs
+     * 
+     */
     std::unordered_map<std::string, std::string> bindings;   
+    
+    
+    /**
+     * @brief Given the std::string key_code, this function will return the corresponding std::string command
+     * 
+     * @param key_code 
+     * @return std::string 
+     */
     std::string getCommand(std::string key_code); 
 
 };
