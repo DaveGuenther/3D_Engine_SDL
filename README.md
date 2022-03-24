@@ -3,7 +3,8 @@
 This project is based on mingw (g++) and SDL (Simplified DirectMedia Layer) and includes VSCode project files
 
 
-## Mingw Configuration:
+## Installation
+### Mingw Configuration:
 Follow these instructions to set up VS Code with MinGW64: https://code.visualstudio.com/docs/cpp/config-mingw  or perform the following steps to match versions used by this project:
 Install to: c:\msys64\ 
 1. Download MSys64: https://github.com/msys2/msys2-installer/releases/download/2022-01-28/msys2-x86_64-20220128.exe
@@ -14,7 +15,7 @@ Install to: c:\msys64\
 6. <code>pacman -Su</code> type 'y' or 'yes' at every prompt.
 7. <code>pacman -S --needed base-devel mingw-w64-x86_64-toolchain</code> type 'y' or 'yes' at every prompt.
 
-## SDL Configuration:
+### SDL Configuration:
 Follow these instructions to download and install the SDL 64 bit lib and Development Libraries: https://giovanni.codes/setup-sdl2-with-visual-studio-code-and-mingw64-on-windows/  or perform the following steps to match versions used by this project:
 
 1. download: SDL2-2.0.18-win32-x64.zip (64-bit Windows) -- https://www.libsdl.org/release/SDL2-2.0.18-win32-x64.zip
