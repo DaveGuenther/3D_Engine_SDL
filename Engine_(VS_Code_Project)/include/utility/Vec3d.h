@@ -33,8 +33,9 @@ class Vec3d:public Vec2d{
 
     void setZ(const float &z_in){ z=z_in; }
     
-    float getZ(){ return z; }
+    const float getZ()const { return z; }
     
+
     friend bool operator== (const Vec3d & vec1, const Vec3d & vec2){ return (vec1.x==vec2.x && vec1.y==vec2.y && vec1.z==vec2.z);}
     friend bool operator!= (const Vec3d & vec1, const Vec3d & vec2){ return !(vec1.x==vec2.x && vec1.y==vec2.y && vec1.z==vec2.z);}
 };

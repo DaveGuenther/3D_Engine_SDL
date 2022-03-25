@@ -16,6 +16,7 @@
 				"${workspaceFolder}\\src\\utility\\Mesh_Pipeline.cpp",
 				"${workspaceFolder}\\src\\utility\\Multiply_Matrix_Service.cpp",
 				"${workspaceFolder}\\src\\utility\\Triangle_Modifier.cpp",
+				"${workspaceFolder}\\src\\utility\\Vector_Math_Service.cpp",
 				
 				//core source code
 				"${workspaceFolder}\\src\\core\\Engine_3D.cpp",
