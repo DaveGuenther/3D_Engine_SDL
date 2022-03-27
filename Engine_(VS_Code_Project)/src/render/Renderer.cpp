@@ -4,6 +4,7 @@
 #include "utility/Triangle.h"
 #include "utility/Mesh_Pipeline.h"
 #include "utility/Multiply_Matrix_Service.h"
+#include "utility/Vector_Math_Service.h"
 #include "render/Renderer.h"
 
 Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
@@ -42,6 +43,10 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
 	SDL_RenderClear(renderer);
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 
+	camera.setX(0);
+	camera.setY(0);
+	camera.setZ(0);
+
 }
 
 void Renderer::resetMouseXY(){
@@ -72,29 +77,41 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	Vec3d TriPoint1 = tri.getTrianglePoint(1);
 	Vec3d TriPoint2 = tri.getTrianglePoint(2);
 
-	Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint0, pt0, matProj);
-	Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint1, pt1, matProj);
-	Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint2, pt2, matProj);
-	triProjected.setTrianglePoint(0,pt0);
-	triProjected.setTrianglePoint(1,pt1);
-	triProjected.setTrianglePoint(2,pt2);
+	// Calculate Normals and Backface Culling
+	
+	Vec3d line1 = Vec3d(TriPoint1.getX()-TriPoint0.getX(), TriPoint1.getY()-TriPoint0.getY(), TriPoint1.getZ()-TriPoint0.getZ());
+	Vec3d line2 = Vec3d(TriPoint2.getX()-TriPoint0.getX(), TriPoint2.getY()-TriPoint0.getY(), TriPoint2.getZ()-TriPoint0.getZ());
+	Vec3d normal_vector = VectorMathService::crossProduct(line1, line2);
+	VectorMathService::getUnitVector(normal_vector);
 
-	// Drop 3D to 2D
-	Vec2d point1, point2, point3;
+	// perform dot product here and test <0
+	Vec3d camera_to_triangle_vector = Vec3d(TriPoint0.getX()-camera.getX(), TriPoint0.getY()-camera.getY(), TriPoint0.getY()-camera.getY()); 
+	VectorMathService::getUnitVector(camera_to_triangle_vector);
+	if (VectorMathService::dotProduct(normal_vector, camera_to_triangle_vector)<0.0f){ // Checks to see if normal vector >= 90 degs away from camera to triangle view vector
+		Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint0, pt0, matProj);
+		Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint1, pt1, matProj);
+		Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint2, pt2, matProj);
+		triProjected.setTrianglePoint(0,pt0);
+		triProjected.setTrianglePoint(1,pt1);
+		triProjected.setTrianglePoint(2,pt2);
 
-	point1.setX(triProjected.getTrianglePoint(0).getX());
-	point1.setY(triProjected.getTrianglePoint(0).getY());
+		// Drop 3D to 2D
+		Vec2d point1, point2, point3;
 
-	point2.setX(triProjected.getTrianglePoint(1).getX());
-	point2.setY(triProjected.getTrianglePoint(1).getY());
+		point1.setX(triProjected.getTrianglePoint(0).getX());
+		point1.setY(triProjected.getTrianglePoint(0).getY());
 
-	point3.setX(triProjected.getTrianglePoint(2).getX());
-	point3.setY(triProjected.getTrianglePoint(2).getY());			
+		point2.setX(triProjected.getTrianglePoint(1).getX());
+		point2.setY(triProjected.getTrianglePoint(1).getY());
 
-	SDL_Color col;
-	col.r=255; col.g=0; col.b=0; col.a = 255;
+		point3.setX(triProjected.getTrianglePoint(2).getX());
+		point3.setY(triProjected.getTrianglePoint(2).getY());			
 
-	drawTriangle2d(point1, point2, point3, col);
+		SDL_Color col;
+		col.r=255; col.g=0; col.b=0; col.a = 255;
+
+		drawTriangle2d(point1, point2, point3, col);
+	}
 }
 
 void Renderer::refreshScreen(Mesh_Pipeline* this_mesh_pipeline){

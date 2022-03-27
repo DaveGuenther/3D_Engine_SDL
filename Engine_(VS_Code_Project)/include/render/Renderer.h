@@ -36,6 +36,8 @@ class Renderer{
         float fAspectRatio;
         float fFOV_rad;
 
+        Vec3d camera;
+
         Mat4x4 matProj;  //[row][column]
 
         /**

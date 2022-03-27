@@ -16,6 +16,7 @@
 				"${workspaceFolder}\\src\\utility\\Mesh_Pipeline.cpp",
 				"${workspaceFolder}\\src\\utility\\Multiply_Matrix_Service.cpp",
 				"${workspaceFolder}\\src\\utility\\Triangle_Modifier.cpp",
+				"${workspaceFolder}\\src\\utility\\Vector_Math_Service.cpp",
 				
 				//core source code
 				"${workspaceFolder}\\src\\core\\Engine_3D.cpp",
@@ -32,6 +33,7 @@
 
 				//render source code
 				"${workspaceFolder}\\src\\render\\Renderer.cpp",
+				"${workspaceFolder}\\src\\render\\Rasterizer.cpp",				
 				"-I",
 				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\include",
 				"-I",
