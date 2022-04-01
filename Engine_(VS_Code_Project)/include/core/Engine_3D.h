@@ -52,6 +52,7 @@ class Engine_3D{
         
     public:
         Engine_3D(void);
+        ~Engine_3D();
         /**
          * @brief This method will load a file housing informations about mesh objects to load and then invoke the Mesh_Pipeline.Add_Mesh_to_Pipeline() method
          * 

@@ -10,6 +10,12 @@ Mesh_Pipeline::Mesh_Pipeline(){
     total_mesh_ids=0;
 }
 
+Mesh_Pipeline::~Mesh_Pipeline(){
+    
+
+}
+
+
 std::vector<Mesh>& Mesh_Pipeline::Get_Meshes(){
     return Meshes;
 }
@@ -24,8 +30,7 @@ void Mesh_Pipeline::Add_Mesh_to_Pipeline(std::string filename, Vec3d origin){
     this_mod->assignToMesh(this_mesh_id);
     std::vector<Triangle_Modifier *> tri_mods_pipe;
     tri_mods_pipe.push_back(this_mod);
-    this->Apply_Modifications(tri_mods_pipe);
-    
+    this->Apply_Modifications(tri_mods_pipe);    
 
     total_mesh_ids+=1;
 }

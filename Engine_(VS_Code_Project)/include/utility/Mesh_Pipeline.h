@@ -26,7 +26,7 @@ class Mesh_Pipeline{
 
     public:
     Mesh_Pipeline();
-
+    ~Mesh_Pipeline();
     /**
      * @brief This function loads data from a file into a Mesh object and adds it to the mesh pipeline
      * 

@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <map>
 
 #include "utility/Vec2d.h"
 #include "utility/Triangle.h"
@@ -6,6 +7,8 @@
 #include "utility/Multiply_Matrix_Service.h"
 #include "utility/Vector_Math_Service.h"
 #include "render/Renderer.h"
+#include "render/Rasterizer.h"
+
 
 Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
     // SDL and Screen initializing
@@ -53,17 +56,49 @@ void Renderer::resetMouseXY(){
 	SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 }
 
-void Renderer::drawTriangle2d(Vec2d vert1, Vec2d vert2, Vec2d vert3, SDL_Color col)
+void Renderer::drawWireFrameTriangle2d(Triangle this_triangle, SDL_Color col)
 {
 	
 	SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
-
-	vert1 = cartesianToScreen(vert1);
-	vert2 = cartesianToScreen(vert2);
-	vert3 = cartesianToScreen(vert3);
+	Vec2d vert1, vert2, vert3;
+	vert1 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(0).getX(), this_triangle.getTrianglePoint(0).getY()));
+	vert2 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(1).getX(), this_triangle.getTrianglePoint(1).getY()));
+	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).getX(), this_triangle.getTrianglePoint(2).getY()));
 	SDL_RenderDrawLineF(renderer, vert1.getX(), vert1.getY(), vert2.getX(), vert2.getY());
 	SDL_RenderDrawLineF(renderer, vert2.getX(), vert2.getY(), vert3.getX(), vert3.getY());
 	SDL_RenderDrawLineF(renderer, vert3.getX(), vert3.getY(), vert1.getX(), vert1.getY());
+}
+
+void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
+	SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
+    
+	//convert triangle x and y coords to pixel screen coords
+	Vec2d vert1, vert2, vert3;
+	vert1 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(0).getX(), this_triangle.getTrianglePoint(0).getY()));
+	vert2 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(1).getX(), this_triangle.getTrianglePoint(1).getY()));
+	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).getX(), this_triangle.getTrianglePoint(2).getY()));
+
+	Triangle screenTri(Vec3d(vert1.getX(),vert1.getY(),this_triangle.getTrianglePoint(0).getZ()), 
+						Vec3d(vert2.getX(),vert2.getY(),this_triangle.getTrianglePoint(1).getZ()),
+						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0);
+
+	//rasterize triangle
+	Triangle_Rasterizer my_rastered_tri(screenTri);
+    std::map<int, std::map<int, bool>> my_bitmap = my_rastered_tri.getBitmap();
+    Vec2d bitmap_start_pos = my_rastered_tri.getBitmapStartPos();
+    Vec2d bitmap_size = my_rastered_tri.getBitmapSize();
+	std::cout << "Drawing Triangle...";
+    for (int y = 0; y < bitmap_size.getY(); y++){
+        for (int x = 0; x < bitmap_size.getX(); x++){
+            // Draw each "true" pixel
+            if (my_bitmap[x][y]==true){
+				SDL_RenderDrawPointF(renderer, x+bitmap_start_pos.getX(), y+bitmap_start_pos.getY());
+                //drawPoint(renderer, x+bitmap_start_pos.getX(), y+bitmap_start_pos.getY());
+            }
+        }
+    }
+	std::cout << "Finished!" << std::endl;
+
 }
 
 void Renderer::projectTriangle3d(Triangle &tri){
@@ -108,9 +143,10 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		point3.setY(triProjected.getTrianglePoint(2).getY());			
 
 		SDL_Color col;
-		col.r=255; col.g=0; col.b=0; col.a = 255;
+		col.r=255; col.g=255; col.b=255; col.a = 255;
 
-		drawTriangle2d(point1, point2, point3, col);
+		//drawWireFrameTriangle2d(triProjected, col);
+		drawFilledTriangle2d(triProjected,col);
 	}
 }
 
@@ -124,7 +160,7 @@ void Renderer::refreshScreen(Mesh_Pipeline* this_mesh_pipeline){
 		for (auto tri: tris)
 		{
 			projectTriangle3d(tri);
-		
+			
 		}
 	}
 	drawReticle();

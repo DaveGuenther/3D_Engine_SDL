@@ -61,7 +61,9 @@ void TwoAxisRangeCommand::update(bool key_pressed){
     this->readyToDestroy=true;
 }
 
-
+TwoAxisRangeCommand::~TwoAxisRangeCommand(){
+    delete mesh_modification;
+}
 
 
 
@@ -193,3 +195,6 @@ void MoveAction::update(bool key_pressed){
     //std::cout << "    " << command_name << ": " << this->speed;
 }
 
+MoveAction::~MoveAction(){
+    delete mesh_modification;
+}
