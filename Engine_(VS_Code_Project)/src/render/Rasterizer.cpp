@@ -20,11 +20,25 @@ void ScanlineRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
     if (p1.getY() > p2.getY()) { Vec3d temp = p1; p1=p2; p2=temp; }
     if (p0.getY() > p1.getY()) { Vec3d temp = p0; p0=p1; p1=temp; }
 
+
+
     // test for flat top
-    if (p0.getY()==p1.getY()) { std::cout << "Flat Top!" << std::endl;}
+    if (p0.getY()==p1.getY()) { 
+        // FLAT TOP Triangle
+        if (p0.getX() > p1.getX()) { Vec3d temp = p0; p0=p1; p1=temp; }
+        Triangle reordered_tri(p0, p1, p2,0);
+        drawFlatTopTri(reordered_tri, col);
+        std::cout << "Flat Top!" << std::endl;
+    }
 
     // test for flat bottom
-    else if (p1.getY()==p2.getY()) {  std::cout << "Flat Bottom" << std::endl; }
+    else if (p1.getY()==p2.getY()) { 
+        if (p1.getX() > p2.getX()) { Vec3d temp = p1; p1=p2; p2=temp; } 
+        //FLAT BOTTOM TRIANGLE
+        Triangle reordered_tri(p0, p1, p2,0);
+        drawFlatBottomTri(reordered_tri, col);
+        std::cout << "Flat Bottom" << std::endl; 
+    }
 
     // General triangle
     else {
@@ -32,8 +46,21 @@ void ScanlineRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
         Vec3d p_i = p0+alpha*(p2-p0);
 
         //Test for major left triangle
-        if (p_i.getX()<p1.getX()){ std::cout << "Major Left" << std::endl; }
-        else{ std::cout << "Major Right" << std::endl;}
+        if (p_i.getX()<p1.getX()){
+            //MAJOR LEFT TRIANGLE 
+            std::cout << "Major Left" << std::endl; 
+            Triangle flat_bottom_tri(p0, p_i, p1,0);
+            Triangle flat_top_tri(p_i, p1, p2,0);
+            drawFlatTopTri(flat_top_tri, col);
+            drawFlatBottomTri(flat_bottom_tri, col);
+        }else{ 
+            //MAJOR RIGHT TRIANGLE
+            Triangle flat_bottom_tri(p0, p1, p_i, 0);
+            Triangle flat_top_tri(p1, p_i, p2, 0);
+            drawFlatTopTri(flat_top_tri, col);
+            drawFlatBottomTri(flat_bottom_tri, col);
+            std::cout << "Major Right" << std::endl;
+        }
 
     }
 
@@ -41,11 +68,33 @@ void ScanlineRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
 }
 
 void ScanlineRasterizer::drawFlatTopTri(Triangle& this_triangle, SDL_Color col){
+    
+    // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
 
+    // 2. Determine y_start and y_end pixels for the triangle
+
+    // 3. Loop through each y scanline (but don't do the last one)
+
+        // a. Calculate start and end x float points
+
+        // b. Calculate discrete pixels for start and end x
+
+        // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
 }
 
 void ScanlineRasterizer::drawFlatBottomTri(Triangle& this_triangle, SDL_Color col){
 
+    // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
+
+    // 2. Determine y_start and y_end pixels for the triangle
+
+    // 3. Loop through each y scanline (but don't do the last one)
+
+        // a. Calculate start and end x float points
+
+        // b. Calculate discrete pixels for start and end x
+
+        // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
 }
 
 
