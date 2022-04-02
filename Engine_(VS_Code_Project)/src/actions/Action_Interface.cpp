@@ -63,6 +63,7 @@ void TwoAxisRangeCommand::update(bool key_pressed){
 
 TwoAxisRangeCommand::~TwoAxisRangeCommand(){
     delete mesh_modification;
+    
 }
 
 
@@ -197,4 +198,5 @@ void MoveAction::update(bool key_pressed){
 
 MoveAction::~MoveAction(){
     delete mesh_modification;
+    
 }

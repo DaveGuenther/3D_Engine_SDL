@@ -51,6 +51,7 @@ Engine_3D::~Engine_3D(){
     delete VariableFrameRate;
     delete mesh_pipeline;
     delete INWORLD_Action_Updater;
+    
 }
 
 void Engine_3D::load_meshes(){
