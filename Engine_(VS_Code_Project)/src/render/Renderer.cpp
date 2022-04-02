@@ -52,6 +52,11 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
 
 }
 
+void Renderer::setWindowTitle(std::string title){
+	char* c = const_cast<char*>(title.c_str());
+	SDL_SetWindowTitle(this->window, c);
+}
+
 void Renderer::resetMouseXY(){
 	SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 }
@@ -83,12 +88,12 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
 						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0);
 
 	//rasterize triangle In Out
-	//ITriangleRasterizer* this_inout_rasterizer = new InOutRasterizer(renderer);
-	//this_inout_rasterizer->drawTriangle(screenTri,col);
+	ITriangleRasterizer* this_inout_rasterizer = new InOutRasterizer(renderer);
+	this_inout_rasterizer->drawTriangle(screenTri,col);
 
 	//rasterie triangle with ScanLines
-	ITriangleRasterizer* this_scanline_rasterizer = new ScanlineRasterizer(renderer);
-	this_scanline_rasterizer->drawTriangle(screenTri, col);
+	//ITriangleRasterizer* this_scanline_rasterizer = new ScanlineRasterizer(renderer);
+	//this_scanline_rasterizer->drawTriangle(screenTri, col);
 
 }
 

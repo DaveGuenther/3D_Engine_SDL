@@ -125,9 +125,7 @@ void InOutRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
         for (int x = 0; x<=this->width;x++){
             //test each pixel in the bounding box of the triangle to see if it should be drawn (true if it should be drawn, false if it shouldn't be drawn)
             if (isPixelContainedIn2dTriangle(x,y)){ SDL_RenderDrawPointF(renderer, this->bound_box_min_x+x, this->bound_box_min_y+y); }
-            //std::cout <<  my_bitmap[x][y];
         }
-        //std::cout << std::endl;
     }
 }
 
