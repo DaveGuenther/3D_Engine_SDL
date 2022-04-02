@@ -3,6 +3,52 @@
 #include <iostream>
 
 
+
+ScanlineRasterizer::ScanlineRasterizer(SDL_Renderer* my_renderer){
+    this->renderer=my_renderer;
+
+}
+void ScanlineRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
+
+    // get points of triangle
+    Vec3d p0 = this_triangle.getTrianglePoint(0);
+    Vec3d p1 = this_triangle.getTrianglePoint(1);
+    Vec3d p2 = this_triangle.getTrianglePoint(2);
+
+    // Order the points from top to bottom
+    if (p0.getY() > p1.getY()) { Vec3d temp = p0; p0=p1; p1=temp; }
+    if (p1.getY() > p2.getY()) { Vec3d temp = p1; p1=p2; p2=temp; }
+    if (p0.getY() > p1.getY()) { Vec3d temp = p0; p0=p1; p1=temp; }
+
+    // test for flat top
+    if (p0.getY()==p1.getY()) { std::cout << "Flat Top!" << std::endl;}
+
+    // test for flat bottom
+    else if (p1.getY()==p2.getY()) {  std::cout << "Flat Bottom" << std::endl; }
+
+    // General triangle
+    else {
+        float alpha = (p1.getY()-p0.getY())/(p2.getY()-p0.getY());
+        Vec3d p_i = p0+alpha*(p2-p0);
+
+        //Test for major left triangle
+        if (p_i.getX()<p1.getX()){ std::cout << "Major Left" << std::endl; }
+        else{ std::cout << "Major Right" << std::endl;}
+
+    }
+
+
+}
+
+void ScanlineRasterizer::drawFlatTopTri(Triangle& this_triangle, SDL_Color col){
+
+}
+
+void ScanlineRasterizer::drawFlatBottomTri(Triangle& this_triangle, SDL_Color col){
+
+}
+
+
 InOutRasterizer::InOutRasterizer(SDL_Renderer* my_renderer){
     this->renderer=my_renderer;
 }

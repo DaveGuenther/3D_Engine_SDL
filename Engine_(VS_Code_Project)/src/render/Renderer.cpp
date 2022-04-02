@@ -82,26 +82,14 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
 						Vec3d(vert2.getX(),vert2.getY(),this_triangle.getTrianglePoint(1).getZ()),
 						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0);
 
-	//rasterize triangle
-	ITriangleRasterizer* this_in_out_rasterizer = new InOutRasterizer(renderer);
-	this_in_out_rasterizer->drawTriangle(screenTri,col);
-/*
-	Triangle_Rasterizer my_rastered_tri(screenTri);
-    std::map<int, std::map<int, bool>> my_bitmap = my_rastered_tri.getBitmap();
-    Vec2d bitmap_start_pos = my_rastered_tri.getBitmapStartPos();
-    Vec2d bitmap_size = my_rastered_tri.getBitmapSize();
-	std::cout << "Drawing Triangle...";
-    for (int y = 0; y < bitmap_size.getY(); y++){
-        for (int x = 0; x < bitmap_size.getX(); x++){
-            // Draw each "true" pixel
-            if (my_bitmap[x][y]==true){
-				SDL_RenderDrawPointF(renderer, x+bitmap_start_pos.getX(), y+bitmap_start_pos.getY());
-                //drawPoint(renderer, x+bitmap_start_pos.getX(), y+bitmap_start_pos.getY());
-            }
-        }
-    }
-	std::cout << "Finished!" << std::endl;
-*/
+	//rasterize triangle In Out
+	//ITriangleRasterizer* this_inout_rasterizer = new InOutRasterizer(renderer);
+	//this_inout_rasterizer->drawTriangle(screenTri,col);
+
+	//rasterie triangle with ScanLines
+	ITriangleRasterizer* this_scanline_rasterizer = new ScanlineRasterizer(renderer);
+	this_scanline_rasterizer->drawTriangle(screenTri, col);
+
 }
 
 void Renderer::projectTriangle3d(Triangle &tri){
