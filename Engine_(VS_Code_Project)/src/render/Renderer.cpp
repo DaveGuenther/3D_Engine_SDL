@@ -83,6 +83,9 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
 						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0);
 
 	//rasterize triangle
+	ITriangleRasterizer* this_in_out_rasterizer = new InOutRasterizer(renderer);
+	this_in_out_rasterizer->drawTriangle(screenTri,col);
+/*
 	Triangle_Rasterizer my_rastered_tri(screenTri);
     std::map<int, std::map<int, bool>> my_bitmap = my_rastered_tri.getBitmap();
     Vec2d bitmap_start_pos = my_rastered_tri.getBitmapStartPos();
@@ -98,7 +101,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
         }
     }
 	std::cout << "Finished!" << std::endl;
-
+*/
 }
 
 void Renderer::projectTriangle3d(Triangle &tri){
