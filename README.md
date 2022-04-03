@@ -6,9 +6,13 @@ This project is based on mingw (g++) and SDL (Simplified DirectMedia Layer) and 
   <br><i>Engine Screenshot - Wireframe Primitives</i>
 </p>
 
-<p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/2022-04-03_back_face_culling.png">
+<br>
+
+<p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/2022-04-03_back_face_culling.png">
   <br><i>Engine Screenshot - Backface Culling</i>
 </p>
+
+<br> 
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/2022-04-03_Rasterized_dimmed.png">
   <br><i>Engine Screenshot - Triangle Rasterization</i>
