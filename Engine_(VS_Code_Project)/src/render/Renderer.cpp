@@ -116,7 +116,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	VectorMathService::getUnitVector(normal_vector);
 
 	// perform dot product here and test <0
-	Vec3d camera_to_triangle_vector = Vec3d(TriPoint0.getX()-camera.getX(), TriPoint0.getY()-camera.getY(), TriPoint0.getY()-camera.getY()); 
+	Vec3d camera_to_triangle_vector = Vec3d(TriPoint0.getX()-camera.getX(), TriPoint0.getY()-camera.getY(), TriPoint0.getZ()-camera.getZ()); 
 	VectorMathService::getUnitVector(camera_to_triangle_vector);
 	if (VectorMathService::dotProduct(normal_vector, camera_to_triangle_vector)<0.0f){ // Checks to see if normal vector >= 90 degs away from camera to triangle view vector
 		Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint0, pt0, matProj);
