@@ -5,6 +5,23 @@
 
 
 
+void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
+    float z_center = this_tri.getTriangleZCenter();
+    float color_modifier;
+    if (z_center>=this->max_visible_z_depth){
+        color_modifier = this->min_visible_color_modifier;
+    }else{
+        color_modifier = 1-(z_center/this->max_visible_z_depth);
+    }
+    SDL_Color draw_col;
+    draw_col.r= col.r*color_modifier;
+    draw_col.g= col.g*color_modifier;
+    draw_col.b= col.b*color_modifier;
+    draw_col.a=255;
+    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_SetRenderDrawColor(this->renderer, draw_col.r, draw_col.g, draw_col.b, SDL_ALPHA_OPAQUE);
+}
+
 ScanlineRasterizer::ScanlineRasterizer(SDL_Renderer* my_renderer){
     this->renderer=my_renderer;
 
@@ -15,6 +32,8 @@ void ScanlineRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
     Vec3d p0 = this_triangle.getTrianglePoint(0);
     Vec3d p1 = this_triangle.getTrianglePoint(1);
     Vec3d p2 = this_triangle.getTrianglePoint(2);
+
+    //applyDepthDimmer(this_triangle, col);
 
     // Order the points from top to bottom
     if (p0.getY() > p1.getY()) { Vec3d temp = p0; p0=p1; p1=temp; }
@@ -74,6 +93,8 @@ void ScanlineRasterizer::drawFlatTopTri(Triangle& this_triangle, SDL_Color col){
     Vec3d p1 = this_triangle.getTrianglePoint(1);
     Vec3d p2 = this_triangle.getTrianglePoint(2);
 
+
+
     // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
     float left_slope = (p2.getX()-p0.getX())/(p2.getY()-p0.getY());
     float right_slope = (p2.getX()-p1.getX())/(p2.getY()-p1.getY());
@@ -107,6 +128,7 @@ void ScanlineRasterizer::drawFlatBottomTri(Triangle& this_triangle, SDL_Color co
     Vec3d p1 = this_triangle.getTrianglePoint(1);
     Vec3d p2 = this_triangle.getTrianglePoint(2);
 
+
     // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
     float left_slope = (p1.getX()-p0.getX())/(p1.getY()-p0.getY());
     float right_slope = (p2.getX()-p0.getX())/(p2.getY()-p0.getY());
@@ -139,6 +161,7 @@ InOutRasterizer::InOutRasterizer(SDL_Renderer* my_renderer){
 }
 
 void InOutRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
+    //applyDepthDimmer(this_triangle, col);
     bound_box_min_x = std::min(std::min(this_triangle.getTrianglePoint(0).getX(), this_triangle.getTrianglePoint(1).getX()), this_triangle.getTrianglePoint(2).getX());
     bound_box_min_y = std::min(std::min(this_triangle.getTrianglePoint(0).getY(), this_triangle.getTrianglePoint(1).getY()), this_triangle.getTrianglePoint(2).getY());
     bound_box_max_x = std::max(std::max(this_triangle.getTrianglePoint(0).getX(), this_triangle.getTrianglePoint(1).getX()), this_triangle.getTrianglePoint(2).getX());

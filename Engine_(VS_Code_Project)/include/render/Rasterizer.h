@@ -10,9 +10,21 @@ class ITriangleRasterizer{
     protected:
         //Renderer* my_renderer;
         SDL_Renderer *renderer;
+        float max_visible_z_depth = 2.0f;  // distance from the camera at which things are no lonver visible
+        float min_visible_color_modifier = 0.1f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
     
     public:
         void virtual drawTriangle(Triangle& this_triangle, SDL_Color col)=0;
+
+        
+        /**
+         * @brief Given an (r,g,b) SDL_Color and a triangle, this function will dim the color based on how far away from the player the triangle is.
+         * 
+         * @param this_tri
+         * @param col 
+         * 
+         */
+        void applyDepthDimmer(Triangle& this_tri, SDL_Color &col);
 
 };
 
@@ -20,6 +32,7 @@ class ScanlineRasterizer:public ITriangleRasterizer{
     public:
         ScanlineRasterizer(SDL_Renderer* my_renderer);
         void drawTriangle(Triangle& this_triangle, SDL_Color col);
+        
     private:
         void drawFlatTopTri(Triangle& this_triangle, SDL_Color col);
         void drawFlatBottomTri(Triangle& this_triangle, SDL_Color col);
@@ -36,6 +49,7 @@ class InOutRasterizer:public ITriangleRasterizer{
         InOutRasterizer(SDL_Renderer* my_renderer);
         ~InOutRasterizer();
         void drawTriangle(Triangle& this_triangle, SDL_Color col);
+        
     
     private:
         bool isPixelContainedIn2dTriangle(int Px, int Py);
