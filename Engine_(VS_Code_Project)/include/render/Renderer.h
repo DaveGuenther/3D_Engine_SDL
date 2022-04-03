@@ -37,6 +37,9 @@ class Renderer{
         float fFOV_rad;
 
         Vec3d camera;
+        float max_visible_z_depth = 5.0f;  // distance from the camera at which things are no lonver visible
+        float min_visible_color_modifier = 0.1f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
+
 
         Mat4x4 matProj;  //[row][column]
 
@@ -45,6 +48,8 @@ class Renderer{
          * 
          */
         void drawReticle();
+
+        SDL_Color applyDepthDimmer(Triangle& this_tri, SDL_Color col);
 
         /**
          * @brief Engine_3D operates in a 3D Cartesian coordinate space with 0,0,0 being the true center spot of the world.  Likewise, 0,0 would be the true center of the screen in cartesian space.  This method will convert cartesian coordinates to screen coordinates factoring in the screen resolution.

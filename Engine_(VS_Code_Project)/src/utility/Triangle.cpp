@@ -41,3 +41,7 @@ std::string Triangle::toString(){
 Vec3d Triangle::getTrianglePoint(int point){
     return p[point];
 }
+
+const float Triangle::getTriangleZCenter(){
+    return (this->p[0].getZ()+ this->p[1].getZ() + this->p[2].getZ())/3.0f;
+}

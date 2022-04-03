@@ -61,6 +61,27 @@ void Renderer::resetMouseXY(){
 	SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 }
 
+SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri, SDL_Color col){
+    float z_center = this_tri.getTriangleZCenter();
+	
+    float color_modifier;
+    if (z_center>=this->max_visible_z_depth){
+        color_modifier = this->min_visible_color_modifier;
+    }else{
+        color_modifier = 1-(z_center/this->max_visible_z_depth);
+		if (color_modifier<min_visible_color_modifier) { color_modifier=min_visible_color_modifier; }
+    }
+    SDL_Color draw_col;
+    draw_col.r= col.r*color_modifier;
+    draw_col.g= col.g*color_modifier;
+    draw_col.b= col.b*color_modifier;
+    draw_col.a=255;
+	std::cout << z_center << " " << color_modifier << std::endl; 
+    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+    return draw_col;
+		
+}
+
 void Renderer::drawWireFrameTriangle2d(Triangle this_triangle, SDL_Color col)
 {
 	
@@ -108,6 +129,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	Vec3d TriPoint1 = tri.getTrianglePoint(1);
 	Vec3d TriPoint2 = tri.getTrianglePoint(2);
 
+
 	// Calculate Normals and Backface Culling
 	
 	Vec3d line1 = Vec3d(TriPoint1.getX()-TriPoint0.getX(), TriPoint1.getY()-TriPoint0.getY(), TriPoint1.getZ()-TriPoint0.getZ());
@@ -125,7 +147,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		triProjected.setTrianglePoint(0,pt0);
 		triProjected.setTrianglePoint(1,pt1);
 		triProjected.setTrianglePoint(2,pt2);
-
+		
 		// Drop 3D to 2D
 		Vec2d point1, point2, point3;
 
@@ -138,11 +160,12 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		point3.setX(triProjected.getTrianglePoint(2).getX());
 		point3.setY(triProjected.getTrianglePoint(2).getY());			
 
-		SDL_Color col;
-		col.r=255; col.g=255; col.b=255; col.a = 255;
+		SDL_Color col; col.r=255; col.g=255; col.b=255; col.a = 255;
+		SDL_Color dimmed_col = applyDepthDimmer(tri, col);
+		//SDL_SetRenderDrawColor(this->renderer, draw_col.r, draw_col.g, draw_col.b, SDL_ALPHA_OPAQUE);
 
 		//drawWireFrameTriangle2d(triProjected, col);
-		drawFilledTriangle2d(triProjected,col);
+		drawFilledTriangle2d(triProjected,dimmed_col);
 	}
 }
 
