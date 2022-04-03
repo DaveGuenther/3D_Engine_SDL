@@ -10,6 +10,7 @@ class Frame_Rate_Manager{
         Uint64 frameEnd;
         int timeDelta;
         float frameDelay;
+        float measured_FPS;
 
     public:
         Frame_Rate_Manager(float FPS){
@@ -37,8 +38,11 @@ class Frame_Rate_Manager{
          */
         void delay(){
             timeDelta = frameEnd-frameStart;
+            measured_FPS = 1000.0f/timeDelta;
             if (frameDelay > timeDelta) { SDL_Delay(frameDelay - timeDelta); }
         }
+
+        const float getMeasuredFPS(){ return measured_FPS; }
 
 };
 

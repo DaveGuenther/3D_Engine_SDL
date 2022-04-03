@@ -62,14 +62,21 @@ class Renderer{
         void projectTriangle3d(Triangle &tri);
 
         /**
-         * @brief Given three 2D points, this method will draw a triangle on the screen page.  Triangles are defined in clockwise point order when looking at the triangle face on (right-hand rule)
+         * @brief Given a Triangle with x and y projected to screen space and z in world space, this method will draw a wireframe triangle to the screen using lines
          * 
-         * @param vert1 
-         * @param vert2 
-         * @param vert3 
-         * @param col SDL color to plo the wireframe triangle
+         * @param this_triangle Triangle object with x, and y vertices in projected screen space [-1.0, 1.0] and z vertex in world space
+         * @param col SDL color to plot the wireframe triangle edges
          */
-        void drawTriangle2d(Vec2d vert1, Vec2d vert2, Vec2d vert3, SDL_Color col);
+        void drawWireFrameTriangle2d(Triangle this_triangle, SDL_Color col);
+
+        /**
+         *
+         * @brief Given a Triangle with x and y projected to screen space and z in world space, this method will draw a filled triangle on the screen using a simple rasterization algorithm.  This methos will implement the Rasterization class
+         * 
+         * @param this_triangle Triangle object with x, and y vertices in projected screen space [-1.0, 1.0] and z vertex in world space
+         * @param col SDL color to fill the triangle
+         */
+        void drawFilledTriangle2d(Triangle this_triangle, SDL_Color col);
 
     public:
 
@@ -80,7 +87,8 @@ class Renderer{
          * 
          */
         void resetMouseXY();
-        
+    
+        void setWindowTitle(std::string title);
         
         
         /**

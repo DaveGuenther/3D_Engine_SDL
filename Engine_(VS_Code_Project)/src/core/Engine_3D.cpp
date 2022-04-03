@@ -43,6 +43,17 @@ Engine_3D::Engine_3D(void){
     
 }
 
+Engine_3D::~Engine_3D(){
+    delete Engine_Renderer;
+    delete Engine_State;
+    delete MENU_Input_Parser;
+    delete INWORLD_Input_Parser;
+    delete VariableFrameRate;
+    delete mesh_pipeline;
+    delete INWORLD_Action_Updater;
+    
+}
+
 void Engine_3D::load_meshes(){
     // Eventually allow this function to read a list of mesh file referenes and load them
     mesh_pipeline->Add_Mesh_to_Pipeline("block.mesh", Vec3d(-1.5,0.5,2));
@@ -85,6 +96,8 @@ void Engine_3D::engine_update(){
     // Update Timing Loop to add delay if necessary
     VariableFrameRate->setFrameEnd();
     VariableFrameRate->delay();
+    std::string window_title = "3D World - FPS: " + std::to_string(int(VariableFrameRate->getMeasuredFPS()));
+    Engine_Renderer->setWindowTitle(window_title);
 }
 
 void Engine_3D::shutdown(){

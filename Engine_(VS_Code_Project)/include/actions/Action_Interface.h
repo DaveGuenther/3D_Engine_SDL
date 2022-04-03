@@ -103,7 +103,7 @@ class TwoAxisRangeCommand:public IAction{
          * @param y_range is the delta_y angle that will apply to all meshes for rotation
          */
         TwoAxisRangeCommand(std::string command_name, float x_range, float y_range);
-
+        ~TwoAxisRangeCommand();
         /**
          * @brief Needs further development...  Will eventually work such that the jump just propels the character into the air and a 
          * separate gravity object will pull the character back down.
@@ -154,6 +154,7 @@ class MoveAction:public IAction{
          * @param FPS Target engine frames per second (default is 60.0)
          */
         MoveAction(std::string command_name, Vec3d direction, float attack, float release, float max_speed, float FPS);
+        ~MoveAction();
         void setAttack(float attack);
         void setRelease(float release);
         void update(bool key_pressed);
