@@ -96,6 +96,8 @@ void Engine_3D::engine_update(){
     // Update Timing Loop to add delay if necessary
     VariableFrameRate->setFrameEnd();
     VariableFrameRate->delay();
+    std::string window_title = "3D World - FPS: " + std::to_string(int(VariableFrameRate->getMeasuredFPS()));
+    Engine_Renderer->setWindowTitle(window_title);
 }
 
 void Engine_3D::shutdown(){

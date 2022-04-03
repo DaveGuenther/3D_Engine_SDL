@@ -1,6 +1,137 @@
 
 #include "render/Rasterizer.h"
 #include <iostream>
+#include <math.h>
+
+
+
+ScanlineRasterizer::ScanlineRasterizer(SDL_Renderer* my_renderer){
+    this->renderer=my_renderer;
+
+}
+void ScanlineRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
+
+    // get points of triangle
+    Vec3d p0 = this_triangle.getTrianglePoint(0);
+    Vec3d p1 = this_triangle.getTrianglePoint(1);
+    Vec3d p2 = this_triangle.getTrianglePoint(2);
+
+    // Order the points from top to bottom
+    if (p0.getY() > p1.getY()) { Vec3d temp = p0; p0=p1; p1=temp; }
+    if (p1.getY() > p2.getY()) { Vec3d temp = p1; p1=p2; p2=temp; }
+    if (p0.getY() > p1.getY()) { Vec3d temp = p0; p0=p1; p1=temp; }
+
+
+
+    // test for flat top
+    if (p0.getY()==p1.getY()) { 
+        // FLAT TOP Triangle
+        if (p0.getX() > p1.getX()) { Vec3d temp = p0; p0=p1; p1=temp; }
+        Triangle reordered_tri(p0, p1, p2,0);
+        drawFlatTopTri(reordered_tri, col);
+        //std::cout << "Flat Top!" << std::endl;
+    }
+
+    // test for flat bottom
+    else if (p1.getY()==p2.getY()) { 
+        if (p1.getX() > p2.getX()) { Vec3d temp = p1; p1=p2; p2=temp; } 
+        //FLAT BOTTOM TRIANGLE
+        Triangle reordered_tri(p0, p1, p2,0);
+        drawFlatBottomTri(reordered_tri, col);
+        //std::cout << "Flat Bottom" << std::endl; 
+    }
+
+    // General triangle
+    else {
+        float alpha = (p1.getY()-p0.getY())/(p2.getY()-p0.getY());
+        Vec3d p_i = p0+alpha*(p2-p0);
+
+        //Test for major left triangle
+        if (p_i.getX()<p1.getX()){
+            //MAJOR LEFT TRIANGLE 
+            //std::cout << "Major Left" << std::endl; 
+            Triangle flat_bottom_tri(p0, p_i, p1,0);
+            Triangle flat_top_tri(p_i, p1, p2,0);
+            drawFlatTopTri(flat_top_tri, col);
+            drawFlatBottomTri(flat_bottom_tri, col);
+        }else{ 
+            //MAJOR RIGHT TRIANGLE
+            Triangle flat_bottom_tri(p0, p1, p_i, 0);
+            Triangle flat_top_tri(p1, p_i, p2, 0);
+            drawFlatTopTri(flat_top_tri, col);
+            drawFlatBottomTri(flat_bottom_tri, col);
+            //std::cout << "Major Right" << std::endl;
+        }
+
+    }
+
+
+}
+
+void ScanlineRasterizer::drawFlatTopTri(Triangle& this_triangle, SDL_Color col){
+    
+    Vec3d p0 = this_triangle.getTrianglePoint(0);
+    Vec3d p1 = this_triangle.getTrianglePoint(1);
+    Vec3d p2 = this_triangle.getTrianglePoint(2);
+
+    // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
+    float left_slope = (p2.getX()-p0.getX())/(p2.getY()-p0.getY());
+    float right_slope = (p2.getX()-p1.getX())/(p2.getY()-p1.getY());
+
+
+    // 2. Determine y_start and y_end pixels for the triangle
+    int y_start = int(ceil(p0.getY()-0.5f));
+    int y_end = int(ceil(p2.getY()-0.5f));
+
+    // 3. Loop through each y scanline (but don't do the last one)
+    for (int y = y_start;y<y_end;y++){
+
+        // a. Calculate start and end x float points
+        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.getX();
+        float p_end = right_slope * (float(y)+0.5f-p1.getY())+p1.getX();
+
+        // b. Calculate discrete pixels for start and end x
+        int x_start = int(ceil(p_start-0.5f));
+        int x_end = int(ceil(p_end - 0.5f));
+
+        // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
+        SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
+        //for (int x = x_start;x<x_end;x++){ SDL_RenderDrawPoint(this->renderer,x, y); }
+
+    }
+}
+
+void ScanlineRasterizer::drawFlatBottomTri(Triangle& this_triangle, SDL_Color col){
+
+    Vec3d p0 = this_triangle.getTrianglePoint(0);
+    Vec3d p1 = this_triangle.getTrianglePoint(1);
+    Vec3d p2 = this_triangle.getTrianglePoint(2);
+
+    // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
+    float left_slope = (p1.getX()-p0.getX())/(p1.getY()-p0.getY());
+    float right_slope = (p2.getX()-p0.getX())/(p2.getY()-p0.getY());
+
+    // 2. Determine y_start and y_end pixels for the triangle
+    int y_start = int(ceil(p0.getY()-0.5f));
+    int y_end = int(ceil(p2.getY()-0.5f));
+
+    // 3. Loop through each y scanline (but don't do the last one)
+    for (int y = y_start;y<y_end;y++){
+
+        // a. Calculate start and end x float points
+        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.getX();
+        float p_end = right_slope * (float(y)+0.5f-p1.getY())+p0.getX();
+
+        // b. Calculate discrete pixels for start and end x
+        int x_start = int(ceil(p_start-0.5f));
+        int x_end = int(ceil(p_end - 0.5f));
+
+        // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
+        //for (int x = x_start;x<x_end;x++){ SDL_RenderDrawPoint(this->renderer,x, y); }
+        SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
+
+    }
+}
 
 
 InOutRasterizer::InOutRasterizer(SDL_Renderer* my_renderer){
@@ -30,9 +161,7 @@ void InOutRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
         for (int x = 0; x<=this->width;x++){
             //test each pixel in the bounding box of the triangle to see if it should be drawn (true if it should be drawn, false if it shouldn't be drawn)
             if (isPixelContainedIn2dTriangle(x,y)){ SDL_RenderDrawPointF(renderer, this->bound_box_min_x+x, this->bound_box_min_y+y); }
-            //std::cout <<  my_bitmap[x][y];
         }
-        //std::cout << std::endl;
     }
 }
 

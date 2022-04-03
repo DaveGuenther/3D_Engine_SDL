@@ -87,7 +87,8 @@ class Renderer{
          * 
          */
         void resetMouseXY();
-        
+    
+        void setWindowTitle(std::string title);
         
         
         /**
