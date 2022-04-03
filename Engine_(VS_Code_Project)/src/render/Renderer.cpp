@@ -141,8 +141,8 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		SDL_Color col;
 		col.r=255; col.g=255; col.b=255; col.a = 255;
 
-		//drawWireFrameTriangle2d(triProjected, col);
-		drawFilledTriangle2d(triProjected,col);
+		drawWireFrameTriangle2d(triProjected, col);
+		//drawFilledTriangle2d(triProjected,col);
 	}
 }
 
