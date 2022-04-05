@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <algorithm>
 #include "utility/Triangle_Modifier.h"
-#include "utility/Multiply_Matrix_Service.h"
+#include "utility/Vector_Math_Service.h"
 
 void Triangle_Modifier::assignToMesh(int mesh_id){
     mesh_ids.push_back(mesh_id);
@@ -100,27 +100,27 @@ void Rotator::modifyTriangle(Triangle &tri){
     Vec3d pt3_o = pt3_i;
 
     if (z_degs!=0){
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt1_i, pt1_o, mat_ZRot);
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt2_i, pt2_o, mat_ZRot);
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt3_i, pt3_o, mat_ZRot);
+        VectorMathService::MultiplyMatrixVector(pt1_i, pt1_o, mat_ZRot);
+        VectorMathService::MultiplyMatrixVector(pt2_i, pt2_o, mat_ZRot);
+        VectorMathService::MultiplyMatrixVector(pt3_i, pt3_o, mat_ZRot);
         pt1_i=pt1_o;
         pt2_i=pt2_o;
         pt3_i=pt3_o;
     }
 
      if (x_degs!=0){
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt1_i, pt1_o, mat_XRot);
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt2_i, pt2_o, mat_XRot);
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt3_i, pt3_o, mat_XRot);
+        VectorMathService::MultiplyMatrixVector(pt1_i, pt1_o, mat_XRot);
+        VectorMathService::MultiplyMatrixVector(pt2_i, pt2_o, mat_XRot);
+        VectorMathService::MultiplyMatrixVector(pt3_i, pt3_o, mat_XRot);
         pt1_i=pt1_o;
         pt2_i=pt2_o;
         pt3_i=pt3_o;
     }   
 
      if (y_degs!=0){
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt1_i, pt1_o, mat_YRot);
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt2_i, pt2_o, mat_YRot);
-        Multiply_Matrix_Service::MultiplyMatrixVector(pt3_i, pt3_o, mat_YRot);
+        VectorMathService::MultiplyMatrixVector(pt1_i, pt1_o, mat_YRot);
+        VectorMathService::MultiplyMatrixVector(pt2_i, pt2_o, mat_YRot);
+        VectorMathService::MultiplyMatrixVector(pt3_i, pt3_o, mat_YRot);
         pt1_i=pt1_o;
         pt2_i=pt2_o;
         pt3_i=pt3_o;
