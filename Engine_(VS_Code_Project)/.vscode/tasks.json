@@ -14,7 +14,6 @@
 				"${workspaceFolder}\\src\\utility\\Mat4x4.cpp",
 				"${workspaceFolder}\\src\\utility\\Triangle.cpp",
 				"${workspaceFolder}\\src\\utility\\Mesh_Pipeline.cpp",
-				"${workspaceFolder}\\src\\utility\\Multiply_Matrix_Service.cpp",
 				"${workspaceFolder}\\src\\utility\\Triangle_Modifier.cpp",
 				"${workspaceFolder}\\src\\utility\\Vector_Math_Service.cpp",
 				

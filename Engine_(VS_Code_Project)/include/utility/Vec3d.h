@@ -34,7 +34,7 @@ class Vec3d:public Vec2d{
     void setZ(const float &z_in){ z=z_in; }
     
     const float getZ()const { return z; }
-    
+    //Vec3d operator= (const Vec3d& vec1) { return Vec3d(vec1.getX(), vec1.getY(), vec1.getZ()); }
 
     friend bool operator== (const Vec3d & vec1, const Vec3d & vec2){ return (vec1.x==vec2.x && vec1.y==vec2.y && vec1.z==vec2.z);}
     friend bool operator!= (const Vec3d & vec1, const Vec3d & vec2){ return !(vec1.x==vec2.x && vec1.y==vec2.y && vec1.z==vec2.z);}
@@ -44,6 +44,7 @@ class Vec3d:public Vec2d{
     friend Vec3d operator* (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.getX()*vec2.getX(), vec1.getY()*vec2.getY(), vec1.getZ()*vec2.getZ()); }
     friend Vec3d operator* (const float& val, const Vec3d& vec){ return Vec3d(val*vec.getX(), val*vec.getY(), val*vec.getZ()); }
     friend Vec3d operator- (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.getX()-vec2.getX(), vec1.getY()-vec2.getY(), vec1.getZ()-vec2.getZ()); }
+    
 };
 
 #endif

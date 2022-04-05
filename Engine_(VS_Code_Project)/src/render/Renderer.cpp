@@ -4,7 +4,6 @@
 #include "utility/Vec2d.h"
 #include "utility/Triangle.h"
 #include "utility/Mesh_Pipeline.h"
-#include "utility/Multiply_Matrix_Service.h"
 #include "utility/Vector_Math_Service.h"
 #include "render/Renderer.h"
 #include "render/Rasterizer.h"
@@ -141,9 +140,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	Vec3d camera_to_triangle_vector = Vec3d(TriPoint0.getX()-camera.getX(), TriPoint0.getY()-camera.getY(), TriPoint0.getZ()-camera.getZ()); 
 	VectorMathService::getUnitVector(camera_to_triangle_vector);
 	if (VectorMathService::dotProduct(normal_vector, camera_to_triangle_vector)<0.0f){ // Checks to see if normal vector >= 90 degs away from camera to triangle view vector
-		Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint0, pt0, matProj);
-		Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint1, pt1, matProj);
-		Multiply_Matrix_Service::MultiplyMatrixVector(TriPoint2, pt2, matProj);
+		VectorMathService::MultiplyMatrixVector(TriPoint0, pt0, matProj);
+		VectorMathService::MultiplyMatrixVector(TriPoint1, pt1, matProj);
+		VectorMathService::MultiplyMatrixVector(TriPoint2, pt2, matProj);
 		triProjected.setTrianglePoint(0,pt0);
 		triProjected.setTrianglePoint(1,pt1);
 		triProjected.setTrianglePoint(2,pt2);
