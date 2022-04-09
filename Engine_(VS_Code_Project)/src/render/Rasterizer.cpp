@@ -33,6 +33,11 @@ void ScanlineRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
     Vec3d p1 = this_triangle.getTrianglePoint(1);
     Vec3d p2 = this_triangle.getTrianglePoint(2);
 
+    p0 = p0.toThousandths();
+    p1 = p1.toThousandths();
+    p2 = p2.toThousandths();
+    
+
     //applyDepthDimmer(this_triangle, col);
 
     // Order the points from top to bottom
@@ -142,7 +147,7 @@ void ScanlineRasterizer::drawFlatBottomTri(Triangle& this_triangle, SDL_Color co
 
         // a. Calculate start and end x float points
         float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.getX();
-        float p_end = right_slope * (float(y)+0.5f-p1.getY())+p0.getX();
+        float p_end = right_slope * (float(y)+0.5f-p0.getY())+p0.getX();
 
         // b. Calculate discrete pixels for start and end x
         int x_start = int(ceil(p_start-0.5f));

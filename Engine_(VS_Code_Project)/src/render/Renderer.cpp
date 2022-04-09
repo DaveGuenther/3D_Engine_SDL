@@ -108,12 +108,12 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
 						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0);
 
 	//rasterize triangle In Out
-	ITriangleRasterizer* this_inout_rasterizer = new InOutRasterizer(renderer);
-	this_inout_rasterizer->drawTriangle(screenTri,col);
+	//ITriangleRasterizer* this_inout_rasterizer = new InOutRasterizer(renderer);
+	//this_inout_rasterizer->drawTriangle(screenTri,col);
 
 	//rasterie triangle with ScanLines
-	//ITriangleRasterizer* this_scanline_rasterizer = new ScanlineRasterizer(renderer);
-	//this_scanline_rasterizer->drawTriangle(screenTri, col);
+	ITriangleRasterizer* this_scanline_rasterizer = new ScanlineRasterizer(renderer);
+	this_scanline_rasterizer->drawTriangle(screenTri, col);
 
 }
 

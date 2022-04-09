@@ -1,6 +1,7 @@
 #ifndef VEC3D_H
 #define VEC3D_H
 #include <string>
+#include <math.h>
 #include "Vec2d.h"
 
 /**
@@ -34,7 +35,9 @@ class Vec3d:public Vec2d{
     void setZ(const float &z_in){ z=z_in; }
     
     const float getZ()const { return z; }
-    //Vec3d operator= (const Vec3d& vec1) { return Vec3d(vec1.getX(), vec1.getY(), vec1.getZ()); }
+    Vec3d toThousandths(){
+      return Vec3d(floor(this->x * 1000 + .5 )/1000, floor(this->y * 1000 + .5 )/1000, floor(this->z * 1000 + .5 )/1000);
+    }
 
     friend bool operator== (const Vec3d & vec1, const Vec3d & vec2){ return (vec1.x==vec2.x && vec1.y==vec2.y && vec1.z==vec2.z);}
     friend bool operator!= (const Vec3d & vec1, const Vec3d & vec2){ return !(vec1.x==vec2.x && vec1.y==vec2.y && vec1.z==vec2.z);}
