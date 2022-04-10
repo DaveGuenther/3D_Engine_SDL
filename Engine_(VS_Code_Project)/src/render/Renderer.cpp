@@ -168,19 +168,22 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	}
 }
 
-void Renderer::refreshScreen(Mesh_Pipeline* this_mesh_pipeline){
+void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
-	Mesh_Pipeline mesh_pipeline = *this_mesh_pipeline;
-	for (auto this_mesh: mesh_pipeline.Get_Meshes()){  //Issues with mesh_pipeline.Get_Meshes() if I try to make this_mesh_pipeline a const ptr
-		std::vector<Triangle> tris = this_mesh.getTriangles();
-		for (auto tri: tris)
-		{
-			projectTriangle3d(tri);
-			
-		}
+	//Mesh_Pipeline mesh_pipeline = *this_mesh_pipeline;
+	
+	//for (auto this_mesh: mesh_pipeline.Get_Meshes()){  //Issues with mesh_pipeline.Get_Meshes() if I try to make this_mesh_pipeline a const ptr
+		//std::vector<Triangle> tris = this_mesh.getTriangles();
+	
+	
+	for (auto tri: my_pre_renderer->getOrderedTriangles())
+	{
+		projectTriangle3d(tri);
+		
 	}
+	//}
 	drawReticle();
 	SDL_RenderPresent(renderer);
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);

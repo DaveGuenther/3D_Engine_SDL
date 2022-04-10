@@ -9,7 +9,7 @@
 #include "utility/Vec3d.h"
 #include "utility/Mat4x4.h"
 #include "utility/Mesh_Pipeline.h"
-#include "Renderer.h"
+#include "render/RendererPipeline.h"
 
 
 
@@ -101,7 +101,7 @@ class Renderer{
          * 
          * @param this_mesh_pipeline 
          */
-        void refreshScreen(Mesh_Pipeline* this_mesh_pipeline);  // Why can't I make this a const pointer?
+        void refreshScreen(RendererPipeline* my_pre_renderer);  // Why can't I make this a const pointer?
 
         const int getWindowWidth() const;
         const int getWindowHeight() const;
