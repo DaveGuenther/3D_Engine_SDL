@@ -43,6 +43,7 @@ class Triangle{
         Vec3d getTrianglePoint(int point);
         const float getTriangleZCenter();
         
+
         std::string toString();
 
         
