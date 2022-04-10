@@ -20,6 +20,7 @@
 #include "utility/Triangle_Modifier.h"
 
 #include "render/Renderer.h"
+#include "render/RendererPipeline.h"
 
 Engine_3D::Engine_3D(void){
 
@@ -90,8 +91,12 @@ void Engine_3D::engine_update(){
             break;
     }
 
+    // call Pre-Renderer - This will remove triangles from meshes and order from farthest to nearest (positive to negative).  
+    // Rather than pass triangles in a mesh pipeline organized by meshes, it will pass a triangle pipeline
+    RendererPipeline* my_pre_renderer = new RendererPipeline(mesh_pipeline);
+
     //Call Renderer
-    Engine_Renderer->refreshScreen(mesh_pipeline);
+    Engine_Renderer->refreshScreen(my_pre_renderer);
 
     // Update Timing Loop to add delay if necessary
     VariableFrameRate->setFrameEnd();
