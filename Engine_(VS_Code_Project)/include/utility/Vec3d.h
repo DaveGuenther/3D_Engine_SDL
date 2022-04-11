@@ -14,7 +14,7 @@ class Vec3d:public Vec2d{
     float w;
     
   public:
-    Vec3d(){ x=0.0f; y=0.0f; z=0.0f; w=0.0f; }
+    Vec3d(){ x=0.0f; y=0.0f; z=0.0f; w=1.0f; }
 
     Vec3d(const float &x_in, const float &y_in, const float &z_in){
       x=x_in;

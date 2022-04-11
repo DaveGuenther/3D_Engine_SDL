@@ -21,29 +21,9 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
 	// Projection Matrix
 	fNear = 0.1f;
 	fFar = 1000.0f;
-	fFOV=80.0f;
+	fFOV=90.0f;
 	matProj = Mat4x4::matrixMakeProjection(fFOV, SCREEN_W, SCREEN_H, fNear, fFar);
-/*
-	fAspectRatio = (float)SCREEN_H/(float)SCREEN_W;
-	fFOV_rad = 1.0/(SDL_tanf((fFOV/2)*(3.14159265f/180.0f)));
 
-	matProj.m[0][0] = fAspectRatio*fFOV_rad;
-	matProj.m[1][0] = 0.0;
-	matProj.m[2][0] = 0.0;
-	matProj.m[3][0] = 0.0;
-	matProj.m[0][1] = 0.0;
-	matProj.m[1][1] = fFOV_rad;
-	matProj.m[2][1] = 0.0;
-	matProj.m[3][1] = 0.0;
-	matProj.m[0][2] = 0.0;
-	matProj.m[1][2] = 0.0;
-	matProj.m[2][2] = fFar/(fFar-fNear);
-	matProj.m[3][2] = (-fFar*fNear)/(fFar-fNear);
-	matProj.m[0][3] = 0.0;
-	matProj.m[1][3] = 0.0;
-	matProj.m[2][3] = 1.0;
-	matProj.m[3][3] = 0.0;
-*/
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
@@ -134,19 +114,26 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 	// Calculate Normals and Backface Culling
 	
-	Vec3d line1 = Vec3d(TriPoint1.getX()-TriPoint0.getX(), TriPoint1.getY()-TriPoint0.getY(), TriPoint1.getZ()-TriPoint0.getZ());
-	Vec3d line2 = Vec3d(TriPoint2.getX()-TriPoint0.getX(), TriPoint2.getY()-TriPoint0.getY(), TriPoint2.getZ()-TriPoint0.getZ());
+	
+	
+	Vec3d line1 = TriPoint1-TriPoint0;
+	Vec3d line2 = TriPoint2-TriPoint1;
+	
 	Vec3d normal_vector = VectorMathService::crossProduct(line1, line2);
 	VectorMathService::getUnitVector(normal_vector);
 
-	// perform dot product here and test <0
-	Vec3d camera_to_triangle_vector = Vec3d(TriPoint0.getX()-camera.getX(), TriPoint0.getY()-camera.getY(), TriPoint0.getZ()-camera.getZ()); 
+	// perform dot product here and test <0 
+	Vec3d camera_to_triangle_vector = TriPoint0-camera;
 	VectorMathService::getUnitVector(camera_to_triangle_vector);
 	if (VectorMathService::dotProduct(normal_vector, camera_to_triangle_vector)<0.0f){ // Checks to see if normal vector >= 90 degs away from camera to triangle view vector
 		
 		pt0 = VectorMathService::MultiplyMatrixVector(matProj, TriPoint0);
 		pt1 = VectorMathService::MultiplyMatrixVector(matProj, TriPoint1);
 		pt2 = VectorMathService::MultiplyMatrixVector(matProj, TriPoint2);
+		pt0 = pt0/pt0.getW();
+		pt1 = pt1/pt1.getW();
+		pt2 = pt2/pt2.getW();
+
 		triProjected.setTrianglePoint(0,pt0);
 		triProjected.setTrianglePoint(1,pt1);
 		triProjected.setTrianglePoint(2,pt2);

@@ -21,71 +21,16 @@ Rotator::Rotator(float x_degrees, float y_degrees, float z_degrees, Vec3d center
     z_degs = z_degrees;
     center_of_rotation = center;
 
-    //X Rotation MAtrix
-    mat_XRot.m[0][0] = 1;
-    mat_XRot.m[0][1] = 0;
-    mat_XRot.m[0][2] = 0;
-    mat_XRot.m[0][3] = 0;
+    //X Rotation Matrix
+    mat_XRot = Mat4x4::matrixMakeRotationX(x_degs);
 
-    mat_XRot.m[1][0] = 0;
-    mat_XRot.m[1][1] = SDL_cosf(x_degs*(3.14159265/180.0));
-    mat_XRot.m[1][2] = SDL_sinf(x_degs*(3.14159265/180.0));
-    mat_XRot.m[1][3] = 0;
-
-    mat_XRot.m[2][0] = 0;
-    mat_XRot.m[2][1] = -SDL_sinf(x_degs*(3.14159265/180.0));
-    mat_XRot.m[2][2] = SDL_cosf(x_degs*(3.14159265/180.0));
-    mat_XRot.m[2][3] = 0;
-
-    mat_XRot.m[3][0] = 0;
-    mat_XRot.m[3][1] = 0;
-    mat_XRot.m[3][2] = 0;
-    mat_XRot.m[3][3] = 1;
-
-    //Y Rotation MAtrix
-    mat_YRot.m[0][0] = SDL_cosf(y_degs*(3.14159265/180.0));
-    mat_YRot.m[0][1] = 0;
-    mat_YRot.m[0][2] = -SDL_sinf(y_degs*(3.14159265/180.0));
-    mat_YRot.m[0][3] = 0;
-
-    mat_YRot.m[1][0] = 0;
-    mat_YRot.m[1][1] = 1;
-    mat_YRot.m[1][2] = 0;
-    mat_YRot.m[1][3] = 0;
-
-    mat_YRot.m[2][0] = SDL_sinf(y_degs*(3.14159265/180.0));
-    mat_YRot.m[2][1] = 0;
-    mat_YRot.m[2][2] = SDL_cosf(y_degs*(3.14159265/180.0));
-    mat_YRot.m[2][3] = 0;
-
-    mat_YRot.m[3][0] = 0;
-    mat_YRot.m[3][1] = 0;
-    mat_YRot.m[3][2] = 0;
-    mat_YRot.m[3][3] = 1;
-
+    //Y Rotation Matrix
+    mat_YRot = Mat4x4::matrixMakeRotationY(y_degs);
+ 
     //Z Rotation Matrix
-    mat_ZRot.m[0][0] = SDL_cosf(z_degs*(3.14159265/180.0));
-    mat_ZRot.m[0][1] = SDL_sinf(z_degs*(3.14159265/180.0));
-    mat_ZRot.m[0][2] = 0;
-    mat_ZRot.m[0][3] = 0;
+    mat_ZRot = Mat4x4::matrixMakeRotationZ(z_degs);
 
-    mat_ZRot.m[1][0] = -SDL_sinf(z_degs*(3.14159265/180.0));
-    mat_ZRot.m[1][1] = SDL_cosf(z_degs*(3.14159265/180.0));
-    mat_ZRot.m[1][2] = 0;
-    mat_ZRot.m[1][3] = 0;
-
-    mat_ZRot.m[2][0] = 0;
-    mat_ZRot.m[2][1] = 0;
-    mat_ZRot.m[2][2] = 1;
-    mat_ZRot.m[2][3] = 0;
-
-    mat_ZRot.m[3][0] = 0;
-    mat_ZRot.m[3][1] = 0;
-    mat_ZRot.m[3][2] = 0;
-    mat_ZRot.m[3][3] = 1;
-    		
-
-}
+}   
 
 
 
@@ -138,6 +83,10 @@ Translator::Translator(float x_distance, float y_distance,  float z_distance){
     x_dist = x_distance;
     y_dist = y_distance;
     z_dist = z_distance;
+
+    //Mat4x4 matTrans;
+    //matTrans= Mat4x4::matrixMakeTranslation(x_dist, y_dist, z_dist);
+
 }
 
 void Translator::modifyTriangle(Triangle& tri){
