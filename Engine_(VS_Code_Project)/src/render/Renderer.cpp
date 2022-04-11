@@ -5,6 +5,7 @@
 #include "utility/Triangle.h"
 #include "utility/Mesh_Pipeline.h"
 #include "utility/Vector_Math_Service.h"
+#include "utility/Mat4x4.h"
 #include "render/Renderer.h"
 #include "render/Rasterizer.h"
 
@@ -18,9 +19,11 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
     
 
 	// Projection Matrix
-    fNear = 0.1f;
+	fNear = 0.1f;
 	fFar = 1000.0f;
 	fFOV=80.0f;
+	matProj = Mat4x4::matrixMakeProjection(fFOV, SCREEN_W, SCREEN_H, fNear, fFar);
+/*
 	fAspectRatio = (float)SCREEN_H/(float)SCREEN_W;
 	fFOV_rad = 1.0/(SDL_tanf((fFOV/2)*(3.14159265f/180.0f)));
 
@@ -40,7 +43,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
 	matProj.m[1][3] = 0.0;
 	matProj.m[2][3] = 1.0;
 	matProj.m[3][3] = 0.0;
-
+*/
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
@@ -140,9 +143,10 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	Vec3d camera_to_triangle_vector = Vec3d(TriPoint0.getX()-camera.getX(), TriPoint0.getY()-camera.getY(), TriPoint0.getZ()-camera.getZ()); 
 	VectorMathService::getUnitVector(camera_to_triangle_vector);
 	if (VectorMathService::dotProduct(normal_vector, camera_to_triangle_vector)<0.0f){ // Checks to see if normal vector >= 90 degs away from camera to triangle view vector
-		VectorMathService::MultiplyMatrixVector(TriPoint0, pt0, matProj);
-		VectorMathService::MultiplyMatrixVector(TriPoint1, pt1, matProj);
-		VectorMathService::MultiplyMatrixVector(TriPoint2, pt2, matProj);
+		
+		pt0 = VectorMathService::MultiplyMatrixVector(matProj, TriPoint0);
+		pt1 = VectorMathService::MultiplyMatrixVector(matProj, TriPoint1);
+		pt2 = VectorMathService::MultiplyMatrixVector(matProj, TriPoint2);
 		triProjected.setTrianglePoint(0,pt0);
 		triProjected.setTrianglePoint(1,pt1);
 		triProjected.setTrianglePoint(2,pt2);

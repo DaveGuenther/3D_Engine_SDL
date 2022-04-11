@@ -11,9 +11,10 @@
 class Vec3d:public Vec2d{
   private:
     float z;
+    float w;
     
   public:
-    Vec3d(){ x=0.0f; y=0.0f; z=0.0f;}
+    Vec3d(){ x=0.0f; y=0.0f; z=0.0f; w=0.0f; }
 
     Vec3d(const float &x_in, const float &y_in, const float &z_in){
       x=x_in;
@@ -33,8 +34,12 @@ class Vec3d:public Vec2d{
     }
 
     void setZ(const float &z_in){ z=z_in; }
+    void setW(const float &w_in){ w=w_in; }
     
+
     const float getZ()const { return z; }
+    const float getW()const { return w; }
+
     Vec3d toThousandths(){
       return Vec3d(floor(this->x * 1000 + .5 )/1000, floor(this->y * 1000 + .5 )/1000, floor(this->z * 1000 + .5 )/1000);
     }

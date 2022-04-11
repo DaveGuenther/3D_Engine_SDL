@@ -100,27 +100,27 @@ void Rotator::modifyTriangle(Triangle &tri){
     Vec3d pt3_o = pt3_i;
 
     if (z_degs!=0){
-        VectorMathService::MultiplyMatrixVector(pt1_i, pt1_o, mat_ZRot);
-        VectorMathService::MultiplyMatrixVector(pt2_i, pt2_o, mat_ZRot);
-        VectorMathService::MultiplyMatrixVector(pt3_i, pt3_o, mat_ZRot);
+        pt1_o = VectorMathService::MultiplyMatrixVector(mat_ZRot, pt1_i);
+        pt2_o = VectorMathService::MultiplyMatrixVector(mat_ZRot, pt2_i);
+        pt3_o = VectorMathService::MultiplyMatrixVector(mat_ZRot, pt3_i);
         pt1_i=pt1_o;
         pt2_i=pt2_o;
         pt3_i=pt3_o;
     }
 
      if (x_degs!=0){
-        VectorMathService::MultiplyMatrixVector(pt1_i, pt1_o, mat_XRot);
-        VectorMathService::MultiplyMatrixVector(pt2_i, pt2_o, mat_XRot);
-        VectorMathService::MultiplyMatrixVector(pt3_i, pt3_o, mat_XRot);
+        pt1_o = VectorMathService::MultiplyMatrixVector(mat_XRot, pt1_i);
+        pt2_o = VectorMathService::MultiplyMatrixVector(mat_XRot, pt2_i);
+        pt3_o = VectorMathService::MultiplyMatrixVector(mat_XRot, pt3_i);
         pt1_i=pt1_o;
         pt2_i=pt2_o;
         pt3_i=pt3_o;
     }   
 
      if (y_degs!=0){
-        VectorMathService::MultiplyMatrixVector(pt1_i, pt1_o, mat_YRot);
-        VectorMathService::MultiplyMatrixVector(pt2_i, pt2_o, mat_YRot);
-        VectorMathService::MultiplyMatrixVector(pt3_i, pt3_o, mat_YRot);
+        pt1_o = VectorMathService::MultiplyMatrixVector(mat_YRot, pt1_i);
+        pt2_o = VectorMathService::MultiplyMatrixVector(mat_YRot, pt2_i);
+        pt3_o = VectorMathService::MultiplyMatrixVector(mat_YRot, pt3_i);
         pt1_i=pt1_o;
         pt2_i=pt2_o;
         pt3_i=pt3_o;
