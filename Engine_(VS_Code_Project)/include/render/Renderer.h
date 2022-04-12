@@ -10,6 +10,7 @@
 #include "utility/Mat4x4.h"
 #include "utility/Mesh_Pipeline.h"
 #include "render/RendererPipeline.h"
+#include "render/Camera.h"
 
 
 
@@ -36,8 +37,7 @@ class Renderer{
         float fAspectRatio;
         float fFOV_rad;
 
-        Vec3d camera;
-        Vec3d lookVector;
+        Camera* player_camera;
         Mat4x4 matView;
         float max_visible_z_depth = 5.0f;  // distance from the camera at which things are no lonver visible
         float min_visible_color_modifier = 0.1f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
@@ -96,10 +96,6 @@ class Renderer{
         void resetMouseXY();
     
         void setWindowTitle(std::string title);
-
-        void setCamera(Vec3d camera);
-        
-        void buildCameraMatrix(Vec3d camera);
         
         /**
          * @brief This method directs the projection operations over the entire mesh pipeline.  It iterates through each mesh and it's tris in order to apply projections and direct screen page drawing

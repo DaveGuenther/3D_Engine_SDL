@@ -28,9 +28,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
 	SDL_RenderClear(renderer);
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 
-	camera.setX(0);
-	camera.setY(0);
-	camera.setZ(0);
+	player_camera = new Camera();
 
 }
 
@@ -100,20 +98,6 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
 
 }
 
-void Renderer::buildCameraMatrix(Vec3d camera){
-	Vec3d lookVector = Vec3d (0.0f,0.0f,1.0f); // This need to be not hard coded!
-	Vec3d vUp=Vec3d(0.0f,1.0f,0.0f);
-	Vec3d vTarget = camera+lookVector;
-
-	Mat4x4 matCamera = Mat4x4::matrixPointAt(camera, vTarget, vUp);
-
-	this->matView = Mat4x4::matrixLookAt(matCamera);
-
-}
-
-void Renderer::setCamera(Vec3d camera){
-	this->camera = camera;
-}
 
 void Renderer::projectTriangle3d(Triangle &tri){
 	// Apply Perspective Projection Matrix
@@ -136,7 +120,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	VectorMathService::getUnitVector(normal_vector);
 
 	// perform dot product here and test <0 
-	Vec3d camera_to_triangle_vector = TriPoint0-camera;
+	Vec3d camera_to_triangle_vector = TriPoint0-player_camera->getCameraPos();
 	VectorMathService::getUnitVector(camera_to_triangle_vector);
 	if (VectorMathService::dotProduct(normal_vector, camera_to_triangle_vector)<0.0f){ // Checks to see if normal vector >= 90 degs away from camera to triangle view vector
 		
@@ -146,9 +130,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		triView.setTrianglePoint(2, VectorMathService::MultiplyMatrixVector(matView, TriPoint2));
 
 
-		TriPoint0 = triView.getTrianglePoint(0)-this->camera;
-		TriPoint1 = triView.getTrianglePoint(1)-this->camera;
-		TriPoint2 = triView.getTrianglePoint(2)-this->camera;
+		TriPoint0 = triView.getTrianglePoint(0)-this->player_camera->getCameraPos();
+		TriPoint1 = triView.getTrianglePoint(1)-this->player_camera->getCameraPos();
+		TriPoint2 = triView.getTrianglePoint(2)-this->player_camera->getCameraPos();
 
 
 		pt0 = VectorMathService::MultiplyMatrixVector(matProj, TriPoint0);
@@ -186,9 +170,13 @@ void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
-	this->setCamera(Vec3d(0.0f,this->camera.getY()+0.001,0.0f));
-	std::cout << this->camera.toString() << std::endl;
-	this->buildCameraMatrix(this->camera);
+
+	//Calculate Camera position/direction into scene
+	Vec3d tempCamera = player_camera->getCameraPos();
+	player_camera->setCameraPos(Vec3d(0.0f,tempCamera.getY()+0.001,0.0f));
+	this->matView = player_camera->buildViewMatrix();
+	
+	// Draw Scene or Triangles
 	for (auto tri: my_pre_renderer->getOrderedTriangles())
 	{
 		
@@ -196,6 +184,8 @@ void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
 	}
 
 	drawReticle();
+
+	// Flip video page to screen
 	SDL_RenderPresent(renderer);
 
 } 
