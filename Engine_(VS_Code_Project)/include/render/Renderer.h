@@ -87,7 +87,7 @@ class Renderer{
 
     public:
 
-        Renderer(int SCREEN_W, int SCREEN_H);
+        Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera);
         
         /**
          * @brief This function will reset the mouse X and Y values to the center of the window.  It requires the window object to call so must occur in the Renderer class

@@ -10,7 +10,7 @@
 #include "render/Rasterizer.h"
 
 
-Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
+Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
     // SDL and Screen initializing
 	this->SCREEN_W = SCREEN_W;
     this->SCREEN_H = SCREEN_H;
@@ -28,7 +28,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
 	SDL_RenderClear(renderer);
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 
-	player_camera = new Camera();
+	this->player_camera = player_camera;
 
 }
 
@@ -172,8 +172,6 @@ void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
 	SDL_RenderClear(renderer);	
 
 	//Calculate Camera position/direction into scene
-	Vec3d tempCamera = player_camera->getCameraPos();
-	player_camera->setCameraPos(Vec3d(0.0f,tempCamera.getY()+0.001,0.0f));
 	this->matView = player_camera->buildViewMatrix();
 	
 	// Draw Scene or Triangles

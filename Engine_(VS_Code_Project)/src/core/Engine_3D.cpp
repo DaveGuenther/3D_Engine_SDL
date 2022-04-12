@@ -21,15 +21,17 @@
 
 #include "render/Renderer.h"
 #include "render/RendererPipeline.h"
+#include "render/Camera.h"
 
 Engine_3D::Engine_3D(void){
 
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
-    this->Engine_Renderer = new Renderer(640,380);
-    //this->game_state_subject = new GameStateSubject;
+    player_camera = new Camera();
+    this->Engine_Renderer = new Renderer(640,380, player_camera);
+
     this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
-    //this->my_subject.addSubscriber(this);
+
     this->MENU_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "menu_bindings.cfg");
     this->INWORLD_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "in_game_bindings.cfg");
     game_state_subject.setState(MENU);
@@ -40,7 +42,7 @@ Engine_3D::Engine_3D(void){
     
       
     game_state_subject.setState(IN_WORLD);
-    
+
     
 }
 
@@ -94,6 +96,10 @@ void Engine_3D::engine_update(){
     // call Pre-Renderer - This will remove triangles from meshes and order from farthest to nearest (positive to negative).  
     // Rather than pass triangles in a mesh pipeline organized by meshes, it will pass a triangle pipeline
     RendererPipeline* my_pre_renderer = new RendererPipeline(mesh_pipeline);
+
+    //CAMERA OVERRIDE for testing
+	Vec3d tempCamera = player_camera->getCameraPos();
+	player_camera->setCameraPos(Vec3d(0.0f,tempCamera.getY()+0.001,0.0f));    
 
     //Call Renderer
     Engine_Renderer->refreshScreen(my_pre_renderer);
