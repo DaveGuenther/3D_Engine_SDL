@@ -1,5 +1,6 @@
 
 #include "actions/Action_Interface.h"
+#include "render/Camera.h"
 #include <string>
 #include <iostream>
 
@@ -70,7 +71,7 @@ TwoAxisRangeCommand::~TwoAxisRangeCommand(){
 
 
 
-MoveAction::MoveAction(std::string command_name, Vec3d direction, float attack, float release, float max_speed, float FPS){
+MoveAction::MoveAction(std::string command_name, Camera* this_camera, Vec3d direction, float attack, float release, float max_speed, float FPS){
     this->speed=0;
     this->is_running=false;
     this->FPS=FPS;
@@ -85,6 +86,7 @@ MoveAction::MoveAction(std::string command_name, Vec3d direction, float attack, 
     this->readyToDestroy=false;
     this-> direction = direction;
     this->mesh_modification = NULL;
+    this->this_camera = this_camera;
 
 }
 
@@ -187,8 +189,19 @@ void MoveAction::update(bool key_pressed){
         translation_vector.setX(direction.getX()*speed);
         translation_vector.setY(direction.getY()*speed);
         translation_vector.setZ(direction.getZ()*speed);
+
+        Vec3d currCameraPos = this->this_camera->getCameraPos();
+        Vec3d newCameraPos = currCameraPos + translation_vector;
+        //Vec3d newCameraPos = Vec3d(currCameraPos.getX()*speed, currCameraPos.getY()*speed, currCameraPos.getZ()*speed);
+
+	    this->this_camera->setCameraPos(newCameraPos);
+        std::cout << "    " << command_name << ": " << newCameraPos.getX() << "," << newCameraPos.getY() << ", " << newCameraPos.getZ() << ": " << this->speed;
+        
+        /*        
+        
+
         mesh_modification = new Translator(translation_vector.getX(), translation_vector.getY(), translation_vector.getZ());
-        std::cout << "    " << command_name << ": " << translation_vector.getX() << "," << translation_vector.getY() << ", " << translation_vector.getZ() << ": " << this->speed;
+        */
         }
 
     // use speed to update meshes here

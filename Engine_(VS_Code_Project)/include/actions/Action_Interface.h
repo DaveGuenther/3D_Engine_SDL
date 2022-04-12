@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include "utility/Triangle_Modifier.h"
+#include "render/Camera.h"
 
 enum ActionCommandState {OFF, TRIG_ATTACK, ATTACK, SUSTAIN, TRIG_RELEASE, RELEASE};
 
@@ -72,6 +73,7 @@ class IAction{
         bool readyToDestroy;
         std::string name;
         Triangle_Modifier* mesh_modification;
+        Camera* this_camera;
 };
 
 /**
@@ -153,7 +155,7 @@ class MoveAction:public IAction{
          * @param max_speed total speed that will apply once the action is in sustain state
          * @param FPS Target engine frames per second (default is 60.0)
          */
-        MoveAction(std::string command_name, Vec3d direction, float attack, float release, float max_speed, float FPS);
+        MoveAction(std::string command_name, Camera* this_camera, Vec3d direction, float attack, float release, float max_speed, float FPS);
         ~MoveAction();
         void setAttack(float attack);
         void setRelease(float release);

@@ -38,7 +38,7 @@ Engine_3D::Engine_3D(void){
     this->FPS=60;
     this->VariableFrameRate = new Frame_Rate_Manager(FPS);
     this->mesh_pipeline = new Mesh_Pipeline;
-    this->INWORLD_Action_Updater = new InGame_Action_Updater(mesh_pipeline, FPS);
+    this->INWORLD_Action_Updater = new InGame_Action_Updater(mesh_pipeline, player_camera, FPS);
     
       
     game_state_subject.setState(IN_WORLD);
@@ -98,8 +98,8 @@ void Engine_3D::engine_update(){
     RendererPipeline* my_pre_renderer = new RendererPipeline(mesh_pipeline);
 
     //CAMERA OVERRIDE for testing
-	Vec3d tempCamera = player_camera->getCameraPos();
-	player_camera->setCameraPos(Vec3d(0.0f,tempCamera.getY()+0.001,0.0f));    
+	//Vec3d tempCamera = player_camera->getCameraPos();
+	//player_camera->setCameraPos(Vec3d(0.0f,tempCamera.getY()+0.001,0.0f));    
 
     //Call Renderer
     Engine_Renderer->refreshScreen(my_pre_renderer);

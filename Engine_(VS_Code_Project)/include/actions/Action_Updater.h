@@ -7,6 +7,7 @@
 #include "actions/Action_Interface.h"
 #include "utility/Triangle_Modifier.h"
 #include "utility/Mesh_Pipeline.h"
+#include "render/Camera.h"
 
 
 class IAction_Updater{
@@ -29,7 +30,7 @@ class IAction_Updater{
 class InGame_Action_Updater: public IAction_Updater{
     public:
     //InGameActionUpdater(int FPS);
-    InGame_Action_Updater(Mesh_Pipeline* mesh_pipeline, int FPS);
+    InGame_Action_Updater(Mesh_Pipeline* mesh_pipeline, Camera* this_camera, int FPS);
     //void AddTactileInputMap(const std::unordered_map<std::string,bool> &input_tactile_map);
     //void AddRangeInputMap(const std::unordered_map<std::string,float> &input_range_map);
 
@@ -47,6 +48,7 @@ class InGame_Action_Updater: public IAction_Updater{
     //std::unordered_map<std::string,float> input_range_map;
     std::vector<Triangle_Modifier*> modifications;  
     Mesh_Pipeline* mesh_pipeline;
+    Camera* this_camera;
     
 
 };
