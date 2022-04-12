@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 
 #include "utility/Mat4x4.h"
+#include "utility/Vector_Math_Service.h"
 
 
 Mat4x4::Mat4x4(){
@@ -166,6 +167,82 @@ Mat4x4 matrixMatrixMultiplication(Mat4x4& m1, Mat4x4& m2){
     }
     return matrix;
 }
+
+Mat4x4 Mat4x4::matrixPointAt(Vec3d& pos, Vec3d& target, Vec3d& up){
+    
+    //Calculate new forward direction
+    Vec3d new_forward = target-pos;
+    VectorMathService::getUnitVector(new_forward);
+
+    //Calculate new Up vector   (I don't yet understand why we need to do this)
+    Vec3d a = new_forward * VectorMathService::dotProduct(up, new_forward);
+    Vec3d new_up = up-a;
+    VectorMathService::getUnitVector(new_up);
+
+    // Create new Right vector
+    Vec3d new_right = VectorMathService::crossProduct(new_up, new_forward);
+
+    // Construct POINT AT matrix
+    Mat4x4 matrix;
+    matrix.m[0][0] = new_right.getX();
+    matrix.m[1][0] = new_up.getX();
+    matrix.m[2][0] = new_forward.getX();
+    matrix.m[3][0] = pos.getX();
+
+    matrix.m[0][1] = new_right.getY();
+    matrix.m[1][1] = new_up.getY();
+    matrix.m[2][1] = new_forward.getY();
+    matrix.m[3][1] = pos.getY();
+
+    matrix.m[0][2] = new_right.getZ();
+    matrix.m[1][2] = new_up.getZ();
+    matrix.m[2][2] = new_forward.getZ();
+    matrix.m[3][2] = pos.getZ();
+
+    matrix.m[0][3] = 0;
+    matrix.m[1][3] = 0;
+    matrix.m[2][3] = 0;
+    matrix.m[3][3] = 1;
+    return matrix;
+
+}
+
+Mat4x4 Mat4x4::matrixLookAt(Mat4x4& m){
+    Mat4x4 matrix;
+    matrix.m[0][0] = m.m[0][0]; matrix.m[0][1] = m.m[1][0]; matrix.m[0][2] = m.m[2][0]; matrix.m[0][3] = 0.0f;
+    matrix.m[1][0] = m.m[0][1]; matrix.m[1][1] = m.m[1][1]; matrix.m[1][2] = m.m[2][1]; matrix.m[1][3] = 0.0f;
+    matrix.m[2][0] = m.m[0][2]; matrix.m[2][1] = m.m[1][2]; matrix.m[2][2] = m.m[2][2]; matrix.m[2][3] = 0.0f;
+    matrix.m[3][0] = -(m.m[3][0] * matrix.m[0][0] + m.m[3][1] * matrix.m[1][0] + m.m[3][2] * matrix.m[2][0]);
+    matrix.m[3][1] = -(m.m[3][0] * matrix.m[0][1] + m.m[3][1] * matrix.m[1][1] + m.m[3][2] * matrix.m[2][1]);
+    matrix.m[3][2] = -(m.m[3][0] * matrix.m[0][2] + m.m[3][1] * matrix.m[1][2] + m.m[3][2] * matrix.m[2][2]);
+    matrix.m[3][3] = 1.0f;
+    /*Vec3d T = Vec3d(m.m[3][0], m.m[3][1], m.m[3][2]);
+    Vec3d A = Vec3d(m.m[0][0], m.m[0][1], m.m[0][2]);
+    Vec3d B = Vec3d(m.m[1][0], m.m[1][1], m.m[1][2]);
+    Vec3d C = Vec3d(m.m[2][0], m.m[2][1], m.m[2][2]);
+    matrix.m[0][0] = m.m[0][0];
+    matrix.m[1][0] = m.m[0][1];
+    matrix.m[2][0] = m.m[0][2];
+    matrix.m[3][0] = -(m.m[3][0] * matrix.m[0][0] + m.m[3][1] * matrix.m[1][0] + m.m[3][2] * matrix.m[2][0]);//VectorMathService::dotProduct(T * -1, A);
+
+    matrix.m[0][1] = m.m[1][0];
+    matrix.m[1][1] = m.m[1][1];
+    matrix.m[2][1] = m.m[1][2];
+    matrix.m[3][1] = -(m.m[3][0] * matrix.m[0][1] + m.m[3][1] * matrix.m[1][1] + m.m[3][2] * matrix.m[2][1]);//VectorMathService::dotProduct(T * -1, B);
+
+    matrix.m[0][2] = m.m[2][0];
+    matrix.m[1][2] = m.m[2][1];
+    matrix.m[2][2] = m.m[2][2];
+    matrix.m[3][2] = -(m.m[3][0] * matrix.m[0][2] + m.m[3][1] * matrix.m[1][2] + m.m[3][2] * matrix.m[2][2]);//VectorMathService::dotProduct(T * -1, C);
+
+    matrix.m[0][3] = 0;
+    matrix.m[1][3] = 0;
+    matrix.m[2][3] = 0;
+    matrix.m[3][3] = 1;
+    */
+    return matrix;
+}
+
 
 std::string Mat4x4::toString(){
     std::string ret_val = "{{"+std::to_string(m[0][0]) +", "+std::to_string(m[0][1])+", "+std::to_string(m[0][2])+", "+std::to_string(m[0][3])+ "},\n"+

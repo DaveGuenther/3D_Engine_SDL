@@ -48,7 +48,7 @@ TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, float x_range
 void TwoAxisRangeCommand::update(bool key_pressed){
     if (this->mesh_modification!=NULL){ this->mesh_modification->clearMeshAssignments();}
     if (is_running){
-        std::cout<< "  Applying TwoAxisMovement X: " << x_range << " Y: " << y_range;
+        //std::cout<< "  Applying TwoAxisMovement X: " << x_range << " Y: " << y_range;
         Vec3d rotation_vector;
         float mouse_sensitivity=360.0f;
         rotation_vector.setX(y_range*mouse_sensitivity);

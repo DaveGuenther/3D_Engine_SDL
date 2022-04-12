@@ -49,7 +49,7 @@ class Vec3d:public Vec2d{
     
     friend Vec3d operator/ (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.getX()/vec2.getX(), vec1.getY()/vec2.getY(), vec1.getZ()/vec2.getZ());}
     friend Vec3d operator/ (const Vec3d& vec, const float& val){ return Vec3d(vec.getX()/val, vec.getY()/val, vec.getZ()/val);}
-    friend Vec3d operator/ (const float& val, const Vec3d& vec){ return Vec3d(vec.getX()/val, vec.getY()/val, vec.getZ()/val);}
+    friend Vec3d operator/ (const float& val, const Vec3d& vec){ return Vec3d(val/vec.getX(), val/vec.getY(), val/vec.getZ());}
     
     
     friend Vec3d operator+ (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.getX()+vec2.getX(), vec1.getY()+vec2.getY(), vec1.getZ()+vec2.getZ()); }
@@ -64,7 +64,7 @@ class Vec3d:public Vec2d{
     
     friend Vec3d operator- (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.getX()-vec2.getX(), vec1.getY()-vec2.getY(), vec1.getZ()-vec2.getZ()); }
     friend Vec3d operator- (const Vec3d& vec, const float& val){ return Vec3d(vec.getX()-val, vec.getY()-val, vec.getZ()-val); }
-    friend Vec3d operator- (const float& val, const Vec3d& vec){ return Vec3d(vec.getX()-val, vec.getY()-val, vec.getZ()-val); }
+    friend Vec3d operator- (const float& val, const Vec3d& vec){ return Vec3d(val-vec.getX(), val-vec.getY(), val-vec.getZ()); }
     
 };
 
