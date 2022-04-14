@@ -130,14 +130,14 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		triView.setTrianglePoint(2, VectorMathService::MultiplyMatrixVector(matView, TriPoint2));
 
 
-		TriPoint0 = triView.getTrianglePoint(0)-this->player_camera->getCameraPos();
-		TriPoint1 = triView.getTrianglePoint(1)-this->player_camera->getCameraPos();
-		TriPoint2 = triView.getTrianglePoint(2)-this->player_camera->getCameraPos();
+		Vec3d newTriPoint0 = triView.getTrianglePoint(0);//-this->player_camera->getCameraPos();
+		Vec3d newTriPoint1 = triView.getTrianglePoint(1);//-this->player_camera->getCameraPos();
+		Vec3d newTriPoint2 = triView.getTrianglePoint(2);//-this->player_camera->getCameraPos();
 
 
-		pt0 = VectorMathService::MultiplyMatrixVector(matProj, TriPoint0);
-		pt1 = VectorMathService::MultiplyMatrixVector(matProj, TriPoint1);
-		pt2 = VectorMathService::MultiplyMatrixVector(matProj, TriPoint2);
+		pt0 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint0);
+		pt1 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint1);
+		pt2 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint2);
 		pt0 = pt0/pt0.getW();
 		pt1 = pt1/pt1.getW();
 		pt2 = pt2/pt2.getW();

@@ -36,6 +36,7 @@ InGame_Action_Updater::InGame_Action_Updater(Mesh_Pipeline* mesh_pipeline, Camer
     action_map.insert_or_assign("MOVE_BACKWARD", new MoveAction("MOVE_BACKWARD", this_camera, Vec3d{0,0,-1}, 1.0f, 1.0f, 0.5f, FPS));
     action_map.insert_or_assign("STRAFE_LEFT", new MoveAction("STRAFE_LEFT", this_camera, Vec3d{-1,0,0}, 1.0f, 1.0f, 0.5f, FPS));
     action_map.insert_or_assign("STRAFE_RIGHT", new MoveAction("STRAFE_RIGHT", this_camera, Vec3d{1,0,0}, 1.0f, 1.0f, 0.5f, FPS));
+    //action_map.insert_or_assign("LOOK_LEFT", new TwoAxisRangeCommand("LOOK_LEFT", this_camera, -0.1f,0.0f));
     action_map.insert_or_assign("JUMP", new JumpAction("JUMP"));
     this->mesh_pipeline = mesh_pipeline;  // I know this is bad coding practice and tightly couples code..  Not sure how else to do it yet.  I might eventually try some kind of observer where ActionUpdater is the subject and mesh_pipeline is the observer, updating itself when the time comes...
 
@@ -57,8 +58,8 @@ void InGame_Action_Updater::update(){
     }
     if (this->didRangeInputChange){
         
-        //NEED TO Uncomment this eventully to allow mouse input once keys are working...
-        action_map.insert_or_assign("LOOK_XY", new TwoAxisRangeCommand("LOOK_XY", range_x, range_y));
+        
+        action_map.insert_or_assign("LOOK_XY", new TwoAxisRangeCommand("LOOK_XY", this_camera, range_x, range_y));
     }
     prev_mouse_x=mouse_x;
     prev_mouse_y=mouse_y;

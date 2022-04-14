@@ -20,16 +20,18 @@ class Vec3d:public Vec2d{
       x=x_in;
       y=y_in;
       z=z_in;
+      w=1.0f;
     }
 
     Vec3d (const Vec3d &V){
       x=V.x;
       y=V.y;
       z=V.z;
+      w=V.w;
     }
 
     std::string toString(){
-      std::string ret_val = "Vec3d(" + std::to_string(x)+ ", "+std::to_string(y)+ ", "+std::to_string(z)+")";
+      std::string ret_val = "Vec3d(" + std::to_string(x)+ ", "+std::to_string(y)+ ", "+std::to_string(z)+", "+std::to_string(w)+")";
       return ret_val;
     }
 

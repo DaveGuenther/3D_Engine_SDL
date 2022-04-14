@@ -12,12 +12,15 @@ class Camera{
 
         void setCameraPos(Vec3d pos_vector);
         void setCameraDir(Vec3d dir_vector);
+        void rotateCamera(Vec3d rotation_vector);
         Vec3d getCameraPos();
         Vec3d getCameraDir();
 
         
 
     private:
+        Vec3d calc_vTarget();
+        Vec3d vTarget;
         Vec3d camera;
         Vec3d lookVector;
         float pitch=0.0f;

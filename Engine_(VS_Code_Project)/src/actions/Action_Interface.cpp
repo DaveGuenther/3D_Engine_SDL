@@ -39,23 +39,27 @@ void JumpAction::update(bool key_pressed){
     this->readyToDestroy=true;
 }
 
-TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, float x_range, float y_range):x_range(x_range),y_range(y_range){    
+TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, Camera* this_camera, float x_range, float y_range):x_range(x_range),y_range(y_range){    
     this->command_name = command_name;
     is_running=true;
     this->mesh_modification = NULL;
+    this->this_camera = this_camera;
 }
 
 
 void TwoAxisRangeCommand::update(bool key_pressed){
     if (this->mesh_modification!=NULL){ this->mesh_modification->clearMeshAssignments();}
     if (is_running){
-        //std::cout<< "  Applying TwoAxisMovement X: " << x_range << " Y: " << y_range;
+        std::cout<< "  Applying TwoAxisMovement X: " << x_range << " Y: " << y_range;
         Vec3d rotation_vector;
         float mouse_sensitivity=360.0f;
-        rotation_vector.setX(y_range*mouse_sensitivity);
-        rotation_vector.setY(-x_range*mouse_sensitivity);
+        rotation_vector.setX(-y_range*mouse_sensitivity);
+        rotation_vector.setY(x_range*mouse_sensitivity);
         rotation_vector.setZ(0);
-        mesh_modification = new Rotator(rotation_vector.getX(), rotation_vector.getY(), rotation_vector.getZ(),Vec3d(0,0,0));
+        this_camera->rotateCamera(rotation_vector);
+        
+        //mesh_modification = new Rotator(rotation_vector.getX(), rotation_vector.getY(), rotation_vector.getZ(),Vec3d(0,0,0));
+        
         this->is_running=false;
     }
     //this->is_running=false;
@@ -190,12 +194,12 @@ void MoveAction::update(bool key_pressed){
         translation_vector.setY(direction.getY()*speed);
         translation_vector.setZ(direction.getZ()*speed);
 
-        Vec3d currCameraPos = this->this_camera->getCameraPos();
-        Vec3d newCameraPos = currCameraPos + translation_vector;
+        //Vec3d currCameraPos = this->this_camera->getCameraPos();
+        //Vec3d newCameraPos = currCameraPos + translation_vector;
         //Vec3d newCameraPos = Vec3d(currCameraPos.getX()*speed, currCameraPos.getY()*speed, currCameraPos.getZ()*speed);
 
-	    this->this_camera->setCameraPos(newCameraPos);
-        std::cout << "    " << command_name << ": " << newCameraPos.getX() << "," << newCameraPos.getY() << ", " << newCameraPos.getZ() << ": " << this->speed;
+	    this->this_camera->setCameraPos(translation_vector);
+        std::cout << "    " << command_name << ": " << translation_vector.getX() << "," << translation_vector.getY() << ", " << translation_vector.getZ() << ": " << this->speed;
         
         /*        
         
