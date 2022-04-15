@@ -1,8 +1,10 @@
 
 #include "actions/Action_Interface.h"
 #include "render/Camera.h"
+#include "globals.h"
 #include <string>
 #include <iostream>
+
 
 const bool IAction::isRunning(){ return this->is_running; }
 
@@ -18,6 +20,57 @@ void IAction::trigger(){
 Triangle_Modifier* IAction::getMeshModification() const{
     return mesh_modification;
 }
+
+TurnAction::TurnAction(std::string command_name, Camera* this_camera, Vec3d direction_unit_vector){
+    this->command_name=command_name;
+    this->is_key_pressed=false;
+    this->is_running=false;
+    this->readyToDestroy=false;
+    this->mesh_modification = NULL;
+    this->this_camera = this_camera;
+    this->direction_unit_vector = direction_unit_vector;
+}
+
+void TurnAction::update(bool key_pressed){
+    // Place Holder
+    if (key_pressed){ is_running=true; } else { is_running=false; }
+    if (is_running){
+        keyboardbreak=true;
+        std::cout << "Turning By Keys!";
+        this->direction_unit_vector = this->direction_unit_vector*1.0f;
+        this_camera->rotateCamera(direction_unit_vector);
+    }
+    is_running=false;
+    this->readyToDestroy=true;
+
+}
+
+
+UseAction::UseAction(std::string command_name, Camera* this_camera){
+    this->command_name=command_name;
+    this->is_key_pressed=false;
+    this->is_running=false;
+    this->readyToDestroy=false;
+    this->mesh_modification = NULL;
+    this->this_camera = this_camera;
+}
+
+void UseAction::update(bool key_pressed){
+    // Place Holder
+    if (key_pressed){ is_running=true; } else { is_running=false; }
+    if (is_running){
+        keyboardbreak=true;
+        std::cout << "Use Pressed!";
+        Vec3d rotation_vector;
+        rotation_vector.setX(1.0f);
+        rotation_vector.setY(0.0f);
+        rotation_vector.setZ(0.0f);
+        this_camera->rotateCamera(rotation_vector);
+    }
+    is_running=false;
+    this->readyToDestroy=true;
+}
+
 
 JumpAction::JumpAction(std::string command_name){
     //passthrough

@@ -76,6 +76,21 @@ class IAction{
         Camera* this_camera;
 };
 
+class TurnAction:public IAction{
+    public:
+    TurnAction(std::string command_name, Camera* this_camera, Vec3d direction_unit_vector);
+    void update(bool key_pressed);
+
+    private: 
+    Vec3d direction_unit_vector;
+};
+
+class UseAction:public IAction{
+    public:
+    UseAction(std::string command_name, Camera* this_camera);
+    void update(bool key_pressed);    
+};
+
 /**
  * @brief Concrete implementation of IAction that handles a jump event.
  * 

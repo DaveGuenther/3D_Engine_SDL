@@ -158,7 +158,7 @@ Mat4x4 Mat4x4::matrixMakeProjection(float fFOV, int SCREEN_W, int SCREEN_H, floa
     return matProj;
 }
 
-Mat4x4 matrixMatrixMultiplication(Mat4x4& m1, Mat4x4& m2){
+Mat4x4 Mat4x4::matrixMatrixMultiplication(Mat4x4& m1, Mat4x4& m2){
     Mat4x4 matrix;
     for (int c=0; c<4; c++){
         for(int r=0;r<4;r++){
@@ -168,7 +168,7 @@ Mat4x4 matrixMatrixMultiplication(Mat4x4& m1, Mat4x4& m2){
     return matrix;
 }
 
-Mat4x4 Mat4x4:: matrixPointAt(Vec3d& pos, Vec3d& target, Vec3d& up){
+Mat4x4 Mat4x4::matrixPointAt(Vec3d& pos, Vec3d& target, Vec3d& up){
     
     //Calculate new forward direction
     Vec3d new_forward = target-pos;

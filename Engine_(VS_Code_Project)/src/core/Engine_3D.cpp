@@ -35,7 +35,7 @@ Engine_3D::Engine_3D(void){
     this->MENU_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "menu_bindings.cfg");
     this->INWORLD_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "in_game_bindings.cfg");
     game_state_subject.setState(MENU);
-    this->FPS=60;
+    this->FPS=60.0f;
     this->VariableFrameRate = new Frame_Rate_Manager(FPS);
     this->mesh_pipeline = new Mesh_Pipeline;
     this->INWORLD_Action_Updater = new InGame_Action_Updater(mesh_pipeline, player_camera, FPS);
