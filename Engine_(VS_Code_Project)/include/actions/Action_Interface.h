@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include "utility/Triangle_Modifier.h"
+#include "render/Camera.h"
 
 enum ActionCommandState {OFF, TRIG_ATTACK, ATTACK, SUSTAIN, TRIG_RELEASE, RELEASE};
 
@@ -72,6 +73,22 @@ class IAction{
         bool readyToDestroy;
         std::string name;
         Triangle_Modifier* mesh_modification;
+        Camera* this_camera;
+};
+
+class TurnAction:public IAction{
+    public:
+    TurnAction(std::string command_name, Camera* this_camera, Vec3d direction_unit_vector);
+    void update(bool key_pressed);
+
+    private: 
+    Vec3d direction_unit_vector;
+};
+
+class UseAction:public IAction{
+    public:
+    UseAction(std::string command_name, Camera* this_camera);
+    void update(bool key_pressed);    
 };
 
 /**
@@ -102,7 +119,7 @@ class TwoAxisRangeCommand:public IAction{
          * @param x_range is the delta_x angle that will apply to all meshes for rotation
          * @param y_range is the delta_y angle that will apply to all meshes for rotation
          */
-        TwoAxisRangeCommand(std::string command_name, float x_range, float y_range);
+        TwoAxisRangeCommand(std::string command_name, Camera* this_camera, float x_range, float y_range);
         ~TwoAxisRangeCommand();
         /**
          * @brief Needs further development...  Will eventually work such that the jump just propels the character into the air and a 
@@ -153,7 +170,7 @@ class MoveAction:public IAction{
          * @param max_speed total speed that will apply once the action is in sustain state
          * @param FPS Target engine frames per second (default is 60.0)
          */
-        MoveAction(std::string command_name, Vec3d direction, float attack, float release, float max_speed, float FPS);
+        MoveAction(std::string command_name, Camera* this_camera, Vec3d direction, float attack, float release, float max_speed, float FPS);
         ~MoveAction();
         void setAttack(float attack);
         void setRelease(float release);

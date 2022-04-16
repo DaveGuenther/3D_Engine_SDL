@@ -1,7 +1,10 @@
 
 #include "actions/Action_Interface.h"
+#include "render/Camera.h"
+#include "globals.h"
 #include <string>
 #include <iostream>
+
 
 const bool IAction::isRunning(){ return this->is_running; }
 
@@ -17,6 +20,57 @@ void IAction::trigger(){
 Triangle_Modifier* IAction::getMeshModification() const{
     return mesh_modification;
 }
+
+TurnAction::TurnAction(std::string command_name, Camera* this_camera, Vec3d direction_unit_vector){
+    this->command_name=command_name;
+    this->is_key_pressed=false;
+    this->is_running=false;
+    this->readyToDestroy=false;
+    this->mesh_modification = NULL;
+    this->this_camera = this_camera;
+    this->direction_unit_vector = direction_unit_vector;
+}
+
+void TurnAction::update(bool key_pressed){
+    // Place Holder
+    if (key_pressed){ is_running=true; } else { is_running=false; }
+    if (is_running){
+        keyboardbreak=true;
+        std::cout << "Turning By Keys!";
+        this->direction_unit_vector = this->direction_unit_vector*1.0f;
+        this_camera->rotateCamera(direction_unit_vector);
+    }
+    is_running=false;
+    this->readyToDestroy=true;
+
+}
+
+
+UseAction::UseAction(std::string command_name, Camera* this_camera){
+    this->command_name=command_name;
+    this->is_key_pressed=false;
+    this->is_running=false;
+    this->readyToDestroy=false;
+    this->mesh_modification = NULL;
+    this->this_camera = this_camera;
+}
+
+void UseAction::update(bool key_pressed){
+    // Place Holder
+    if (key_pressed){ is_running=true; } else { is_running=false; }
+    if (is_running){
+        keyboardbreak=true;
+        std::cout << "Use Pressed!";
+        Vec3d rotation_vector;
+        rotation_vector.setX(1.0f);
+        rotation_vector.setY(0.0f);
+        rotation_vector.setZ(0.0f);
+        this_camera->rotateCamera(rotation_vector);
+    }
+    is_running=false;
+    this->readyToDestroy=true;
+}
+
 
 JumpAction::JumpAction(std::string command_name){
     //passthrough
@@ -38,10 +92,11 @@ void JumpAction::update(bool key_pressed){
     this->readyToDestroy=true;
 }
 
-TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, float x_range, float y_range):x_range(x_range),y_range(y_range){    
+TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, Camera* this_camera, float x_range, float y_range):x_range(x_range),y_range(y_range){    
     this->command_name = command_name;
     is_running=true;
     this->mesh_modification = NULL;
+    this->this_camera = this_camera;
 }
 
 
@@ -51,10 +106,13 @@ void TwoAxisRangeCommand::update(bool key_pressed){
         std::cout<< "  Applying TwoAxisMovement X: " << x_range << " Y: " << y_range;
         Vec3d rotation_vector;
         float mouse_sensitivity=360.0f;
-        rotation_vector.setX(y_range*mouse_sensitivity);
-        rotation_vector.setY(-x_range*mouse_sensitivity);
+        rotation_vector.setX(-y_range*mouse_sensitivity);
+        rotation_vector.setY(x_range*mouse_sensitivity);
         rotation_vector.setZ(0);
-        mesh_modification = new Rotator(rotation_vector.getX(), rotation_vector.getY(), rotation_vector.getZ(),Vec3d(0,0,0));
+        this_camera->rotateCamera(rotation_vector);
+        
+        //mesh_modification = new Rotator(rotation_vector.getX(), rotation_vector.getY(), rotation_vector.getZ(),Vec3d(0,0,0));
+        
         this->is_running=false;
     }
     //this->is_running=false;
@@ -70,7 +128,7 @@ TwoAxisRangeCommand::~TwoAxisRangeCommand(){
 
 
 
-MoveAction::MoveAction(std::string command_name, Vec3d direction, float attack, float release, float max_speed, float FPS){
+MoveAction::MoveAction(std::string command_name, Camera* this_camera, Vec3d direction, float attack, float release, float max_speed, float FPS){
     this->speed=0;
     this->is_running=false;
     this->FPS=FPS;
@@ -85,6 +143,7 @@ MoveAction::MoveAction(std::string command_name, Vec3d direction, float attack, 
     this->readyToDestroy=false;
     this-> direction = direction;
     this->mesh_modification = NULL;
+    this->this_camera = this_camera;
 
 }
 
@@ -187,8 +246,19 @@ void MoveAction::update(bool key_pressed){
         translation_vector.setX(direction.getX()*speed);
         translation_vector.setY(direction.getY()*speed);
         translation_vector.setZ(direction.getZ()*speed);
-        mesh_modification = new Translator(translation_vector.getX(), translation_vector.getY(), translation_vector.getZ());
+
+        //Vec3d currCameraPos = this->this_camera->getCameraPos();
+        //Vec3d newCameraPos = currCameraPos + translation_vector;
+        //Vec3d newCameraPos = Vec3d(currCameraPos.getX()*speed, currCameraPos.getY()*speed, currCameraPos.getZ()*speed);
+
+	    this->this_camera->setCameraPos(translation_vector);
         std::cout << "    " << command_name << ": " << translation_vector.getX() << "," << translation_vector.getY() << ", " << translation_vector.getZ() << ": " << this->speed;
+        
+        /*        
+        
+
+        mesh_modification = new Translator(translation_vector.getX(), translation_vector.getY(), translation_vector.getZ());
+        */
         }
 
     // use speed to update meshes here

@@ -21,6 +21,20 @@ void VectorMathService::getUnitVector(Vec3d& this_vec){
     this_vec.setZ(this_vec.getZ()/vector_length);
 }
 
+Vec3d VectorMathService::MultiplyMatrixVector( const Mat4x4 &m, Vec3d &i){
+    Vec3d v;
+    v.setX(i.getX()*m.m[0][0] + i.getY()*m.m[1][0] + i.getZ()*m.m[2][0] + i.getW() * m.m[3][0]);
+    v.setY(i.getX()*m.m[0][1] + i.getY()*m.m[1][1] + i.getZ()*m.m[2][1] + i.getW() * m.m[3][1]);
+    v.setZ(i.getX()*m.m[0][2] + i.getY()*m.m[1][2] + i.getZ()*m.m[2][2] + i.getW() * m.m[3][2]);
+    v.setW(i.getX()*m.m[0][3] + i.getY()*m.m[1][3] + i.getZ()*m.m[2][3] + i.getW() * m.m[3][3]);
+    return v;
+}
+
+
+
+
+
+/*
 void VectorMathService::MultiplyMatrixVector(Vec3d &i, Vec3d &o, const Mat4x4 &m){
 
     //[x, y, z, 1] * mat4x4 gives us 1x4 vector
@@ -37,7 +51,7 @@ void VectorMathService::MultiplyMatrixVector(Vec3d &i, Vec3d &o, const Mat4x4 &m
 		o.setY(o.getY()/w);
 		o.setZ(o.getZ()/w);
 	}
-}
+}*/
 
 Vec3d VectorMathService::vectorIntersectPlane(Vec3d &plane_p, Vec3d &plane_n, Vec3d &lineStart, Vec3d &lineEnd){
     getUnitVector(plane_n);

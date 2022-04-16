@@ -5,11 +5,12 @@
 #include "utility/Triangle.h"
 #include "utility/Mesh_Pipeline.h"
 #include "utility/Vector_Math_Service.h"
+#include "utility/Mat4x4.h"
 #include "render/Renderer.h"
 #include "render/Rasterizer.h"
 
 
-Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
+Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
     // SDL and Screen initializing
 	this->SCREEN_W = SCREEN_W;
     this->SCREEN_H = SCREEN_H;
@@ -18,36 +19,16 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H) {
     
 
 	// Projection Matrix
-    fNear = 0.1f;
+	fNear = 0.1f;
 	fFar = 1000.0f;
-	fFOV=80.0f;
-	fAspectRatio = (float)SCREEN_H/(float)SCREEN_W;
-	fFOV_rad = 1.0/(SDL_tanf((fFOV/2)*(3.14159265f/180.0f)));
-
-	matProj.m[0][0] = fAspectRatio*fFOV_rad;
-	matProj.m[1][0] = 0.0;
-	matProj.m[2][0] = 0.0;
-	matProj.m[3][0] = 0.0;
-	matProj.m[0][1] = 0.0;
-	matProj.m[1][1] = fFOV_rad;
-	matProj.m[2][1] = 0.0;
-	matProj.m[3][1] = 0.0;
-	matProj.m[0][2] = 0.0;
-	matProj.m[1][2] = 0.0;
-	matProj.m[2][2] = fFar/(fFar-fNear);
-	matProj.m[3][2] = (-fFar*fNear)/(fFar-fNear);
-	matProj.m[0][3] = 0.0;
-	matProj.m[1][3] = 0.0;
-	matProj.m[2][3] = 1.0;
-	matProj.m[3][3] = 0.0;
+	fFOV=90.0f;
+	matProj = Mat4x4::matrixMakeProjection(fFOV, SCREEN_W, SCREEN_H, fNear, fFar);
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 
-	camera.setX(0);
-	camera.setY(0);
-	camera.setZ(0);
+	this->player_camera = player_camera;
 
 }
 
@@ -75,7 +56,7 @@ SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri, SDL_Color col){
     draw_col.g= col.g*color_modifier;
     draw_col.b= col.b*color_modifier;
     draw_col.a=255;
-	std::cout << z_center << " " << color_modifier << std::endl; 
+	//std::cout << z_center << " " << color_modifier << std::endl; 
     //SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
     return draw_col;
 		
@@ -117,9 +98,10 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
 
 }
 
+
 void Renderer::projectTriangle3d(Triangle &tri){
 	// Apply Perspective Projection Matrix
-	Triangle triProjected;
+	Triangle triProjected, triView;
 	Vec3d pt0; 
 	Vec3d pt1; 
 	Vec3d pt2;
@@ -131,18 +113,35 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 	// Calculate Normals and Backface Culling
 	
-	Vec3d line1 = Vec3d(TriPoint1.getX()-TriPoint0.getX(), TriPoint1.getY()-TriPoint0.getY(), TriPoint1.getZ()-TriPoint0.getZ());
-	Vec3d line2 = Vec3d(TriPoint2.getX()-TriPoint0.getX(), TriPoint2.getY()-TriPoint0.getY(), TriPoint2.getZ()-TriPoint0.getZ());
+	Vec3d line1 = TriPoint1-TriPoint0;
+	Vec3d line2 = TriPoint2-TriPoint1;
+	
 	Vec3d normal_vector = VectorMathService::crossProduct(line1, line2);
 	VectorMathService::getUnitVector(normal_vector);
 
-	// perform dot product here and test <0
-	Vec3d camera_to_triangle_vector = Vec3d(TriPoint0.getX()-camera.getX(), TriPoint0.getY()-camera.getY(), TriPoint0.getZ()-camera.getZ()); 
+	// perform dot product here and test <0 
+	Vec3d camera_to_triangle_vector = TriPoint0-player_camera->getCameraPos();
 	VectorMathService::getUnitVector(camera_to_triangle_vector);
 	if (VectorMathService::dotProduct(normal_vector, camera_to_triangle_vector)<0.0f){ // Checks to see if normal vector >= 90 degs away from camera to triangle view vector
-		VectorMathService::MultiplyMatrixVector(TriPoint0, pt0, matProj);
-		VectorMathService::MultiplyMatrixVector(TriPoint1, pt1, matProj);
-		VectorMathService::MultiplyMatrixVector(TriPoint2, pt2, matProj);
+		
+		// Project worldspace to Camera view
+		triView.setTrianglePoint(0, VectorMathService::MultiplyMatrixVector(matView, TriPoint0));
+		triView.setTrianglePoint(1, VectorMathService::MultiplyMatrixVector(matView, TriPoint1));
+		triView.setTrianglePoint(2, VectorMathService::MultiplyMatrixVector(matView, TriPoint2));
+
+
+		Vec3d newTriPoint0 = triView.getTrianglePoint(0);//-this->player_camera->getCameraPos();
+		Vec3d newTriPoint1 = triView.getTrianglePoint(1);//-this->player_camera->getCameraPos();
+		Vec3d newTriPoint2 = triView.getTrianglePoint(2);//-this->player_camera->getCameraPos();
+
+
+		pt0 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint0);
+		pt1 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint1);
+		pt2 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint2);
+		pt0 = pt0/pt0.getW();
+		pt1 = pt1/pt1.getW();
+		pt2 = pt2/pt2.getW();
+
 		triProjected.setTrianglePoint(0,pt0);
 		triProjected.setTrianglePoint(1,pt1);
 		triProjected.setTrianglePoint(2,pt2);
@@ -161,7 +160,6 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 		SDL_Color col; col.r=255; col.g=255; col.b=255; col.a = 255;
 		SDL_Color dimmed_col = applyDepthDimmer(tri, col);
-		//SDL_SetRenderDrawColor(this->renderer, draw_col.r, draw_col.g, draw_col.b, SDL_ALPHA_OPAQUE);
 
 		//drawWireFrameTriangle2d(triProjected, col);
 		drawFilledTriangle2d(triProjected,dimmed_col);
@@ -172,21 +170,22 @@ void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
-	//Mesh_Pipeline mesh_pipeline = *this_mesh_pipeline;
+
+	//Calculate Camera position/direction into scene
+	this->matView = player_camera->buildViewMatrix();
 	
-	//for (auto this_mesh: mesh_pipeline.Get_Meshes()){  //Issues with mesh_pipeline.Get_Meshes() if I try to make this_mesh_pipeline a const ptr
-		//std::vector<Triangle> tris = this_mesh.getTriangles();
-	
-	
+	// Draw Scene or Triangles
 	for (auto tri: my_pre_renderer->getOrderedTriangles())
 	{
-		projectTriangle3d(tri);
 		
+		projectTriangle3d(tri);
 	}
-	//}
+
 	drawReticle();
+
+	// Flip video page to screen
 	SDL_RenderPresent(renderer);
-	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
+
 } 
 
 void Renderer::drawReticle(){
