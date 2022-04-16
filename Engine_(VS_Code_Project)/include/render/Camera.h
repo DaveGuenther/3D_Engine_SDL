@@ -4,28 +4,58 @@
 #include "utility/Vec3d.h"
 #include "utility/Mat4x4.h"
 
-
+/**
+ * @brief This camera class allows a camera to be places anywhere in the 3D world and moved around/turned.  From that point it projects to the screen.  It has two major aspects
+ * - the "camera" vector that has it's current position relative to 0,0,0
+ * - the "lookVector", which is a unit vector that points to the direction that the camera will face when rendering the scene
+ * 
+ * To use the camera, we will always start with the camera facing Z-forward at the beginning of each cycle (0,0,1).  Then we'll rotate around X and Y axis the total pitch and yaw
+ * amounts from input.  Pitch and yaw are additive.  Each cycle you add/subtract the values from their previous value in order to have a pitch_total and yaw_total to rotate starting
+ * at z-forward.  After rotating the camera and storing into lookVector, you add lookVector to the camera's position vector "camera" in order to get a target for rendering
+ * 
+ */
 class Camera{
     public:
         Camera();
         Mat4x4 buildViewMatrix();
 
+        
+        /**
+         * @brief Set the Camers position in world space.  This moves the camera from the direction that the camera is facing, not absolute X, Y, and Z axis movement.
+         * 
+        * @param pos_vector Vec3d that represents the left/right, up/down, forward/backward amount to mov the camera with respect to the direction that the camera is facing
+         */
         void setCameraPos(Vec3d pos_vector);
-        void setCameraDir(Vec3d dir_vector);
+        
+        //void setCameraDir(Vec3d dir_vector);
+        
+        /**
+         * @brief This method rotates the camera around the X and Y axis from the z-forward direction (0,0,1).  The rotation vector lookVector is the new direction and is a unit vector
+         * 
+         * @param rotation_vector this is a Vec3d that contains pitch and yaw information in degrees.  Vec3d (pitch, yaw, 0).  There is no Z rotation (roll) implemented.
+         * Pitch is the degrees to look up or down (positive degrees points the camera up, rotation the environment effectively down)
+         * Yaw is the degrees to look left or right (positive degrees points the camera right, rotation the environment effectively left)
+         */
         void rotateCamera(Vec3d rotation_vector);
+        
+        /**
+         * @brief Get the Camera Position object in world space 
+         * 
+         * @return Vec3d (x, y, z)
+         */
         Vec3d getCameraPos();
-        Vec3d getCameraDir();
-
         
 
     private:
+        /**
+         * @brief creates a new "point at" vector for the camera to render by adding the camera's current position vector and the direction unit vector.
+         * 
+         * @return Vec3d 
+         */
         Vec3d calc_vTarget();
         Vec3d vTarget;
         Vec3d camera;
         Vec3d lookVector;
-        //Vec3d newForward;
-        float pitch_delta=0.0f;
-        float yaw_delta=0.0f;
         float pitch_total=0.0f;
         float yaw_total=0.0f;
 
