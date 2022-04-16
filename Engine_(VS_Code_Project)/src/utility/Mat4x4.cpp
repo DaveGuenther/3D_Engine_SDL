@@ -175,7 +175,8 @@ Mat4x4 Mat4x4::matrixPointAt(Vec3d& pos, Vec3d& target, Vec3d& up){
     VectorMathService::getUnitVector(new_forward);
 
     //Calculate new Up vector   (I don't yet understand why we need to do this)
-    Vec3d a = new_forward * VectorMathService::dotProduct(up, new_forward);
+    float up_projection_on_new_forward = VectorMathService::dotProduct(up, new_forward);
+    Vec3d a = new_forward * up_projection_on_new_forward;
     Vec3d new_up = up-a;
     VectorMathService::getUnitVector(new_up);
 

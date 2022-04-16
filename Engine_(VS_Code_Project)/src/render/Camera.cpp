@@ -9,14 +9,17 @@ Camera::Camera(){
     this->camera = Vec3d(0.0f, 0.0f, 0.0f);
     this->lookVector = Vec3d(0.0f, 0.0f, 1.0f);
     this->vTarget = Vec3d(0.0f,0.0f,1.0f);
+    ///this->newForward = Vec3d(0.0f,0.0f,1.0f);
 }
 
 Mat4x4 Camera::buildViewMatrix(){
     
 	Vec3d vUp=Vec3d(0.0f,1.0f,0.0f);
-	Vec3d offsetTarget = calc_vTarget();
-    std::cout <<"  offset vTarget: " << offsetTarget.toString() << std::endl;
-	Mat4x4 matCamera = Mat4x4::matrixPointAt(this->camera, offsetTarget, vUp);
+	//Vec3d newForward = this->vTarget-this->camera;
+    this->vTarget = this->calc_vTarget();
+
+    //std::cout <<"  offset vTarget: " << newForward.toString() << std::endl;
+	Mat4x4 matCamera = Mat4x4::matrixPointAt(this->camera, vTarget, vUp);
 
     Mat4x4 matView= Mat4x4::matrixLookAt(matCamera);
     
@@ -24,9 +27,9 @@ Mat4x4 Camera::buildViewMatrix(){
 }
 
 void Camera::rotateCamera(Vec3d rotation_vector){
-    this->yaw = rotation_vector.getY(); // Amount of rotation around the Y axis (turn the camera left or right)
-    this->pitch = rotation_vector.getX(); // Amount of rotation around X axis (pitch the camera up and down)
-    Vec3d ForwardZ = Vec3d(0,0,1);
+    this->yaw_total = rotation_vector.getY()+yaw_total; // Amount of rotation around the Y axis (turn the camera left or right)
+    this->pitch_total = rotation_vector.getX()+pitch_total; // Amount of rotation around X axis (pitch the camera up and down)
+    this->vTarget = Vec3d(0,0,1);
     /*if (keyboardbreak==true){
         std::cout << "BREAK!" << std::endl;
         yaw=160.0f;
@@ -48,13 +51,16 @@ void Camera::rotateCamera(Vec3d rotation_vector){
 
 */
 
-    Mat4x4 matCameraRotX = Mat4x4::matrixMakeRotationX(pitch);
-    Mat4x4 matCameraRotY = Mat4x4::matrixMakeRotationY(yaw);
+    Mat4x4 matCameraRotX = Mat4x4::matrixMakeRotationX(pitch_total);
+    Mat4x4 matCameraRotY = Mat4x4::matrixMakeRotationY(yaw_total);
     Mat4x4 matCameraRotXY = Mat4x4::matrixMatrixMultiplication(matCameraRotX, matCameraRotY);
-    this->lookVector = VectorMathService::MultiplyMatrixVector(matCameraRotXY, vTarget);
-    this->vTarget=this->lookVector; 
+    this->lookVector = VectorMathService::MultiplyMatrixVector(matCameraRotXY, this->vTarget);
+    //this->vTarget=this->lookVector; 
+    //this->newForward = this->lookVector;
 
-
+    //this->vTarget = this->calc_vTarget();
+    std::cout << "  Camera: " << this->camera.toString() << "  LookVectors: " << lookVector.toString() << "  vTarget: " << vTarget.toString();
+    
 }
 
 Vec3d Camera::calc_vTarget(){
@@ -89,7 +95,7 @@ void Camera::setCameraPos(Vec3d transform_from_forward){
     // Up Down movement
     // Apply movement directly to the camera's y value.  This is Quake, not Descent.
     this->camera.setY(this->camera.getY()+transform_from_forward.getY());
-
+    //this->vTarget = this->calc_vTarget();
 }
 
 Vec3d Camera::getCameraPos(){

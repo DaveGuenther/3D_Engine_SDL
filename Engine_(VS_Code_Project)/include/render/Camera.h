@@ -23,9 +23,11 @@ class Camera{
         Vec3d vTarget;
         Vec3d camera;
         Vec3d lookVector;
-        float pitch=0.0f;
-        float yaw=0.0f;
-        float old_yaw=0.0f;
+        //Vec3d newForward;
+        float pitch_delta=0.0f;
+        float yaw_delta=0.0f;
+        float pitch_total=0.0f;
+        float yaw_total=0.0f;
 
 };
 
