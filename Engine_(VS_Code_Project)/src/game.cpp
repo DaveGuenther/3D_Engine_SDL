@@ -1,5 +1,4 @@
 #include <SDL2/SDL.h>
-
 #include "core/Engine_3D.h"
 
 
@@ -18,6 +17,5 @@ int main(int argv, char** args)
 	
 	Game_Engine.shutdown();
 	
-
 	return 0;
 }  
