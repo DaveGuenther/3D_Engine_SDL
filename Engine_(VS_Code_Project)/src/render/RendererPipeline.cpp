@@ -11,11 +11,15 @@ RendererPipeline::RendererPipeline(Mesh_Pipeline* my_pipeline){
             this->tri_pipeline.push_back(this_tri);
         }
     }
-    sort(this->tri_pipeline.begin(), this->tri_pipeline.end(), zSortFunction);
+    
 }
 
 
-std::vector<Triangle> RendererPipeline::getOrderedTriangles(){
+void RendererPipeline::orderPipelineByZ(){ 
+    sort(this->tri_pipeline.begin(), this->tri_pipeline.end(), zSortFunction); 
+}
+
+std::vector<Triangle> RendererPipeline::getTrianglePipeline(){
     return this->tri_pipeline;
 }
 

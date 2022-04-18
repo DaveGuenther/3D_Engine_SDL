@@ -86,7 +86,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
 
 	Triangle screenTri(Vec3d(vert1.getX(),vert1.getY(),this_triangle.getTrianglePoint(0).getZ()), 
 						Vec3d(vert2.getX(),vert2.getY(),this_triangle.getTrianglePoint(1).getZ()),
-						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0);
+						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0,col);
 
 	//rasterize triangle In Out
 	//ITriangleRasterizer* this_inout_rasterizer = new InOutRasterizer(renderer);
@@ -130,39 +130,57 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		triView.setTrianglePoint(2, VectorMathService::MultiplyMatrixVector(matView, TriPoint2));
 
 
-		Vec3d newTriPoint0 = triView.getTrianglePoint(0);//-this->player_camera->getCameraPos();
-		Vec3d newTriPoint1 = triView.getTrianglePoint(1);//-this->player_camera->getCameraPos();
-		Vec3d newTriPoint2 = triView.getTrianglePoint(2);//-this->player_camera->getCameraPos();
+		// Clip triangle against z_near plane
+		int nClippedTriangles=0;
+		Triangle clipped[2];
+		nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.1f), Vec3d(0.0f, 0.0f, 1.0f), triView, clipped[0], clipped[1]);
+
+		// decide how to handle any clipped triangles
+		for (int n=0; n < nClippedTriangles; n++)
+		{
+
+			Vec3d newTriPoint0 = clipped[n].getTrianglePoint(0);//-this->player_camera->getCameraPos();
+			Vec3d newTriPoint1 = clipped[n].getTrianglePoint(1);//-this->player_camera->getCameraPos();
+			Vec3d newTriPoint2 = clipped[n].getTrianglePoint(2);//-this->player_camera->getCameraPos();
 
 
-		pt0 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint0);
-		pt1 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint1);
-		pt2 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint2);
-		pt0 = pt0/pt0.getW();
-		pt1 = pt1/pt1.getW();
-		pt2 = pt2/pt2.getW();
+			pt0 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint0);
+			pt1 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint1);
+			pt2 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint2);
+			pt0 = pt0/pt0.getW();
+			pt1 = pt1/pt1.getW();
+			pt2 = pt2/pt2.getW();
 
-		triProjected.setTrianglePoint(0,pt0);
-		triProjected.setTrianglePoint(1,pt1);
-		triProjected.setTrianglePoint(2,pt2);
-		
-		// Drop 3D to 2D
-		Vec2d point1, point2, point3;
+			// superimpose world Z coords from View Plane into projected space where Z isn't used anymore
+			// This helps with z-lighting and z-ordering of triangles
+			pt0.setZ(newTriPoint0.getZ());
+			pt1.setZ(newTriPoint1.getZ());
+			pt2.setZ(newTriPoint2.getZ());
 
-		point1.setX(triProjected.getTrianglePoint(0).getX());
-		point1.setY(triProjected.getTrianglePoint(0).getY());
+			triProjected.setTrianglePoint(0,pt0);
+			triProjected.setTrianglePoint(1,pt1);
+			triProjected.setTrianglePoint(2,pt2);
+			
+			// Drop 3D to 2D
+			Vec2d point1, point2, point3;
 
-		point2.setX(triProjected.getTrianglePoint(1).getX());
-		point2.setY(triProjected.getTrianglePoint(1).getY());
+			point1.setX(triProjected.getTrianglePoint(0).getX());
+			point1.setY(triProjected.getTrianglePoint(0).getY());
 
-		point3.setX(triProjected.getTrianglePoint(2).getX());
-		point3.setY(triProjected.getTrianglePoint(2).getY());			
+			point2.setX(triProjected.getTrianglePoint(1).getX());
+			point2.setY(triProjected.getTrianglePoint(1).getY());
 
-		SDL_Color col; col.r=255; col.g=255; col.b=255; col.a = 255;
-		SDL_Color dimmed_col = applyDepthDimmer(tri, col);
+			point3.setX(triProjected.getTrianglePoint(2).getX());
+			point3.setY(triProjected.getTrianglePoint(2).getY());			
 
-		//drawWireFrameTriangle2d(triProjected, col);
-		drawFilledTriangle2d(triProjected,dimmed_col);
+			SDL_Color col; col.r=255; col.g=255; col.b=255; col.a = 255;
+			SDL_Color dimmed_col = applyDepthDimmer(triView, col);
+			triProjected.setColor(dimmed_col);
+
+			this->trianglesToRasterize.push_back(triProjected);
+			//drawWireFrameTriangle2d(triProjected, col);
+			//drawFilledTriangle2d(triProjected,dimmed_col);
+		}
 	}
 }
 
@@ -170,17 +188,34 @@ void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
+	this->trianglesToRasterize.clear();
+	
 
 	//Calculate Camera position/direction into scene
 	this->matView = player_camera->buildViewMatrix();
 	
-	// Draw Scene or Triangles
-	for (auto tri: my_pre_renderer->getOrderedTriangles())
+	// Handle Triangle Clipping (produces a new pipeline of triangles)
+
+	// Reorder Drawable Triangles from back to front
+	my_pre_renderer->orderPipelineByZ();
+
+	// Draw Triangles
+
+
+	
+	for (auto tri: my_pre_renderer->getTrianglePipeline())
 	{
 		
 		projectTriangle3d(tri);
 	}
 
+	for (auto tri: this->trianglesToRasterize)
+	{
+		drawFilledTriangle2d(tri, tri.getColor());
+		drawWireFrameTriangle2d(tri, SDL_Color {255,0,0});
+		
+	}	
+	
 	drawReticle();
 
 	// Flip video page to screen

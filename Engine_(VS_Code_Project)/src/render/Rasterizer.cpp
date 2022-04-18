@@ -51,7 +51,7 @@ void ScanlineRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
     if (p0.getY()==p1.getY()) { 
         // FLAT TOP Triangle
         if (p0.getX() > p1.getX()) { Vec3d temp = p0; p0=p1; p1=temp; }
-        Triangle reordered_tri(p0, p1, p2,0);
+        Triangle reordered_tri(p0, p1, p2,0, col);
         drawFlatTopTri(reordered_tri, col);
         //std::cout << "Flat Top!" << std::endl;
     }
@@ -60,7 +60,7 @@ void ScanlineRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
     else if (p1.getY()==p2.getY()) { 
         if (p1.getX() > p2.getX()) { Vec3d temp = p1; p1=p2; p2=temp; } 
         //FLAT BOTTOM TRIANGLE
-        Triangle reordered_tri(p0, p1, p2,0);
+        Triangle reordered_tri(p0, p1, p2,0, col);
         drawFlatBottomTri(reordered_tri, col);
         //std::cout << "Flat Bottom" << std::endl; 
     }
@@ -74,14 +74,14 @@ void ScanlineRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
         if (p_i.getX()<p1.getX()){
             //MAJOR LEFT TRIANGLE 
             //std::cout << "Major Left" << std::endl; 
-            Triangle flat_bottom_tri(p0, p_i, p1,0);
-            Triangle flat_top_tri(p_i, p1, p2,0);
+            Triangle flat_bottom_tri(p0, p_i, p1,0, col);
+            Triangle flat_top_tri(p_i, p1, p2,0, col);
             drawFlatTopTri(flat_top_tri, col);
             drawFlatBottomTri(flat_bottom_tri, col);
         }else{ 
             //MAJOR RIGHT TRIANGLE
-            Triangle flat_bottom_tri(p0, p1, p_i, 0);
-            Triangle flat_top_tri(p1, p_i, p2, 0);
+            Triangle flat_bottom_tri(p0, p1, p_i, 0, col);
+            Triangle flat_top_tri(p1, p_i, p2, 0, col);
             drawFlatTopTri(flat_top_tri, col);
             drawFlatBottomTri(flat_bottom_tri, col);
             //std::cout << "Major Right" << std::endl;

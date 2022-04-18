@@ -72,13 +72,14 @@ void UseAction::update(bool key_pressed){
 }
 
 
-JumpAction::JumpAction(std::string command_name){
+JumpAction::JumpAction(std::string command_name, Camera* this_camera){
     //passthrough
     this->command_name=command_name;
     this->is_key_pressed=false;
     this->is_running=false;
     this->readyToDestroy=false;
     this->mesh_modification = NULL;
+    this->this_camera=this_camera;
 }
 
 void JumpAction::update(bool key_pressed){
@@ -87,6 +88,12 @@ void JumpAction::update(bool key_pressed){
     if (is_running){
 
         std::cout << "Jump Pressed!";
+        Vec3d translation_vector;
+        translation_vector.setX(0.0f);
+        translation_vector.setY(0.01f);
+        translation_vector.setZ(0.0f);
+	    this->this_camera->setCameraPos(translation_vector);
+
     }
     is_running=false;
     this->readyToDestroy=true;

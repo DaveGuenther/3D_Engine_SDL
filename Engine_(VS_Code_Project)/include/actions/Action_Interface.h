@@ -97,7 +97,7 @@ class UseAction:public IAction{
  */
 class JumpAction:public IAction{
     public:
-    JumpAction(std::string command_name);
+    JumpAction(std::string command_name, Camera* this_camera);
     void update(bool key_pressed);
 };
 
