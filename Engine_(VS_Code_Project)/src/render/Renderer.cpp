@@ -41,9 +41,9 @@ void Renderer::resetMouseXY(){
 	SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 }
 
-SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri, SDL_Color col){
+SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri){
     float z_center = this_tri.getTriangleZCenter();
-	
+	SDL_Color col = this_tri.getColor();
     float color_modifier;
     if (z_center>=this->max_visible_z_depth){
         color_modifier = this->min_visible_color_modifier;
@@ -75,7 +75,8 @@ void Renderer::drawWireFrameTriangle2d(Triangle this_triangle, SDL_Color col)
 	SDL_RenderDrawLineF(renderer, vert3.getX(), vert3.getY(), vert1.getX(), vert1.getY());
 }
 
-void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
+void Renderer::drawFilledTriangle2d(Triangle this_triangle){
+	SDL_Color col = this_triangle.getColor();
 	SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
     
 	//convert triangle x and y coords to pixel screen coords
@@ -174,7 +175,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			point3.setY(triProjected.getTrianglePoint(2).getY());			
 
 			SDL_Color col; col.r=255; col.g=255; col.b=255; col.a = 255;
-			SDL_Color dimmed_col = applyDepthDimmer(triView, col);
+			SDL_Color dimmed_col = applyDepthDimmer(triView);
 			triProjected.setColor(dimmed_col);
 
 			this->trianglesToRasterize.push_back(triProjected);
@@ -211,7 +212,7 @@ void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
 
 	for (auto tri: this->trianglesToRasterize)
 	{
-		drawFilledTriangle2d(tri, tri.getColor());
+		drawFilledTriangle2d(tri);
 		drawWireFrameTriangle2d(tri, SDL_Color {255,0,0});
 		
 	}	

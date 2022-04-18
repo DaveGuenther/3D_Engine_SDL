@@ -51,7 +51,7 @@ class Renderer{
          */
         void drawReticle();
 
-        SDL_Color applyDepthDimmer(Triangle& this_tri, SDL_Color col);
+        SDL_Color applyDepthDimmer(Triangle& this_tri);
 
         /**
          * @brief Engine_3D operates in a 3D Cartesian coordinate space with 0,0,0 being the true center spot of the world.  Likewise, 0,0 would be the true center of the screen in cartesian space.  This method will convert cartesian coordinates to screen coordinates factoring in the screen resolution.
@@ -83,7 +83,7 @@ class Renderer{
          * @param this_triangle Triangle object with x, and y vertices in projected screen space [-1.0, 1.0] and z vertex in world space
          * @param col SDL color to fill the triangle
          */
-        void drawFilledTriangle2d(Triangle this_triangle, SDL_Color col);
+        void drawFilledTriangle2d(Triangle this_triangle);
 
     public:
 
