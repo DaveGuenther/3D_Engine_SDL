@@ -54,14 +54,7 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 {
 	// Make sure plane normal is indeed normal
 	VectorMathService::getUnitVector(plane_n);
-	/*
-	// Return signed shortest distance from point to plane, plane normal must be normalised
-	auto dist = [&](Vec3d &p)
-	{
-		Vec3d n = p;
-		VectorMathService::getUnitVector(n);
-		return (plane_n.getX() * p.getX() + plane_n.getY() * p.getY() + plane_n.getZ() * p.getZ() - VectorMathService::dotProduct(plane_n, plane_p));
-	};*/
+
 
 	// Create two temporary storage arrays to classify points either side of plane
 	// If distance sign is positive, point lies on "inside" of plane
@@ -120,6 +113,7 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 		// the plane, the triangle simply becomes a smaller triangle
 
 		// Copy appearance info to new triangle
+		out_tri1.setColor(SDL_Color {0,0,255,255});
 		//out_tri1.col =  in_tri.col;
 		//out_tri1.sym = in_tri.sym;
 
@@ -141,12 +135,12 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 		// represent a quad with two new triangles
 
 		// Copy appearance info to new triangles
-		/*
-		out_tri1.col =  in_tri.col;
-		out_tri1.sym = in_tri.sym;
+		
+		out_tri1.setColor(SDL_Color {0,255,0,255});
+		//out_tri1.sym = in_tri.sym;
 
-		out_tri2.col =  in_tri.col;
-		out_tri2.sym = in_tri.sym;*/
+		out_tri2.setColor(SDL_Color {255,0,0,255});
+		//out_tri2.sym = in_tri.sym;
 
 		// The first triangle consists of the two inside points and a new
 		// point determined by the location where one side of the triangle

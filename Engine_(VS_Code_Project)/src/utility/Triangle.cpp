@@ -11,6 +11,14 @@ Triangle::Triangle(){
 
 }
 
+Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id){
+    p[0]=pt1;
+    p[1]=pt2;
+    p[2]=pt3;
+    tri_id=triangle_id;    
+    color = SDL_Color {255, 0, 255, 255};
+}
+
 Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id, const SDL_Color this_color){
     p[0]=pt1;
     p[1]=pt2;

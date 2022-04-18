@@ -95,7 +95,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 
 	//rasterie triangle with ScanLines
 	ITriangleRasterizer* this_scanline_rasterizer = new ScanlineRasterizer(renderer);
-	this_scanline_rasterizer->drawTriangle(screenTri, col);
+	this_scanline_rasterizer->drawTriangle(screenTri);
 
 }
 
@@ -161,6 +161,8 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			triProjected.setTrianglePoint(0,pt0);
 			triProjected.setTrianglePoint(1,pt1);
 			triProjected.setTrianglePoint(2,pt2);
+			triProjected.setColor(clipped[n].getColor());
+			triView.setColor(clipped[n].getColor());
 			
 			// Drop 3D to 2D
 			Vec2d point1, point2, point3;

@@ -26,8 +26,9 @@ ScanlineRasterizer::ScanlineRasterizer(SDL_Renderer* my_renderer){
     this->renderer=my_renderer;
 
 }
-void ScanlineRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
+void ScanlineRasterizer::drawTriangle(Triangle& this_triangle){
 
+    SDL_Color col = this_triangle.getColor();
     // get points of triangle
     Vec3d p0 = this_triangle.getTrianglePoint(0);
     Vec3d p1 = this_triangle.getTrianglePoint(1);
@@ -165,8 +166,9 @@ InOutRasterizer::InOutRasterizer(SDL_Renderer* my_renderer){
     this->renderer=my_renderer;
 }
 
-void InOutRasterizer::drawTriangle(Triangle& this_triangle, SDL_Color col){
+void InOutRasterizer::drawTriangle(Triangle& this_triangle){
     //applyDepthDimmer(this_triangle, col);
+    SDL_Color col = this_triangle.getColor();
     bound_box_min_x = std::min(std::min(this_triangle.getTrianglePoint(0).getX(), this_triangle.getTrianglePoint(1).getX()), this_triangle.getTrianglePoint(2).getX());
     bound_box_min_y = std::min(std::min(this_triangle.getTrianglePoint(0).getY(), this_triangle.getTrianglePoint(1).getY()), this_triangle.getTrianglePoint(2).getY());
     bound_box_max_x = std::max(std::max(this_triangle.getTrianglePoint(0).getX(), this_triangle.getTrianglePoint(1).getX()), this_triangle.getTrianglePoint(2).getX());

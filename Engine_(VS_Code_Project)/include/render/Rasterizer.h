@@ -14,7 +14,7 @@ class ITriangleRasterizer{
         float min_visible_color_modifier = 0.1f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
     
     public:
-        void virtual drawTriangle(Triangle& this_triangle, SDL_Color col)=0;
+        void virtual drawTriangle(Triangle& this_triangle)=0;
 
         
         /**
@@ -31,7 +31,7 @@ class ITriangleRasterizer{
 class ScanlineRasterizer:public ITriangleRasterizer{
     public:
         ScanlineRasterizer(SDL_Renderer* my_renderer);
-        void drawTriangle(Triangle& this_triangle, SDL_Color col);
+        void drawTriangle(Triangle& this_triangle);
         
     private:
         void drawFlatTopTri(Triangle& this_triangle, SDL_Color col);
@@ -48,7 +48,7 @@ class InOutRasterizer:public ITriangleRasterizer{
     public:
         InOutRasterizer(SDL_Renderer* my_renderer);
         ~InOutRasterizer();
-        void drawTriangle(Triangle& this_triangle, SDL_Color col);
+        void drawTriangle(Triangle& this_triangle);
         
     
     private:
