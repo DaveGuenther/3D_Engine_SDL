@@ -1,5 +1,16 @@
 # SDL based 3D Engine
 
+This is a personal learning project that uses the core math and code presented by <b>javidx9</b> through his youtube tutorial series: https://youtu.be/ih20l3pJoeU.  I've added additional code to build an engine using an OOP approach and add in other things like input mangement classes and possibly simple physics.  The goal is to get to the point where the engine can load and render a small 3D map with the following functionality:
+- Backface Culling
+- Simple Lighting
+- Camera Support
+- Input Manager for FPS style control
+- Solid Color Triangle Rasterization
+- Surface Collision (not being able to walk through walls)
+- Texturemapping
+
+Everything uses software rendering (no open GL support) in an effort to build something similar to what might have been possible in the mid 90's but on stronger hardware.
+
 This project is based on mingw (g++) and SDL (Simplified DirectMedia Layer) and includes VSCode project files
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/2022-03-23.png">
