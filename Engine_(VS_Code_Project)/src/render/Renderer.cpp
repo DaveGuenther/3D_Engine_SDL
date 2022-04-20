@@ -19,7 +19,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
     
 
 	// Projection Matrix
-	fNear = 0.1f;
+	fNear = 5.0f;
 	fFar = 1000.0f;
 	fFOV=90.0f;
 	matProj = Mat4x4::matrixMakeProjection(fFOV, SCREEN_W, SCREEN_H, fNear, fFar);
@@ -135,15 +135,54 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		int nClippedTriangles=0;
 		Triangle clipped[2];
 		nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.1f), Vec3d(0.0f, 0.0f, 1.0f), triView, clipped[0], clipped[1]);
+		std::vector<Triangle> front_clipped_tris, left_clipped_tris, top_clipped_tris, right_clipped_tris, bottom_clipped_tris; 
+		for (int n=0; n< nClippedTriangles; n++){
+			front_clipped_tris.push_back(clipped[n]);
+		}
+		// Test along left frustum edge
+		for (Triangle this_tri:front_clipped_tris){
+			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(this->fAspectRatio, 0.0f, 1.0f), this_tri, clipped[0], clipped[1]);
+			for (int n=0;n<nClippedTriangles;n++){
+				left_clipped_tris.push_back(clipped[n]);
+			}
+		}
+
+		// Test along top frustum edge
+		for (Triangle this_tri:left_clipped_tris){
+			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(0.0f, -1.0f, 1.0f), this_tri, clipped[0], clipped[1]);
+			for (int n=0;n<nClippedTriangles;n++){
+				top_clipped_tris.push_back(clipped[n]);
+			}
+		}
+
+		// Test along right frustum edge
+		for (Triangle this_tri:top_clipped_tris){
+			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(-1*this->fAspectRatio, 0.0f, 1.0f), this_tri, clipped[0], clipped[1]);
+			for (int n=0;n<nClippedTriangles;n++){
+				right_clipped_tris.push_back(clipped[n]);
+			}
+		}
+
+		// Test along bottom frustum edge
+		for (Triangle this_tri:right_clipped_tris){
+			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(0.0f, 1.0f, 1.0f), this_tri, clipped[0], clipped[1]);
+			for (int n=0;n<nClippedTriangles;n++){
+				bottom_clipped_tris.push_back(clipped[n]);
+			}
+		}
 
 		// decide how to handle any clipped triangles
-		for (int n=0; n < nClippedTriangles; n++)
+		//for (int n=0; n < nClippedTriangles; n++)
+		for(Triangle tri:bottom_clipped_tris)
 		{
+			
 
-			Vec3d newTriPoint0 = clipped[n].getTrianglePoint(0);//-this->player_camera->getCameraPos();
-			Vec3d newTriPoint1 = clipped[n].getTrianglePoint(1);//-this->player_camera->getCameraPos();
-			Vec3d newTriPoint2 = clipped[n].getTrianglePoint(2);//-this->player_camera->getCameraPos();
-
+			/*Vec3d newTriPoint0 = clipped[n].getTrianglePoint(0);
+			Vec3d newTriPoint1 = clipped[n].getTrianglePoint(1);
+			Vec3d newTriPoint2 = clipped[n].getTrianglePoint(2);*/
+			Vec3d newTriPoint0 = tri.getTrianglePoint(0);
+			Vec3d newTriPoint1 = tri.getTrianglePoint(1);
+			Vec3d newTriPoint2 = tri.getTrianglePoint(2);
 
 			pt0 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint0);
 			pt1 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint1);
@@ -161,8 +200,8 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			triProjected.setTrianglePoint(0,pt0);
 			triProjected.setTrianglePoint(1,pt1);
 			triProjected.setTrianglePoint(2,pt2);
-			triProjected.setColor(clipped[n].getColor());
-			triView.setColor(clipped[n].getColor());
+			triProjected.setColor(tri.getColor());
+			triView.setColor(tri.getColor());
 			
 			// Drop 3D to 2D
 			Vec2d point1, point2, point3;

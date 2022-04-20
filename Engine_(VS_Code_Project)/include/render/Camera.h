@@ -45,6 +45,7 @@ class Camera{
          */
         Vec3d getCameraPos();
         
+        void defineFrustumEdgePlanes();
 
     private:
         /**
@@ -58,6 +59,7 @@ class Camera{
         Vec3d lookVector;
         float pitch_total=0.0f;
         float yaw_total=0.0f;
+        Vec3d frustum_top_normal, frustum_bottom_normal, frustum_left_normal, frustum_right_normal;
 
 };
 
