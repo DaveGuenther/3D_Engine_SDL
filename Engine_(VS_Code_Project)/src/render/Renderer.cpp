@@ -22,7 +22,9 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
 	fNear = 5.0f;
 	fFar = 1000.0f;
 	fFOV=90.0f;
+	this->fAspectRatio = float(float(SCREEN_H)/float(SCREEN_W));
 	matProj = Mat4x4::matrixMakeProjection(fFOV, SCREEN_W, SCREEN_H, fNear, fFar);
+	
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
@@ -173,16 +175,16 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 		// decide how to handle any clipped triangles
 		//for (int n=0; n < nClippedTriangles; n++)
-		for(Triangle tri:bottom_clipped_tris)
+		for(Triangle this_tri:bottom_clipped_tris)
 		{
 			
 
 			/*Vec3d newTriPoint0 = clipped[n].getTrianglePoint(0);
 			Vec3d newTriPoint1 = clipped[n].getTrianglePoint(1);
 			Vec3d newTriPoint2 = clipped[n].getTrianglePoint(2);*/
-			Vec3d newTriPoint0 = tri.getTrianglePoint(0);
-			Vec3d newTriPoint1 = tri.getTrianglePoint(1);
-			Vec3d newTriPoint2 = tri.getTrianglePoint(2);
+			Vec3d newTriPoint0 = this_tri.getTrianglePoint(0);
+			Vec3d newTriPoint1 = this_tri.getTrianglePoint(1);
+			Vec3d newTriPoint2 = this_tri.getTrianglePoint(2);
 
 			pt0 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint0);
 			pt1 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint1);
@@ -200,8 +202,8 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			triProjected.setTrianglePoint(0,pt0);
 			triProjected.setTrianglePoint(1,pt1);
 			triProjected.setTrianglePoint(2,pt2);
-			triProjected.setColor(tri.getColor());
-			triView.setColor(tri.getColor());
+			triProjected.setColor(this_tri.getColor());
+			triView.setColor(this_tri.getColor());
 			
 			// Drop 3D to 2D
 			Vec2d point1, point2, point3;
@@ -254,7 +256,7 @@ void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
 	for (auto tri: this->trianglesToRasterize)
 	{
 		drawFilledTriangle2d(tri);
-		drawWireFrameTriangle2d(tri, SDL_Color {255,0,0});
+		//drawWireFrameTriangle2d(tri, SDL_Color {255,0,0});
 		
 	}	
 	
