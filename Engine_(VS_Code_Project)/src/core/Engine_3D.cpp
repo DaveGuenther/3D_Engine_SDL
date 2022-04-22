@@ -95,7 +95,8 @@ void Engine_3D::engine_update(){
 
     // call Pre-Renderer - This will remove triangles from meshes and order from farthest to nearest (positive to negative).  
     // Rather than pass triangles in a mesh pipeline organized by meshes, it will pass a triangle pipeline
-    RendererPipeline* my_pre_renderer = new RendererPipeline(mesh_pipeline);
+    RendererPipeline* my_pre_renderer = new RendererPipeline();
+    my_pre_renderer->setPipelineFromMeshes(mesh_pipeline);
 
     //CAMERA OVERRIDE for testing
 	//Vec3d tempCamera = player_camera->getCameraPos();

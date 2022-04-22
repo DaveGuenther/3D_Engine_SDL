@@ -241,7 +241,7 @@ void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
 	// Handle Triangle Clipping (produces a new pipeline of triangles)
 
 	// Reorder Drawable Triangles from back to front
-	my_pre_renderer->orderPipelineByZ();
+	//my_pre_renderer->orderPipelineByZ();
 
 	// Draw Triangles
 
@@ -253,6 +253,9 @@ void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
 		projectTriangle3d(tri);
 	}
 
+	my_pre_renderer->setPipelineFromTriangles(this->trianglesToRasterize);
+	my_pre_renderer->orderPipelineByZ();
+	this->trianglesToRasterize = my_pre_renderer->getTrianglePipeline();
 	for (auto tri: this->trianglesToRasterize)
 	{
 		drawFilledTriangle2d(tri);

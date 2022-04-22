@@ -19,7 +19,11 @@ class RendererPipeline{
      * 
      * @param my_pipeline This is a Mesh_Pipeline*
      */
-    RendererPipeline(Mesh_Pipeline* my_pipeline);
+    RendererPipeline();
+
+    void setPipelineFromMeshes(Mesh_Pipeline* my_pipeline);
+
+    void setPipelineFromTriangles(std::vector<Triangle> this_tri_pipeline);
 
     /**
      * @brief Orders the triangles in the triangle pipeline by z value from far to near
