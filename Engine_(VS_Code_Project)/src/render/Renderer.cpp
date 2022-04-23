@@ -127,11 +127,35 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	VectorMathService::getUnitVector(camera_to_triangle_vector);
 	if (VectorMathService::dotProduct(normal_vector, camera_to_triangle_vector)<0.0f){ // Checks to see if normal vector >= 90 degs away from camera to triangle view vector
 		
+		//Place a light in world space
+		/*Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f);
+		Vec3d light_source_normal_direction = light_source_direction*-1;
+		VectorMathService::getUnitVector(light_source_normal_direction);
+		float dp_light_source = VectorMathService::dotProduct(light_source_normal_direction, normal_vector);
+		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
+		*/
+
+
 		// Project worldspace to Camera view
 		triView.setTrianglePoint(0, VectorMathService::MultiplyMatrixVector(matView, TriPoint0));
 		triView.setTrianglePoint(1, VectorMathService::MultiplyMatrixVector(matView, TriPoint1));
 		triView.setTrianglePoint(2, VectorMathService::MultiplyMatrixVector(matView, TriPoint2));
+		
+		// Generate triangle normal in view space
+		Vec3d viewline1 = triView.getTrianglePoint(1)-triView.getTrianglePoint(0);
+		Vec3d viewline2 = triView.getTrianglePoint(2)-triView.getTrianglePoint(1);
+		
+		Vec3d view_normal_vector = VectorMathService::crossProduct(viewline1, viewline2);
+		VectorMathService::getUnitVector(view_normal_vector);		
+		
+		// Light triangle from camera
+		Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f);
+		Vec3d light_source_normal_direction = light_source_direction*-1;
+		VectorMathService::getUnitVector(light_source_normal_direction);
+		float dp_light_source = VectorMathService::dotProduct(light_source_normal_direction, view_normal_vector);
+		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 
+		triView.setColor(col);
 
 		// Clip triangle against z_near plane
 		int nClippedTriangles=0;
@@ -217,7 +241,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			point3.setX(triProjected.getTrianglePoint(2).getX());
 			point3.setY(triProjected.getTrianglePoint(2).getY());			
 
-			SDL_Color col; col.r=255; col.g=255; col.b=255; col.a = 255;
+			// Dim Lighting by Distance
 			SDL_Color dimmed_col = applyDepthDimmer(triView);
 			triProjected.setColor(dimmed_col);
 
