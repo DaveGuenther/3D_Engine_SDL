@@ -1,16 +1,16 @@
 #include <algorithm>
 
-#include "render/RendererPipeline.h"
+#include "render/TrianglePipeline.h"
 #include "utility/Mesh_Pipeline.h"
 
 
-RendererPipeline::RendererPipeline(){
+TrianglePipeline::TrianglePipeline(){
     
 
     
 }
 
-void RendererPipeline::setPipelineFromMeshes(Mesh_Pipeline* my_pipeline){
+void TrianglePipeline::setPipelineFromMeshes(Mesh_Pipeline* my_pipeline){
     for (auto this_mesh:my_pipeline->Get_Meshes()){
         for (auto this_tri:this_mesh.getTriangles()){
             this->tri_pipeline.push_back(this_tri);
@@ -18,19 +18,19 @@ void RendererPipeline::setPipelineFromMeshes(Mesh_Pipeline* my_pipeline){
     }
 }
 
-void RendererPipeline::setPipelineFromTriangles(std::vector<Triangle> this_tri_pipeline){
+void TrianglePipeline::setPipelineFromTriangles(std::vector<Triangle> this_tri_pipeline){
     this->tri_pipeline = this_tri_pipeline;
 }
 
-void RendererPipeline::orderPipelineByZ(){ 
+void TrianglePipeline::orderPipelineByZ(){ 
     sort(this->tri_pipeline.begin(), this->tri_pipeline.end(), zSortFunction); 
 }
 
-std::vector<Triangle> RendererPipeline::getTrianglePipeline(){
+std::vector<Triangle> TrianglePipeline::getTrianglePipeline(){
     return this->tri_pipeline;
 }
 
-bool RendererPipeline::zSortFunction(Triangle a, Triangle b){
+bool TrianglePipeline::zSortFunction(Triangle a, Triangle b){
     return (a.getTriangleZCenter() > b.getTriangleZCenter());
 }
 

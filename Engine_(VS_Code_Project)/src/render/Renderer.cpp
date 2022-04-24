@@ -248,7 +248,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	}
 }
 
-void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
+void Renderer::refreshScreen(TrianglePipeline* my_pre_renderer){
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
