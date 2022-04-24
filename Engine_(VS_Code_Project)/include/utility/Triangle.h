@@ -44,6 +44,9 @@ class Triangle{
         Vec3d getTrianglePoint(int point);
         const float getTriangleZCenter();
         const float getDistanceToCamera(Vec3d camera_pos);
+
+        void setUnitNormalFromPoints();
+        const Vec3d& getUnitNormalVector();
         const SDL_Color getColor();
         std::string toString();
 
@@ -52,6 +55,7 @@ class Triangle{
         const float getTriangleYCenter();
         const float getTriangleXCenter();
         const Vec3d getTriangleCenter();
+        Vec3d unit_normal_vector;
         Vec3d p[3];
         float distance_to_player_camera;
         int tri_id;
