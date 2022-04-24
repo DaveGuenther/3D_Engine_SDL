@@ -44,6 +44,7 @@ void Mesh::loadMesh(std::string filename){
 	std::string comment = "//";
 	char linefeed = '\n';
     int tri_id=0;
+	SDL_Color color; color.r=255; color.g=255; color.b=255; color.a=255; 
 	while (std::getline(myfile, line)) {
 
 		if (line.substr(0,2)!= comment) {
@@ -56,7 +57,7 @@ void Mesh::loadMesh(std::string filename){
 				Vec3d pt1(tri_points.at(0), tri_points.at(1), tri_points.at(2));
 				Vec3d pt2(tri_points.at(3), tri_points.at(4),tri_points.at(5));
 				Vec3d pt3(tri_points.at(6),tri_points.at(7),tri_points.at(8));
-				Triangle this_tri(pt1, pt2, pt3, tri_id);
+				Triangle this_tri(pt1, pt2, pt3, tri_id, color);
 				Triangle that_tri=this_tri;
 
 				add3dTriangle(that_tri);

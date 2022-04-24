@@ -1,6 +1,7 @@
 #ifndef VECTOR_MATH_SERVICE_H
 #define VECTOR_MATH_SERVICE_H
 
+#include "utility/Triangle.h"
 #include "utility/Vec3d.h"
 #include "Mat4x4.h"
 
@@ -50,7 +51,13 @@ class VectorMathService{
 
         static Vec3d MultiplyMatrixVector( const Mat4x4 &m, Vec3d &i);
         
+        
 
+
+        static int clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Triangle &in_tri, Triangle &out_tri1, Triangle &out_tri2);
+
+        private:
+            static float getSignedShortestDist(Vec3d& plane_p, Vec3d& plane_n, Vec3d& point1);
 
         /**
          * @brief Test and return the point where a line intersects with a plane.  

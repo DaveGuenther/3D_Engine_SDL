@@ -1,6 +1,7 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 #include <string>
+#include <SDL2/SDL.h>
 #include "Vec3d.h"
 
 
@@ -9,14 +10,12 @@
  * 
  */
 class Triangle{
-    private:
-        Vec3d p[3];
-        int tri_id;
-    
+
     public:
         
         Triangle();
         Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id);
+        Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id, const SDL_Color this_color);
         Triangle (const Triangle &T);
 
         /**
@@ -34,6 +33,8 @@ class Triangle{
          */
         void setID(int tri_id);
 
+        void setColor(SDL_Color this_color);
+
         /**
          * @brief Get a single point of a ttriangle.  Given an enumerated point (0, 1, or 2), this function will return the Vec3d value.
          * 
@@ -42,12 +43,19 @@ class Triangle{
          */
         Vec3d getTrianglePoint(int point);
         const float getTriangleZCenter();
-        
-
+        const float getDistanceToCamera(Vec3d camera_pos);
+        const SDL_Color getColor();
         std::string toString();
 
-        
 
+    private:
+        const float getTriangleYCenter();
+        const float getTriangleXCenter();
+        const Vec3d getTriangleCenter();
+        Vec3d p[3];
+        float distance_to_player_camera;
+        int tri_id;
+        SDL_Color color;
     
 };
 

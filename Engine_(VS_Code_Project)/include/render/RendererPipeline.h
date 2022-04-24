@@ -3,10 +3,11 @@
 
 #include "utility/Mesh_Pipeline.h"
 #include "utility/Triangle.h"
+#include "render/Camera.h"
 #include <vector>
 
 /**
- * @brief This class extracts all triangles from the Mesh Pipeline and organizes them into a triangle pipeline
+ * @brief This class extracts all triangles from the Mesh Pipeline and organizes them into a triangle pipeline in order to start the pre-render process
  * specifically for renderering and nothing else.  This class will also order the triangles from z-far to z-near so they can be drawn properly
  * 
  */
@@ -14,18 +15,28 @@ class RendererPipeline{
     public:
     /**
      * @brief Construct a new Renderer Pipeline object.  It populates the private attribuate tri_pipeline with all triangles across all meshes
-     * ordered by z value from far to near
+     * 
      * 
      * @param my_pipeline This is a Mesh_Pipeline*
      */
-    RendererPipeline(Mesh_Pipeline* my_pipeline);
+    RendererPipeline();
+
+    void setPipelineFromMeshes(Mesh_Pipeline* my_pipeline);
+
+    void setPipelineFromTriangles(std::vector<Triangle> this_tri_pipeline);
 
     /**
-     * @brief Get the Ordered Triangles object
+     * @brief Orders the triangles in the triangle pipeline by z value from far to near
+     * 
+     */
+    void orderPipelineByZ();
+
+    /**
+     * @brief Returns the triangle pipeline object
      * 
      * @return std::vector<Triangle> 
      */
-    std::vector<Triangle> getOrderedTriangles();
+    std::vector<Triangle> getTrianglePipeline();
 
     private:
     /**
@@ -45,6 +56,9 @@ class RendererPipeline{
      * @return false if the triangle positions don't need to be swapped
      */
     static bool zSortFunction(Triangle a, Triangle b);
+
+    private:
+        Vec3d camera_pos;
 };
 
 #endif

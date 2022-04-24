@@ -19,10 +19,12 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
     
 
 	// Projection Matrix
-	fNear = 0.1f;
+	fNear = 5.0f;
 	fFar = 1000.0f;
 	fFOV=90.0f;
+	this->fAspectRatio = float(float(SCREEN_H)/float(SCREEN_W));
 	matProj = Mat4x4::matrixMakeProjection(fFOV, SCREEN_W, SCREEN_H, fNear, fFar);
+	
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
@@ -41,9 +43,9 @@ void Renderer::resetMouseXY(){
 	SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 }
 
-SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri, SDL_Color col){
+SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri){
     float z_center = this_tri.getTriangleZCenter();
-	
+	SDL_Color col = this_tri.getColor();
     float color_modifier;
     if (z_center>=this->max_visible_z_depth){
         color_modifier = this->min_visible_color_modifier;
@@ -75,7 +77,8 @@ void Renderer::drawWireFrameTriangle2d(Triangle this_triangle, SDL_Color col)
 	SDL_RenderDrawLineF(renderer, vert3.getX(), vert3.getY(), vert1.getX(), vert1.getY());
 }
 
-void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
+void Renderer::drawFilledTriangle2d(Triangle this_triangle){
+	SDL_Color col = this_triangle.getColor();
 	SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
     
 	//convert triangle x and y coords to pixel screen coords
@@ -86,7 +89,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
 
 	Triangle screenTri(Vec3d(vert1.getX(),vert1.getY(),this_triangle.getTrianglePoint(0).getZ()), 
 						Vec3d(vert2.getX(),vert2.getY(),this_triangle.getTrianglePoint(1).getZ()),
-						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0);
+						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0,col);
 
 	//rasterize triangle In Out
 	//ITriangleRasterizer* this_inout_rasterizer = new InOutRasterizer(renderer);
@@ -94,7 +97,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle, SDL_Color col){
 
 	//rasterie triangle with ScanLines
 	ITriangleRasterizer* this_scanline_rasterizer = new ScanlineRasterizer(renderer);
-	this_scanline_rasterizer->drawTriangle(screenTri, col);
+	this_scanline_rasterizer->drawTriangle(screenTri);
 
 }
 
@@ -124,45 +127,128 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	VectorMathService::getUnitVector(camera_to_triangle_vector);
 	if (VectorMathService::dotProduct(normal_vector, camera_to_triangle_vector)<0.0f){ // Checks to see if normal vector >= 90 degs away from camera to triangle view vector
 		
+		//Place a light in world space
+		/*Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f);
+		Vec3d light_source_normal_direction = light_source_direction*-1;
+		VectorMathService::getUnitVector(light_source_normal_direction);
+		float dp_light_source = VectorMathService::dotProduct(light_source_normal_direction, normal_vector);
+		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
+		*/
+
+
 		// Project worldspace to Camera view
 		triView.setTrianglePoint(0, VectorMathService::MultiplyMatrixVector(matView, TriPoint0));
 		triView.setTrianglePoint(1, VectorMathService::MultiplyMatrixVector(matView, TriPoint1));
 		triView.setTrianglePoint(2, VectorMathService::MultiplyMatrixVector(matView, TriPoint2));
-
-
-		Vec3d newTriPoint0 = triView.getTrianglePoint(0);//-this->player_camera->getCameraPos();
-		Vec3d newTriPoint1 = triView.getTrianglePoint(1);//-this->player_camera->getCameraPos();
-		Vec3d newTriPoint2 = triView.getTrianglePoint(2);//-this->player_camera->getCameraPos();
-
-
-		pt0 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint0);
-		pt1 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint1);
-		pt2 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint2);
-		pt0 = pt0/pt0.getW();
-		pt1 = pt1/pt1.getW();
-		pt2 = pt2/pt2.getW();
-
-		triProjected.setTrianglePoint(0,pt0);
-		triProjected.setTrianglePoint(1,pt1);
-		triProjected.setTrianglePoint(2,pt2);
 		
-		// Drop 3D to 2D
-		Vec2d point1, point2, point3;
+		// Generate triangle normal in view space
+		Vec3d viewline1 = triView.getTrianglePoint(1)-triView.getTrianglePoint(0);
+		Vec3d viewline2 = triView.getTrianglePoint(2)-triView.getTrianglePoint(1);
+		
+		Vec3d view_normal_vector = VectorMathService::crossProduct(viewline1, viewline2);
+		VectorMathService::getUnitVector(view_normal_vector);		
+		
+		// Light triangle from camera
+		Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f);
+		Vec3d light_source_normal_direction = light_source_direction*-1;
+		VectorMathService::getUnitVector(light_source_normal_direction);
+		float dp_light_source = VectorMathService::dotProduct(light_source_normal_direction, view_normal_vector);
+		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 
-		point1.setX(triProjected.getTrianglePoint(0).getX());
-		point1.setY(triProjected.getTrianglePoint(0).getY());
+		triView.setColor(col);
 
-		point2.setX(triProjected.getTrianglePoint(1).getX());
-		point2.setY(triProjected.getTrianglePoint(1).getY());
+		// Clip triangle against z_near plane
+		int nClippedTriangles=0;
+		Triangle clipped[2];
+		nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.1f), Vec3d(0.0f, 0.0f, 1.0f), triView, clipped[0], clipped[1]);
+		std::vector<Triangle> front_clipped_tris, left_clipped_tris, top_clipped_tris, right_clipped_tris, bottom_clipped_tris; 
+		for (int n=0; n< nClippedTriangles; n++){
+			front_clipped_tris.push_back(clipped[n]);
+		}
+		// Test along left frustum edge
+		for (Triangle this_tri:front_clipped_tris){
+			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(this->fAspectRatio, 0.0f, 1.0f), this_tri, clipped[0], clipped[1]);
+			for (int n=0;n<nClippedTriangles;n++){
+				left_clipped_tris.push_back(clipped[n]);
+			}
+		}
 
-		point3.setX(triProjected.getTrianglePoint(2).getX());
-		point3.setY(triProjected.getTrianglePoint(2).getY());			
+		// Test along top frustum edge
+		for (Triangle this_tri:left_clipped_tris){
+			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(0.0f, -1.0f, 1.0f), this_tri, clipped[0], clipped[1]);
+			for (int n=0;n<nClippedTriangles;n++){
+				top_clipped_tris.push_back(clipped[n]);
+			}
+		}
 
-		SDL_Color col; col.r=255; col.g=255; col.b=255; col.a = 255;
-		SDL_Color dimmed_col = applyDepthDimmer(tri, col);
+		// Test along right frustum edge
+		for (Triangle this_tri:top_clipped_tris){
+			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(-1*this->fAspectRatio, 0.0f, 1.0f), this_tri, clipped[0], clipped[1]);
+			for (int n=0;n<nClippedTriangles;n++){
+				right_clipped_tris.push_back(clipped[n]);
+			}
+		}
 
-		//drawWireFrameTriangle2d(triProjected, col);
-		drawFilledTriangle2d(triProjected,dimmed_col);
+		// Test along bottom frustum edge
+		for (Triangle this_tri:right_clipped_tris){
+			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(0.0f, 1.0f, 1.0f), this_tri, clipped[0], clipped[1]);
+			for (int n=0;n<nClippedTriangles;n++){
+				bottom_clipped_tris.push_back(clipped[n]);
+			}
+		}
+
+		// decide how to handle any clipped triangles
+		//for (int n=0; n < nClippedTriangles; n++)
+		for(Triangle this_tri:bottom_clipped_tris)
+		{
+			
+
+			/*Vec3d newTriPoint0 = clipped[n].getTrianglePoint(0);
+			Vec3d newTriPoint1 = clipped[n].getTrianglePoint(1);
+			Vec3d newTriPoint2 = clipped[n].getTrianglePoint(2);*/
+			Vec3d newTriPoint0 = this_tri.getTrianglePoint(0);
+			Vec3d newTriPoint1 = this_tri.getTrianglePoint(1);
+			Vec3d newTriPoint2 = this_tri.getTrianglePoint(2);
+
+			pt0 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint0);
+			pt1 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint1);
+			pt2 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint2);
+			pt0 = pt0/pt0.getW();
+			pt1 = pt1/pt1.getW();
+			pt2 = pt2/pt2.getW();
+
+			// superimpose world Z coords from View Plane into projected space where Z isn't used anymore
+			// This helps with z-lighting and z-ordering of triangles
+			pt0.setZ(newTriPoint0.getZ());
+			pt1.setZ(newTriPoint1.getZ());
+			pt2.setZ(newTriPoint2.getZ());
+
+			triProjected.setTrianglePoint(0,pt0);
+			triProjected.setTrianglePoint(1,pt1);
+			triProjected.setTrianglePoint(2,pt2);
+			triProjected.setColor(this_tri.getColor());
+			triView.setColor(this_tri.getColor());
+			
+			// Drop 3D to 2D
+			Vec2d point1, point2, point3;
+
+			point1.setX(triProjected.getTrianglePoint(0).getX());
+			point1.setY(triProjected.getTrianglePoint(0).getY());
+
+			point2.setX(triProjected.getTrianglePoint(1).getX());
+			point2.setY(triProjected.getTrianglePoint(1).getY());
+
+			point3.setX(triProjected.getTrianglePoint(2).getX());
+			point3.setY(triProjected.getTrianglePoint(2).getY());			
+
+			// Dim Lighting by Distance
+			SDL_Color dimmed_col = applyDepthDimmer(triView);
+			triProjected.setColor(dimmed_col);
+
+			this->trianglesToRasterize.push_back(triProjected);
+			//drawWireFrameTriangle2d(triProjected, col);
+			//drawFilledTriangle2d(triProjected,dimmed_col);
+		}
 	}
 }
 
@@ -170,17 +256,37 @@ void Renderer::refreshScreen(RendererPipeline* my_pre_renderer){
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
+	this->trianglesToRasterize.clear();
+	
 
 	//Calculate Camera position/direction into scene
 	this->matView = player_camera->buildViewMatrix();
 	
-	// Draw Scene or Triangles
-	for (auto tri: my_pre_renderer->getOrderedTriangles())
+	// Handle Triangle Clipping (produces a new pipeline of triangles)
+
+	// Reorder Drawable Triangles from back to front
+	//my_pre_renderer->orderPipelineByZ();
+
+	// Draw Triangles
+
+
+	
+	for (auto tri: my_pre_renderer->getTrianglePipeline())
 	{
 		
 		projectTriangle3d(tri);
 	}
 
+	my_pre_renderer->setPipelineFromTriangles(this->trianglesToRasterize);
+	my_pre_renderer->orderPipelineByZ();
+	this->trianglesToRasterize = my_pre_renderer->getTrianglePipeline();
+	for (auto tri: this->trianglesToRasterize)
+	{
+		drawFilledTriangle2d(tri);
+		//drawWireFrameTriangle2d(tri, SDL_Color {255,0,0});
+		
+	}	
+	
 	drawReticle();
 
 	// Flip video page to screen
