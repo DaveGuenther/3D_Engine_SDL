@@ -1,5 +1,5 @@
-#ifndef PRERENDERER_H
-#define PRERENDERER_H
+#ifndef TRIANGLE_PIPELINE_H
+#define TRIANGLE_PIPELINE_H
 
 #include "utility/Mesh_Pipeline.h"
 #include "utility/Triangle.h"
@@ -11,7 +11,7 @@
  * specifically for renderering and nothing else.  This class will also order the triangles from z-far to z-near so they can be drawn properly
  * 
  */
-class RendererPipeline{
+class TrianglePipeline{
     public:
     /**
      * @brief Construct a new Renderer Pipeline object.  It populates the private attribuate tri_pipeline with all triangles across all meshes
@@ -19,7 +19,7 @@ class RendererPipeline{
      * 
      * @param my_pipeline This is a Mesh_Pipeline*
      */
-    RendererPipeline();
+    TrianglePipeline();
 
     void setPipelineFromMeshes(Mesh_Pipeline* my_pipeline);
 

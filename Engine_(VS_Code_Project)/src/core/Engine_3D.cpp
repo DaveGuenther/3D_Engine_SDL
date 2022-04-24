@@ -20,7 +20,7 @@
 #include "utility/Triangle_Modifier.h"
 
 #include "render/Renderer.h"
-#include "render/RendererPipeline.h"
+#include "render/TrianglePipeline.h"
 #include "render/Camera.h"
 
 Engine_3D::Engine_3D(void){
@@ -95,15 +95,15 @@ void Engine_3D::engine_update(){
 
     // call Pre-Renderer - This will remove triangles from meshes and order from farthest to nearest (positive to negative).  
     // Rather than pass triangles in a mesh pipeline organized by meshes, it will pass a triangle pipeline
-    RendererPipeline* my_pre_renderer = new RendererPipeline();
-    my_pre_renderer->setPipelineFromMeshes(mesh_pipeline);
+    TrianglePipeline* my_tri_renderer = new TrianglePipeline();
+    my_tri_renderer->setPipelineFromMeshes(mesh_pipeline);
 
     //CAMERA OVERRIDE for testing
 	//Vec3d tempCamera = player_camera->getCameraPos();
 	//player_camera->setCameraPos(Vec3d(0.0f,tempCamera.getY()+0.001,0.0f));    
 
     //Call Renderer
-    Engine_Renderer->refreshScreen(my_pre_renderer);
+    Engine_Renderer->refreshScreen(my_tri_renderer);
 
     // Update Timing Loop to add delay if necessary
     VariableFrameRate->setFrameEnd();
