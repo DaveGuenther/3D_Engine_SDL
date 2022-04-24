@@ -115,12 +115,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 
 	// Calculate Normals and Backface Culling
+	tri.setUnitNormalFromPoints();
+	Vec3d normal_vector = tri.getUnitNormalVector();
 	
-	Vec3d line1 = TriPoint1-TriPoint0;
-	Vec3d line2 = TriPoint2-TriPoint1;
-	
-	Vec3d normal_vector = VectorMathService::crossProduct(line1, line2);
-	VectorMathService::getUnitVector(normal_vector);
 
 	// perform dot product here and test <0 
 	Vec3d camera_to_triangle_vector = TriPoint0-player_camera->getCameraPos();
@@ -142,11 +139,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		triView.setTrianglePoint(2, VectorMathService::MultiplyMatrixVector(matView, TriPoint2));
 		
 		// Generate triangle normal in view space
-		Vec3d viewline1 = triView.getTrianglePoint(1)-triView.getTrianglePoint(0);
-		Vec3d viewline2 = triView.getTrianglePoint(2)-triView.getTrianglePoint(1);
-		
-		Vec3d view_normal_vector = VectorMathService::crossProduct(viewline1, viewline2);
-		VectorMathService::getUnitVector(view_normal_vector);		
+		triView.setUnitNormalFromPoints();
+		Vec3d view_normal_vector = triView.getUnitNormalVector();
+			
 		
 		// Light triangle from camera
 		Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f);
@@ -226,8 +221,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			triProjected.setTrianglePoint(0,pt0);
 			triProjected.setTrianglePoint(1,pt1);
 			triProjected.setTrianglePoint(2,pt2);
-			triProjected.setColor(this_tri.getColor());
-			triView.setColor(this_tri.getColor());
+
 			
 			// Drop 3D to 2D
 			Vec2d point1, point2, point3;
@@ -242,6 +236,8 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			point3.setY(triProjected.getTrianglePoint(2).getY());			
 
 			// Dim Lighting by Distance
+			triProjected.setColor(this_tri.getColor());
+			triView.setColor(this_tri.getColor());
 			SDL_Color dimmed_col = applyDepthDimmer(triView);
 			triProjected.setColor(dimmed_col);
 

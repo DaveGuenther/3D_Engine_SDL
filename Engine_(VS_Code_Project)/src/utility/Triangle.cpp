@@ -51,6 +51,20 @@ void Triangle::setColor(SDL_Color this_color){
     this->color = this_color;
 }
 
+void Triangle::setUnitNormalFromPoints(){
+// Generate triangle normal in view space
+    Vec3d viewline1 = p[1]-p[0];
+    Vec3d viewline2 = p[2]-p[1];
+    
+    this->unit_normal_vector = VectorMathService::crossProduct(viewline1, viewline2);
+    VectorMathService::getUnitVector(this->unit_normal_vector);		    
+}
+
+const Vec3d& Triangle::getUnitNormalVector(){
+    return this->unit_normal_vector;
+}
+
+
 std::string Triangle::toString(){
     std::string point1 = p[0].toString();
     std::string point2 = p[1].toString();
