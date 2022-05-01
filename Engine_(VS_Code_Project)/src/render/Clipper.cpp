@@ -2,19 +2,29 @@
 #include "utility/Vector_Math_Service.h"
 #include "utility/Triangle.h"
 
-Clipper::Clipper(Camera* thisCamera):thisCameraFrustum(thisCamera->cameraViewFrustum){}
+Clipper::Clipper(Camera* thisCamera):thisCameraFrustum(thisCamera->cameraViewFrustum){
+    this->frustum_bottom_plane_normal = this->thisCameraFrustum->getFrustumBottomPlaneNormal();
+    this->frustum_front_plane_normal = this->thisCameraFrustum->getFrustumFrontPlaneNormal();
+    this->frustum_front_point = this->thisCameraFrustum->getFrustumFrontPoint();
+    this->frustum_left_plane_normal = this->thisCameraFrustum->getFrustumLeftPlaneNormal();
+    this->frustum_origin_point = this->thisCameraFrustum->getFrustumOriginPoint();
+    this->frustum_right_plane_normal = this->thisCameraFrustum->getFrustumRightPlaneNormal();
+    this->frustum_top_plane_normal = this->thisCameraFrustum->getFrustumTopPlaneNormal();
+
+}
 
 std::vector<Triangle>& Clipper::getClippedTrisAgainstFrustum(float AspectRatio, Triangle& triView, float distToFrontFrustumPlane){
     this->frustum_clipped_tris.clear();
 
-    this->frustum_front_plane_normal = Vec3d(0.0f, 0.0f, 1.0f);
-    this->frustum_front_point = Vec3d(0.0f, 0.0f, distToFrontFrustumPlane);
+    
+    //this->frustum_front_plane_normal = Vec3d(0.0f, 0.0f, 1.0f);
+    //this->frustum_front_point = Vec3d(0.0f, 0.0f, distToFrontFrustumPlane);
 
-    this->frustum_left_plane_normal = Vec3d(AspectRatio, 0.0f, 1.0f);
-    this->frustum_right_plane_normal=(Vec3d(-1*AspectRatio, 0.0f, 1.0f));
-    this->frustum_top_plane_normal = Vec3d(0.0f, -1.0f, 1.0f);
-    this->frustum_bottom_plane_normal = Vec3d(0.0f, 1.0f, 1.0f);
-    this->frustum_origin_point = Vec3d(0.0f, 0.0f, 0.0f);
+    //this->frustum_left_plane_normal = Vec3d(AspectRatio, 0.0f, 1.0f);
+    //this->frustum_right_plane_normal=(Vec3d(-1*AspectRatio, 0.0f, 1.0f));
+    //this->frustum_top_plane_normal = Vec3d(0.0f, -1.0f, 1.0f);
+    //this->frustum_bottom_plane_normal = Vec3d(0.0f, 1.0f, 1.0f);
+    //this->frustum_origin_point = Vec3d(0.0f, 0.0f, 0.0f);
 
     // Clip triangle against z_near plane
     int nClippedTriangles=0;
