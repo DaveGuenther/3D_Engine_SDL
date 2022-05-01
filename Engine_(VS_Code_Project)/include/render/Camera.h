@@ -3,6 +3,8 @@
 
 #include "utility/Vec3d.h"
 #include "utility/Mat4x4.h"
+#include "render/Frustum.h"
+
 
 /**
  * @brief This camera class allows a camera to be places anywhere in the 3D world and moved around/turned.  From that point it projects to the screen.  It has two major aspects
@@ -16,9 +18,10 @@
  */
 class Camera{
     public:
-        Camera();
+        
+        Camera(float aspectRatio);
         Mat4x4 buildViewMatrix();
-
+        
         
         /**
          * @brief Set the Camers position in world space.  This moves the camera from the direction that the camera is facing, not absolute X, Y, and Z axis movement.
@@ -47,6 +50,8 @@ class Camera{
         
         void defineFrustumEdgePlanes();
 
+        Frustum* cameraViewFrustum;
+
     private:
         /**
          * @brief creates a new "point at" vector for the camera to render by adding the camera's current position vector and the direction unit vector.
@@ -59,8 +64,8 @@ class Camera{
         Vec3d lookVector;
         float pitch_total=0.0f;
         float yaw_total=0.0f;
-        Vec3d frustum_top_normal, frustum_bottom_normal, frustum_left_normal, frustum_right_normal;
-
+        //Vec3d frustum_top_normal, frustum_bottom_normal, frustum_left_normal, frustum_right_normal;
+        
 };
 
 #endif

@@ -22,12 +22,14 @@
 #include "render/Renderer.h"
 #include "render/TrianglePipeline.h"
 #include "render/Camera.h"
+#include "render/AspectRatio.h"
 
 Engine_3D::Engine_3D(void){
 
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
-    player_camera = new Camera();
+    float aspectRatio = AspectRatio::getAspectRatio(640,480);
+    player_camera = new Camera(aspectRatio);  // need aspect ratio here
     this->Engine_Renderer = new Renderer(640,380, player_camera);
 
     this->Engine_State=new Game_Engine_State_Observer(game_state_subject);

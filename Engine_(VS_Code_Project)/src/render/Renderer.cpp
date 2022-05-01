@@ -8,6 +8,9 @@
 #include "utility/Mat4x4.h"
 #include "render/Renderer.h"
 #include "render/Rasterizer.h"
+#include "render/Clipper.h"
+#include "render/Frustum.h"
+#include "render/AspectRatio.h"
 
 
 Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
@@ -22,7 +25,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
 	fNear = 5.0f;
 	fFar = 1000.0f;
 	fFOV=90.0f;
-	this->fAspectRatio = float(float(SCREEN_H)/float(SCREEN_W));
+	this->fAspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);
 	matProj = Mat4x4::matrixMakeProjection(fFOV, SCREEN_W, SCREEN_H, fNear, fFar);
 	
 
@@ -31,6 +34,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 
 	this->player_camera = player_camera;
+	this->thisFrustumClipper = new Clipper(player_camera);
 
 }
 
@@ -124,15 +128,6 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	VectorMathService::getUnitVector(camera_to_triangle_vector);
 	if (VectorMathService::dotProduct(normal_vector, camera_to_triangle_vector)<0.0f){ // Checks to see if normal vector >= 90 degs away from camera to triangle view vector
 		
-		//Place a light in world space
-		/*Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f);
-		Vec3d light_source_normal_direction = light_source_direction*-1;
-		VectorMathService::getUnitVector(light_source_normal_direction);
-		float dp_light_source = VectorMathService::dotProduct(light_source_normal_direction, normal_vector);
-		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
-		*/
-
-
 		// Project worldspace to Camera view
 		triView.setTrianglePoint(0, VectorMathService::MultiplyMatrixVector(matView, TriPoint0));
 		triView.setTrianglePoint(1, VectorMathService::MultiplyMatrixVector(matView, TriPoint1));
@@ -149,58 +144,17 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		VectorMathService::getUnitVector(light_source_normal_direction);
 		float dp_light_source = VectorMathService::dotProduct(light_source_normal_direction, view_normal_vector);
 		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
-
 		triView.setColor(col);
 
-		// Clip triangle against z_near plane
-		int nClippedTriangles=0;
-		Triangle clipped[2];
-		nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.1f), Vec3d(0.0f, 0.0f, 1.0f), triView, clipped[0], clipped[1]);
-		std::vector<Triangle> front_clipped_tris, left_clipped_tris, top_clipped_tris, right_clipped_tris, bottom_clipped_tris; 
-		for (int n=0; n< nClippedTriangles; n++){
-			front_clipped_tris.push_back(clipped[n]);
-		}
-		// Test along left frustum edge
-		for (Triangle this_tri:front_clipped_tris){
-			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(this->fAspectRatio, 0.0f, 1.0f), this_tri, clipped[0], clipped[1]);
-			for (int n=0;n<nClippedTriangles;n++){
-				left_clipped_tris.push_back(clipped[n]);
-			}
-		}
-
-		// Test along top frustum edge
-		for (Triangle this_tri:left_clipped_tris){
-			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(0.0f, -1.0f, 1.0f), this_tri, clipped[0], clipped[1]);
-			for (int n=0;n<nClippedTriangles;n++){
-				top_clipped_tris.push_back(clipped[n]);
-			}
-		}
-
-		// Test along right frustum edge
-		for (Triangle this_tri:top_clipped_tris){
-			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(-1*this->fAspectRatio, 0.0f, 1.0f), this_tri, clipped[0], clipped[1]);
-			for (int n=0;n<nClippedTriangles;n++){
-				right_clipped_tris.push_back(clipped[n]);
-			}
-		}
-
-		// Test along bottom frustum edge
-		for (Triangle this_tri:right_clipped_tris){
-			nClippedTriangles = VectorMathService::clipTriangleWithPlane(Vec3d(0.0f,0.0f,0.0f), Vec3d(0.0f, 1.0f, 1.0f), this_tri, clipped[0], clipped[1]);
-			for (int n=0;n<nClippedTriangles;n++){
-				bottom_clipped_tris.push_back(clipped[n]);
-			}
-		}
+		// Clip trangle against front, left, top, right, and bottom frustum edges in camera space in that order.
+		//Clipper this_tri_clipper;
+		
+		std::vector<Triangle> clipped_tris = this->thisFrustumClipper->getClippedTrisAgainstFrustum(float(fAspectRatio), triView, 0.1f);
 
 		// decide how to handle any clipped triangles
-		//for (int n=0; n < nClippedTriangles; n++)
-		for(Triangle this_tri:bottom_clipped_tris)
+		for(Triangle this_tri:clipped_tris)
 		{
 			
-
-			/*Vec3d newTriPoint0 = clipped[n].getTrianglePoint(0);
-			Vec3d newTriPoint1 = clipped[n].getTrianglePoint(1);
-			Vec3d newTriPoint2 = clipped[n].getTrianglePoint(2);*/
 			Vec3d newTriPoint0 = this_tri.getTrianglePoint(0);
 			Vec3d newTriPoint1 = this_tri.getTrianglePoint(1);
 			Vec3d newTriPoint2 = this_tri.getTrianglePoint(2);
@@ -224,16 +178,16 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 			
 			// Drop 3D to 2D
-			Vec2d point1, point2, point3;
+			//Vec2d point1, point2, point3;
 
-			point1.setX(triProjected.getTrianglePoint(0).getX());
-			point1.setY(triProjected.getTrianglePoint(0).getY());
+			//point1.setX(triProjected.getTrianglePoint(0).getX());
+			//point1.setY(triProjected.getTrianglePoint(0).getY());
 
-			point2.setX(triProjected.getTrianglePoint(1).getX());
-			point2.setY(triProjected.getTrianglePoint(1).getY());
+			//point2.setX(triProjected.getTrianglePoint(1).getX());
+			//point2.setY(triProjected.getTrianglePoint(1).getY());
 
-			point3.setX(triProjected.getTrianglePoint(2).getX());
-			point3.setY(triProjected.getTrianglePoint(2).getY());			
+			//point3.setX(triProjected.getTrianglePoint(2).getX());
+			//point3.setY(triProjected.getTrianglePoint(2).getY());			
 
 			// Dim Lighting by Distance
 			triProjected.setColor(this_tri.getColor());

@@ -11,6 +11,7 @@
 #include "utility/Mesh_Pipeline.h"
 #include "render/TrianglePipeline.h"
 #include "render/Camera.h"
+#include "render/Clipper.h"
 
 
 
@@ -38,6 +39,7 @@ class Renderer{
         float fFOV_rad;
 
         Camera* player_camera;
+        Clipper* thisFrustumClipper;
         Mat4x4 matView;
         float max_visible_z_depth = 15.0f;  // distance from the camera at which things are no lonver visible
         float min_visible_color_modifier = 0.1f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color

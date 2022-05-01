@@ -35,6 +35,8 @@
 				"${workspaceFolder}\\src\\render\\TrianglePipeline.cpp",
 				"${workspaceFolder}\\src\\render\\Rasterizer.cpp",		
 				"${workspaceFolder}\\src\\render\\Camera.cpp",	
+				"${workspaceFolder}\\src\\render\\Clipper.cpp",	
+				"${workspaceFolder}\\src\\render\\Frustum.cpp",	
 				
 				"${workspaceFolder}\\src\\globals.cpp",
 					
