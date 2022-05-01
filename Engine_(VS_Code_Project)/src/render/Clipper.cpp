@@ -13,18 +13,8 @@ Clipper::Clipper(Camera* thisCamera):thisCameraFrustum(thisCamera->cameraViewFru
 
 }
 
-std::vector<Triangle>& Clipper::getClippedTrisAgainstFrustum(float AspectRatio, Triangle& triView, float distToFrontFrustumPlane){
+std::vector<Triangle>& Clipper::getClippedTrisAgainstFrustum(Triangle& triView){
     this->frustum_clipped_tris.clear();
-
-    
-    //this->frustum_front_plane_normal = Vec3d(0.0f, 0.0f, 1.0f);
-    //this->frustum_front_point = Vec3d(0.0f, 0.0f, distToFrontFrustumPlane);
-
-    //this->frustum_left_plane_normal = Vec3d(AspectRatio, 0.0f, 1.0f);
-    //this->frustum_right_plane_normal=(Vec3d(-1*AspectRatio, 0.0f, 1.0f));
-    //this->frustum_top_plane_normal = Vec3d(0.0f, -1.0f, 1.0f);
-    //this->frustum_bottom_plane_normal = Vec3d(0.0f, 1.0f, 1.0f);
-    //this->frustum_origin_point = Vec3d(0.0f, 0.0f, 0.0f);
 
     // Clip triangle against z_near plane
     int nClippedTriangles=0;

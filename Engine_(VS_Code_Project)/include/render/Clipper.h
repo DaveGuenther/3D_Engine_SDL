@@ -22,7 +22,7 @@ class Clipper{
 
     public:
         Clipper(Camera* thisCamera);
-        std::vector<Triangle>& getClippedTrisAgainstFrustum(float AspectRatio, Triangle& triView, float distToFrontFrustumPlane);
+        std::vector<Triangle>& getClippedTrisAgainstFrustum(Triangle& triView);
 
 
 

@@ -35,7 +35,7 @@ void TurnAction::update(bool key_pressed){
     // Place Holder
     if (key_pressed){ is_running=true; } else { is_running=false; }
     if (is_running){
-        keyboardbreak=true;
+
         std::cout << "Turning By Keys!";
         this->direction_unit_vector = this->direction_unit_vector*1.0f;
         this_camera->rotateCamera(direction_unit_vector);
@@ -59,13 +59,15 @@ void UseAction::update(bool key_pressed){
     // Place Holder
     if (key_pressed){ is_running=true; } else { is_running=false; }
     if (is_running){
-        keyboardbreak=true;
+
         std::cout << "Use Pressed!";
-        Vec3d rotation_vector;
-        rotation_vector.setX(1.0f);
-        rotation_vector.setY(0.0f);
-        rotation_vector.setZ(0.0f);
-        this_camera->rotateCamera(rotation_vector);
+        //Vec3d rotation_vector;
+        keyboardbreak=true;
+
+        //rotation_vector.setX(1.0f);
+        //rotation_vector.setY(0.0f);
+        //rotation_vector.setZ(0.0f);
+        //this_camera->rotateCamera(rotation_vector);
     }
     is_running=false;
     this->readyToDestroy=true;

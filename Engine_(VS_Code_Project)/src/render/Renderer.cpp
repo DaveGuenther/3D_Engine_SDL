@@ -1,5 +1,7 @@
 #include <SDL2/SDL.h>
 #include <map>
+#include <string>
+#include <iostream>
 
 #include "utility/Vec2d.h"
 #include "utility/Triangle.h"
@@ -11,6 +13,7 @@
 #include "render/Clipper.h"
 #include "render/Frustum.h"
 #include "render/AspectRatio.h"
+#include "globals.h"
 
 
 Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
@@ -62,8 +65,7 @@ SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri){
     draw_col.g= col.g*color_modifier;
     draw_col.b= col.b*color_modifier;
     draw_col.a=255;
-	//std::cout << z_center << " " << color_modifier << std::endl; 
-    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+
     return draw_col;
 		
 }
@@ -95,7 +97,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 						Vec3d(vert2.getX(),vert2.getY(),this_triangle.getTrianglePoint(1).getZ()),
 						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0,col);
 
-	//rasterize triangle In Out
+	//rasterize triangle In Out - very slow method, implemented only for learning purposes
 	//ITriangleRasterizer* this_inout_rasterizer = new InOutRasterizer(renderer);
 	//this_inout_rasterizer->drawTriangle(screenTri,col);
 
@@ -139,19 +141,24 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			
 		
 		// Light triangle from camera
+
+
 		Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f);
 		Vec3d light_source_normal_direction = light_source_direction*-1;
 		VectorMathService::getUnitVector(light_source_normal_direction);
 		float dp_light_source = VectorMathService::dotProduct(light_source_normal_direction, view_normal_vector);
+		if(dp_light_source<0.0f) {dp_light_source=0.0f;}
+		if(dp_light_source>1.0f) {dp_light_source=1.0f;}
 		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 		triView.setColor(col);
+		if (keyboardbreak==true){ 
+			std::cout << dp_light_source << view_normal_vector.toString() << std::endl;
+			keyboardbreak=false;
+		}
+		// Clip this triangle against Front, left, top, right, and bottom frustum planes, then create new triangles as necessary that end at the frustum
+		std::vector<Triangle> clipped_tris = this->thisFrustumClipper->getClippedTrisAgainstFrustum(triView);
 
-		// Clip trangle against front, left, top, right, and bottom frustum edges in camera space in that order.
-		//Clipper this_tri_clipper;
-		
-		std::vector<Triangle> clipped_tris = this->thisFrustumClipper->getClippedTrisAgainstFrustum(float(fAspectRatio), triView, 0.1f);
-
-		// decide how to handle any clipped triangles
+		//Project 3d triangles to 2d screen space with camera space Z information
 		for(Triangle this_tri:clipped_tris)
 		{
 			
@@ -176,19 +183,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			triProjected.setTrianglePoint(1,pt1);
 			triProjected.setTrianglePoint(2,pt2);
 
-			
-			// Drop 3D to 2D
-			//Vec2d point1, point2, point3;
-
-			//point1.setX(triProjected.getTrianglePoint(0).getX());
-			//point1.setY(triProjected.getTrianglePoint(0).getY());
-
-			//point2.setX(triProjected.getTrianglePoint(1).getX());
-			//point2.setY(triProjected.getTrianglePoint(1).getY());
-
-			//point3.setX(triProjected.getTrianglePoint(2).getX());
-			//point3.setY(triProjected.getTrianglePoint(2).getY());			
-
+		
 			// Dim Lighting by Distance
 			triProjected.setColor(this_tri.getColor());
 			triView.setColor(this_tri.getColor());
@@ -196,8 +191,6 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			triProjected.setColor(dimmed_col);
 
 			this->trianglesToRasterize.push_back(triProjected);
-			//drawWireFrameTriangle2d(triProjected, col);
-			//drawFilledTriangle2d(triProjected,dimmed_col);
 		}
 	}
 }
@@ -206,29 +199,21 @@ void Renderer::refreshScreen(TrianglePipeline* my_pre_renderer){
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
+
+	// start with empty triangle buffer to rasterize each frame
 	this->trianglesToRasterize.clear();
-	
 
 	//Calculate Camera position/direction into scene
 	this->matView = player_camera->buildViewMatrix();
 	
-	// Handle Triangle Clipping (produces a new pipeline of triangles)
+	// Clip and Project Triangles to 2d screen space
+	for (auto tri: my_pre_renderer->getTrianglePipeline()){ projectTriangle3d(tri); }
 
-	// Reorder Drawable Triangles from back to front
-	//my_pre_renderer->orderPipelineByZ();
-
-	// Draw Triangles
-
-
-	
-	for (auto tri: my_pre_renderer->getTrianglePipeline())
-	{
-		
-		projectTriangle3d(tri);
-	}
-
+	// Z-order triangles so that farthest are drawn first
 	my_pre_renderer->setPipelineFromTriangles(this->trianglesToRasterize);
 	my_pre_renderer->orderPipelineByZ();
+
+	// Rasterize triangles to virtual page
 	this->trianglesToRasterize = my_pre_renderer->getTrianglePipeline();
 	for (auto tri: this->trianglesToRasterize)
 	{
