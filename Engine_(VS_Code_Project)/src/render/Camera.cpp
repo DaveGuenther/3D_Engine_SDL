@@ -2,13 +2,16 @@
 #include "render/Camera.h"
 #include "utility/Mat4x4.h"
 #include "utility/Vector_Math_Service.h"
+#include "render/Frustum.h"
 
 
-Camera::Camera(){
-    this->camera = Vec3d(0.0f, 0.0f, 0.0f);
-    this->lookVector = Vec3d(0.0f, 0.0f, 1.0f);
-    this->vTarget = Vec3d(0.0f,0.0f,1.0f);
-
+Camera::Camera(float aspectRatio):camera(Vec3d(0.0f, 0.0f, 0.0f)), 
+                                lookVector(Vec3d(0.0f, 0.0f, 1.0f)),
+                                vTarget(Vec3d(0.0f, 0.0f, 1.0f)), 
+                                cameraViewFrustum(new Frustum(aspectRatio)){
+    //this->camera = Vec3d(0.0f, 0.0f, 0.0f);
+    //this->lookVector = Vec3d(0.0f, 0.0f, 1.0f);
+    //this->vTarget = Vec3d(0.0f,0.0f,1.0f);
 }
 
 Mat4x4 Camera::buildViewMatrix(){
@@ -23,17 +26,15 @@ Mat4x4 Camera::buildViewMatrix(){
 
     // Invert the camera so that the world objects are rotated the opposite direction (which is actually what we want when we rotate the camera)
     Mat4x4 matView= Mat4x4::matrixLookAt(matCamera);
-    
-
 
     // matView is used during the Renderer::refreshScreen method
 	return matView;
 }
 
-void Camera::defineFrustumEdgePlanes(){
+/*void Camera::defineFrustumEdgePlanes(){
     Vec2d screen_left_edge = Vec2d(-1.0f, 0.0f), screen_right_edge = Vec2d(1.0f, 0.0f), screen_top_edge = Vec2d(0.0f, 1.0f), screen_bottom_edge = Vec2d(0.0f, -1.0f);
     //Vec3d frustum_top_ray = Vec3d(screen_top_edge.getX()
-}
+}*/
 
 void Camera::rotateCamera(Vec3d rotation_vector){
     // Update total pitch and yaw
