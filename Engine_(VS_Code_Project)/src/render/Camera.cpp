@@ -31,10 +31,10 @@ Mat4x4 Camera::buildViewMatrix(){
 	return matView;
 }
 
-void Camera::defineFrustumEdgePlanes(){
+/*void Camera::defineFrustumEdgePlanes(){
     Vec2d screen_left_edge = Vec2d(-1.0f, 0.0f), screen_right_edge = Vec2d(1.0f, 0.0f), screen_top_edge = Vec2d(0.0f, 1.0f), screen_bottom_edge = Vec2d(0.0f, -1.0f);
     //Vec3d frustum_top_ray = Vec3d(screen_top_edge.getX()
-}
+}*/
 
 void Camera::rotateCamera(Vec3d rotation_vector){
     // Update total pitch and yaw

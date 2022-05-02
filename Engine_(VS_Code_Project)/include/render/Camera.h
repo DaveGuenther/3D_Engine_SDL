@@ -19,6 +19,11 @@
 class Camera{
     public:
         
+        /**
+         * @brief Construct a new Camera object
+         * 
+         * @param aspectRatio is required to build the frustum 
+         */
         Camera(float aspectRatio);
         Mat4x4 buildViewMatrix();
         
@@ -48,8 +53,6 @@ class Camera{
          */
         Vec3d getCameraPos();
         
-        void defineFrustumEdgePlanes();
-
         Frustum* cameraViewFrustum;
 
     private:
@@ -59,11 +62,11 @@ class Camera{
          * @return Vec3d 
          */
         Vec3d calc_vTarget();
-        Vec3d vTarget;
-        Vec3d camera;
-        Vec3d lookVector;
-        float pitch_total=0.0f;
-        float yaw_total=0.0f;
+        Vec3d vTarget; // Camera's new direction that it should face at the end of the frame
+        Vec3d camera; // Camera's x, y, and z position in world space
+        Vec3d lookVector; // Camera's original look direction (x, y, z) unit vector
+        float pitch_total=0.0f; // Amount of rotation around X axis (pitch the camera up and down)
+        float yaw_total=0.0f; // Amount of rotation around the Y axis (turn the camera left or right)
         //Vec3d frustum_top_normal, frustum_bottom_normal, frustum_left_normal, frustum_right_normal;
         
 };

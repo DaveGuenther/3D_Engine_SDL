@@ -28,7 +28,7 @@ Engine_3D::Engine_3D(void){
 
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
-    float aspectRatio = AspectRatio::getAspectRatio(640,480);
+    float aspectRatio = AspectRatio::getAspectRatio(640,380);
     player_camera = new Camera(aspectRatio);  // need aspect ratio here
     this->Engine_Renderer = new Renderer(640,380, player_camera);
 

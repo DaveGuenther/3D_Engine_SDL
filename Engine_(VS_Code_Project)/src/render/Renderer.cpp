@@ -141,8 +141,6 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			
 		
 		// Light triangle from camera
-
-
 		Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f);
 		Vec3d light_source_normal_direction = light_source_direction*-1;
 		VectorMathService::getUnitVector(light_source_normal_direction);
