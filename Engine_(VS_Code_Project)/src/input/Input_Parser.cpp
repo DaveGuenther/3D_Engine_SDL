@@ -1,6 +1,7 @@
+#include <memory>
 #include "input/Input_Parser.h"
 
-Input_Parser::Input_Parser(GameStateSubject &subject, Renderer* my_renderer, std::string binding_filename) :game_state_subject(subject){
+Input_Parser::Input_Parser(GameStateSubject &subject, std::shared_ptr<Renderer> my_renderer, std::string binding_filename) :game_state_subject(subject){
     this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
     bindings.loadBinding(binding_filename);
     //bindings.loadBinding("in_game_bindings.cfg");

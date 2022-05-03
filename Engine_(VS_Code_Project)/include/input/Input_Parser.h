@@ -1,6 +1,8 @@
 #ifndef INPUT_PARSER_H
 #define INPUT_PARSER_H
 
+//#include <memory>
+#include <memory>
 #include <SDL2/SDL.h>
 #include "core/Gamestate_Observer_Pattern.h"
 #include "input/Event_Scanner.h"
@@ -27,7 +29,7 @@ class Input_Parser{
         void print_map(const std::unordered_map<std::string,bool> this_map);
         
     public: 
-        Input_Parser(GameStateSubject &subject, Renderer* my_renderer, std::string binding_filename);
+        Input_Parser(GameStateSubject &subject, std::shared_ptr<Renderer> my_renderer, std::string binding_filename);
         
         /**
          * @brief Get the Current Commands object

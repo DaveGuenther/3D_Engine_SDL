@@ -1,7 +1,7 @@
 #ifndef ENGINE_3D_H
 #define ENGINE_3D_H
 
-
+#include <memory>
 
 #include "core/GameState_Observer_Pattern.h"
 #include "core/Frame_Rate_Manager.h"
@@ -18,8 +18,9 @@
 class Engine_3D{
     private:
 
-        Renderer* Engine_Renderer;
-
+        //Renderer* Engine_Renderer;
+        std::shared_ptr<Renderer> Engine_Renderer;
+        //unique_ptr<Song> song2(new Song(L"Nothing on You", L"Bruno Mars"));
 
         bool isRunning; //If set to false, this will end the 3D engine during the next engine_update()
         

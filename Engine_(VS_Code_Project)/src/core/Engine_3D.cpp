@@ -1,6 +1,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
+#include <memory>
 
 #include <SDL2/SDL.h>
 
@@ -30,7 +31,9 @@ Engine_3D::Engine_3D(void){
     isRunning = true;
     float aspectRatio = AspectRatio::getAspectRatio(640,380);
     player_camera = new Camera(aspectRatio);  // need aspect ratio here
-    this->Engine_Renderer = new Renderer(640,380, player_camera);
+    std::shared_ptr<Renderer> this_Renderer(new Renderer(640, 380, player_camera));
+    this->Engine_Renderer=this_Renderer;
+    //this->Engine_Renderer = new Renderer(640,380, player_camera);
 
     this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
 
@@ -49,7 +52,7 @@ Engine_3D::Engine_3D(void){
 }
 
 Engine_3D::~Engine_3D(){
-    delete Engine_Renderer;
+    //delete Engine_Renderer;
     delete Engine_State;
     delete MENU_Input_Parser;
     delete INWORLD_Input_Parser;

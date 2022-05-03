@@ -14,6 +14,11 @@ class ITriangleRasterizer{
         float min_visible_color_modifier = 0.1f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
     
     public:
+    /**
+     * @brief Rasterizes a triangle in pixel space
+     * 
+     * @param this_triangle 
+     */
         void virtual drawTriangle(Triangle& this_triangle)=0;
 
         
