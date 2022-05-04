@@ -106,7 +106,7 @@ class Renderer{
          * 
          * @param this_mesh_pipeline 
          */
-        void refreshScreen(TrianglePipeline* my_pre_renderer);  // Why can't I make this a const pointer?
+        void refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer);  // Why can't I make this a const pointer?
 
         const int getWindowWidth() const;
         const int getWindowHeight() const;
