@@ -35,15 +35,17 @@ Engine_3D::Engine_3D(void){
     this->Engine_Renderer=this_Renderer;
     //this->Engine_Renderer = new Renderer(640,380, player_camera);
 
-    this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
 
+    std::shared_ptr<Game_Engine_State_Observer> Engine_State(new Game_Engine_State_Observer(game_state_subject));
+    this->Engine_State=Engine_State;
     this->MENU_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "menu_bindings.cfg");
     this->INWORLD_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "in_game_bindings.cfg");
     game_state_subject.setState(MENU);
     this->FPS=60.0f;
     this->VariableFrameRate = new Frame_Rate_Manager(FPS);
-    this->mesh_pipeline = new Mesh_Pipeline;
-    this->INWORLD_Action_Updater = new InGame_Action_Updater(mesh_pipeline, player_camera, FPS);
+    std::shared_ptr<Mesh_Pipeline> local_mesh_pipeline(new Mesh_Pipeline);
+    this->mesh_pipeline = local_mesh_pipeline;
+    this->INWORLD_Action_Updater = new InGame_Action_Updater(this->mesh_pipeline, player_camera, FPS);
     
       
     game_state_subject.setState(IN_WORLD);
@@ -53,11 +55,11 @@ Engine_3D::Engine_3D(void){
 
 Engine_3D::~Engine_3D(){
     //delete Engine_Renderer;
-    delete Engine_State;
+    //delete Engine_State;
     delete MENU_Input_Parser;
     delete INWORLD_Input_Parser;
     delete VariableFrameRate;
-    delete mesh_pipeline;
+    //delete mesh_pipeline;
     delete INWORLD_Action_Updater;
     
 }

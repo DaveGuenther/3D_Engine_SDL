@@ -1,10 +1,13 @@
 #ifndef TRIANGLE_PIPELINE_H
 #define TRIANGLE_PIPELINE_H
 
+#include <vector>
+#include <memory>
+
 #include "utility/Mesh_Pipeline.h"
 #include "utility/Triangle.h"
 #include "render/Camera.h"
-#include <vector>
+
 
 /**
  * @brief This class extracts all triangles from the Mesh Pipeline and organizes them into a triangle pipeline in order to start the pre-render process
@@ -21,7 +24,7 @@ class TrianglePipeline{
      */
     TrianglePipeline();
 
-    void setPipelineFromMeshes(Mesh_Pipeline* my_pipeline);
+    void setPipelineFromMeshes(std::shared_ptr<Mesh_Pipeline> my_pipeline);
 
     void setPipelineFromTriangles(std::vector<Triangle> this_tri_pipeline);
 

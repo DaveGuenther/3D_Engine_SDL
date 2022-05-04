@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <memory>
 
 #include "render/TrianglePipeline.h"
 #include "utility/Mesh_Pipeline.h"
@@ -10,7 +11,7 @@ TrianglePipeline::TrianglePipeline(){
     
 }
 
-void TrianglePipeline::setPipelineFromMeshes(Mesh_Pipeline* my_pipeline){
+void TrianglePipeline::setPipelineFromMeshes(std::shared_ptr<Mesh_Pipeline> my_pipeline){
     for (auto this_mesh:my_pipeline->Get_Meshes()){
         for (auto this_tri:this_mesh.getTriangles()){
             this->tri_pipeline.push_back(this_tri);

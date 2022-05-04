@@ -18,21 +18,22 @@
 class Engine_3D{
     private:
 
-        //Renderer* Engine_Renderer;
+        
         std::shared_ptr<Renderer> Engine_Renderer;
-        //unique_ptr<Song> song2(new Song(L"Nothing on You", L"Bruno Mars"));
+        
 
         bool isRunning; //If set to false, this will end the 3D engine during the next engine_update()
         
-        // MIGHT NEED TO UNCOMMENT THIS
-        Mesh_Pipeline* mesh_pipeline; // contains all of the objects that the engine will need to render
-        // MIGHT NEED TO UNCOMMENT THIS
+        std::shared_ptr<Mesh_Pipeline> mesh_pipeline;
+        //Mesh_Pipeline* mesh_pipeline; // contains all of the objects that the engine will need to render
+     
 
 
         //Triangle_Modifications_Pipeline tri_modifications;
         
         GameStateSubject game_state_subject;
-        Game_Engine_State_Observer* Engine_State;
+        std::shared_ptr<Game_Engine_State_Observer> Engine_State;
+        //Game_Engine_State_Observer* Engine_State;
         float fTheta, tTheta;
         Input_Parser* MENU_Input_Parser;
         Input_Parser* INWORLD_Input_Parser; 
