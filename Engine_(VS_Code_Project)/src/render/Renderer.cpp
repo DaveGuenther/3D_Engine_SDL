@@ -37,7 +37,8 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 
 	this->player_camera = player_camera;
-	this->thisFrustumClipper = new Clipper(player_camera);
+	std::shared_ptr<Clipper> thisFrustumClipper(new Clipper(player_camera));
+	this->thisFrustumClipper = thisFrustumClipper;
 
 }
 
