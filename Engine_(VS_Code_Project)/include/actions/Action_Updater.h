@@ -30,23 +30,13 @@ class IAction_Updater{
 
 class InGame_Action_Updater: public IAction_Updater{
     public:
-    //InGameActionUpdater(int FPS);
+
     InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh_pipeline, std::shared_ptr<Camera> this_camera, int FPS);
-    //void AddTactileInputMap(const std::unordered_map<std::string,bool> &input_tactile_map);
-    //void AddRangeInputMap(const std::unordered_map<std::string,float> &input_range_map);
-
     std::vector<std::shared_ptr<Triangle_Modifier>> getModifications() const; // This should be the Mesh_Pipeline actiually
-    
-
-
     void update();
 
     private:
-    //int numberOfActiveCommands(const std::unordered_map<std::string, IAction*> &action_map) const;
-    //int FPS;
-    //std::unordered_map<std::string, IAction*> action_map;
-    //std::unordered_map<std::string,bool> input_tactile_map;
-    //std::unordered_map<std::string,float> input_range_map;
+
     std::vector<std::shared_ptr<Triangle_Modifier>> modifications;  
     std::shared_ptr<Mesh_Pipeline> mesh_pipeline;
     std::shared_ptr<Camera> this_camera;

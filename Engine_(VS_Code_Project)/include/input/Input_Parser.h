@@ -14,7 +14,7 @@ class Input_Parser{
         SDL_Event event;
         Game_Engine_State_Observer* Engine_State;
         Bindings bindings;
-        Event_Scanner* input_events =NULL;
+        std::shared_ptr<Event_Scanner> input_events =NULL;
         GameStateSubject &game_state_subject;
         std::unordered_map<std::string,bool> curr_commands;
         std::unordered_map<std::string,float> curr_range_input;
