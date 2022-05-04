@@ -1,4 +1,5 @@
 #include <string>
+#include <memory>
 
 #include "utility/Mesh.h"
 #include "utility/Mesh_Pipeline.h"
@@ -26,9 +27,9 @@ void Mesh_Pipeline::Add_Mesh_to_Pipeline(std::string filename, Vec3d origin){
     Meshes.push_back(new_mesh);
     
     int this_mesh_id = new_mesh.getID();
-    Triangle_Modifier* this_mod = new Translator(origin.getX(), origin.getY(), origin.getZ());
+    std::shared_ptr<Triangle_Modifier> this_mod(new Translator(origin.getX(), origin.getY(), origin.getZ()));
     this_mod->assignToMesh(this_mesh_id);
-    std::vector<Triangle_Modifier *> tri_mods_pipe;
+    std::vector<std::shared_ptr<Triangle_Modifier>> tri_mods_pipe;
     tri_mods_pipe.push_back(this_mod);
     this->Apply_Modifications(tri_mods_pipe);    
 
@@ -41,7 +42,7 @@ void Mesh_Pipeline::Add_Mesh_to_Pipeline(Mesh this_mesh){
     total_mesh_ids+=1;
 }
 
-void Mesh_Pipeline::Apply_Modifications(std::vector<Triangle_Modifier*> tri_mods_pipe){
+void Mesh_Pipeline::Apply_Modifications(std::vector<std::shared_ptr<Triangle_Modifier>> tri_mods_pipe){
 
     for (auto triMod:tri_mods_pipe){
         std::vector<int> mesh_ids = triMod->getAssignedMeshIDs();

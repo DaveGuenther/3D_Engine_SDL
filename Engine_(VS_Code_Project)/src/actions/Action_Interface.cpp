@@ -18,7 +18,7 @@ void IAction::trigger(){
     this->is_running=true; 
 }
 
-Triangle_Modifier* IAction::getMeshModification() const{
+std::shared_ptr<Triangle_Modifier> IAction::getMeshModification() const{
     return mesh_modification;
 }
 
@@ -130,7 +130,7 @@ void TwoAxisRangeCommand::update(bool key_pressed){
 }
 
 TwoAxisRangeCommand::~TwoAxisRangeCommand(){
-    delete mesh_modification;
+    //delete mesh_modification;
     
 }
 
@@ -277,6 +277,6 @@ void MoveAction::update(bool key_pressed){
 }
 
 MoveAction::~MoveAction(){
-    delete mesh_modification;
+    //delete mesh_modification;
     
 }

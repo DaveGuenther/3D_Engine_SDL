@@ -64,16 +64,16 @@ class IAction{
         /**
          * @brief Get the Mesh Modification object.  The mesh modifications are applied in the Action_Updater class
          * 
-         * @return Triangle_Modifier* 
+         * @return std::shared_ptr<Triangle_Modifier> 
          */
-        Triangle_Modifier* getMeshModification() const;
+        std::shared_ptr<Triangle_Modifier> getMeshModification() const;
     protected: 
         bool is_running;
         bool is_key_pressed;
         std::string command_name;
         bool readyToDestroy;
         std::string name;
-        Triangle_Modifier* mesh_modification;
+        std::shared_ptr<Triangle_Modifier> mesh_modification;
         std::shared_ptr<Camera> this_camera;
 };
 

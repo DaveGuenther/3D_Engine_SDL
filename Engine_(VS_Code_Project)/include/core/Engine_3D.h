@@ -50,7 +50,7 @@ class Engine_3D{
         std::shared_ptr<Camera> player_camera;
         //Camera* player_camera;
         
-        std::vector<Triangle_Modifier*> modifications;
+        std::vector<std::shared_ptr<Triangle_Modifier>> modifications;
         
     public:
         Engine_3D(void);

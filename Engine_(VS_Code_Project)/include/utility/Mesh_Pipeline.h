@@ -2,6 +2,7 @@
 #define MESH_PIPELINE_H
 
 #include <vector>
+#include <memory>
 #include "Mesh.h"
 
 
@@ -47,7 +48,7 @@ class Mesh_Pipeline{
      * 
      * @param tri_mods_pipe Each Triangle_Modifier in this vector can apply to one or more Meshes as determined by that modifier.
      */
-    void Apply_Modifications(std::vector<Triangle_Modifier*> tri_mods_pipe);
+    void Apply_Modifications(std::vector<std::shared_ptr<Triangle_Modifier>> tri_mods_pipe);
     
     /**
      * @brief Get the total number of meshes in the mesh pipeline

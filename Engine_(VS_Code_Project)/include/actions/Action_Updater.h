@@ -35,7 +35,7 @@ class InGame_Action_Updater: public IAction_Updater{
     //void AddTactileInputMap(const std::unordered_map<std::string,bool> &input_tactile_map);
     //void AddRangeInputMap(const std::unordered_map<std::string,float> &input_range_map);
 
-    std::vector<Triangle_Modifier*> getModifications() const; // This should be the Mesh_Pipeline actiually
+    std::vector<std::shared_ptr<Triangle_Modifier>> getModifications() const; // This should be the Mesh_Pipeline actiually
     
 
 
@@ -47,7 +47,7 @@ class InGame_Action_Updater: public IAction_Updater{
     //std::unordered_map<std::string, IAction*> action_map;
     //std::unordered_map<std::string,bool> input_tactile_map;
     //std::unordered_map<std::string,float> input_range_map;
-    std::vector<Triangle_Modifier*> modifications;  
+    std::vector<std::shared_ptr<Triangle_Modifier>> modifications;  
     std::shared_ptr<Mesh_Pipeline> mesh_pipeline;
     std::shared_ptr<Camera> this_camera;
     

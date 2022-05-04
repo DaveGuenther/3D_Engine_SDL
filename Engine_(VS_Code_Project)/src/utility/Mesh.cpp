@@ -80,7 +80,7 @@ void Mesh::add3dTriangle(Triangle &this_tri){
 	tris.push_back(this_tri);
 }
 
-void Mesh::performModifications(std::vector<Triangle_Modifier*> triMods){
+void Mesh::performModifications(std::vector<std::shared_ptr<Triangle_Modifier>> triMods){
 
     for (auto triMod:triMods){
         for (auto &tri:tris){
@@ -89,7 +89,7 @@ void Mesh::performModifications(std::vector<Triangle_Modifier*> triMods){
     }
 }
 
-void Mesh::performModifications(Triangle_Modifier* triMod){
+void Mesh::performModifications(std::shared_ptr<Triangle_Modifier> triMod){
 	for (auto &tri:tris){
 		triMod->modifyTriangle(tri);
 	}
