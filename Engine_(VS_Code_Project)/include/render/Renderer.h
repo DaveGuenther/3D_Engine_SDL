@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include <vector>
+#include <memory>
 #include <SDL2/SDL.h>
 
 #include "utility/Mesh.h"
@@ -38,7 +39,7 @@ class Renderer{
         float fAspectRatio;
         float fFOV_rad;
 
-        Camera* player_camera;
+        std::shared_ptr<Camera> player_camera;
         Clipper* thisFrustumClipper;
         Mat4x4 matView;
         float max_visible_z_depth = 15.0f;  // distance from the camera at which things are no lonver visible
@@ -89,7 +90,7 @@ class Renderer{
 
     public:
 
-        Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera);
+        Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera);
         
         /**
          * @brief This function will reset the mouse X and Y values to the center of the window.  It requires the window object to call so must occur in the Renderer class

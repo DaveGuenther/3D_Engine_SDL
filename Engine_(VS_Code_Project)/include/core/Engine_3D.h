@@ -24,33 +24,31 @@ class Engine_3D{
 
         bool isRunning; //If set to false, this will end the 3D engine during the next engine_update()
         
-        std::shared_ptr<Mesh_Pipeline> mesh_pipeline;
-        //Mesh_Pipeline* mesh_pipeline; // contains all of the objects that the engine will need to render
+        std::shared_ptr<Mesh_Pipeline> mesh_pipeline; // contains all of the objects that the engine will need to render
      
 
 
-        //Triangle_Modifications_Pipeline tri_modifications;
         
         GameStateSubject game_state_subject;
         std::shared_ptr<Game_Engine_State_Observer> Engine_State;
-        //Game_Engine_State_Observer* Engine_State;
-        float fTheta, tTheta;
-        Input_Parser* MENU_Input_Parser;
-        Input_Parser* INWORLD_Input_Parser; 
 
-        InGame_Action_Updater* INWORLD_Action_Updater;
+        float fTheta, tTheta;
+        std::shared_ptr<Input_Parser> MENU_Input_Parser;
+
+        std::shared_ptr<Input_Parser> INWORLD_Input_Parser;
+        
+
+        std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater;
+
 
         float FPS;
-        Frame_Rate_Manager* VariableFrameRate; 
-        //std::unordered_map<std::string, IAction*> action_map;
+        std::shared_ptr<Frame_Rate_Manager> VariableFrameRate;
 
-        //Renderer Engine_Renderer;
-        //bool isRunning; //If set to false, this will end the 3D engine during the next engine_update()
+
         SDL_Event event;
-        //Mesh_Pipeline mesh_pipeline; // contains all of the objects that the engine will need to render
-        //Triangle_Modifications_Pipeline tri_modifications;
-        //float fTheta, tTheta;
-        Camera* player_camera;
+
+        std::shared_ptr<Camera> player_camera;
+        //Camera* player_camera;
         
         std::vector<Triangle_Modifier*> modifications;
         

@@ -33,7 +33,7 @@ int IAction_Updater::numberOfActiveCommands(const std::unordered_map<std::string
 
 
 
-InGame_Action_Updater::InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh_pipeline, Camera* this_camera, int FPS){
+InGame_Action_Updater::InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh_pipeline, std::shared_ptr<Camera> this_camera, int FPS){
     this->this_camera= this_camera;
     action_map.insert_or_assign("MOVE_FORWARD", new MoveAction("MOVE_FORWARD", this_camera, Vec3d{0,0,1}, 1.0f, 1.0f, 0.01f, FPS));
     action_map.insert_or_assign("MOVE_BACKWARD", new MoveAction("MOVE_BACKWARD", this_camera, Vec3d{0,0,-1}, 1.0f, 1.0f, 0.1f, FPS));

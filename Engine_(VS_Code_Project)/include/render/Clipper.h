@@ -31,7 +31,7 @@ class Clipper{
          * 
          * @param thisCamera this is passed in to access the frustum object used to define the frustum edges for clipping
          */
-        Clipper(Camera* thisCamera);
+        Clipper(std::shared_ptr<Camera> thisCamera);
         
         /**
          * @brief Get the Clipped Tris Against Frustum object.  This function is called once per triangle that is being projected from 3D viewSpace 

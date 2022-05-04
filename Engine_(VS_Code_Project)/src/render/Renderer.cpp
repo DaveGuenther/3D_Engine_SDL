@@ -16,7 +16,7 @@
 #include "globals.h"
 
 
-Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
+Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera) {
     // SDL and Screen initializing
 	this->SCREEN_W = SCREEN_W;
     this->SCREEN_H = SCREEN_H;
