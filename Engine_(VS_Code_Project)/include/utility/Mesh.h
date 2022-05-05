@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "Vec2d.h"
 #include "Vec3d.h"
 #include "Triangle.h"
@@ -67,14 +68,14 @@ class Mesh {
 		 * 
 		 * @param triMod This is a single Triangle_Modifier object (either a Translation or Rotation) which contains instructions on rotating all triangles in a number of meshes in the mesh pipeline
 		 */
-		void performModifications(Triangle_Modifier* triMod);
+		void performModifications(std::shared_ptr<Triangle_Modifier> triMod);
 
 		/**
 		 * @brief Not used in the engine, and may be removed..  This function will accept a vector of Triangle_Modifiers and for each Triangle_Modifier, perform the modifications (Transformation or Rotation) of a list of meshes as determined in the Triangle_Modifier object.
 		 * 
 		 * @param triMods vector of Triangle_Modifiers (either a rotation or a translation) to be applied to meshes in the mesh pipeline
 		 */
-		void performModifications(std::vector<Triangle_Modifier*> triMods);
+		void performModifications(std::vector<std::shared_ptr<Triangle_Modifier>> triMods);
 
 
 

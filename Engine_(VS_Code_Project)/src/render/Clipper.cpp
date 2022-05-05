@@ -1,8 +1,9 @@
+#include <memory>
 #include "render/Clipper.h"
 #include "utility/Vector_Math_Service.h"
 #include "utility/Triangle.h"
 
-Clipper::Clipper(Camera* thisCamera):thisCameraFrustum(thisCamera->cameraViewFrustum){
+Clipper::Clipper(std::shared_ptr<Camera> thisCamera):thisCameraFrustum(thisCamera->cameraViewFrustum){
     this->frustum_bottom_plane_normal = this->thisCameraFrustum->getFrustumBottomPlaneNormal();
     this->frustum_front_plane_normal = this->thisCameraFrustum->getFrustumFrontPlaneNormal();
     this->frustum_front_point = this->thisCameraFrustum->getFrustumFrontPoint();

@@ -1,7 +1,10 @@
-#include "actions/Action_Updater.h"
-#include "actions/Action_Interface.h"
 #include <vector>
 #include <iostream>
+#include <memory>
+
+#include "actions/Action_Updater.h"
+#include "actions/Action_Interface.h"
+
 
 void IAction_Updater::AddTactileInputMap(const std::unordered_map<std::string,bool> &input_tactile_map){
     this->input_tactile_map=input_tactile_map;
@@ -30,7 +33,7 @@ int IAction_Updater::numberOfActiveCommands(const std::unordered_map<std::string
 
 
 
-InGame_Action_Updater::InGame_Action_Updater(Mesh_Pipeline* mesh_pipeline, Camera* this_camera, int FPS){
+InGame_Action_Updater::InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh_pipeline, std::shared_ptr<Camera> this_camera, int FPS){
     this->this_camera= this_camera;
     action_map.insert_or_assign("MOVE_FORWARD", new MoveAction("MOVE_FORWARD", this_camera, Vec3d{0,0,1}, 1.0f, 1.0f, 0.01f, FPS));
     action_map.insert_or_assign("MOVE_BACKWARD", new MoveAction("MOVE_BACKWARD", this_camera, Vec3d{0,0,-1}, 1.0f, 1.0f, 0.1f, FPS));
@@ -44,6 +47,7 @@ InGame_Action_Updater::InGame_Action_Updater(Mesh_Pipeline* mesh_pipeline, Camer
     //action_map.insert_or_assign("LOOK_LEFT", new TwoAxisRangeCommand("LOOK_LEFT", this_camera, -0.1f,0.0f));
     action_map.insert_or_assign("JUMP", new MoveAction("JUMP", this_camera, Vec3d{0,1,0}, 1.0f, 1.0f, 0.5f, FPS));
     action_map.insert_or_assign("CROUCH", new MoveAction("CROUCH", this_camera, Vec3d{0,-1,0}, 1.0f, 1.0f, 0.5f, FPS));
+    //std::shared_ptr<Mesh_Pipeline> local_mesh_pipeline()
     this->mesh_pipeline = mesh_pipeline;  // I know this is bad coding practice and tightly couples code..  Not sure how else to do it yet.  I might eventually try some kind of observer where ActionUpdater is the subject and mesh_pipeline is the observer, updating itself when the time comes...
 
 }
@@ -98,7 +102,7 @@ void InGame_Action_Updater::update(){
         for (auto this_command:action_map){
             
             if (this_command.second->getMeshModification()!=NULL){
-                Triangle_Modifier* this_mod = this_command.second->getMeshModification();
+                std::shared_ptr<Triangle_Modifier> this_mod = this_command.second->getMeshModification();
                 for(int i=0;i<mesh_pipeline->GetSize();i++){ this_mod->assignToMesh(i); }
                 modifications.push_back(this_command.second->getMeshModification());
                 //for(int i=0;i<mesh_pipeline->GetSize();i++){ modifications.back().assignToMesh(i); }
@@ -115,6 +119,6 @@ void InGame_Action_Updater::update(){
 
 }
 
-std::vector<Triangle_Modifier*> InGame_Action_Updater::getModifications() const{
+std::vector<std::shared_ptr<Triangle_Modifier>> InGame_Action_Updater::getModifications() const{
     return this->modifications;
 }

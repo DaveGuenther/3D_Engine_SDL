@@ -1,6 +1,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
+#include <memory>
 
 #include <SDL2/SDL.h>
 
@@ -29,19 +30,29 @@ Engine_3D::Engine_3D(void){
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
     float aspectRatio = AspectRatio::getAspectRatio(640,380);
-    player_camera = new Camera(aspectRatio);  // need aspect ratio here
-    this->Engine_Renderer = new Renderer(640,380, player_camera);
+    std::shared_ptr<Camera> player_camera(new Camera(aspectRatio));
+    player_camera = player_camera;
+    std::shared_ptr<Renderer> this_Renderer(new Renderer(640, 380, player_camera));
+    this->Engine_Renderer=this_Renderer;
+    //this->Engine_Renderer = new Renderer(640,380, player_camera);
 
-    this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
 
-    this->MENU_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "menu_bindings.cfg");
-    this->INWORLD_Input_Parser = new Input_Parser(game_state_subject, Engine_Renderer, "in_game_bindings.cfg");
+    std::shared_ptr<Game_Engine_State_Observer> Engine_State(new Game_Engine_State_Observer(game_state_subject));
+    this->Engine_State=Engine_State;
+    std::shared_ptr<Input_Parser> MENU_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "menu_bindings.cfg"));
+    this->MENU_Input_Parser = MENU_Input_Parser;
+    std::shared_ptr<Input_Parser> INWORLD_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "in_game_bindings.cfg"));
+    this->INWORLD_Input_Parser = INWORLD_Input_Parser;
+
     game_state_subject.setState(MENU);
     this->FPS=60.0f;
-    this->VariableFrameRate = new Frame_Rate_Manager(FPS);
-    this->mesh_pipeline = new Mesh_Pipeline;
-    this->INWORLD_Action_Updater = new InGame_Action_Updater(mesh_pipeline, player_camera, FPS);
-    
+    std::shared_ptr<Frame_Rate_Manager> VariableFrameRate(new Frame_Rate_Manager(FPS));
+    this->VariableFrameRate = VariableFrameRate;
+    std::shared_ptr<Mesh_Pipeline> local_mesh_pipeline(new Mesh_Pipeline);
+    this->mesh_pipeline = local_mesh_pipeline;
+
+    std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater(new InGame_Action_Updater(this->mesh_pipeline, player_camera, FPS));
+    this->INWORLD_Action_Updater = INWORLD_Action_Updater;
       
     game_state_subject.setState(IN_WORLD);
 
@@ -49,13 +60,13 @@ Engine_3D::Engine_3D(void){
 }
 
 Engine_3D::~Engine_3D(){
-    delete Engine_Renderer;
-    delete Engine_State;
-    delete MENU_Input_Parser;
-    delete INWORLD_Input_Parser;
-    delete VariableFrameRate;
-    delete mesh_pipeline;
-    delete INWORLD_Action_Updater;
+    //delete Engine_Renderer;
+    //delete Engine_State;
+    //delete MENU_Input_Parser;
+    //delete INWORLD_Input_Parser;
+    //delete VariableFrameRate;
+    //delete mesh_pipeline;
+    //delete INWORLD_Action_Updater;
     
 }
 
@@ -97,7 +108,7 @@ void Engine_3D::engine_update(){
 
     // call Pre-Renderer - This will remove triangles from meshes and order from farthest to nearest (positive to negative).  
     // Rather than pass triangles in a mesh pipeline organized by meshes, it will pass a triangle pipeline
-    TrianglePipeline* my_tri_renderer = new TrianglePipeline();
+    std::shared_ptr<TrianglePipeline> my_tri_renderer(new TrianglePipeline());
     my_tri_renderer->setPipelineFromMeshes(mesh_pipeline);
 
     //CAMERA OVERRIDE for testing

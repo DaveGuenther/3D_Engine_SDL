@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <memory>
 #include "utility/Triangle_Modifier.h"
 #include "render/Camera.h"
 
@@ -63,22 +64,22 @@ class IAction{
         /**
          * @brief Get the Mesh Modification object.  The mesh modifications are applied in the Action_Updater class
          * 
-         * @return Triangle_Modifier* 
+         * @return std::shared_ptr<Triangle_Modifier> 
          */
-        Triangle_Modifier* getMeshModification() const;
+        std::shared_ptr<Triangle_Modifier> getMeshModification() const;
     protected: 
         bool is_running;
         bool is_key_pressed;
         std::string command_name;
         bool readyToDestroy;
         std::string name;
-        Triangle_Modifier* mesh_modification;
-        Camera* this_camera;
+        std::shared_ptr<Triangle_Modifier> mesh_modification;
+        std::shared_ptr<Camera> this_camera;
 };
 
 class TurnAction:public IAction{
     public:
-    TurnAction(std::string command_name, Camera* this_camera, Vec3d direction_unit_vector);
+    TurnAction(std::string command_name, std::shared_ptr<Camera> this_camera, Vec3d direction_unit_vector);
     void update(bool key_pressed);
 
     private: 
@@ -87,7 +88,7 @@ class TurnAction:public IAction{
 
 class UseAction:public IAction{
     public:
-    UseAction(std::string command_name, Camera* this_camera);
+    UseAction(std::string command_name, std::shared_ptr<Camera> this_camera);
     void update(bool key_pressed);    
 };
 
@@ -97,7 +98,7 @@ class UseAction:public IAction{
  */
 class JumpAction:public IAction{
     public:
-    JumpAction(std::string command_name, Camera* this_camera);
+    JumpAction(std::string command_name, std::shared_ptr<Camera> this_camera);
     void update(bool key_pressed);
 };
 
@@ -119,7 +120,7 @@ class TwoAxisRangeCommand:public IAction{
          * @param x_range is the delta_x angle that will apply to all meshes for rotation
          * @param y_range is the delta_y angle that will apply to all meshes for rotation
          */
-        TwoAxisRangeCommand(std::string command_name, Camera* this_camera, float x_range, float y_range);
+        TwoAxisRangeCommand(std::string command_name, std::shared_ptr<Camera> this_camera, float x_range, float y_range);
         ~TwoAxisRangeCommand();
         /**
          * @brief Needs further development...  Will eventually work such that the jump just propels the character into the air and a 
@@ -170,7 +171,7 @@ class MoveAction:public IAction{
          * @param max_speed total speed that will apply once the action is in sustain state
          * @param FPS Target engine frames per second (default is 60.0)
          */
-        MoveAction(std::string command_name, Camera* this_camera, Vec3d direction, float attack, float release, float max_speed, float FPS);
+        MoveAction(std::string command_name, std::shared_ptr<Camera> this_camera, Vec3d direction, float attack, float release, float max_speed, float FPS);
         ~MoveAction();
         void setAttack(float attack);
         void setRelease(float release);

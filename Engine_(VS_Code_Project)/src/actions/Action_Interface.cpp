@@ -4,6 +4,7 @@
 #include "globals.h"
 #include <string>
 #include <iostream>
+#include <memory>
 
 
 const bool IAction::isRunning(){ return this->is_running; }
@@ -17,11 +18,11 @@ void IAction::trigger(){
     this->is_running=true; 
 }
 
-Triangle_Modifier* IAction::getMeshModification() const{
+std::shared_ptr<Triangle_Modifier> IAction::getMeshModification() const{
     return mesh_modification;
 }
 
-TurnAction::TurnAction(std::string command_name, Camera* this_camera, Vec3d direction_unit_vector){
+TurnAction::TurnAction(std::string command_name, std::shared_ptr<Camera> this_camera, Vec3d direction_unit_vector){
     this->command_name=command_name;
     this->is_key_pressed=false;
     this->is_running=false;
@@ -46,7 +47,7 @@ void TurnAction::update(bool key_pressed){
 }
 
 
-UseAction::UseAction(std::string command_name, Camera* this_camera){
+UseAction::UseAction(std::string command_name, std::shared_ptr<Camera> this_camera){
     this->command_name=command_name;
     this->is_key_pressed=false;
     this->is_running=false;
@@ -74,7 +75,7 @@ void UseAction::update(bool key_pressed){
 }
 
 
-JumpAction::JumpAction(std::string command_name, Camera* this_camera){
+JumpAction::JumpAction(std::string command_name, std::shared_ptr<Camera> this_camera){
     //passthrough
     this->command_name=command_name;
     this->is_key_pressed=false;
@@ -101,7 +102,7 @@ void JumpAction::update(bool key_pressed){
     this->readyToDestroy=true;
 }
 
-TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, Camera* this_camera, float x_range, float y_range):x_range(x_range),y_range(y_range){    
+TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, std::shared_ptr<Camera> this_camera, float x_range, float y_range):x_range(x_range),y_range(y_range){    
     this->command_name = command_name;
     is_running=true;
     this->mesh_modification = NULL;
@@ -129,7 +130,7 @@ void TwoAxisRangeCommand::update(bool key_pressed){
 }
 
 TwoAxisRangeCommand::~TwoAxisRangeCommand(){
-    delete mesh_modification;
+    //delete mesh_modification;
     
 }
 
@@ -137,7 +138,7 @@ TwoAxisRangeCommand::~TwoAxisRangeCommand(){
 
 
 
-MoveAction::MoveAction(std::string command_name, Camera* this_camera, Vec3d direction, float attack, float release, float max_speed, float FPS){
+MoveAction::MoveAction(std::string command_name, std::shared_ptr<Camera> this_camera, Vec3d direction, float attack, float release, float max_speed, float FPS){
     this->speed=0;
     this->is_running=false;
     this->FPS=FPS;
@@ -276,6 +277,6 @@ void MoveAction::update(bool key_pressed){
 }
 
 MoveAction::~MoveAction(){
-    delete mesh_modification;
+    //delete mesh_modification;
     
 }

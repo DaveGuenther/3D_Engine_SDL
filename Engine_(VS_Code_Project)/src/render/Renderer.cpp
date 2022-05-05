@@ -16,7 +16,7 @@
 #include "globals.h"
 
 
-Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
+Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera) {
     // SDL and Screen initializing
 	this->SCREEN_W = SCREEN_W;
     this->SCREEN_H = SCREEN_H;
@@ -37,7 +37,8 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera) {
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 
 	this->player_camera = player_camera;
-	this->thisFrustumClipper = new Clipper(player_camera);
+	std::shared_ptr<Clipper> thisFrustumClipper(new Clipper(player_camera));
+	this->thisFrustumClipper = thisFrustumClipper;
 
 }
 
@@ -102,7 +103,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 	//this_inout_rasterizer->drawTriangle(screenTri,col);
 
 	//rasterie triangle with ScanLines
-	ITriangleRasterizer* this_scanline_rasterizer = new ScanlineRasterizer(renderer);
+	std::shared_ptr<ITriangleRasterizer> this_scanline_rasterizer(new ScanlineRasterizer(renderer));
 	this_scanline_rasterizer->drawTriangle(screenTri);
 
 }
@@ -193,7 +194,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	}
 }
 
-void Renderer::refreshScreen(TrianglePipeline* my_pre_renderer){
+void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	

@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include <vector>
+#include <memory>
 #include <SDL2/SDL.h>
 
 #include "utility/Mesh.h"
@@ -38,8 +39,9 @@ class Renderer{
         float fAspectRatio;
         float fFOV_rad;
 
-        Camera* player_camera;
-        Clipper* thisFrustumClipper;
+        std::shared_ptr<Camera> player_camera;
+        std::shared_ptr<Clipper> thisFrustumClipper;
+        //Clipper* thisFrustumClipper;
         Mat4x4 matView;
         float max_visible_z_depth = 15.0f;  // distance from the camera at which things are no lonver visible
         float min_visible_color_modifier = 0.1f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
@@ -89,7 +91,7 @@ class Renderer{
 
     public:
 
-        Renderer(int SCREEN_W, int SCREEN_H, Camera* player_camera);
+        Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera);
         
         /**
          * @brief This function will reset the mouse X and Y values to the center of the window.  It requires the window object to call so must occur in the Renderer class
@@ -104,7 +106,7 @@ class Renderer{
          * 
          * @param this_mesh_pipeline 
          */
-        void refreshScreen(TrianglePipeline* my_pre_renderer);  // Why can't I make this a const pointer?
+        void refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer);  // Why can't I make this a const pointer?
 
         const int getWindowWidth() const;
         const int getWindowHeight() const;

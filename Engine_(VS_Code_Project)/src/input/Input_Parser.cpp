@@ -1,10 +1,12 @@
+#include <memory>
 #include "input/Input_Parser.h"
 
-Input_Parser::Input_Parser(GameStateSubject &subject, Renderer* my_renderer, std::string binding_filename) :game_state_subject(subject){
+Input_Parser::Input_Parser(GameStateSubject &subject, std::shared_ptr<Renderer> my_renderer, std::string binding_filename) :game_state_subject(subject){
     this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
     bindings.loadBinding(binding_filename);
     //bindings.loadBinding("in_game_bindings.cfg");
-    input_events = new Event_Scanner(event, my_renderer );
+    std::shared_ptr<Event_Scanner> input_events(new Event_Scanner(event, my_renderer ));
+    this->input_events = input_events;
     rangeInputChanged=false;
 
 
@@ -13,7 +15,7 @@ Input_Parser::Input_Parser(GameStateSubject &subject, Renderer* my_renderer, std
 
 Input_Parser::~Input_Parser(void){
 
-    delete input_events;
+    //delete input_events;
     delete Engine_State;
     
     
