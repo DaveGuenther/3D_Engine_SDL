@@ -23,7 +23,7 @@ class Clipper{
         Vec3d frustum_origin_point = Vec3d(0.0f, 0.0f, 0.0f);
         Triangle triView;
         std::vector<Triangle> frustum_clipped_tris;
-        Frustum* thisCameraFrustum;
+        std::shared_ptr<Frustum> thisCameraFrustum;
 
     public:
         /**

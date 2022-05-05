@@ -103,7 +103,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 	//this_inout_rasterizer->drawTriangle(screenTri,col);
 
 	//rasterie triangle with ScanLines
-	ITriangleRasterizer* this_scanline_rasterizer = new ScanlineRasterizer(renderer);
+	std::shared_ptr<ITriangleRasterizer> this_scanline_rasterizer(new ScanlineRasterizer(renderer));
 	this_scanline_rasterizer->drawTriangle(screenTri);
 
 }

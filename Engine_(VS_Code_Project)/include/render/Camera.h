@@ -1,6 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <memory>
 #include "utility/Vec3d.h"
 #include "utility/Mat4x4.h"
 #include "render/Frustum.h"
@@ -53,7 +54,8 @@ class Camera{
          */
         Vec3d getCameraPos();
         
-        Frustum* cameraViewFrustum;
+        std::shared_ptr<Frustum> cameraViewFrustum;
+        //Frustum* cameraViewFrustum;
 
     private:
         /**
