@@ -54,7 +54,7 @@ InGame_Action_Updater::InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh
 
 void InGame_Action_Updater::update(){
     modifications.clear();
-    //  Translate parsed input to input commands
+    //  Translate lexd input to input commands
     for (auto input:input_tactile_map){ 
         
         action_map.at(input.first)->trigger(); 

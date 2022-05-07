@@ -1,7 +1,7 @@
-#include "objects/ParseLine_vertex.h"
-#include "objects/ParseLine_textureCoord.h"
-#include "objects/ParseLine_normal.h"
-#include "objects/ParseLine_triFace.h"
+#include "objects/LexLine_vertex.h"
+#include "objects/LexLine_textureCoord.h"
+#include "objects/LexLine_normal.h"
+#include "objects/LexLine_triFace.h"
 #include <string>
 #include <iostream>
 
@@ -23,8 +23,8 @@ int main(int argv, char** args)
     }
 
 	
-    ParseLine_vertex thisLine;
-    thisLine.parse(myvertstring);
+    LexLine_vertex thisLine;
+    thisLine.lex(myvertstring);
 
     std::cout << "Vertex" << std::endl;
     std::cout << thisLine.getX() << std::endl;
@@ -47,8 +47,8 @@ int main(int argv, char** args)
     }
 
 	
-    ParseLine_textureCoord textureLine;
-    textureLine.parse(mytextstring);
+    LexLine_textureCoord textureLine;
+    textureLine.lex(mytextstring);
 
     std::cout << "Texture Coordinate" << std::endl;
     std::cout << textureLine.getU() << std::endl;
@@ -71,8 +71,8 @@ int main(int argv, char** args)
     }
 
 	
-    ParseLine_normal normalLine;
-    normalLine.parse(mynormalstring);
+    LexLine_normal normalLine;
+    normalLine.lex(mynormalstring);
 
     std::cout << "Texture Coordinate" << std::endl;
     std::cout << normalLine.getNormal().toString() << std::endl;
@@ -93,8 +93,8 @@ int main(int argv, char** args)
     }
 
 	
-    ParseLine_triFace triLine;
-    triLine.parse(mytristring);
+    LexLine_triFace triLine;
+    triLine.lex(mytristring);
     std::vector<int> verts, texts, norms;
     verts = triLine.getVertexIDs();
     texts = triLine.getTextureCoords();

@@ -2,10 +2,10 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "objects/ParseLine_normal.h"
+#include "objects/LexLine_normal.h"
 
 
-void ParseLine_normal::parse(std::string thisLine){
+void LexLine_normal::lex(std::string thisLine){
     std::vector<std::string> tokens;
     std::stringstream check1(thisLine);
     std::string intermediate;
@@ -26,7 +26,7 @@ void ParseLine_normal::parse(std::string thisLine){
     
 }
 
-Vec3d ParseLine_normal::getNormal(){
+Vec3d LexLine_normal::getNormal(){
     return this->thisNormal;
 }
 

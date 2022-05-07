@@ -1,9 +1,9 @@
-#ifndef PARSELINE_VERTEX_H
-#define PARSELINE_VERTEX_H
+#ifndef LEXLINE_VERTEX_H
+#define LEXLINE_VERTEX_H
 
 #include <string>
 
-/*class ParseLine_triFace:public IParseLine{
+/*class LexLine_triFace:public ILexLine{
     private:
         struct face{
             int vertex_id;
@@ -12,11 +12,11 @@
         };
 
     public:
-        void parse(std::string thisLine);
+        void lex(std::string thisLine);
         face& getFace();
 };
 
-class ParseLine_normal:public IParseLine{
+class LexLine_normal:public ILexLine{
     private:
         struct normal{
             float x;
@@ -25,11 +25,11 @@ class ParseLine_normal:public IParseLine{
         };
     
     public:
-        void parse(std::string thisLine);
+        void lex(std::string thisLine);
         normal& getNormal();
 };
 
-class ParseLine_texture_coord:public IParseLine{
+class LexLine_texture_coord:public ILexLine{
     private:
         struct textureCoord{
             float u;
@@ -38,14 +38,14 @@ class ParseLine_texture_coord:public IParseLine{
         };
 
     public:
-        void parse(std::string thisLine);
+        void lex(std::string thisLine);
         textureCoord& getTextureCoord();
 };*/
 
-class ParseLine_vertex{
+class LexLine_vertex{
     public:
-        ParseLine_vertex();
-        void parse(std::string thisLine);
+        LexLine_vertex();
+        void lex(std::string thisLine);
         float getX();
         float getY();
         float getZ();

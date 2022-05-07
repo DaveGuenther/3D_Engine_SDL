@@ -2,13 +2,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "objects/ParseLine_vertex.h"
+#include "objects/LexLine_textureCoord.h"
 
-ParseLine_vertex::ParseLine_vertex(){
-    
-}
-
-void ParseLine_vertex::parse(std::string thisLine){
+void LexLine_textureCoord::lex(std::string thisLine){
     std::vector<std::string> tokens;
     std::stringstream check1(thisLine);
     std::string intermediate;
@@ -19,31 +15,28 @@ void ParseLine_vertex::parse(std::string thisLine){
     }
 
     // assign tokens to private structure up to 3 elements
-    if (tokens.size()>=3){
-        this->x = std::stof(tokens[0]);
-        this->y = std::stof(tokens[1]);
-        this->z = std::stof(tokens[2]);
+    if (tokens.size()>=2){
+        this->u = std::stof(tokens[0]);
+        this->v = std::stof(tokens[1]);
+
     }
 
     // assign 4th element if it exists
-    if (tokens.size()==4){
+    if (tokens.size()==3){
         this->w = std::stof(tokens[3]);
     }
     
 }
 
-float ParseLine_vertex::getX(){
-    return this->x;
+float LexLine_textureCoord::getU(){
+    return this->u;
 }
 
-float ParseLine_vertex::getY(){
-    return this->y;
+float LexLine_textureCoord::getV(){
+    return this->v;
 }
 
-float ParseLine_vertex::getZ(){
-    return this->z;
-}
-
-float ParseLine_vertex::getW(){
+float LexLine_textureCoord::getW(){
     return this->w;
 }
+

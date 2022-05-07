@@ -1,16 +1,16 @@
-#ifndef PARSELINE_NORMAL_H
-#define PARSELINE_NORMAL_H
+#ifndef LEXLINE_NORMAL_H
+#define LEXLINE_NORMAL_H
 
 #include <string>
 #include "utility/Vec3d.h"
 
 
-class ParseLine_normal{
+class LexLine_normal{
     private:
         Vec3d thisNormal;
 
     public:
-        void parse(std::string thisLine);
+        void lex(std::string thisLine);
         Vec3d getNormal();
 
 };

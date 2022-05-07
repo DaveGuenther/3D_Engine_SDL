@@ -1,17 +1,17 @@
-#ifndef PARSELINE_TRIFACE_H
-#define PARSELINE_TRIFACE_H
+#ifndef LEXLINE_TRIFACE_H
+#define LEXLINE_TRIFACE_H
 
 #include <string>
 #include <vector>
 
-class ParseLine_triFace{
+class LexLine_triFace{
     private:
         std::vector<int> vertex_ids;
         std::vector<int> texture_coord_ids;
         std::vector<int> normal_ids;
 
     public:
-        void parse(std::string thisLine);
+        void lex(std::string thisLine);
         std::vector<int> getVertexIDs();
         std::vector<int> getTextureCoords();
         std::vector<int> getNormalIDs();
