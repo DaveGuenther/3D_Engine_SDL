@@ -72,7 +72,9 @@ Engine_3D::~Engine_3D(){
 
 void Engine_3D::load_meshes(){
     // Eventually allow this function to read a list of mesh file referenes and load them
-    mesh_pipeline->Add_Mesh_to_Pipeline("block.mesh", Vec3d(-1.5,0.5,2));
+    mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("cube.obj", Vec3d(1.5,-0.5,3));
+    mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("funky_little_thing.obj", Vec3d(-1.5,0.5,5));
+    //mesh_pipeline->Add_Mesh_to_Pipeline("block.mesh", Vec3d(-1.5,0.5,2));
     mesh_pipeline->Add_Mesh_to_Pipeline("pyramid.mesh", Vec3d(.5,1.5,6));
 }
 

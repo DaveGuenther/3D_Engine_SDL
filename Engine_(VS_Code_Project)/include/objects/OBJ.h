@@ -6,11 +6,11 @@
 
 class OBJ{
     private:
-        //Mesh thisMesh;
+        Mesh thisMesh;
         
     public:
         OBJ(std::string filename);
-        //Mesh& getMesh();
+        Mesh& getMesh();
 
 
 

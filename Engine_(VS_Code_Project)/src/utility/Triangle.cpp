@@ -3,9 +3,12 @@
 
 Triangle::Triangle(){
 
-    p[0]=Vec3d(0, 0, 0);
-    p[1]=Vec3d(0, 0, 0);
-    p[2]=Vec3d(0, 0, 0);
+    p[0]=Vec3d(0.0f, 0.0f, 0.0f);
+    p[1]=Vec3d(0.0f, 0.0f, 0.0f);
+    p[2]=Vec3d(0.0f, 0.0f, 0.0f);
+    textureCoords[0] = Vec2d(0.0f, 0.0f);
+    textureCoords[1] = Vec2d(0.0f, 0.0f);
+    textureCoords[2] = Vec2d(0.0f, 0.0f);
     this->tri_id=0;
     color.r=255; color.g=255; color.b=255; color.a = 255;
 

@@ -2,9 +2,13 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "objects/LexLine_textureCoord.h"
+#include "objects/OBJ_vertex.h"
 
-void LexLine_textureCoord::lex(std::string thisLine){
+OBJ_vertex::OBJ_vertex(){
+
+}
+
+void OBJ_vertex::lex(std::string thisLine){
     std::vector<std::string> tokens;
     std::stringstream check1(thisLine);
     std::string intermediate;
@@ -15,28 +19,31 @@ void LexLine_textureCoord::lex(std::string thisLine){
     }
 
     // assign tokens to private structure up to 3 elements
-    if (tokens.size()>=2){
-        this->u = std::stof(tokens[0]);
-        this->v = std::stof(tokens[1]);
-
+    if (tokens.size()>=3){
+        this->x = std::stof(tokens[0]);
+        this->y = std::stof(tokens[1]);
+        this->z = std::stof(tokens[2]);
     }
 
     // assign 4th element if it exists
-    if (tokens.size()==3){
+    if (tokens.size()==4){
         this->w = std::stof(tokens[3]);
     }
     
 }
 
-float LexLine_textureCoord::getU(){
-    return this->u;
+float OBJ_vertex::getX(){
+    return this->x;
 }
 
-float LexLine_textureCoord::getV(){
-    return this->v;
+float OBJ_vertex::getY(){
+    return this->y;
 }
 
-float LexLine_textureCoord::getW(){
+float OBJ_vertex::getZ(){
+    return this->z;
+}
+
+float OBJ_vertex::getW(){
     return this->w;
 }
-

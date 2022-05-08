@@ -10,7 +10,9 @@
 #include "utility/Mesh.h"
 
 
-
+Mesh::Mesh(){
+	this->id = 0;
+}
 
 Mesh::Mesh(int mesh_id) {
 	id = mesh_id;

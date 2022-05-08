@@ -5,12 +5,13 @@
 #include "utility/Vec3d.h"
 
 
-class LexLine_normal{
+class OBJ_normal{
     private:
-        Vec3d thisNormal;
+        
 
     public:
         void lex(std::string thisLine);
+        Vec3d thisNormal;
         Vec3d getNormal();
 
 };

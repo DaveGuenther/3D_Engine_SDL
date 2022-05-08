@@ -3,7 +3,7 @@
 
 #include <string>
 
-/*class LexLine_triFace:public ILexLine{
+/*class OBJ_triFace:public ILexLine{
     private:
         struct face{
             int vertex_id;
@@ -16,7 +16,7 @@
         face& getFace();
 };
 
-class LexLine_normal:public ILexLine{
+class OBJ_normal:public ILexLine{
     private:
         struct normal{
             float x;
@@ -29,7 +29,7 @@ class LexLine_normal:public ILexLine{
         normal& getNormal();
 };
 
-class LexLine_texture_coord:public ILexLine{
+class OBJ_texture_coord:public ILexLine{
     private:
         struct textureCoord{
             float u;
@@ -42,20 +42,22 @@ class LexLine_texture_coord:public ILexLine{
         textureCoord& getTextureCoord();
 };*/
 
-class LexLine_vertex{
+class OBJ_vertex{
     public:
-        LexLine_vertex();
+        OBJ_vertex();
         void lex(std::string thisLine);
         float getX();
         float getY();
         float getZ();
         float getW();
 
-    private:
         float x;
         float y;
         float z;
         float w = 1.0f;
+
+    private:
+
 };
 
 #endif

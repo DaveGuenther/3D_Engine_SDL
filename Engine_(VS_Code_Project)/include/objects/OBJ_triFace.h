@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-class LexLine_triFace{
+class OBJ_triFace{
     private:
         std::vector<int> vertex_ids;
         std::vector<int> texture_coord_ids;

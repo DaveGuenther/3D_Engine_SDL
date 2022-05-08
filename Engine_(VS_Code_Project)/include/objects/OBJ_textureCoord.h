@@ -4,17 +4,19 @@
 #include <string>
 
 
-class LexLine_textureCoord{
+class OBJ_textureCoord{
     private:
-        float u=0.0f;
-        float v=0.0f;
-        float w=0.0f;
+
 
     public:
         void lex(std::string thisLine);
         float getU();
         float getV();
         float getW();
+
+        float u=0.0f;
+        float v=0.0f;
+        float w=0.0f;
 };
 
 

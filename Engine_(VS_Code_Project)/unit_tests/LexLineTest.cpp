@@ -1,7 +1,8 @@
-#include "objects/LexLine_vertex.h"
-#include "objects/LexLine_textureCoord.h"
-#include "objects/LexLine_normal.h"
-#include "objects/LexLine_triFace.h"
+#include "objects/OBJ_vertex.h"
+#include "objects/OBJ_textureCoord.h"
+#include "objects/OBJ_normal.h"
+#include "objects/OBJ_triFace.h"
+
 #include <string>
 #include <iostream>
 
@@ -23,7 +24,7 @@ int main(int argv, char** args)
     }
 
 	
-    LexLine_vertex thisLine;
+    OBJ_vertex thisLine;
     thisLine.lex(myvertstring);
 
     std::cout << "Vertex" << std::endl;
@@ -47,7 +48,7 @@ int main(int argv, char** args)
     }
 
 	
-    LexLine_textureCoord textureLine;
+    OBJ_textureCoord textureLine;
     textureLine.lex(mytextstring);
 
     std::cout << "Texture Coordinate" << std::endl;
@@ -71,7 +72,7 @@ int main(int argv, char** args)
     }
 
 	
-    LexLine_normal normalLine;
+    OBJ_normal normalLine;
     normalLine.lex(mynormalstring);
 
     std::cout << "Texture Coordinate" << std::endl;
@@ -93,7 +94,7 @@ int main(int argv, char** args)
     }
 
 	
-    LexLine_triFace triLine;
+    OBJ_triFace triLine;
     triLine.lex(mytristring);
     std::vector<int> verts, texts, norms;
     verts = triLine.getVertexIDs();
@@ -103,5 +104,6 @@ int main(int argv, char** args)
     for (int i=0;i<3;i++){
         std::cout << verts[i] << "/" << texts[i] << "/" << norms[i] << std::endl;
     }
+
 	return 0;
 }   
