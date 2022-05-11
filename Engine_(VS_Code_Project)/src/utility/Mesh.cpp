@@ -107,6 +107,14 @@ int Mesh::getID(){
 	return id;
 }
 
+void Mesh::setName(std::string name){
+	this->name = name;
+}
+
+std::string Mesh::getName(){
+	return this->name;
+}
+
 std::string Mesh::toString(){
     std::string ret_val;
 	for (Triangle tri:tris){

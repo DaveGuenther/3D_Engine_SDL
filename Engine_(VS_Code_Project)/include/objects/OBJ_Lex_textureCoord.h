@@ -4,15 +4,12 @@
 #include <string>
 
 
-class OBJ_textureCoord{
+class OBJ_Lex_textureCoord{
     private:
 
 
     public:
         void lex(std::string thisLine);
-        float getU();
-        float getV();
-        float getW();
 
         float u=0.0f;
         float v=0.0f;

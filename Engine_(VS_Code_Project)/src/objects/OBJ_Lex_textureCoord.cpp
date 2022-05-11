@@ -2,9 +2,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "objects/OBJ_textureCoord.h"
+#include "objects/OBJ_Lex_textureCoord.h"
 
-void OBJ_textureCoord::lex(std::string thisLine){
+void OBJ_Lex_textureCoord::lex(std::string thisLine){
     std::vector<std::string> tokens;
     std::stringstream check1(thisLine);
     std::string intermediate;
@@ -26,17 +26,5 @@ void OBJ_textureCoord::lex(std::string thisLine){
         this->w = std::stof(tokens[3]);
     }
     
-}
-
-float OBJ_textureCoord::getU(){
-    return this->u;
-}
-
-float OBJ_textureCoord::getV(){
-    return this->v;
-}
-
-float OBJ_textureCoord::getW(){
-    return this->w;
 }
 

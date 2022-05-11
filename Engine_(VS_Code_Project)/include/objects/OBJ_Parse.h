@@ -6,23 +6,19 @@
 #include <sstream>
 #include <string>
 
-#include "objects/OBJ_normal.h"
-#include "objects/OBJ_textureCoord.h"
-#include "objects/OBJ_triFace.h"
-#include "objects/OBJ_vertex.h"
+#include "objects/OBJ_Lex_normal.h"
+#include "objects/OBJ_Lex_textureCoord.h"
+#include "objects/OBJ_Lex_triFace.h"
+#include "objects/OBJ_Lex_vertex.h"
 
 class OBJ_Parse{
     public:
         OBJ_Parse(std::string filename);
-        std::vector<OBJ_vertex>& getVertices();
-        std::vector<OBJ_textureCoord>& getTextureCoords();
-        std::vector<OBJ_normal>& getNormals();
-        std::vector<OBJ_triFace>& getTriangleFaces();
         
-        std::vector<OBJ_vertex> vertices;
-        std::vector<OBJ_textureCoord> textureCoords;
-        std::vector<OBJ_normal> normals;
-        std::vector<OBJ_triFace> triangleFaces;
+        std::vector<OBJ_Lex_vertex> vertices;
+        std::vector<OBJ_Lex_textureCoord> textureCoords;
+        std::vector<OBJ_Lex_normal> normals;
+        std::vector<OBJ_Lex_triFace> triangleFaces;
         
     private:
 

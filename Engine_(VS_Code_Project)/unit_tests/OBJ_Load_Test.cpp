@@ -5,7 +5,7 @@
 
 int main(int argv, char** args)
 {
-    std::string filename = "cube.obj";
+    std::string filename = "Compass.obj";
     OBJ thisOBJ(filename);
     
     

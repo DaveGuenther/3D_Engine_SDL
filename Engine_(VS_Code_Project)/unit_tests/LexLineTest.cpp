@@ -1,7 +1,7 @@
-#include "objects/OBJ_vertex.h"
-#include "objects/OBJ_textureCoord.h"
-#include "objects/OBJ_normal.h"
-#include "objects/OBJ_triFace.h"
+#include "objects/OBJ_Lex_vertex.h"
+#include "objects/OBJ_Lex_textureCoord.h"
+#include "objects/OBJ_Lex_normal.h"
+#include "objects/OBJ_Lex_triFace.h"
 
 #include <string>
 #include <iostream>
@@ -24,14 +24,14 @@ int main(int argv, char** args)
     }
 
 	
-    OBJ_vertex thisLine;
+    OBJ_Lex_vertex thisLine;
     thisLine.lex(myvertstring);
 
     std::cout << "Vertex" << std::endl;
-    std::cout << thisLine.getX() << std::endl;
-    std::cout << thisLine.getY() << std::endl;
-    std::cout << thisLine.getZ() << std::endl;
-    std::cout << thisLine.getW() << std::endl;
+    std::cout << thisLine.x << std::endl;
+    std::cout << thisLine.y << std::endl;
+    std::cout << thisLine.z << std::endl;
+    std::cout << thisLine.w << std::endl;
 
     /////  Text Texture Coordinate Read Line  /////
     std::string mytextstring = "vt 0.875000 0.500000";
@@ -48,13 +48,13 @@ int main(int argv, char** args)
     }
 
 	
-    OBJ_textureCoord textureLine;
+    OBJ_Lex_textureCoord textureLine;
     textureLine.lex(mytextstring);
 
     std::cout << "Texture Coordinate" << std::endl;
-    std::cout << textureLine.getU() << std::endl;
-    std::cout << textureLine.getV() << std::endl;
-    std::cout << textureLine.getW() << std::endl;
+    std::cout << textureLine.u << std::endl;
+    std::cout << textureLine.v << std::endl;
+    std::cout << textureLine.w << std::endl;
 
 
     /////  Text Normal Read Line  /////
@@ -72,7 +72,7 @@ int main(int argv, char** args)
     }
 
 	
-    OBJ_normal normalLine;
+    OBJ_Lex_normal normalLine;
     normalLine.lex(mynormalstring);
 
     std::cout << "Texture Coordinate" << std::endl;
@@ -94,12 +94,12 @@ int main(int argv, char** args)
     }
 
 	
-    OBJ_triFace triLine;
+    OBJ_Lex_triFace triLine;
     triLine.lex(mytristring);
     std::vector<int> verts, texts, norms;
-    verts = triLine.getVertexIDs();
-    texts = triLine.getTextureCoords();
-    norms = triLine.getNormalIDs();
+    verts = triLine.vertex_ids;
+    texts = triLine.texture_coord_ids;
+    norms = triLine.normal_ids;
     std::cout << "triangle Face definitions" << std::endl;
     for (int i=0;i<3;i++){
         std::cout << verts[i] << "/" << texts[i] << "/" << norms[i] << std::endl;

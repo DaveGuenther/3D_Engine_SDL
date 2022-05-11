@@ -40,10 +40,10 @@
 				
 				//objects source code
 				"${workspaceFolder}\\src\\objects\\OBJ.cpp",
-				"${workspaceFolder}\\src\\objects\\OBJ_vertex.cpp",
-				"${workspaceFolder}\\src\\objects\\OBJ_textureCoord.cpp",
-				"${workspaceFolder}\\src\\objects\\OBJ_normal.cpp",
-				"${workspaceFolder}\\src\\objects\\OBJ_triFace.cpp",
+				"${workspaceFolder}\\src\\objects\\OBJ_Lex_vertex.cpp",
+				"${workspaceFolder}\\src\\objects\\OBJ_Lex_textureCoord.cpp",
+				"${workspaceFolder}\\src\\objects\\OBJ_Lex_normal.cpp",
+				"${workspaceFolder}\\src\\objects\\OBJ_Lex_triFace.cpp",
 				"${workspaceFolder}\\src\\objects\\OBJ_Parse.cpp",
 				
 				"${workspaceFolder}\\src\\globals.cpp",

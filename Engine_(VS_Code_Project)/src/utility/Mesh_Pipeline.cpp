@@ -39,22 +39,25 @@ void Mesh_Pipeline::Add_Mesh_to_Pipeline(std::string filename, Vec3d origin){
 
 void Mesh_Pipeline::Add_OBJ_Mesh_to_Pipeline(std::string filename, Vec3d origin){
     OBJ thisOBJ(filename);
-    Mesh new_mesh = thisOBJ.getMesh();
-    new_mesh.setID(total_mesh_ids);
-    
-    /*Mesh new_mesh(total_mesh_ids);
-    new_mesh.loadMesh(filename);
-    */
-    Meshes.push_back(new_mesh);
-    
-    int this_mesh_id = new_mesh.getID();
-    std::shared_ptr<Triangle_Modifier> this_mod(new Translator(origin.getX(), origin.getY(), origin.getZ()));
-    this_mod->assignToMesh(this_mesh_id);
-    std::vector<std::shared_ptr<Triangle_Modifier>> tri_mods_pipe;
-    tri_mods_pipe.push_back(this_mod);
-    this->Apply_Modifications(tri_mods_pipe);    
+    std::vector<Mesh> OBJ_meshes;
+    OBJ_meshes = thisOBJ.getMeshes();
 
-    total_mesh_ids+=1;
+    for (auto new_mesh:OBJ_meshes){
+        new_mesh.setID(total_mesh_ids);
+        Meshes.push_back(new_mesh);
+        int this_mesh_id = new_mesh.getID();
+        
+        std::shared_ptr<Triangle_Modifier> this_mod(new Translator(origin.getX(), origin.getY(), origin.getZ()));
+        this_mod->assignToMesh(this_mesh_id);
+        std::vector<std::shared_ptr<Triangle_Modifier>> tri_mods_pipe;
+        tri_mods_pipe.push_back(this_mod);
+        this->Apply_Modifications(tri_mods_pipe);    
+            
+        total_mesh_ids+=1;    
+    }
+    
+    
+    
 }
 
 void Mesh_Pipeline::Add_Mesh_to_Pipeline(Mesh this_mesh){

@@ -26,22 +26,22 @@ OBJ_Parse::OBJ_Parse(std::string filename){
             std::getline(this_stream,lexLine);
             
             if (keyword=="v"){ // Vertex
-                OBJ_vertex this_vertex;
+                OBJ_Lex_vertex this_vertex;
                 this_vertex.lex(lexLine);
                 this->vertices.push_back(this_vertex);
 
             }else if (keyword=="vt"){ // texture coordinate
-                OBJ_textureCoord this_textCoord;
+                OBJ_Lex_textureCoord this_textCoord;
                 this_textCoord.lex(lexLine);
                 this->textureCoords.push_back(this_textCoord);
 
             }else if (keyword=="vn"){ // normal vector
-                OBJ_normal this_normal_vector;
+                OBJ_Lex_normal this_normal_vector;
                 this_normal_vector.lex(lexLine);
                 this->normals.push_back(this_normal_vector);
 
             }else if (keyword=="f"){ // triangle face
-                OBJ_triFace this_triangle_face;
+                OBJ_Lex_triFace this_triangle_face;
                 this_triangle_face.lex(lexLine);
                 this->triangleFaces.push_back(this_triangle_face);
 
@@ -55,9 +55,6 @@ OBJ_Parse::OBJ_Parse(std::string filename){
                 //std::cout << "Not Parsed" << std::endl;
             }
             
-            
-            
-            //std::cout << keyword << std::endl; 
  
             
         }

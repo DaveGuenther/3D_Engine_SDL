@@ -26,7 +26,7 @@ class Mesh {
 		 */
 		std::vector<float> stringToFloatVector(std::string input_string);
 
-
+		std::string name;
 		
 		/**
 		 * @brief fTheta and tTheta represent the current angles (in degrees) that this mesh will rotate during next refresh.  
@@ -78,6 +78,10 @@ class Mesh {
 		 * @param this_tri A single Triangle object with points represented in the 3D cartesian space
 		 */
 		void add3dTriangle(Triangle &this_tri);
+
+		void setName(std::string name);
+
+		std::string getName();
 
 		/**
 		 * @brief Setter for the IID value of this Mesh
