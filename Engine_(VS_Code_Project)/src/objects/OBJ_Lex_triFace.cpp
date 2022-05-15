@@ -24,7 +24,9 @@ void OBJ_Lex_triFace::lex(std::string thisLine){
 
         vertex_ids.push_back(std::stoi(token_a));
         texture_coord_ids.push_back(std::stoi(token_b));
-        normal_ids.push_back(std::stoi(token_c));
+        if (token_c!=""){
+            normal_ids.push_back(std::stoi(token_c));
+        }
 
     }
 

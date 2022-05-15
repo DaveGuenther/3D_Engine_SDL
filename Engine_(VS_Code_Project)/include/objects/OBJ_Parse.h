@@ -13,7 +13,7 @@
 
 class OBJ_Parse{
     public:
-        OBJ_Parse(std::string filename);
+        OBJ_Parse(std::stringstream& this_mesh_object);
         
         std::vector<OBJ_Lex_vertex> vertices;
         std::vector<OBJ_Lex_textureCoord> textureCoords;

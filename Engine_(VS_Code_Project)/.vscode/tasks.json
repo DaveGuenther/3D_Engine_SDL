@@ -6,9 +6,12 @@
 			"label": "C/C++: g++.exe build active file",
 			"command": "C:\\msys64\\mingw64\\bin\\g++.exe",
 			"args": [
+				"-std=c++17",
+				"-lstdc++fs",
 				"-fdiagnostics-color=always",
 				"-g",
 				"${file}",
+				
 				//utility source code
 				"${workspaceFolder}\\src\\utility\\Mesh.cpp",
 				"${workspaceFolder}\\src\\utility\\Mat4x4.cpp",

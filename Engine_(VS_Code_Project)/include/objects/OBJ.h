@@ -7,19 +7,15 @@
 
 #include "utility/Mesh.h"
 
-/*class OBJ_Datum{
+class OBJ_Datum{
     public:
-    std::stringstream meshblocks;  // each stringstream will be a meshblock from the file delimited by lines that start with "o"
-    std::string mesh_name; // each mesh gets a name
-    std::string mtl; //
-
-};*/
-
-/*struct OBJ_Datum{
-    std::stringstream meshblocks;  // each stringstream will be a meshblock from the file delimited by lines that start with "o"
+    OBJ_Datum(std::string raw_mesh_data):meshblocks(new std::stringstream(raw_mesh_data)){ }
+    std::stringstream* meshblocks;
+    std::vector<std::string> this_mesh_block; // this is used to feed each line in succession to the stringstream so that it can be read using getline
     std::string mesh_name; // each mesh gets a name
     std::string mtl; // 
-};*/
+};
+
 
 /**
  * @brief This class is the main object class used by the engine to load Blender OBJ files.  This class specifically works with the OBJ_Parse class to load and expose raw OBJ 
@@ -31,15 +27,17 @@
 class OBJ{
     private:
 
-        struct OBJ_Datum{
-            std::stringstream meshblocks;  // each stringstream will be a meshblock from the file delimited by lines that start with "o"
+        /*struct OBJ_Datum{
+            //std::stringstream& meshblocks;  // each stringstream will be a meshblock from the file delimited by lines that start with "o"
             std::string mesh_name; // each mesh gets a name
             std::string mtl; // 
-        };
+        };*/
 
         std::vector<Mesh> Meshes;
-        std::vector<OBJ_Datum> OBJ_Data; 
+        //std::vector<OBJ_Datum> OBJ_Data; 
+        std::vector<OBJ_Datum> myOBJ_Data;
         bool peekline( std::ifstream & is, std::string & s );
+        std::ifstream myfile;
 
         
     public:
@@ -59,7 +57,7 @@ class OBJ{
          */
         std::vector<Mesh>& getMeshes();
 
-
+        void split_OBJ_Chunks();
 
 };
 
