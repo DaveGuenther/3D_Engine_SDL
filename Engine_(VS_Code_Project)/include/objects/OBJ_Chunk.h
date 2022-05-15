@@ -1,5 +1,5 @@
-#ifndef OBJ_PARSE_H
-#define OBJ_PARSE_H
+#ifndef OBJ_CHUNK_H
+#define OBJ_CHUNK_H
 
 #include <vector>
 #include <fstream>
@@ -11,16 +11,21 @@
 #include "objects/OBJ_Lex_triFace.h"
 #include "objects/OBJ_Lex_vertex.h"
 
-class OBJ_Parse{
+class OBJ_Chunk{
     public:
-        OBJ_Parse(std::stringstream& this_mesh_object);
+        OBJ_Chunk(std::stringstream& this_mesh_object);
         
         std::vector<OBJ_Lex_vertex> vertices;
         std::vector<OBJ_Lex_textureCoord> textureCoords;
         std::vector<OBJ_Lex_normal> normals;
         std::vector<OBJ_Lex_triFace> triangleFaces;
-        
+        const int& getTotalVertexNum();
+        const int& getTotalTextCoordNum();        
     private:
+
+        int totalVertices;
+        int totalTextureCoords;
+
 
 };
 

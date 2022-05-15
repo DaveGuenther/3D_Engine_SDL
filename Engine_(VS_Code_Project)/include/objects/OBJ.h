@@ -38,6 +38,9 @@ class OBJ{
         std::vector<OBJ_Datum> myOBJ_Data;
         bool peekline( std::ifstream & is, std::string & s );
         std::ifstream myfile;
+        int totalVertices;
+        int totalTextureCoords;
+        
 
         
     public:

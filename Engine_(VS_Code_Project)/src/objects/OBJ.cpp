@@ -4,7 +4,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "objects/OBJ_Parse.h"
+#include "objects/OBJ_Chunk.h"
 #include "objects/OBJ.h"
 #include "utility/Mesh.h"
 #include "utility/Triangle.h"
@@ -151,6 +151,8 @@ void OBJ::split_OBJ_Chunks(){
 
 OBJ::OBJ(std::string filename){
 
+    this->totalTextureCoords=0;
+    this->totalVertices=0;
     filename = "Meshes/"+filename;
 	std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
 	myfile.open (filename);
@@ -254,19 +256,20 @@ OBJ::OBJ(std::string filename){
         //push stringstream to vector
     
 */
-        
+
     for (auto this_chunk:this->myOBJ_Data){
-        OBJ_Parse this_OBJ((*this_chunk.meshblocks));
+        OBJ_Chunk this_OBJ_Chunk((*this_chunk.meshblocks));
+
         Mesh thisMesh(0);
         int tri_id=0;
-        for (auto triangle: this_OBJ.triangleFaces){
+        for (auto triangle: this_OBJ_Chunk.triangleFaces){
             Triangle thisTri;
             std::vector<int> vertIDs = triangle.vertex_ids;
             for (int i=0;i<3;i++){
-                int vertex_ID = vertIDs[i]-1;
-                Vec3d this_vert = Vec3d(this_OBJ.vertices[vertex_ID].x,
-                                        this_OBJ.vertices[vertex_ID].y,
-                                        this_OBJ.vertices[vertex_ID].z);
+                int vertex_ID = vertIDs[i]-1-this->totalVertices;
+                Vec3d this_vert = Vec3d(this_OBJ_Chunk.vertices[vertex_ID].x,
+                                        this_OBJ_Chunk.vertices[vertex_ID].y,
+                                        this_OBJ_Chunk.vertices[vertex_ID].z);
                 thisTri.setTrianglePoint(i,this_vert);
                 
             }
@@ -278,8 +281,11 @@ OBJ::OBJ(std::string filename){
             thisTri.setID(tri_id);
             thisMesh.add3dTriangle(thisTri);
             tri_id+=1;
+
             
         }
+        this->totalTextureCoords+=this_OBJ_Chunk.getTotalTextCoordNum();
+        this->totalVertices+=this_OBJ_Chunk.getTotalVertexNum();
         this->Meshes.push_back(thisMesh);  
     }    
     

@@ -47,7 +47,7 @@
 				"${workspaceFolder}\\src\\objects\\OBJ_Lex_textureCoord.cpp",
 				"${workspaceFolder}\\src\\objects\\OBJ_Lex_normal.cpp",
 				"${workspaceFolder}\\src\\objects\\OBJ_Lex_triFace.cpp",
-				"${workspaceFolder}\\src\\objects\\OBJ_Parse.cpp",
+				"${workspaceFolder}\\src\\objects\\OBJ_Chunk.cpp",
 				
 				"${workspaceFolder}\\src\\globals.cpp",
 					
