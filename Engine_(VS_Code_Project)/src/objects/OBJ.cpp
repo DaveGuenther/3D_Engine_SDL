@@ -151,112 +151,25 @@ void OBJ::split_OBJ_Chunks(){
 
 OBJ::OBJ(std::string filename){
 
+    this->forceClockwiseWinding=true;
+    this->flip_X_Coords=true;
+    buildMesh(filename); 
+    
+}
+
+OBJ::OBJ(std::string filename, bool forceClockwiseWinding, bool flip_X_Coords){
+
+    this->forceClockwiseWinding=forceClockwiseWinding;
+    this->flip_X_Coords=flip_X_Coords;
+    buildMesh(filename); 
+    
+}
+
+void OBJ::assembleChunks(){
     this->totalTextureCoords=0;
     this->totalVertices=0;
-    filename = "Meshes/"+filename;
-	std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
-	myfile.open (filename);
-
-    //std::ifstream myfile;
-    split_OBJ_Chunks();
-    
-
-    /*//park all tis into a struct above obj class, then make a private vector of structs in obj to expost to the pipeline
-    std::vector<std::stringstream> meshblocks;  // each stringstream will be a meshblock from the file delimited by lines that start with "o"
-    std::vector<std::string> mesh_name;
-    //std::vector<std::vector<std::string>> mtl;  */
-/*
-    bool notEOF=true;
-    std::string line, nextToken, mtlfile;
-	if (myfile.is_open()) {   
-        
-        // Start getting tokens until first "o" comes up
-        std::stringstream meshStream; 
-        std::string name;
-        std::string this_usemtl;
-        std::string nextToken="#";
-        while(nextToken!="o"){
-            
-            // getline and extract token
-            std::getline(myfile, line);
-            std::stringstream this_stream(line);
-            std::string keyword, lexLine;   
-            std::getline(this_stream,keyword,' ');
-            std::getline(this_stream,lexLine);
-            
-            // parse "mtllib" lines
-            if (keyword=="mtllib"){ // mtllib line
-                //record mtllib information for this mesh
-                mtlfile = lexLine;
-            }         
-
-            notEOF = peekline(myfile, line);
-            // get nextToken
-            this_stream.clear();
-            this_stream << line;
-            std::getline(this_stream,nextToken,' ');
-            
-        }    
-        std::getline(myfile, line); // this is an "o" line
-        std::stringstream this_stream(line);
-        std::string keyword, lexLine;   
-        std::getline(this_stream,keyword,' ');
-        std::getline(this_stream,lexLine);
-        name=lexLine;
-        this_stream.clear();
-        //while (notEOF)
-        while(notEOF){
-            //getline
-            std::getline(myfile, line); // this is an "o" line
-            
-            //add line to stringstream
-            meshStream << line;
-            
-            //notEOF= peekahead
-            notEOF = peekline(myfile, line);
-            // get nextToken
-            this_stream.clear();
-            meshStream << line;
-            std::getline(this_stream,nextToken,' ');
-
-
-            //if nextToken == "usemtl"
-            if (keyword=="usemtl"){ // capture material used
-                // get this mtl line and store it
-                std::getline(myfile, line); // this is an "o" line
-                this_stream.clear();
-                this_stream << line;
-                std::getline(this_stream,keyword,' ');
-                std::getline(this_stream,lexLine);
-                
-                // Assign material
-                this_usemtl = lexLine;
-            }   
-
-            //if nextToken == "o"
-            if (keyword=="o"){ // new mesh object line
-                //build raw Datum object and push Datum to OBJ_Data
-                //OBJ_Datum this_datum;
-                //this_datum.mesh_name=name;
-                //meshStream << this_datum.meshblocks.rdbuf();
-                //this_datum.mtl = this_usemtl;
-                //this->OBJ_Data.push_back(this_datum);
-                
-                //clear stringstream
-                meshStream.clear();
-            }            
-
-        }
-        
-        //OBJ_Datum this_datum;
-        //this_datum.mesh_name=name;
-        //meshStream << this_datum.meshblocks.rdbuf();
-        //this_datum.mtl=this_usemtl;
-        //this->OBJ_Data.push_back(this_datum);
-        //push stringstream to vector
-    
-*/
-
+    int X_CoordinateInverter=1;
+    if (this->flip_X_Coords==true){ X_CoordinateInverter=-1; } 
     for (auto this_chunk:this->myOBJ_Data){
         OBJ_Chunk this_OBJ_Chunk((*this_chunk.meshblocks));
 
@@ -266,8 +179,17 @@ OBJ::OBJ(std::string filename){
             Triangle thisTri;
             std::vector<int> vertIDs = triangle.vertex_ids;
             for (int i=0;i<3;i++){
-                int vertex_ID = vertIDs[i]-1-this->totalVertices;
-                Vec3d this_vert = Vec3d(this_OBJ_Chunk.vertices[vertex_ID].x,
+                int normal_offset_id = i;
+                if (this->forceClockwiseWinding==true){
+                    if (i==0){
+                    normal_offset_id=2;
+                    }
+                    if (i==2){
+                        normal_offset_id=0;
+                    }
+                }
+                int vertex_ID = vertIDs[normal_offset_id]-1-this->totalVertices;
+                Vec3d this_vert = Vec3d(this_OBJ_Chunk.vertices[vertex_ID].x*X_CoordinateInverter,
                                         this_OBJ_Chunk.vertices[vertex_ID].y,
                                         this_OBJ_Chunk.vertices[vertex_ID].z);
                 thisTri.setTrianglePoint(i,this_vert);
@@ -287,10 +209,19 @@ OBJ::OBJ(std::string filename){
         this->totalTextureCoords+=this_OBJ_Chunk.getTotalTextCoordNum();
         this->totalVertices+=this_OBJ_Chunk.getTotalVertexNum();
         this->Meshes.push_back(thisMesh);  
-    }    
-    
+    }   
 }
 
+void OBJ::buildMesh(std::string filename){
+    filename = "Meshes/"+filename;
+	std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
+	myfile.open (filename);
+
+    //std::ifstream myfile;
+    split_OBJ_Chunks();
+    assembleChunks();
+    
+}
 
 std::vector<Mesh>& OBJ::getMeshes(){
     return this->Meshes;

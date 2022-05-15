@@ -37,10 +37,14 @@ class OBJ{
         //std::vector<OBJ_Datum> OBJ_Data; 
         std::vector<OBJ_Datum> myOBJ_Data;
         bool peekline( std::ifstream & is, std::string & s );
+        void assembleChunks();
+        void buildMesh(std::string filename);
+
         std::ifstream myfile;
         int totalVertices;
         int totalTextureCoords;
-        
+        bool forceClockwiseWinding;
+        bool flip_X_Coords;
 
         
     public:
@@ -52,6 +56,8 @@ class OBJ{
          * the same name as the obj file
          */
         OBJ(std::string filename);
+
+        OBJ(std::string filename, bool forceClockwiseWinding, bool flip_X_Coords);
 
         /**
          * @brief Get the Mesh object.  This is the final mesh object loaded into the mesh pipeline
