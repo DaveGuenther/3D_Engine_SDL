@@ -5,7 +5,7 @@
 #include "render/Frustum.h"
 
 
-Camera::Camera(float aspectRatio):camera(Vec3d(0.0f, 0.0f, -2.0f)), 
+Camera::Camera(float aspectRatio):camera(Vec3d(0.0f, 0.0f, 0.0f)), 
                                 lookVector(Vec3d(0.0f, 0.0f, 1.0f)),
                                 vTarget(Vec3d(0.0f, 0.0f, 1.0f)), 
                                 cameraViewFrustum(new Frustum(aspectRatio)){

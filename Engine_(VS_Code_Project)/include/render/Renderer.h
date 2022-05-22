@@ -30,7 +30,7 @@ class Renderer{
 
         int SCREEN_W;
         int SCREEN_H;
-        int screen_mode=0;  // 0 for Windowed, 1 for Fullscreen
+        int screen_mode=1;  // 0 for Windowed, 1 for Fullscreen
 
         // Projection Matrix
         float fNear;
@@ -46,6 +46,8 @@ class Renderer{
         float max_visible_z_depth = 15.0f;  // distance from the camera at which things are no lonver visible
         float min_visible_color_modifier = 0.3f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
         std::vector<Triangle> trianglesToRasterize;
+
+        bool colorFrustumClippedTris=true;
 
         Mat4x4 matProj;  //[row][column]
 
@@ -110,6 +112,8 @@ class Renderer{
 
         const int getWindowWidth() const;
         const int getWindowHeight() const;
+
+        void setColorFrustumClippedTris(bool value);
 
         /**
          * @brief this method is mainly used to shut down the SDL renderer and window objects
