@@ -9,6 +9,22 @@
 #include "utility/Mesh.h"
 #include "utility/Triangle.h"
 
+OBJ::OBJ(std::string filename){
+
+    this->forceClockwiseWinding=true;
+    this->flip_X_Coords=true;
+    buildMesh(filename); 
+    
+}
+
+OBJ::OBJ(std::string filename, bool forceClockwiseWinding, bool flip_X_Coords){
+
+    this->forceClockwiseWinding=forceClockwiseWinding;
+    this->flip_X_Coords=flip_X_Coords;
+    buildMesh(filename); 
+    
+}
+
 bool OBJ::peekline( std::ifstream & is, std::string & s ){
     std::streampos sp = is.tellg();
     if(getline( is, s )){
@@ -23,11 +39,6 @@ bool OBJ::peekline( std::ifstream & is, std::string & s ){
 
 void OBJ::split_OBJ_Chunks(){
     std::vector<std::vector<std::string>> mesh_streams;
-    
-    
-    
-    
-    //std::vector<OBJ_Datum> myOBJ_Data;
 
     bool notEOF=true;
     std::string line, nextToken, mtlfile;
@@ -149,21 +160,7 @@ void OBJ::split_OBJ_Chunks(){
 
 }
 
-OBJ::OBJ(std::string filename){
 
-    this->forceClockwiseWinding=true;
-    this->flip_X_Coords=true;
-    buildMesh(filename); 
-    
-}
-
-OBJ::OBJ(std::string filename, bool forceClockwiseWinding, bool flip_X_Coords){
-
-    this->forceClockwiseWinding=forceClockwiseWinding;
-    this->flip_X_Coords=flip_X_Coords;
-    buildMesh(filename); 
-    
-}
 
 void OBJ::assembleChunks(){
     this->totalTextureCoords=0;
