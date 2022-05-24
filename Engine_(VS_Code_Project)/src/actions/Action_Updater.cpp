@@ -35,10 +35,10 @@ int IAction_Updater::numberOfActiveCommands(const std::unordered_map<std::string
 
 InGame_Action_Updater::InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh_pipeline, std::shared_ptr<Camera> this_camera, int FPS){
     this->this_camera= this_camera;
-    action_map.insert_or_assign("MOVE_FORWARD", new MoveAction("MOVE_FORWARD", this_camera, Vec3d{0,0,1}, 1.0f, 1.0f, 0.01f, FPS));
-    action_map.insert_or_assign("MOVE_BACKWARD", new MoveAction("MOVE_BACKWARD", this_camera, Vec3d{0,0,-1}, 1.0f, 1.0f, 0.1f, FPS));
-    action_map.insert_or_assign("STRAFE_LEFT", new MoveAction("STRAFE_LEFT", this_camera, Vec3d{-1,0,0}, 1.0f, 1.0f, 0.1f, FPS));
-    action_map.insert_or_assign("STRAFE_RIGHT", new MoveAction("STRAFE_RIGHT", this_camera, Vec3d{1,0,0}, 1.0f, 1.0f, 0.1f, FPS));
+    action_map.insert_or_assign("MOVE_FORWARD", new MoveAction("MOVE_FORWARD", this_camera, Vec3d{0,0,1}, 1.0f, 1.0f, 0.2f, FPS));
+    action_map.insert_or_assign("MOVE_BACKWARD", new MoveAction("MOVE_BACKWARD", this_camera, Vec3d{0,0,-1}, 1.0f, 1.0f, 0.2f, FPS));
+    action_map.insert_or_assign("STRAFE_LEFT", new MoveAction("STRAFE_LEFT", this_camera, Vec3d{-1,0,0}, 1.0f, 1.0f, 0.2f, FPS));
+    action_map.insert_or_assign("STRAFE_RIGHT", new MoveAction("STRAFE_RIGHT", this_camera, Vec3d{1,0,0}, 1.0f, 1.0f, 0.2f, FPS));
     action_map.insert_or_assign("LOOK_LEFT",new TurnAction("LOOK_LEFT",this_camera, Vec3d(0,-1,0)));
     action_map.insert_or_assign("LOOK_RIGHT",new TurnAction("LOOK_RIGHT",this_camera, Vec3d(0,1,0)));
     action_map.insert_or_assign("LOOK_UP",new TurnAction("LOOK_UP",this_camera, Vec3d(-1,0,0)));
@@ -54,7 +54,7 @@ InGame_Action_Updater::InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh
 
 void InGame_Action_Updater::update(){
     modifications.clear();
-    //  Translate parsed input to input commands
+    //  Translate lexd input to input commands
     for (auto input:input_tactile_map){ 
         
         action_map.at(input.first)->trigger(); 

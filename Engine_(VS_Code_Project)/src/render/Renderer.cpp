@@ -184,14 +184,24 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 		
 			// Dim Lighting by Distance
-			triProjected.setColor(this_tri.getColor());
-			triView.setColor(this_tri.getColor());
+			if (this->colorFrustumClippedTris==true){
+				triProjected.setColor(this_tri.getColor());
+				triView.setColor(this_tri.getColor());
+			}else{
+				triProjected.setColor(triView.getColor());
+			}
+			
+			
 			SDL_Color dimmed_col = applyDepthDimmer(triView);
 			triProjected.setColor(dimmed_col);
 
 			this->trianglesToRasterize.push_back(triProjected);
 		}
 	}
+}
+
+void Renderer::setColorFrustumClippedTris(bool value){
+	this->colorFrustumClippedTris=value;
 }
 
 void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){

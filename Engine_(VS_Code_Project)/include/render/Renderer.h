@@ -44,8 +44,10 @@ class Renderer{
         //Clipper* thisFrustumClipper;
         Mat4x4 matView;
         float max_visible_z_depth = 15.0f;  // distance from the camera at which things are no lonver visible
-        float min_visible_color_modifier = 0.1f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
+        float min_visible_color_modifier = 0.3f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
         std::vector<Triangle> trianglesToRasterize;
+
+        bool colorFrustumClippedTris=true;
 
         Mat4x4 matProj;  //[row][column]
 
@@ -110,6 +112,8 @@ class Renderer{
 
         const int getWindowWidth() const;
         const int getWindowHeight() const;
+
+        void setColorFrustumClippedTris(bool value);
 
         /**
          * @brief this method is mainly used to shut down the SDL renderer and window objects

@@ -57,6 +57,7 @@ class Triangle{
         const Vec3d getTriangleCenter();
         Vec3d unit_normal_vector;
         Vec3d p[3];
+        Vec2d textureCoords[3];
         float distance_to_player_camera;
         int tri_id;
         SDL_Color color;

@@ -10,7 +10,9 @@
 #include "utility/Mesh.h"
 
 
-
+Mesh::Mesh(){
+	this->id = 0;
+}
 
 Mesh::Mesh(int mesh_id) {
 	id = mesh_id;
@@ -103,6 +105,14 @@ void Mesh::setID(int in_id){
 
 int Mesh::getID(){
 	return id;
+}
+
+void Mesh::setName(std::string name){
+	this->name = name;
+}
+
+std::string Mesh::getName(){
+	return this->name;
 }
 
 std::string Mesh::toString(){

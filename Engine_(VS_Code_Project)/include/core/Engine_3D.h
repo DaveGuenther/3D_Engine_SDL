@@ -1,7 +1,7 @@
 #ifndef ENGINE_3D_H
 #define ENGINE_3D_H
 
-#include <memory>
+#include <memory> // for smare ptrs
 
 #include "core/GameState_Observer_Pattern.h"
 #include "core/Frame_Rate_Manager.h"

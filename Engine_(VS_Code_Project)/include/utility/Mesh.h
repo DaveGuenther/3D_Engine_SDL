@@ -26,12 +26,7 @@ class Mesh {
 		 */
 		std::vector<float> stringToFloatVector(std::string input_string);
 
-		/**
-		 * @brief This method adds a Triangle object to the tris vector that makes up this class
-		 * 
-		 * @param this_tri A single Triangle object with points represented in the 3D cartesian space
-		 */
-		void add3dTriangle(Triangle &this_tri);
+		std::string name;
 		
 		/**
 		 * @brief fTheta and tTheta represent the current angles (in degrees) that this mesh will rotate during next refresh.  
@@ -44,7 +39,7 @@ class Mesh {
 	public:
 		
 
-		
+		Mesh();
 		Mesh(int mesh_id);
 
 		
@@ -77,7 +72,16 @@ class Mesh {
 		 */
 		void performModifications(std::vector<std::shared_ptr<Triangle_Modifier>> triMods);
 
+		/**
+		 * @brief This method adds a Triangle object to the tris vector that makes up this class
+		 * 
+		 * @param this_tri A single Triangle object with points represented in the 3D cartesian space
+		 */
+		void add3dTriangle(Triangle &this_tri);
 
+		void setName(std::string name);
+
+		std::string getName();
 
 		/**
 		 * @brief Setter for the IID value of this Mesh
