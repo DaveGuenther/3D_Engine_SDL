@@ -1,4 +1,4 @@
-#include "objects/OBJ_Lex_triFace.h"
+#include "OBJ_Lex_triFace.h"
 #include <string>
 #include <vector>
 #include <sstream>

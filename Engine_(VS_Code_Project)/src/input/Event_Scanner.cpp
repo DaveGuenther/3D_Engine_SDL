@@ -1,5 +1,5 @@
 #include <memory>
-#include "input/Event_Scanner.h"
+#include "Event_Scanner.h"
 #include "render/Renderer.h"
 
 Event_Scanner::Event_Scanner(SDL_Event &my_event, std::shared_ptr<Renderer> my_renderer){

@@ -55,7 +55,7 @@
 				"-I",
 				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\include",
 				"-I",
-				"${workspaceFolder}\\include",				
+				"${workspaceFolder}\\src",				
 				"-L",
 				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\lib",
 				"-o",
@@ -67,7 +67,7 @@
 				"-mwindows"
 			],
 			"options": {
-				"cwd": "${workspaceFolder}"
+				"cwd": "${workspaceFolder}\\build"
 			},
 			"problemMatcher": [
 				"$gcc"

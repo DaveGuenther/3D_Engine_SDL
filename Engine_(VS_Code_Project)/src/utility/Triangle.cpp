@@ -1,5 +1,5 @@
-#include "utility/Triangle.h"
-#include "utility/Vector_Math_Service.h"
+#include "Triangle.h"
+#include "Vector_Math_Service.h"
 
 Triangle::Triangle(){
 

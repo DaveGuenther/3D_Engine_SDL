@@ -3,10 +3,11 @@
         {
             "name": "GCC",
             "includePath": [
+                "${workspaceFolder}/src/**",
                 "${workspaceFolder}/**",
                 "C:/SDL/SDL2-2.0.18/x86_64-w64-mingw32/include",
-                "${workspaceFolder}/include",
-                "${workspaceFolder}/src"
+                "${workspaceFolder}/build"
+                
             ],
             "defines": [
                 "_DEBUG",

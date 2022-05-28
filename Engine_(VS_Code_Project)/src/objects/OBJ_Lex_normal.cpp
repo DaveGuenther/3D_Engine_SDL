@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "objects/OBJ_Lex_normal.h"
+#include "OBJ_Lex_normal.h"
 
 
 void OBJ_Lex_normal::lex(std::string thisLine){

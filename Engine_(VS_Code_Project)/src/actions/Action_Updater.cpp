@@ -2,8 +2,8 @@
 #include <iostream>
 #include <memory>
 
-#include "actions/Action_Updater.h"
-#include "actions/Action_Interface.h"
+#include "Action_Updater.h"
+#include "Action_Interface.h"
 
 
 void IAction_Updater::AddTactileInputMap(const std::unordered_map<std::string,bool> &input_tactile_map){
