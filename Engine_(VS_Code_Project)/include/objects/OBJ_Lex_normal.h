@@ -4,9 +4,12 @@
 #include <string>
 #include "utility/Vec3d.h"
 
-
+/**
+ * @brief This class will lex the tokens for a single line if the line starts with "vn" indicating it is a vector normal definition
+ * 
+ */
 class OBJ_Lex_normal{
-    private:
+
         
 
     public:
@@ -14,6 +17,7 @@ class OBJ_Lex_normal{
         Vec3d thisNormal;
         Vec3d getNormal();
 
+    private:
 };
 
 

@@ -4,6 +4,9 @@
 #include <string>
 #include <vector>
 
+/**
+ * @brief TThis class will lex the tokens for a single line if the line starts with "f" indicating it is a triangleFace defininition
+ */
 class OBJ_Lex_triFace{
 
     public:
@@ -16,3 +19,6 @@ class OBJ_Lex_triFace{
 
 
 #endif
+
+
+

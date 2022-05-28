@@ -3,7 +3,10 @@
 
 #include <string>
 
-
+/**
+ * @brief This class will lex the tokens for a UV Coodrinate in the stringstream.
+@brief This class will lex the tokens for a single line if the line starts with "t" indicating it is a texture defininition
+ */
 class OBJ_Lex_textureCoord{
     private:
 
