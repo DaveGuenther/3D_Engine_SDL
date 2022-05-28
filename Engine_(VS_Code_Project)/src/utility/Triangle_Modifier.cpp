@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <algorithm>
-#include "utility/Triangle_Modifier.h"
-#include "utility/Vector_Math_Service.h"
+#include "Triangle_Modifier.h"
+#include "Vector_Math_Service.h"
 
 void Triangle_Modifier::assignToMesh(int mesh_id){
     mesh_ids.push_back(mesh_id);

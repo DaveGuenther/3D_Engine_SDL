@@ -6,7 +6,7 @@
 
 #include "utility/Mesh_Pipeline.h"
 #include "utility/Triangle.h"
-#include "render/Camera.h"
+#include "Camera.h"
 
 
 /**

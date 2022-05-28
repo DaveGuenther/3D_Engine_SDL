@@ -1,4 +1,4 @@
-#include "utility/nonVector_Math_Service.h"
+#include "nonVector_Math_Service.h"
 
 float nonVectorMathService::lerp(float x, float y, float t){
     float lerp_val=0.0f;

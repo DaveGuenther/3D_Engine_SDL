@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <memory>
 
-#include "render/TrianglePipeline.h"
+#include "TrianglePipeline.h"
 #include "utility/Mesh_Pipeline.h"
 
 

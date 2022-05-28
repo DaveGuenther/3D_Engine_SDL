@@ -3,8 +3,8 @@
 
 #include <memory> // for smare ptrs
 
-#include "core/GameState_Observer_Pattern.h"
-#include "core/Frame_Rate_Manager.h"
+#include "GameState_Observer_Pattern.h"
+#include "Frame_Rate_Manager.h"
 #include "input/Input_Parser.h"
 #include "actions/Action_Updater.h"
 #include "utility/Mesh_Pipeline.h"

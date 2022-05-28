@@ -1,7 +1,7 @@
 #include "math.h"
-#include "utility/Vector_Math_Service.h"
-#include "utility/Vec3d.h"
-#include "utility/Triangle.h"
+#include "Vector_Math_Service.h"
+#include "Vec3d.h"
+#include "Triangle.h"
 
 float VectorMathService::dotProduct(const Vec3d& A, const Vec3d& B){
     return (A.getX()*B.getX())+(A.getY()*B.getY())+(A.getZ()*B.getZ());

@@ -1,8 +1,8 @@
 #include <iostream>
-#include "render/Camera.h"
+#include "Camera.h"
 #include "utility/Mat4x4.h"
 #include "utility/Vector_Math_Service.h"
-#include "render/Frustum.h"
+#include "Frustum.h"
 
 
 Camera::Camera(float aspectRatio):camera(Vec3d(0.0f, 0.0f, 0.0f)), 

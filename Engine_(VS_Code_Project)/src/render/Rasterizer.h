@@ -1,7 +1,7 @@
 #ifndef RASTERIZER_H
 #define RASTERIZER_H
 
-#include "render/Renderer.h"
+#include "Renderer.h"
 #include "utility/Vec2d.h"
 #include <array>
 #include <map>

@@ -1,4 +1,4 @@
-#include "core/GameState_Observer_Pattern.h"
+#include "GameState_Observer_Pattern.h"
 #include <algorithm> //std::find
 
 void GameStateSubject::setState(game_state state){ 
