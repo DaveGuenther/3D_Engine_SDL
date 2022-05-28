@@ -161,7 +161,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		
 		if(dp_light_source<0.0f) {dp_light_source=0.0f;}
 		if(dp_light_source>1.0f) {dp_light_source=1.0f;}
-		dp_light_source = nonVectorMathService::lerp(0.25f, 1.0f, dp_light_source); // make it so the walls aren't too shiny
+		dp_light_source = nonVectorMathService::lerp(0.25f, 0.60f, dp_light_source); // make it so the walls aren't too shiny
 		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 		triView.setColor(col);
 		if (keyboardbreak==true){ 
