@@ -7,6 +7,7 @@
 #include "utility/Triangle.h"
 #include "utility/Mesh_Pipeline.h"
 #include "utility/Vector_Math_Service.h"
+#include "utility/nonVector_Math_Service.h"
 #include "utility/Mat4x4.h"
 #include "render/Renderer.h"
 #include "render/Rasterizer.h"
@@ -40,6 +41,10 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	std::shared_ptr<Clipper> thisFrustumClipper(new Clipper(player_camera));
 	this->thisFrustumClipper = thisFrustumClipper;
 
+	this->min_blue_value = 255*this->min_visible_color_modifier;
+	this->min_red_value = 255*this->min_visible_color_modifier;
+	this->min_green_value = 255*this->min_visible_color_modifier;
+
 }
 
 void Renderer::setWindowTitle(std::string title){
@@ -66,6 +71,10 @@ SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri){
     draw_col.g= col.g*color_modifier;
     draw_col.b= col.b*color_modifier;
     draw_col.a=255;
+
+	if (draw_col.r<this->min_red_value) {draw_col.r=this->min_red_value;}
+	if (draw_col.g<this->min_red_value) {draw_col.g=this->min_green_value;}
+	if (draw_col.b<this->min_red_value) {draw_col.b=this->min_blue_value;}
 
     return draw_col;
 		
@@ -141,13 +150,18 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		Vec3d view_normal_vector = triView.getUnitNormalVector();
 			
 		
-		// Light triangle from camera
-		Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f);
+		// Light triangle from camera 
+		//Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f); // lit like the sun
+		Vec3d light_source_direction = camera_to_triangle_vector;  // omnidirectional liht out from camera position
 		Vec3d light_source_normal_direction = light_source_direction*-1;
+		
+		
 		VectorMathService::getUnitVector(light_source_normal_direction);
 		float dp_light_source = VectorMathService::dotProduct(light_source_normal_direction, view_normal_vector);
+		
 		if(dp_light_source<0.0f) {dp_light_source=0.0f;}
 		if(dp_light_source>1.0f) {dp_light_source=1.0f;}
+		dp_light_source = nonVectorMathService::lerp(0.25f, 1.0f, dp_light_source); // make it so the walls aren't too shiny
 		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 		triView.setColor(col);
 		if (keyboardbreak==true){ 

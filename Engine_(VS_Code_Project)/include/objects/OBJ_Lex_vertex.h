@@ -3,6 +3,9 @@
 
 #include <string>
 
+/**
+ * @brief This class will lex the tokens for a single line if the line starts with "v" indicating it is a vertex vetor
+ */
 class OBJ_Lex_vertex{
     public:
         OBJ_Lex_vertex();
