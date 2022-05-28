@@ -26,7 +26,7 @@ This project is based on mingw (g++) and SDL (Simplified DirectMedia Layer) and 
 <br>
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/cave%20conincal%202.PNG">
-  <br><i>Engine Screenshot - Conical Lighting (currently in line with direction of camera) 5/27/2022</i>
+  <br><i>Engine Screenshot - Conical Lighting (light shoots out in the direction the camera is facing) 5/27/2022</i>
 </p>
 
 <br>
