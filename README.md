@@ -14,36 +14,36 @@ Everything uses software rendering (no open GL support) in an effort to build so
 This project is based on mingw (g++) and SDL (Simplified DirectMedia Layer) and includes VSCode project files
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/Pirate%20Cave%20-%20walkthrough.gif">
-  <br><i>Engine Screenshot - Pirate Cave Walkthrough (Omnidirectional lighting)</i>
+  <br><i>Engine Screenshot - Pirate Cave Walkthrough (Omnidirectional lighting) 5/27/2022</i>
 </p>
 
 <br>
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/cave%20omni%202.PNG">
-  <br><i>Engine Screenshot - Omnidirectional Lighting (position of camera shoots out light in all directions)</i>
+  <br><i>Engine Screenshot - Omnidirectional Lighting (position of camera shoots out light in all directions) 5/27/2022</i>
 </p>
 
 <br>
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/cave%20conincal%202.PNG">
-  <br><i>Engine Screenshot - Conical Lighting (currently in line with direction of camera)</i>
+  <br><i>Engine Screenshot - Conical Lighting (currently in line with direction of camera) 5/27/2022</i>
 </p>
 
 <br>
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/2022-04-03_Rasterized_dimmed.png">
-  <br><i>Engine Screenshot - Triangle Rasterization</i>
+  <br><i>Engine Screenshot - Triangle Rasterization 4/3/2022</i>
 </p>
 
 <br>
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/2022-04-03_back_face_culling.png">
-  <br><i>Engine Screenshot - Backface Culling</i>
+  <br><i>Engine Screenshot - Backface Culling 4/3/2022</i>
 </p>
 
 <br> 
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/2022-03-23.png">
-  <br><i>Engine Screenshot - Wireframe Primitives</i>
+  <br><i>Engine Screenshot - Wireframe Primitives 3/23/2022</i>
 </p>
 
 
