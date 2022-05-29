@@ -24,8 +24,8 @@ void Event_Scanner::captureMouseMovement(){
     prev_mouse_y=curr_mouse_y;
     curr_mouse_x=(float(event.motion.x)-(float(SCREEN_W)/2))/(float(SCREEN_W)/2);
     curr_mouse_y=-(float(event.motion.y)-(float(SCREEN_H)/2))/(float(SCREEN_H)/2);
-    delta_mouse_x = curr_mouse_x-prev_mouse_x;
-    delta_mouse_y = curr_mouse_y-prev_mouse_y;
+    if (curr_mouse_x!=0.0f) {delta_mouse_x = curr_mouse_x-prev_mouse_x;} else {delta_mouse_x=0.0f;}
+    if (curr_mouse_y!=0.0f) {delta_mouse_y = curr_mouse_y-prev_mouse_y;} else {delta_mouse_y=0.0f;}
 
     curr_range_input_matrix.insert_or_assign("MOUSE_X",event.motion.x);
     curr_range_input_matrix.insert_or_assign("MOUSE_Y",event.motion.y);
@@ -35,7 +35,7 @@ void Event_Scanner::captureMouseMovement(){
 }
 
 void Event_Scanner::scanInput(){
-    my_renderer->resetMouseXY();    
+    my_renderer->resetMouseXY();     
     prev_key_matrix=curr_key_matrix;
     prev_range_input_matrix=curr_range_input_matrix;
     //if (!prev_key_matrix.empty() && !curr_key_matrix.empty()) { prev_key_matrix=curr_key_matrix; }
@@ -73,7 +73,8 @@ void Event_Scanner::scanInput(){
             default:
                 break;
         }
-    }       
+    }    
+     
 }
 
 const std::unordered_map<std::string,bool>& Event_Scanner::getTactileMap(input_map this_map){
