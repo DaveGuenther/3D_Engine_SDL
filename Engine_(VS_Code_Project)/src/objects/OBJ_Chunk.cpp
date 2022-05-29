@@ -1,6 +1,6 @@
 #include "objects/OBJ_Chunk.h"
 
-#include "SDL2/SDL.h"
+#include "SDL.h"
 #include <fstream>
 #include <filesystem>
 #include <sstream>

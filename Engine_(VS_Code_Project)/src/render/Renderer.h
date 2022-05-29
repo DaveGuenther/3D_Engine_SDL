@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <memory>
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 #include "utility/Mesh.h"
 #include "utility/Vec2d.h"

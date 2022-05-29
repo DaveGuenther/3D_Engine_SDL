@@ -3,7 +3,7 @@
 
 //#include <memory>
 #include <memory>
-#include "SDL2/SDL.h"
+#include "SDL.h"
 #include "core/Gamestate_Observer_Pattern.h"
 #include "input/Event_Scanner.h"
 #include "input/KeyBindings.h"

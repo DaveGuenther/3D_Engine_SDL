@@ -1,5 +1,5 @@
 #include <string>
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 #include "utility/Mat4x4.h"
 #include "utility/Vector_Math_Service.h"
