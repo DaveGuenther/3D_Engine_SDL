@@ -67,10 +67,17 @@ Follow these instructions to download and install the SDL 64 bit lib and Develop
 Copy the .DLL file in this to the build/ folder of the repo after you've cloned it.  (.gitignore won't include it in the remote repo)
 
 2. download: SDL2-devel-2.0.18-mingw.tar.gz (MinGW 32/64-bit) -- https://www.libsdl.org/release/SDL2-devel-2.0.18-mingw.tar.gz
-Open the archive with 7zip and go down one later in the archive until you see a folder called "SDL2-2.0.18"
+Open the archive with 7zip and go down one level in the archive until you see a folder called "SDL2-2.0.18"
 Extract that folder to c:\SDL\
 If you did it right, you should have the following active path: c:\SDL\SDL2-2.0.18\x86_64-w64-mingw32\include
 
+3. download: SDL2_image-2.0.5-win32-x64.zip (64-bit Windows) -- https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.5-win32-x64.zip
+Copy the .DLL file in this archive to the build/ folder off the repo after you've cloned it.
+
+4. download: SDL2_image-devel-2.0.5-mingw.tar.gz (MinGW 32/64-bit) -- https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-mingw.tar.gz
+Open the archive with 7zip and go down one level in the archive until you see a folder called "SDL2_image-2.0.5"
+Extract that folder to c:\SDL\
+If you did it right, you should have the following active path: C:\SDL\SDL2_image-2.0.5\x86_64-w64-mingw32\include
 
 ## Running the Engine
 1. Once in VS Code, open the 'Engine_(VS_Code_Project)' folder
