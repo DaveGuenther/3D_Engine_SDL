@@ -1,7 +1,7 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 #include <string>
-#include <SDL2/SDL.h>
+#include "SDL2/SDL.h"
 #include "Vec3d.h"
 
 

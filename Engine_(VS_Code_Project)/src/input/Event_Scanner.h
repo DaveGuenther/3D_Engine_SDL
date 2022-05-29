@@ -1,7 +1,7 @@
 #ifndef EVENT_SCANNER_H
 #define EVENT_SCANNER_H
 
-#include <SDL2/SDL.h>
+#include "SDL2/SDL.h"
 #include <unordered_map>
 #include <memory>
 #include "render/Renderer.h"
