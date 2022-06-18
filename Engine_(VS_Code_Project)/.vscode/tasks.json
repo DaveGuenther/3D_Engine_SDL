@@ -11,7 +11,7 @@
 				"-fdiagnostics-color=always",
 				"-g",
 				"${file}",
-				
+
 				//utility source code
 				"${workspaceFolder}\\src\\utility\\Mesh.cpp",
 				"${workspaceFolder}\\src\\utility\\Mat4x4.cpp",
@@ -20,6 +20,7 @@
 				"${workspaceFolder}\\src\\utility\\Triangle_Modifier.cpp",
 				"${workspaceFolder}\\src\\utility\\Vector_Math_Service.cpp",
 				"${workspaceFolder}\\src\\utility\\nonVector_Math_Service.cpp",
+				"${workspaceFolder}\\src\\utility\\Texture.cpp",
 
 				//core source code
 				"${workspaceFolder}\\src\\core\\Engine_3D.cpp",
