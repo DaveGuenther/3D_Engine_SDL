@@ -11,7 +11,7 @@
 				"-fdiagnostics-color=always",
 				"-g",
 				"${file}",
-				
+
 				//utility source code
 				"${workspaceFolder}\\src\\utility\\Mesh.cpp",
 				"${workspaceFolder}\\src\\utility\\Mat4x4.cpp",
@@ -20,6 +20,7 @@
 				"${workspaceFolder}\\src\\utility\\Triangle_Modifier.cpp",
 				"${workspaceFolder}\\src\\utility\\Vector_Math_Service.cpp",
 				"${workspaceFolder}\\src\\utility\\nonVector_Math_Service.cpp",
+				"${workspaceFolder}\\src\\utility\\PNGTexture.cpp",
 
 				//core source code
 				"${workspaceFolder}\\src\\core\\Engine_3D.cpp",
@@ -53,16 +54,21 @@
 				"${workspaceFolder}\\src\\globals.cpp",
 					
 				"-I",
-				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\include",
+				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\include\\SDL2",
+				"-I",
+				"C:\\SDL\\SDL2_image-2.0.5\\x86_64-w64-mingw32\\include\\SDL2", 
 				"-I",
 				"${workspaceFolder}\\src",				
 				"-L",
-				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\lib",
+				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\lib",			
+				"-L",
+				"C:\\SDL\\SDL2_image-2.0.5\\x86_64-w64-mingw32\\lib",
 				"-o",
 				"${workspaceFolder}\\build\\${fileBasenameNoExtension}.exe",
 				"-lmingw32",
 				"-lSDL2main",
 				"-lSDL2",
+				"-lSDL2_image",
 				"-mconsole",
 				"-mwindows"
 			],

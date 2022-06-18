@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/src/**",
                 "${workspaceFolder}/**",
-                "C:/SDL/SDL2-2.0.18/x86_64-w64-mingw32/include",
+                "C:/SDL/SDL2-2.0.18/x86_64-w64-mingw32/include/SDL2",
+                "C:/SDL/SDL2_image-2.0.5/x86_64-w64-mingw32/include/SDL2", 
                 "${workspaceFolder}/build"
                 
             ],

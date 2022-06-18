@@ -1,7 +1,7 @@
 #ifndef FRAME_RATE_MANAGER_H
 #define FRAME_RATE_MANAGER_H
 
-#include <SDL2\SDL.h>
+#include "SDL.h"
 
 class Frame_Rate_Manager{
     private:
