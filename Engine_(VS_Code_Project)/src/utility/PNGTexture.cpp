@@ -3,10 +3,10 @@
 #include <string>
 #include "SDL.h"
 #include "SDL_image.h"
-#include "Texture.h"
+#include "PNGTexture.h"
 
 
-Texture::Texture(const char* filename){
+PNGTexture::PNGTexture(const char* filename){
     
     uint8_t* pixels;
     int pitch;
@@ -52,15 +52,16 @@ Texture::Texture(const char* filename){
         this->pixel_array.push_back(this_row);
         this_row.clear();
     }
+
     std::cout << "finished initting" << std::endl;
 }
 
-Texture::~Texture(){
+PNGTexture::~PNGTexture(){
     IMG_Quit();
     SDL_FreeSurface(image);
 }
 
-void Texture::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
+void PNGTexture::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
     uint32_t x = U*this->width;
     uint32_t y = V*this->height;
     
@@ -70,10 +71,13 @@ void Texture::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
     col.a= 255;
 }
 
-
-void Texture::getPixelAtXY(const int &x, const int &y, SDL_Color &col){
+void PNGTexture::getPixelAtXY(const int &x, const int &y, SDL_Color &col){
     col.r= pixel_array[x][y].r;
     col.g= pixel_array[x][y].g; 
     col.b= pixel_array[x][y].b;
     col.a= 255;
+}
+
+SDL_Surface* PNGTexture::getSDL_Surface(){
+    return image;
 }

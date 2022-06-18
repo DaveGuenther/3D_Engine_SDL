@@ -20,7 +20,7 @@
 				"${workspaceFolder}\\src\\utility\\Triangle_Modifier.cpp",
 				"${workspaceFolder}\\src\\utility\\Vector_Math_Service.cpp",
 				"${workspaceFolder}\\src\\utility\\nonVector_Math_Service.cpp",
-				"${workspaceFolder}\\src\\utility\\Texture.cpp",
+				"${workspaceFolder}\\src\\utility\\PNGTexture.cpp",
 
 				//core source code
 				"${workspaceFolder}\\src\\core\\Engine_3D.cpp",
