@@ -36,18 +36,16 @@ PNGTexture::PNGTexture(const char* filename){
     std::cout << w << ", " << h << std::endl;
     
     std::vector<SDL_Color> this_row;
-    //SDL_Color pixel_array[w][h];
+
     for (int i=0; i<w; i++){
         for (int j=0; j<h; j++){
             pixelPosition = j * pitch + (i*image->format->BytesPerPixel);
             red = pixels[pixelPosition];
             green = pixels[pixelPosition+1];
             blue = pixels[pixelPosition+2];
-            //alpha = pixels[pixelPosition+3];
+
             this_row.push_back(SDL_Color({red,green,blue,alpha}));
 
-            //SDL_GetRGBA(pixels[pixelPosition],pixelFormat,r, g, b, a);
-            //std::cout << red << ", " << green << ", " << blue << ", " << alpha << std::endl;
         }
         this->pixel_array.push_back(this_row);
         this_row.clear();
@@ -78,6 +76,3 @@ void PNGTexture::getPixelAtXY(const int &x, const int &y, SDL_Color &col){
     col.a= 255;
 }
 
-SDL_Surface* PNGTexture::getSDL_Surface(){
-    return image;
-}

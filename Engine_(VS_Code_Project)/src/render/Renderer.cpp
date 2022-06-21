@@ -80,9 +80,9 @@ SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri){
 		
 }
 
-void Renderer::drawWireFrameTriangle2d(Triangle this_triangle, SDL_Color col)
+void Renderer::drawWireFrameTriangle2d(Triangle this_triangle)
 {
-	
+	SDL_Color col = this_triangle.getColor();
 	SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
 	Vec2d vert1, vert2, vert3;
 	vert1 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(0).getX(), this_triangle.getTrianglePoint(0).getY()));
@@ -108,14 +108,17 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0,col);
 
 	//rasterize triangle In Out - very slow method, implemented only for learning purposes
-	//ITriangleRasterizer* this_inout_rasterizer = new InOutRasterizer(renderer);
-	//this_inout_rasterizer->drawTriangle(screenTri,col);
+	//std::shared_ptr<ITriangleRasterizer> this_inout_rasterizer(new InOutRasterizer(renderer));
+	//this_inout_rasterizer->drawTriangle(screenTri);
 
-	//rasterie triangle with ScanLines
+	//rasterie triangle with ScanLines - faster
 	std::shared_ptr<ITriangleRasterizer> this_scanline_rasterizer(new ScanlineRasterizer(renderer));
 	this_scanline_rasterizer->drawTriangle(screenTri);
 
+
+
 }
+
 
 
 void Renderer::projectTriangle3d(Triangle &tri){
@@ -241,7 +244,7 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	for (auto tri: this->trianglesToRasterize)
 	{
 		drawFilledTriangle2d(tri);
-		//drawWireFrameTriangle2d(tri, SDL_Color {255,0,0});
+		//drawWireFrameTriangle2d(tri);
 		
 	}	
 	
@@ -266,7 +269,21 @@ void Renderer::drawReticle(){
 	SDL_RenderDrawPointF(renderer, x, y);
 }
 
+
+
 //Private Methods
+void Renderer::cartesianToScreen_inplace(Vec2d& this_point)
+{
+	float HALF_SCREEN_W = (SCREEN_W)/2;
+	float scaled_x = this_point.getX()*(HALF_SCREEN_W);
+	this_point.setX(scaled_x+(HALF_SCREEN_W));
+
+	float HALF_SCREEN_H = (SCREEN_H)/2;
+	float scaled_y = this_point.getY()*(HALF_SCREEN_H);
+	this_point.setY(SCREEN_H-(scaled_y+(HALF_SCREEN_H)));
+} 
+
+
 Vec2d Renderer::cartesianToScreen(Vec2d this_point)
 {
 	float HALF_SCREEN_W = (SCREEN_W)/2;
@@ -278,6 +295,7 @@ Vec2d Renderer::cartesianToScreen(Vec2d this_point)
 	this_point.setY(SCREEN_H-(scaled_y+(HALF_SCREEN_H)));
 	return this_point;
 } 
+
 
 const int Renderer::getWindowWidth()const { return SCREEN_W; }
 const int Renderer::getWindowHeight()const { return SCREEN_H; }

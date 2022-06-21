@@ -39,12 +39,14 @@ class Vec3d:public Vec2d{
     void setW(const float &w_in){ w=w_in; }
     
 
-    const float getZ()const { return z; }
-    const float getW()const { return w; }
+    const float& getZ()const { return z; }
+    const float& getW()const { return w; }
 
-    Vec3d toThousandths(){
+    const Vec3d toThousandths(){
       return Vec3d(floor(this->x * 1000 + .5 )/1000, floor(this->y * 1000 + .5 )/1000, floor(this->z * 1000 + .5 )/1000);
     }
+
+  
 
     friend bool operator== (const Vec3d & vec1, const Vec3d & vec2){ return (vec1.x==vec2.x && vec1.y==vec2.y && vec1.z==vec2.z);}
     friend bool operator!= (const Vec3d & vec1, const Vec3d & vec2){ return !(vec1.x==vec2.x && vec1.y==vec2.y && vec1.z==vec2.z);}

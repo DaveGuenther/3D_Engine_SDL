@@ -68,8 +68,8 @@ Engine_3D::~Engine_3D(){
 void Engine_3D::load_meshes(){
     // Eventually allow this function to read a list of mesh file referenes and load them
     //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("cave2lowpoly.obj", Vec3d(0,0,0));
-    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("cave2.obj", Vec3d(0,0,0));
-    mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("Pirate Cave.obj", Vec3d(0,0,0));
+    mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("textured_cube.obj", Vec3d(0,0,5));
+    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("Pirate Cave.obj", Vec3d(0,0,0));
     //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("compass.obj", Vec3d(0,0,0));
     //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("funky_little_thing.obj", Vec3d(-1.5,0.5,5));
     //mesh_pipeline->Add_Mesh_to_Pipeline("block.mesh", Vec3d(-1.5,0.5,2));

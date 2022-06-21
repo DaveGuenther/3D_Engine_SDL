@@ -16,6 +16,8 @@ class Triangle{
         Triangle();
         Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id);
         Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id, const SDL_Color this_color);
+        Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id);
+
         Triangle (const Triangle &T);
 
         /**
@@ -25,6 +27,8 @@ class Triangle{
          * @param vec:  Vec3d value fo the point in 3d space
          */
         void setTrianglePoint(int point, const Vec3d &vec);
+
+        void setTriangleTexturePoint(int point, const Vec3d &vec);
         
         /**
          * @brief this function provides an id value for this triangle in the mesh.  It isn't readily used by the engine except to print the triangle string.
@@ -41,14 +45,14 @@ class Triangle{
          * @param point 
          * @return Vec3d 
          */
-        Vec3d getTrianglePoint(int point);
+        const Vec3d& getTrianglePoint(int point);
         const float getTriangleZCenter();
         const float getDistanceToCamera(Vec3d camera_pos);
 
         void setUnitNormalFromPoints();
         const Vec3d& getUnitNormalVector();
-        const SDL_Color getColor();
-        std::string toString();
+        const SDL_Color& getColor();
+        const std::string toString();
 
 
     private:

@@ -36,7 +36,7 @@ class PNGTexture{
          * @param col Pass a color in by reference to be set from within the function
          */
         void getPixelAtXY(const int &x, const int &y, SDL_Color &col);
-        SDL_Surface* getSDL_Surface();
+
 
     private:
         int width, height;

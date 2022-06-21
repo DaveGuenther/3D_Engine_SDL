@@ -30,23 +30,43 @@ Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const i
     color = this_color;
 }
 
+Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id){
+    p[0]=pt1;
+    p[1]=pt2;
+    p[2]=pt3;
+    this->textureCoords[0]=tex_p1;
+    this->textureCoords[1]=tex_p2;
+    this->textureCoords[2]=tex_p3;
+    tri_id=triangle_id;    
+    color = SDL_Color {255, 0, 255, 255};
+}
+
 Triangle::Triangle (const Triangle &T){
     p[0]=T.p[0];
     p[1]=T.p[1];
     p[2]=T.p[2];
     tri_id = T.tri_id;
     this->color = T.color;
+    this->textureCoords[0] = T.textureCoords[0];
+    this->textureCoords[1] = T.textureCoords[1];
+    this->textureCoords[2] = T.textureCoords[2];
+    
 }
 
 void Triangle::setTrianglePoint(int point, const Vec3d &vec){
     p[point]=vec;
 }
 
+void Triangle::setTriangleTexturePoint(int point, const Vec3d &vec){
+    this->textureCoords[point]=vec;
+    
+}
+
 void Triangle::setID(int this_tri_id){
     tri_id=this_tri_id;
 }
 
-const SDL_Color Triangle::getColor(){
+const SDL_Color& Triangle::getColor(){
     return this->color;
 }
 
@@ -68,7 +88,7 @@ const Vec3d& Triangle::getUnitNormalVector(){
 }
 
 
-std::string Triangle::toString(){
+const std::string Triangle::toString(){
     std::string point1 = p[0].toString();
     std::string point2 = p[1].toString();
     std::string point3 = p[2].toString();
@@ -76,7 +96,7 @@ std::string Triangle::toString(){
     return ret_val;
 }
 
-Vec3d Triangle::getTrianglePoint(int point){
+const Vec3d& Triangle::getTrianglePoint(int point){
     return p[point];
 }
 

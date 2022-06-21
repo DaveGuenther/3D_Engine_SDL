@@ -194,9 +194,28 @@ void OBJ::assembleChunks(){
             }
             
             /* Eventually place the information on texture coords here
-
+            
             */
-
+           std::vector<int> texIDs = triangle.texture_coord_ids;
+           for (int i=0;i<3;i++){
+                int normal_offset_id = i;
+                if (this->forceClockwiseWinding==true){
+                    if (i==0){
+                    normal_offset_id=2;
+                    }
+                    if (i==2){
+                        normal_offset_id=0;
+                    }
+                }
+                int tex_ID = texIDs[normal_offset_id]-1-this->totalTextureCoords;
+                Vec3d this_tex_coord = Vec3d(this_OBJ_Chunk.textureCoords[tex_ID].u,
+                                        this_OBJ_Chunk.textureCoords[tex_ID].v,
+                                        this_OBJ_Chunk.textureCoords[tex_ID].w);
+                thisTri.setTriangleTexturePoint(i,this_tex_coord);
+                
+            }
+           //int tex_ID = vertIDs[normal_offset_id]-1-this->totalVertices;
+            
             thisTri.setID(tri_id);
             thisMesh.add3dTriangle(thisTri);
             tri_id+=1;

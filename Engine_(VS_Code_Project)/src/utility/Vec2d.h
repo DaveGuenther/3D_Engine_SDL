@@ -23,8 +23,8 @@ class Vec2d{
     void setX(const float &x_in){ x=x_in; }
     void setY(const float &y_in){ y=y_in; }
 
-    const float getX()const { return x; }
-    const float getY()const { return y; }
+    const float& getX()const { return x; }
+    const float& getY()const { return y; }
 
     std::string toString(){
       std::string ret_val = "Vec2d(" + std::to_string(x)+ ", "+std::to_string(y)+")";

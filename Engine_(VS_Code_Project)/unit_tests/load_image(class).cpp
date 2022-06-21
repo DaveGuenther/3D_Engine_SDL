@@ -17,7 +17,7 @@ int main (int argv, char** args){
 
     PNGTexture my_texture("texture.png");
 
-    SDL_Surface* image = my_texture.getSDL_Surface();
+    //SDL_Surface* image = my_texture.getSDL_Surface();
 
     Uint32 start_array_time, end_array_time, start_surface_time, end_surface_time=0;
 
