@@ -52,7 +52,7 @@ Engine_3D::Engine_3D(void){
     std::shared_ptr<Mesh_Pipeline> local_mesh_pipeline(new Mesh_Pipeline);
     this->mesh_pipeline = local_mesh_pipeline;
 
-    std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater(new InGame_Action_Updater(this->mesh_pipeline, player_camera, FPS));
+    std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater(new InGame_Action_Updater(this->mesh_pipeline, player_camera, FPS, game_state_subject));
     this->INWORLD_Action_Updater = INWORLD_Action_Updater;
       
     game_state_subject.setState(IN_WORLD);

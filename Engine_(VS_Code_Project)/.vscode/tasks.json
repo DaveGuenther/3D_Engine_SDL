@@ -6,6 +6,9 @@
 			"label": "C/C++: g++.exe build active file",
 			"command": "C:\\msys64\\mingw64\\bin\\g++.exe",
 			"args": [
+				"-pg",          // Include this line when using gprof for profiling, otherwise exclude it
+				"-no-pie",      // Include this line when using gprof for profiling, otherwise exclude it
+				"-fno-builtin", // Include this line when using gprof for profiling, otherwise exclude it				
 				"-std=c++17",
 				"-lstdc++fs",
 				"-fdiagnostics-color=always",

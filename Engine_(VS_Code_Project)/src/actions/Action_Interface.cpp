@@ -1,5 +1,6 @@
 
 #include "Action_Interface.h"
+#include "core/GameState_Observer_Pattern.h"
 #include "render/Camera.h"
 #include "globals.h"
 #include <string>
@@ -46,6 +47,26 @@ void TurnAction::update(bool key_pressed){
 
 }
 
+GameStateAction::GameStateAction(std::string command_name, GameStateSubject &subject): subject(subject){
+    this->is_key_pressed=false;
+    this->is_running=false;
+    this->readyToDestroy=false;
+    this->mesh_modification = NULL;
+    this->command_name = command_name;
+}
+
+void GameStateAction::update(bool key_pressed){
+    if (this->command_name=="QUIT"){
+        this->subject.setState(QUIT);
+        std::cout << "Goodbye!" << std::endl;   
+    }else if (this->command_name=="CONSOLE"){
+        this->subject.setState(CONSOLE);
+        std::cout << "Going to Console" << std::endl;
+    }
+    
+    
+    is_running=false;
+}
 
 UseAction::UseAction(std::string command_name, std::shared_ptr<Camera> this_camera){
     this->command_name=command_name;

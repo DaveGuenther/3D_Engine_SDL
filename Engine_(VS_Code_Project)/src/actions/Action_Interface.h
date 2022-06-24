@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <memory>
+#include "core/GameState_Observer_Pattern.h"
 #include "utility/Triangle_Modifier.h"
 #include "render/Camera.h"
 
@@ -84,6 +85,15 @@ class TurnAction:public IAction{
 
     private: 
     Vec3d direction_unit_vector;
+};
+
+class GameStateAction:public IAction{
+    public:
+        GameStateAction(std::string new_state, GameStateSubject &subject);
+        void update(bool key_pressed);   
+    private:
+        GameStateSubject &subject;
+
 };
 
 class UseAction:public IAction{
