@@ -6,7 +6,7 @@
     "configurations": [
         
         {
-            "name": "g++.exe - Build and debug active file",
+            "name": "GAME BUILD C/C++: g++.exe build game file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}\\build\\${fileBasenameNoExtension}.exe",
@@ -25,7 +25,30 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "C/C++: g++.exe build active file"
+            "preLaunchTask": "GAME BUILD C/C++: g++.exe build game file"
+        },
+
+        {
+            "name": "Bare Bones C/C++: g++.exe build active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}\\build\\${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            //"cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}\\build",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\msys64\\mingw64\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Bare Bones C/C++: g++.exe build active file"
         }
     ]
 }
