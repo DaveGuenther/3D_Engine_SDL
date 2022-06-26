@@ -132,9 +132,11 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
 void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
     Vec3d p0 = this_triangle.getTrianglePoint(0);
+    Vec2d uv0 = this_triangle.getUVPoint(0);
     Vec3d p1 = this_triangle.getTrianglePoint(1);
+    Vec2d uv1 = this_triangle.getUVPoint(1);
     Vec3d p2 = this_triangle.getTrianglePoint(2);
-
+    Vec2d uv2 = this_triangle.getUVPoint(2);
 
     // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
     float left_slope = (p1.getX()-p0.getX())/(p1.getY()-p0.getY());
@@ -155,12 +157,47 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
         int x_start = int(ceil(p_start-0.5f));
         int x_end = int(ceil(p_end - 0.5f));
 
+        //determine alpha_start (distance between v1 -> v2)
+        float alpha_start = (y-p0.getY())/(p1.getY()-p0.getY());
+        //determine alpha_end  (distance between v0 -> v2)
+        float alpha_end = (y-p0.getY())/(p2.getY()-p0.getY());
+
+        //determine UV_start
+        float UVx_start = alpha_start*(uv1.getX()-uv0.getX())+uv0.getX();
+        float UVy_start = alpha_start*(uv1.getY()-uv0.getY())+uv0.getY();
+        //determine UV_end
+        float UVx_end = alpha_end*(uv2.getX()-uv0.getX())+uv0.getX();
+        float UVy_end = alpha_end*(uv2.getY()-uv0.getY())+uv0.getY();
+
         // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
-        //for (int x = x_start;x<x_end;x++){ SDL_RenderDrawPoint(this->renderer,x, y); }
-        SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
+        for (int x = x_start;x<x_end;x++){ 
+            
+            // determine alpha_scan
+            float alpha_scan;
+            if (x_end==x_start){
+                alpha_scan=0;
+            } else{
+                alpha_scan = (x-x_start)/(x_end-x_start);
+            }
+            
+            // determine Vec2d(U,V)
+            float UVx_scan = alpha_scan*(UVx_end-UVx_start)+UVx_start;
+            float UVy_scan = alpha_scan*(UVy_end-UVy_start)+UVy_start;
+            
+            // sample texture color at (U/V)
+            
+            
+            // Set Color
+
+            // draw point at (x,y)
+            SDL_RenderDrawPoint(this->renderer,x, y); 
+        }
+        //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
 
     }
 }
+
+
 
 ScanlineRasterizer::ScanlineRasterizer(SDL_Renderer* my_renderer){
     this->renderer=my_renderer;

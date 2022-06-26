@@ -99,6 +99,10 @@ const std::string Triangle::toString(){
 const Vec3d& Triangle::getTrianglePoint(int point){
     return p[point];
 }
+const Vec2d& Triangle::getUVPoint(int point){
+    return textureCoords[point];
+}
+
 
 const float Triangle::getDistanceToCamera(Vec3d camera_pos){
     return VectorMathService::getVectorLength(this->getTriangleCenter()-camera_pos);

@@ -67,18 +67,19 @@
 				"C:\\SDL\\SDL2_image-2.0.5\\x86_64-w64-mingw32\\include\\SDL2", 
 				"-I",
 				"${workspaceFolder}\\src",	
-				
+
+				//"-pg",          // Include this line when using gprof for profiling, otherwise exclude it
+				//"-no-pie",      // Include this line when using gprof for profiling, otherwise exclude it
+				//"-fno-builtin", // Include this line when using gprof for profiling, otherwise exclude it	
 				
 				"-L",
 				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\lib",			
 				"-L",
 				"C:\\SDL\\SDL2_image-2.0.5\\x86_64-w64-mingw32\\lib",
 				"-o",
-				"${workspaceFolder}\\build\\game.exe",
+				"${workspaceFolder}\\build\\game.exe"
 
-				"-pg",          // Include this line when using gprof for profiling, otherwise exclude it
-				"-no-pie",      // Include this line when using gprof for profiling, otherwise exclude it
-				"-fno-builtin" // Include this line when using gprof for profiling, otherwise exclude it	
+
 			],
 			"options": {
 				"cwd": "${workspaceFolder}\\build"
@@ -180,8 +181,8 @@
 				"$gcc"
 			],
 			"group": {
-				"kind": "build",
-				"isDefault": true
+				"kind": "test",
+				"isDefault": false
 			},
 			"detail": "compiler: C:\\msys64\\mingw64\\bin\\g++.exe"
 		}

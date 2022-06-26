@@ -46,6 +46,7 @@ class Triangle{
          * @return Vec3d 
          */
         const Vec3d& getTrianglePoint(int point);
+        const Vec2d& getUVPoint(int point);
         const float getTriangleZCenter();
         const float getDistanceToCamera(Vec3d camera_pos);
 
