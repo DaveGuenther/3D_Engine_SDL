@@ -1,2 +1,4 @@
+# These files may run into problems when ifstream and stringstream tries to use getline() to process through them if they are CRLF.  We'll force them to LF 
 *.obj	text eol=lf
 *.mtl	text eol=lf
+*.cfg	text eol=lf
