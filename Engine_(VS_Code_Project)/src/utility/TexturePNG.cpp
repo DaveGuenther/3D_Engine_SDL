@@ -3,10 +3,10 @@
 #include <string>
 #include "SDL.h"
 #include "SDL_image.h"
-#include "PNGTexture.h"
+#include "TexturePNG.h"
 
 
-PNGTexture::PNGTexture(const char* filename){
+TexturePNG::TexturePNG(const char* filename){
     
     uint8_t* pixels;
     int pitch;
@@ -54,12 +54,12 @@ PNGTexture::PNGTexture(const char* filename){
     std::cout << "finished initting" << std::endl;
 }
 
-PNGTexture::~PNGTexture(){
+TexturePNG::~TexturePNG(){
     IMG_Quit();
     SDL_FreeSurface(image);
 }
 
-void PNGTexture::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
+void TexturePNG::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
     uint32_t x = U*this->width;
     uint32_t y = V*this->height;
     
@@ -69,7 +69,7 @@ void PNGTexture::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
     col.a= 255;
 }
 
-void PNGTexture::getPixelAtXY(const int &x, const int &y, SDL_Color &col){
+void TexturePNG::getPixelAtXY(const int &x, const int &y, SDL_Color &col){
     col.r= pixel_array[x][y].r;
     col.g= pixel_array[x][y].g; 
     col.b= pixel_array[x][y].b;

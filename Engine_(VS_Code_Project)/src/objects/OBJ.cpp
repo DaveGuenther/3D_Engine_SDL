@@ -28,7 +28,9 @@ OBJ::OBJ(std::string filename, bool forceClockwiseWinding, bool flip_X_Coords){
 bool OBJ::peekline( std::ifstream & is, std::string & s ){
     std::streampos sp = is.tellg();
     if(getline( is, s )){
+        std::streampos sp2 = is.tellg();
         is.seekg( sp );
+        sp = is.tellg();
         return true;
     }else{
         s = "EOF";
@@ -49,18 +51,21 @@ void OBJ::split_OBJ_Chunks(){
         std::string name;
         std::string this_usemtl;
         std::string nextToken="#";
+        std::streampos sp;
         while(nextToken!="o"){ 
             // This while loop is really just looking for the mtllib token in the obj file before 
             // the first "o" object definition
             
             // getline and extract token
+            sp = myfile.tellg();
             std::getline(myfile, line);
+            sp = myfile.tellg();
             std::stringstream this_stream(line);
             std::string keyword, lexLine, str_this_stream;   
             std::getline(this_stream,keyword,' ');
             std::getline(this_stream,lexLine);
             str_this_stream = this_stream.str();
-            
+            sp = myfile.tellg();
             // parse "mtllib" lines
             if (keyword=="mtllib"){ // mtllib line
                 //record mtllib information for this mesh
@@ -68,13 +73,14 @@ void OBJ::split_OBJ_Chunks(){
             }         
 
             notEOF = peekline(myfile, line);
+            sp = myfile.tellg();
             // get nextToken
             std::stringstream this_peek_stream(line);
             this_peek_stream << line << std::endl;
-
+            sp = myfile.tellg();
             str_this_stream = this_peek_stream.str();
             std::getline (this_peek_stream,nextToken,' '); 
-            
+            sp = myfile.tellg();
         }   
 
         // This block works through the first "o" line 

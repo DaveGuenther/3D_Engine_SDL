@@ -3,7 +3,7 @@
 
 #include "Renderer.h"
 #include "utility/Vec2d.h"
-#include "utility/PNGTexture.h"
+#include "utility/TexturePNG.h"
 #include <array>
 #include <map>
 
@@ -36,13 +36,13 @@ class ITriangleRasterizer{
 
 class TexturemapRasterizer:public ITriangleRasterizer{
     public:
-        TexturemapRasterizer(SDL_Renderer* my_renderer, std::shared_ptr<PNGTexture> this_texture);
+        TexturemapRasterizer(SDL_Renderer* my_renderer, std::shared_ptr<TexturePNG> this_texture);
         void drawTriangle(Triangle& this_triangle);
         
     private:
         void drawFlatTopTri(Triangle& this_triangle);
         void drawFlatBottomTri(Triangle& this_triangle);
-        std::shared_ptr<PNGTexture> this_texture;
+        std::shared_ptr<TexturePNG> this_texture;
         
 };
 

@@ -2,7 +2,7 @@
 #include "Rasterizer.h"
 #include <iostream>
 #include <math.h>
-#include "utility/PNGTexture.h"
+#include "utility/TexturePNG.h"
 
 void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
     float z_center = this_tri.getTriangleZCenter();
@@ -21,7 +21,7 @@ void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
     SDL_SetRenderDrawColor(this->renderer, draw_col.r, draw_col.g, draw_col.b, SDL_ALPHA_OPAQUE);
 }
 
-TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, std::shared_ptr<PNGTexture> this_texture): this_texture(this_texture){
+TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, std::shared_ptr<TexturePNG> this_texture): this_texture(this_texture){
     this->renderer=my_renderer;
 
 }

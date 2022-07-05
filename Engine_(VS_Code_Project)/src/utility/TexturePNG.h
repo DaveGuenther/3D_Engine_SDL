@@ -1,5 +1,5 @@
-#ifndef PNGTEXTURE_H
-#define PNGTEXTURE_H
+#ifndef TEXTUREPNG_H
+#define TEXTUREPNG_H
 
 #include <vector>
 #include "SDL.h"
@@ -9,15 +9,15 @@
  * @brief This library uses SDL Surfaces to load a .png texture into memory and allow for easy pixel sampling (for use with texturemapping)
  * 
  */
-class PNGTexture{
+class TexturePNG{
     public:
         /**
          * @brief Construct a new PNG Texture object.  Texture is initiated with a path to the .png file to load
          * 
          * @param filename 
          */
-        PNGTexture(const char* filename);
-        ~PNGTexture();
+        TexturePNG(const char* filename);
+        ~TexturePNG();
         
         /**
          * @brief Get the Pixel At U V location of texture.
