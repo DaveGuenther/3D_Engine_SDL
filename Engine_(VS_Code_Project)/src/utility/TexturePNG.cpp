@@ -11,8 +11,11 @@ TexturePNG::TexturePNG(const char* filename){
     uint8_t* pixels;
     int pitch;
     this->image=IMG_Load(filename);
+    std::cout << filename;
     if(!this->image) {
-        printf("IMG_Load: %s\n", IMG_GetError());
+        std::cout<<"IMG_Load: " << IMG_GetError() << image;
+        //printf("IMG_Load: %s\n", IMG_GetError());
+        //raise(1);
         // handle error
     }    
     image = SDL_ConvertSurfaceFormat(image,SDL_PIXELFORMAT_RGB24,0);
@@ -54,10 +57,11 @@ TexturePNG::TexturePNG(const char* filename){
     std::cout << "finished initting" << std::endl;
 }
 
-TexturePNG::~TexturePNG(){
+void TexturePNG::destroyTexture(){
     IMG_Quit();
     SDL_FreeSurface(image);
 }
+
 
 void TexturePNG::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
     uint32_t x = U*this->width;

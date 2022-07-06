@@ -17,7 +17,14 @@ class TexturePNG{
          * @param filename 
          */
         TexturePNG(const char* filename);
-        ~TexturePNG();
+
+        /**
+         * @brief Explicit Destructor is called by TextureList class destructor.  If this method were called ~TexturePNG, it would
+         * result in a seg fault because the TextureList class might be destroyed first.
+         * 
+         */
+        void destroyTexture();
+
         
         /**
          * @brief Get the Pixel At U V location of texture.
