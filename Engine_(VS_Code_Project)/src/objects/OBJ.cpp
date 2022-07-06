@@ -3,18 +3,22 @@
 #include <filesystem>
 #include <sstream>
 #include <iostream>
+#include <stdexcept>
 
 #include "objects/OBJ_Chunk.h"
 #include "objects/OBJ.h"
+#include "objects/MTL.h"
 #include "utility/Mesh.h"
 #include "utility/Triangle.h"
 
-OBJ::OBJ(std::string filename){
+OBJ::OBJ(std::string filename, std::shared_ptr<TextureList> texture_list){
 
     this->forceClockwiseWinding=true;
     this->flip_X_Coords=true;
     buildMesh(filename); 
-    
+    std::string toErase = ".obj";
+    this->filename = filename.erase(filename.find(toErase),toErase.length());
+   
 }
 
 OBJ::OBJ(std::string filename, bool forceClockwiseWinding, bool flip_X_Coords){
@@ -70,6 +74,7 @@ void OBJ::split_OBJ_Chunks(){
             if (keyword=="mtllib"){ // mtllib line
                 //record mtllib information for this mesh
                 mtlfile = lexLine;
+                
             }         
 
             notEOF = peekline(myfile, line);
@@ -138,7 +143,7 @@ void OBJ::split_OBJ_Chunks(){
                     (*this_datum.meshblocks) << temp_line << std::endl;
                 }
                 this_datum.mesh_name=name;
-                this_datum.mtl = this_usemtl;
+                this_datum.material.push_back(this_usemtl);
                 this_datum.this_mesh_block = this_mesh_block;
                 this_mesh_block.clear();
                 myOBJ_Data.push_back(this_datum);
@@ -157,7 +162,7 @@ void OBJ::split_OBJ_Chunks(){
 
         this_datum.mesh_name=name;
         this_datum.this_mesh_block = this_mesh_block;
-        this_datum.mtl=this_usemtl;
+        this_datum.material.push_back(this_usemtl);
         myOBJ_Data.push_back(this_datum);
         //push stringstream to vector
         mesh_streams.push_back(this_mesh_block);
@@ -238,6 +243,8 @@ void OBJ::buildMesh(std::string filename){
     filename = "Meshes/"+filename;
 	std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
 	myfile.open (filename);
+    if (!myfile)
+        throw std::runtime_error(std::string("OBJ::buildMesh - Could not open file: ")+filename);
 
     //std::ifstream myfile;
     split_OBJ_Chunks();

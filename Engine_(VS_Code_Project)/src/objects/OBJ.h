@@ -7,6 +7,7 @@
 #include <memory> // for smare ptrs
 
 #include "utility/Mesh.h"
+#include "utility/TextureList.h"
 
 /**
  * @brief This class is used to hold information about each mech chunk that is pulled from an fstream (including the stringstream itself)
@@ -18,7 +19,7 @@ class OBJ_Datum{
     std::shared_ptr<std::stringstream> meshblocks;
     std::vector<std::string> this_mesh_block; // this is used to feed each line in succession to the stringstream so that it can be read using getline
     std::string mesh_name; // each mesh gets a name
-    std::string mtl; // each mesh has an assigned material
+    std::vector<std::string> material; // each mesh can have multiple materials
 };
 
 
@@ -56,7 +57,7 @@ class OBJ{
          * @param filename std::string file name of the .obj file to be loaded.  In the future this class will handle materials and will pull that information from a .mtl file with 
          * the same name as the obj file
          */
-        OBJ(std::string filename);
+        OBJ(std::string filename, std::shared_ptr<TextureList> texture_list);
 
         /**
          * @brief Construct a new OBJ object.  This is line the default constructor, except that it's intended for OBJ files where the faces are already defined in CW winding order rather than CCW.
@@ -116,7 +117,9 @@ class OBJ{
 
         std::vector<Mesh> Meshes;
         std::vector<OBJ_Datum> myOBJ_Data;
+        std::shared_ptr<TextureList> texture_list;
         std::ifstream myfile;
+        std::string filename;
         int totalVertices;
         int totalTextureCoords;
         bool forceClockwiseWinding;

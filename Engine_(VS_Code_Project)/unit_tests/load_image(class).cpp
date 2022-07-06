@@ -29,12 +29,12 @@ int main (int argv, char** args){
     std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
     std::string CWD = std::filesystem::current_path().u8string();
     std::string filename = "texture.png"; 
-    my_list.insertOrAssignTexture("Textures/determined.png");
-    my_list.insertOrAssignTexture("Textures/1st_texture.png");
+    my_list.insertOrAssignTexture("determined.png");
+    my_list.insertOrAssignTexture("1st_texture.png");
     //my_list.insertOrAssignTexture("1st_texture.png");
 
-    std::shared_ptr<TexturePNG> my_texture = my_list.getTextureByFilename("Textures/determined.png");
-    std::shared_ptr<TexturePNG> my_texture2 = my_list.getTextureByFilename("Textures/1st_texture.png");
+    std::shared_ptr<TexturePNG> my_texture = my_list.getTextureByFilename("determined.png");
+    std::shared_ptr<TexturePNG> my_texture2 = my_list.getTextureByFilename("1st_texture.png");
     std::shared_ptr<TexturePNG> this_null_ptr = my_list.getTextureByFilename("filenotfound.png");
 
 

@@ -16,7 +16,8 @@ TextureList::~TextureList(){
 }
 
 std::shared_ptr<TexturePNG> TextureList::insertOrAssignTexture(const std::string filename){
-    TexturePNG this_texture(filename.c_str());
+    std::string relative_path_file ="Textures/"+filename;
+    TexturePNG this_texture(relative_path_file.c_str());
 
     this->this_texture_list.insert_or_assign(filename,this_texture);
     std::unordered_map<std::string, TexturePNG>::iterator texture_element = this->this_texture_list.find(filename);
