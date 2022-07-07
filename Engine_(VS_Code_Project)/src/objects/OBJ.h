@@ -8,6 +8,7 @@
 
 #include "utility/Mesh.h"
 #include "utility/TextureList.h"
+#include "objects/MTL.h"
 
 /**
  * @brief This class is used to hold information about each mech chunk that is pulled from an fstream (including the stringstream itself)
@@ -118,6 +119,7 @@ class OBJ{
         std::vector<Mesh> Meshes;
         std::vector<OBJ_Datum> myOBJ_Data;
         std::shared_ptr<TextureList> texture_list;
+        std::shared_ptr<MTL> MTLfile;
         std::ifstream myfile;
         std::string filename;
         int totalVertices;

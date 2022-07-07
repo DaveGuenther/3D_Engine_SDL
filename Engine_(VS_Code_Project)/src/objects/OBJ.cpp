@@ -16,8 +16,8 @@ OBJ::OBJ(std::string filename, std::shared_ptr<TextureList> texture_list){
     this->forceClockwiseWinding=true;
     this->flip_X_Coords=true;
     buildMesh(filename); 
-    std::string toErase = ".obj";
-    this->filename = filename.erase(filename.find(toErase),toErase.length());
+    //std::string toErase = ".obj";
+    //this->filename = filename.erase(filename.find(toErase),toErase.length());
    
 }
 
@@ -74,6 +74,8 @@ void OBJ::split_OBJ_Chunks(){
             if (keyword=="mtllib"){ // mtllib line
                 //record mtllib information for this mesh
                 mtlfile = lexLine;
+                std::shared_ptr<MTL> newMTLfile(new MTL(mtlfile));
+                this->MTLfile = newMTLfile;
                 
             }         
 

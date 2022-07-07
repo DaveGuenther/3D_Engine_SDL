@@ -1,5 +1,6 @@
 #ifndef MTL_H
 #define MTL_H
+#include <unordered_map>
 
 class MTL{
     public:
@@ -23,6 +24,8 @@ class MTL{
         bool peekline( std::ifstream & is, std::string & s );
         
         std::ifstream myMTLfile;
+        std::unordered_map<std::string,std::string> materials;  // (material name, file name)
+
 };
 
 #endif
