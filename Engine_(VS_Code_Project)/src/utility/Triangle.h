@@ -37,7 +37,7 @@ class Triangle{
          */
         void setID(int tri_id);
 
-        void setTexture(std::string texture);
+        void setTexture(std::shared_ptr<TexturePNG> texture);
 
         void setColor(SDL_Color this_color);
 
@@ -55,7 +55,7 @@ class Triangle{
         void setUnitNormalFromPoints();
         const Vec3d& getUnitNormalVector();
         const SDL_Color& getColor();
-        const std::string getTexture();
+        std::shared_ptr<TexturePNG> getTexture();
         const std::string toString();
 
 
@@ -70,7 +70,7 @@ class Triangle{
         float distance_to_player_camera;
         int tri_id;
         SDL_Color color;
-        std::string texture_file;
+        std::shared_ptr<TexturePNG> texture_ptr;
     
 };
 

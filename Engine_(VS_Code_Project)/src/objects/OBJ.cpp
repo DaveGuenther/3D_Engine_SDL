@@ -10,6 +10,8 @@
 #include "objects/MTL.h"
 #include "utility/Mesh.h"
 #include "utility/Triangle.h"
+#include "utility/TextureList.h"
+
 
 OBJ::OBJ(std::string filename, std::shared_ptr<TextureList> texture_list){
 
@@ -209,7 +211,8 @@ void OBJ::assembleChunks(){
             }
             
             // Set Texture File Information Here
-            thisTri.setTexture(triangle.texturefile);
+            std::shared_ptr<TexturePNG> this_texture_ptr = this->texture_list->getTextureByFilename(triangle.texturefile);
+            thisTri.setTexture(this_texture_ptr);
 
             // Set Texture UV Vertices for triangle
             std::vector<int> texIDs = triangle.texture_coord_ids;

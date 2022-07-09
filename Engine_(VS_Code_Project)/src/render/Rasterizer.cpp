@@ -2,6 +2,7 @@
 #include "Rasterizer.h"
 #include <iostream>
 #include <math.h>
+#include "utility/TextureList.h"
 #include "utility/TexturePNG.h"
 
 void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){

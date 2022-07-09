@@ -1,5 +1,8 @@
+#include <memory>
+#include <unordered_map>
 #include "Triangle.h"
 #include "Vector_Math_Service.h"
+#include "TexturePNG.h"
 
 Triangle::Triangle(){
 
@@ -62,8 +65,8 @@ void Triangle::setTriangleTexturePoint(int point, const Vec3d &vec){
     
 }
 
-void Triangle::setTexture(std::string texture){
-    this->texture_file=texture;
+void Triangle::setTexture(std::shared_ptr<TexturePNG> texture){
+    this->texture_ptr=texture;
 }
 
 void Triangle::setID(int this_tri_id){
@@ -74,8 +77,8 @@ const SDL_Color& Triangle::getColor(){
     return this->color;
 }
 
-const std::string Triangle::getTexture(){
-    return this->texture_file;
+std::shared_ptr<TexturePNG> Triangle::getTexture(){
+    return this->texture_ptr;
 }
 
 void Triangle::setColor(SDL_Color this_color){
