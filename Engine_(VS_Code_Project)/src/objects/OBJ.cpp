@@ -181,12 +181,14 @@ void OBJ::assembleChunks(){
     int X_CoordinateInverter=1;
     if (this->flip_X_Coords==true){ X_CoordinateInverter=-1; } 
     for (auto this_chunk:this->myOBJ_Data){
-        OBJ_Chunk this_OBJ_Chunk((*this_chunk.meshblocks));
+        OBJ_Chunk this_OBJ_Chunk((*this_chunk.meshblocks), this->MTLfile->getMTL_map());
 
         Mesh thisMesh(0);
         int tri_id=0;
         for (auto triangle: this_OBJ_Chunk.triangleFaces){
             Triangle thisTri;
+
+            // Set Triangle Vertices
             std::vector<int> vertIDs = triangle.vertex_ids;
             for (int i=0;i<3;i++){
                 int normal_offset_id = i;
@@ -206,11 +208,12 @@ void OBJ::assembleChunks(){
                 
             }
             
-            /* Eventually place the information on texture coords here
-            
-            */
-           std::vector<int> texIDs = triangle.texture_coord_ids;
-           for (int i=0;i<3;i++){
+            // Set Texture File Information Here
+            thisTri.setTexture(triangle.texturefile);
+
+            // Set Texture UV Vertices for triangle
+            std::vector<int> texIDs = triangle.texture_coord_ids;
+            for (int i=0;i<3;i++){
                 int normal_offset_id = i;
                 if (this->forceClockwiseWinding==true){
                     if (i==0){

@@ -14,6 +14,7 @@ class OBJ_Lex_triFace{
         std::vector<int> vertex_ids;
         std::vector<int> texture_coord_ids;
         std::vector<int> normal_ids;
+        std::string texturefile;
 
 };
 

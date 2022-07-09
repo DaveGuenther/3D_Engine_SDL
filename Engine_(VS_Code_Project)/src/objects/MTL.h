@@ -5,7 +5,7 @@
 class MTL{
     public:
         MTL(std::string filename);
-
+        const std::unordered_map<std::string, std::string>& getMTL_map();
         
     private:
 

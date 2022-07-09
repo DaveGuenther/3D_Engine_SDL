@@ -14,6 +14,10 @@ MTL::MTL(std::string filename){
     parseMTL();
 }
 
+const std::unordered_map<std::string, std::string>& MTL::getMTL_map(){
+    return this->materials;
+}
+
 bool MTL::peekline( std::ifstream & is, std::string & s ){
     std::streampos sp = is.tellg();
     if(getline( is, s )){
