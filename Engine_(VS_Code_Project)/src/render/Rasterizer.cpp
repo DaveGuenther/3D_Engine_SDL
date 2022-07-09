@@ -22,7 +22,7 @@ void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
     SDL_SetRenderDrawColor(this->renderer, draw_col.r, draw_col.g, draw_col.b, SDL_ALPHA_OPAQUE);
 }
 
-TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, std::shared_ptr<TexturePNG> this_texture): this_texture(this_texture){
+TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer){
     this->renderer=my_renderer;
 
 }
@@ -132,6 +132,7 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
 
 void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
+    std::shared_ptr<TexturePNG> texture = this_triangle.getTexture();
     Vec3d p0 = this_triangle.getTrianglePoint(0);
     Vec2d uv0 = this_triangle.getUVPoint(0);
     Vec3d p1 = this_triangle.getTrianglePoint(1);
@@ -185,12 +186,15 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
             float UVx_scan = alpha_scan*(UVx_end-UVx_start)+UVx_start;
             float UVy_scan = alpha_scan*(UVy_end-UVy_start)+UVy_start;
             
+            SDL_Color col={255,255,255,255};
+
             // sample texture color at (U/V)
-            
+            texture->getPixelAtUV(UVx_scan, UVy_scan, col);
             
             // Set Color
+            SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
 
-            // draw point at (x,y)
+            // draw point at (x,)
             SDL_RenderDrawPoint(this->renderer,x, y); 
         }
         //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);

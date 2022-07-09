@@ -1,8 +1,10 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 #include <string>
+#include <memory>
 #include "SDL.h"
 #include "Vec3d.h"
+#include "TexturePNG.h"
 
 
 /**

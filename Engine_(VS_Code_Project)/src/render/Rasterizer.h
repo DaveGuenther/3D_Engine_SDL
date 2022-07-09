@@ -36,7 +36,7 @@ class ITriangleRasterizer{
 
 class TexturemapRasterizer:public ITriangleRasterizer{
     public:
-        TexturemapRasterizer(SDL_Renderer* my_renderer, std::shared_ptr<TexturePNG> this_texture);
+        TexturemapRasterizer(SDL_Renderer* my_renderer);
         void drawTriangle(Triangle& this_triangle);
         
     private:

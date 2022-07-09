@@ -112,10 +112,12 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 	//this_inout_rasterizer->drawTriangle(screenTri);
 
 	//rasterie triangle with ScanLines - faster
-	std::shared_ptr<ITriangleRasterizer> this_scanline_rasterizer(new ScanlineRasterizer(renderer));
-	this_scanline_rasterizer->drawTriangle(screenTri);
+	//std::shared_ptr<ITriangleRasterizer> this_scanline_rasterizer(new ScanlineRasterizer(renderer));
+	//this_scanline_rasterizer->drawTriangle(screenTri);
 
-
+	// Here goes TextureMapping!
+	std::shared_ptr<ITriangleRasterizer> this_texturemap_rasterizer(new TexturemapRasterizer(renderer));
+	this_texturemap_rasterizer->drawTriangle(screenTri);
 
 }
 
