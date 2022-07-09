@@ -3,13 +3,16 @@
 
 #include "utility/Mesh.h"
 #include "utility/Mesh_Pipeline.h"
+#include "utility/TextureList.h"
 #include "objects/OBJ.h"
 
 
 
 
-Mesh_Pipeline::Mesh_Pipeline(){
+
+Mesh_Pipeline::Mesh_Pipeline(std::shared_ptr<TextureList> texture_list){
     total_mesh_ids=0;
+    this->texture_list=texture_list;
 }
 
 Mesh_Pipeline::~Mesh_Pipeline(){
@@ -38,7 +41,7 @@ void Mesh_Pipeline::Add_Mesh_to_Pipeline(std::string filename, Vec3d origin){
 }
 
 void Mesh_Pipeline::Add_OBJ_Mesh_to_Pipeline(std::string filename, Vec3d origin){
-    OBJ thisOBJ(filename);
+    OBJ thisOBJ(filename, texture_list);
     std::vector<Mesh> OBJ_meshes;
     OBJ_meshes = thisOBJ.getMeshes();
 

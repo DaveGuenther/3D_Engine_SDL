@@ -40,6 +40,9 @@ void Mesh::loadMesh(std::string filename){
 	filename = "Meshes/"+filename;
 	std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
 	myfile.open (filename);
+	if (!myfile)
+	throw std::runtime_error(std::string("Mesh::loadMesh - Could not open file: ")+filename);
+
 
 	if (myfile.is_open()) {
     std::string line;

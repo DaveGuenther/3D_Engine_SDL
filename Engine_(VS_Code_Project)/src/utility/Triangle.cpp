@@ -62,6 +62,10 @@ void Triangle::setTriangleTexturePoint(int point, const Vec3d &vec){
     
 }
 
+void Triangle::setTexture(std::string texture){
+    this->texture_file=texture;
+}
+
 void Triangle::setID(int this_tri_id){
     tri_id=this_tri_id;
 }
@@ -70,9 +74,15 @@ const SDL_Color& Triangle::getColor(){
     return this->color;
 }
 
+const std::string Triangle::getTexture(){
+    return this->texture_file;
+}
+
 void Triangle::setColor(SDL_Color this_color){
     this->color = this_color;
 }
+
+
 
 void Triangle::setUnitNormalFromPoints(){
 // Generate triangle normal in view space

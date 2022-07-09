@@ -47,6 +47,9 @@ void Bindings::loadBinding(std::string filename){
 	//filename = "Meshes/"+filename;
 	std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
 	myfile.open (filename);
+    if (!myfile)
+    throw std::runtime_error(std::string("Bindings::loadBinding - Could not open file: ")+filename);
+
 
 	if (myfile.is_open()) {
         std::cout<<"File Open " << std::endl;

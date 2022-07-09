@@ -3,18 +3,22 @@
 #include <filesystem>
 #include <sstream>
 #include <iostream>
+#include <stdexcept>
 
 #include "objects/OBJ_Chunk.h"
 #include "objects/OBJ.h"
+#include "objects/MTL.h"
 #include "utility/Mesh.h"
 #include "utility/Triangle.h"
 
-OBJ::OBJ(std::string filename){
+OBJ::OBJ(std::string filename, std::shared_ptr<TextureList> texture_list){
 
     this->forceClockwiseWinding=true;
     this->flip_X_Coords=true;
     buildMesh(filename); 
-    
+    //std::string toErase = ".obj";
+    //this->filename = filename.erase(filename.find(toErase),toErase.length());
+   
 }
 
 OBJ::OBJ(std::string filename, bool forceClockwiseWinding, bool flip_X_Coords){
@@ -70,6 +74,9 @@ void OBJ::split_OBJ_Chunks(){
             if (keyword=="mtllib"){ // mtllib line
                 //record mtllib information for this mesh
                 mtlfile = lexLine;
+                std::shared_ptr<MTL> newMTLfile(new MTL(mtlfile));
+                this->MTLfile = newMTLfile;
+                
             }         
 
             notEOF = peekline(myfile, line);
@@ -138,7 +145,7 @@ void OBJ::split_OBJ_Chunks(){
                     (*this_datum.meshblocks) << temp_line << std::endl;
                 }
                 this_datum.mesh_name=name;
-                this_datum.mtl = this_usemtl;
+                this_datum.material.push_back(this_usemtl);
                 this_datum.this_mesh_block = this_mesh_block;
                 this_mesh_block.clear();
                 myOBJ_Data.push_back(this_datum);
@@ -157,7 +164,7 @@ void OBJ::split_OBJ_Chunks(){
 
         this_datum.mesh_name=name;
         this_datum.this_mesh_block = this_mesh_block;
-        this_datum.mtl=this_usemtl;
+        this_datum.material.push_back(this_usemtl);
         myOBJ_Data.push_back(this_datum);
         //push stringstream to vector
         mesh_streams.push_back(this_mesh_block);
@@ -174,12 +181,14 @@ void OBJ::assembleChunks(){
     int X_CoordinateInverter=1;
     if (this->flip_X_Coords==true){ X_CoordinateInverter=-1; } 
     for (auto this_chunk:this->myOBJ_Data){
-        OBJ_Chunk this_OBJ_Chunk((*this_chunk.meshblocks));
+        OBJ_Chunk this_OBJ_Chunk((*this_chunk.meshblocks), this->MTLfile->getMTL_map());
 
         Mesh thisMesh(0);
         int tri_id=0;
         for (auto triangle: this_OBJ_Chunk.triangleFaces){
             Triangle thisTri;
+
+            // Set Triangle Vertices
             std::vector<int> vertIDs = triangle.vertex_ids;
             for (int i=0;i<3;i++){
                 int normal_offset_id = i;
@@ -199,11 +208,12 @@ void OBJ::assembleChunks(){
                 
             }
             
-            /* Eventually place the information on texture coords here
-            
-            */
-           std::vector<int> texIDs = triangle.texture_coord_ids;
-           for (int i=0;i<3;i++){
+            // Set Texture File Information Here
+            thisTri.setTexture(triangle.texturefile);
+
+            // Set Texture UV Vertices for triangle
+            std::vector<int> texIDs = triangle.texture_coord_ids;
+            for (int i=0;i<3;i++){
                 int normal_offset_id = i;
                 if (this->forceClockwiseWinding==true){
                     if (i==0){
@@ -238,6 +248,8 @@ void OBJ::buildMesh(std::string filename){
     filename = "Meshes/"+filename;
 	std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
 	myfile.open (filename);
+    if (!myfile)
+        throw std::runtime_error(std::string("OBJ::buildMesh - Could not open file: ")+filename);
 
     //std::ifstream myfile;
     split_OBJ_Chunks();

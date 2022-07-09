@@ -13,10 +13,7 @@ TexturePNG::TexturePNG(const char* filename){
     this->image=IMG_Load(filename);
     std::cout << filename;
     if(!this->image) {
-        std::cout<<"IMG_Load: " << IMG_GetError() << image;
-        //printf("IMG_Load: %s\n", IMG_GetError());
-        //raise(1);
-        // handle error
+        throw std::runtime_error(std::string("TexturePNG::TexturePNG - Could not open file: ")+filename);
     }    
     image = SDL_ConvertSurfaceFormat(image,SDL_PIXELFORMAT_RGB24,0);
     pixels = (uint8_t*)this->image->pixels;

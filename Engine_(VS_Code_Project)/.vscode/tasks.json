@@ -52,6 +52,7 @@
 				"${workspaceFolder}\\src\\objects\\OBJ_Lex_normal.cpp",
 				"${workspaceFolder}\\src\\objects\\OBJ_Lex_triFace.cpp",
 				"${workspaceFolder}\\src\\objects\\OBJ_Chunk.cpp",
+				"${workspaceFolder}\\src\\objects\\MTL.cpp",
 				
 				"${workspaceFolder}\\src\\globals.cpp",
 				
