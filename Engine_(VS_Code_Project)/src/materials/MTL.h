@@ -1,6 +1,8 @@
 #ifndef MTL_H
 #define MTL_H
 #include <unordered_map>
+#include <fstream>
+#include <string>
 
 class MTL{
     public:

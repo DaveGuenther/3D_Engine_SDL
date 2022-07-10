@@ -4,7 +4,7 @@
 #include <memory>
 #include "SDL.h"
 #include "Vec3d.h"
-#include "TexturePNG.h"
+#include "materials/TexturePNG.h"
 
 
 /**

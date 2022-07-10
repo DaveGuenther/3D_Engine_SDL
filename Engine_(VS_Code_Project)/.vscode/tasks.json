@@ -21,8 +21,7 @@
 				"${workspaceFolder}\\src\\utility\\Triangle_Modifier.cpp",
 				"${workspaceFolder}\\src\\utility\\Vector_Math_Service.cpp",
 				"${workspaceFolder}\\src\\utility\\nonVector_Math_Service.cpp",
-				"${workspaceFolder}\\src\\utility\\TexturePNG.cpp",
-				"${workspaceFolder}\\src\\utility\\TextureList.cpp",
+
 
 				//core source code
 				"${workspaceFolder}\\src\\core\\Engine_3D.cpp",
@@ -52,8 +51,14 @@
 				"${workspaceFolder}\\src\\objects\\OBJ_Lex_normal.cpp",
 				"${workspaceFolder}\\src\\objects\\OBJ_Lex_triFace.cpp",
 				"${workspaceFolder}\\src\\objects\\OBJ_Chunk.cpp",
-				"${workspaceFolder}\\src\\objects\\MTL.cpp",
+
+				//materials source code
+				"${workspaceFolder}\\src\\materials\\MTL.cpp",
+				"${workspaceFolder}\\src\\materials\\TexturePNG.cpp",
+				"${workspaceFolder}\\src\\materials\\TextureList.cpp",
+				"${workspaceFolder}\\src\\materials\\MaterialMapper.cpp",
 				
+				//other
 				"${workspaceFolder}\\src\\globals.cpp",
 				
 				"-lmingw32",

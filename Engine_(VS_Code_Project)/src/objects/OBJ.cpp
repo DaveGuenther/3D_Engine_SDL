@@ -7,16 +7,18 @@
 
 #include "objects/OBJ_Chunk.h"
 #include "objects/OBJ.h"
-#include "objects/MTL.h"
+#include "materials/MTL.h"
 #include "utility/Mesh.h"
 #include "utility/Triangle.h"
-#include "utility/TextureList.h"
+#include "materials/TextureList.h"
+#include "materials/MaterialMapper.h"
 
 
 OBJ::OBJ(std::string filename, std::shared_ptr<TextureList> texture_list){
 
     this->forceClockwiseWinding=true;
     this->flip_X_Coords=true;
+    this->texture_list=texture_list;
     buildMesh(filename); 
     //std::string toErase = ".obj";
     //this->filename = filename.erase(filename.find(toErase),toErase.length());
@@ -256,6 +258,7 @@ void OBJ::buildMesh(std::string filename){
 
     //std::ifstream myfile;
     split_OBJ_Chunks();
+    MaterialMapper::doMap(this->MTLfile,this->texture_list);
     assembleChunks();
     
 }

@@ -1,11 +1,12 @@
 #ifndef RASTERIZER_H
 #define RASTERIZER_H
+#include <array>
+#include <map>
 
 #include "Renderer.h"
 #include "utility/Vec2d.h"
-#include "utility/TexturePNG.h"
-#include <array>
-#include <map>
+#include "materials/TexturePNG.h"
+
 
 class ITriangleRasterizer{
     protected:

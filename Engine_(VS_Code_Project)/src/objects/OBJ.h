@@ -7,8 +7,8 @@
 #include <memory> // for smare ptrs
 
 #include "utility/Mesh.h"
-#include "utility/TextureList.h"
-#include "objects/MTL.h"
+#include "materials/TextureList.h"
+#include "materials/MTL.h"
 
 /**
  * @brief This class is used to hold information about each mech chunk that is pulled from an fstream (including the stringstream itself)
