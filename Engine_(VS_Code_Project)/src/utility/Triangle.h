@@ -18,7 +18,7 @@ class Triangle{
         Triangle();
         Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id);
         Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id, const SDL_Color this_color);
-        Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id);
+        Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id, const SDL_Color this_color, std::shared_ptr<TexturePNG> this_texture_ptr);
 
         Triangle (const Triangle &T);
 
@@ -30,7 +30,7 @@ class Triangle{
          */
         void setTrianglePoint(int point, const Vec3d &vec);
 
-        void setTriangleTexturePoint(int point, const Vec3d &vec);
+        void setUVPoint(int point, const Vec2d &vec);
         
         /**
          * @brief this function provides an id value for this triangle in the mesh.  It isn't readily used by the engine except to print the triangle string.

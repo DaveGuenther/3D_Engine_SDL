@@ -103,9 +103,13 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 	vert2 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(1).getX(), this_triangle.getTrianglePoint(1).getY()));
 	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).getX(), this_triangle.getTrianglePoint(2).getY()));
 
+	
 	Triangle screenTri(Vec3d(vert1.getX(),vert1.getY(),this_triangle.getTrianglePoint(0).getZ()), 
 						Vec3d(vert2.getX(),vert2.getY(),this_triangle.getTrianglePoint(1).getZ()),
-						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),0,col);
+						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),
+						this_triangle.getUVPoint(0), this_triangle.getUVPoint(1), this_triangle.getUVPoint(2), 
+						0,col, this_triangle.getTexture());
+						
 
 	//rasterize triangle In Out - very slow method, implemented only for learning purposes
 	//std::shared_ptr<ITriangleRasterizer> this_inout_rasterizer(new InOutRasterizer(renderer));
@@ -209,7 +213,15 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			}else{
 				triProjected.setColor(triView.getColor());
 			}
+
+			// Copy Texture_ptr over
+			triProjected.setTexture(tri.getTexture());
 			
+			// Copy UV coordinates over
+			triProjected.setUVPoint(0,tri.getUVPoint(0));
+			triProjected.setUVPoint(1,tri.getUVPoint(1));
+			triProjected.setUVPoint(2,tri.getUVPoint(2));
+
 			
 			SDL_Color dimmed_col = applyDepthDimmer(triView);
 			triProjected.setColor(dimmed_col);

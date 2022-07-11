@@ -33,7 +33,7 @@ Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const i
     color = this_color;
 }
 
-Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id){
+Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id, const SDL_Color this_color, std::shared_ptr<TexturePNG> this_texture_ptr){
     p[0]=pt1;
     p[1]=pt2;
     p[2]=pt3;
@@ -42,6 +42,7 @@ Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const V
     this->textureCoords[2]=tex_p3;
     tri_id=triangle_id;    
     color = SDL_Color {255, 0, 255, 255};
+    this->texture_ptr=this_texture_ptr;
 }
 
 Triangle::Triangle (const Triangle &T){
@@ -53,6 +54,7 @@ Triangle::Triangle (const Triangle &T){
     this->textureCoords[0] = T.textureCoords[0];
     this->textureCoords[1] = T.textureCoords[1];
     this->textureCoords[2] = T.textureCoords[2];
+    this->texture_ptr=T.texture_ptr;
     
 }
 
@@ -60,7 +62,7 @@ void Triangle::setTrianglePoint(int point, const Vec3d &vec){
     p[point]=vec;
 }
 
-void Triangle::setTriangleTexturePoint(int point, const Vec3d &vec){
+void Triangle::setUVPoint(int point, const Vec2d &vec){
     this->textureCoords[point]=vec;
     
 }

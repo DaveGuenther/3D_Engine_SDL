@@ -35,6 +35,9 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
     Vec3d p0 = this_triangle.getTrianglePoint(0);
     Vec3d p1 = this_triangle.getTrianglePoint(1);
     Vec3d p2 = this_triangle.getTrianglePoint(2);
+    Vec2d uv_p0 = this_triangle.getUVPoint(0);
+    Vec2d uv_p1 = this_triangle.getUVPoint(1);
+    Vec2d uv_p2 = this_triangle.getUVPoint(2);
 
     p0 = p0.toThousandths();
     p1 = p1.toThousandths();
@@ -44,26 +47,40 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
     //applyDepthDimmer(this_triangle, col);
 
     // Order the points from top to bottom
-    if (p0.getY() > p1.getY()) { Vec3d temp = p0; p0=p1; p1=temp; }
-    if (p1.getY() > p2.getY()) { Vec3d temp = p1; p1=p2; p2=temp; }
-    if (p0.getY() > p1.getY()) { Vec3d temp = p0; p0=p1; p1=temp; }
-
+    if (p0.getY() > p1.getY()) {
+        Vec3d temp = p0;        p0=p1;          p1=temp; 
+        Vec2d uv_temp=uv_p0;    uv_p0=uv_p1;    uv_p1=uv_temp;
+    }
+    if (p1.getY() > p2.getY()) {
+        Vec3d temp = p1;        p1=p2;          p2=temp; 
+        Vec2d uv_temp = uv_p1;  uv_p1=uv_p2;    uv_p2=uv_temp;
+    }
+    if (p0.getY() > p1.getY()) {
+        Vec3d temp = p0;        p0=p1;          p1=temp; 
+        Vec2d uv_temp = uv_p0;  uv_p0=uv_p1;    uv_p1=uv_temp;
+    }
 
 
     // test for flat top
     if (p0.getY()==p1.getY()) { 
         // FLAT TOP Triangle
-        if (p0.getX() > p1.getX()) { Vec3d temp = p0; p0=p1; p1=temp; }
-        Triangle reordered_tri(p0, p1, p2,0, col);
+        if (p0.getX() > p1.getX()) {
+            Vec3d temp = p0;        p0=p1;          p1=temp; 
+            Vec2d uv_temp = uv_p0;  uv_p0=uv_p1;    uv_p1=uv_temp;
+        }
+        Triangle reordered_tri(p0, p1, p2, uv_p0, uv_p1, uv_p2,0, col, this_triangle.getTexture());
         drawFlatTopTri(reordered_tri);
         //std::cout << "Flat Top!" << std::endl;
     }
 
     // test for flat bottom
-    else if (p1.getY()==p2.getY()) { 
-        if (p1.getX() > p2.getX()) { Vec3d temp = p1; p1=p2; p2=temp; } 
+    else if (p1.getY()==p2.getY()) {
+        if (p1.getX() > p2.getX()) {
+            Vec3d temp = p1;        p1=p2;          p2=temp;
+            Vec2d uv_temp = uv_p1;  uv_p1=uv_p2;    uv_p2=uv_temp;
+        } 
         //FLAT BOTTOM TRIANGLE
-        Triangle reordered_tri(p0, p1, p2,0, col);
+        Triangle reordered_tri(p0, p1, p2,uv_p0, uv_p1, uv_p2,0, col, this_triangle.getTexture());
         drawFlatBottomTri(reordered_tri);
         //std::cout << "Flat Bottom" << std::endl; 
     }
@@ -71,20 +88,27 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
     // General triangle
     else {
         float alpha = (p1.getY()-p0.getY())/(p2.getY()-p0.getY());
+        float uv_alpha = (uv_p1.getY()-uv_p0.getY())/(uv_p2.getY()-uv_p0.getY());
+
         Vec3d p_i = p0+alpha*(p2-p0);
+        Vec2d uv_p_i = uv_p0+ uv_alpha*(uv_p2-uv_p0);
 
         //Test for major left triangle
         if (p_i.getX()<p1.getX()){
             //MAJOR LEFT TRIANGLE 
             //std::cout << "Major Left" << std::endl; 
-            Triangle flat_bottom_tri(p0, p_i, p1,0, col);
-            Triangle flat_top_tri(p_i, p1, p2,0, col);
+            Triangle flat_bottom_tri(p0, p_i, p1, uv_p0, uv_p_i, uv_p1, 0, col, this_triangle.getTexture());
+            Triangle flat_top_tri(p_i, p1, p2, uv_p_i, uv_p1, uv_p2, 0, col, this_triangle.getTexture());
             drawFlatTopTri(flat_top_tri);
             drawFlatBottomTri(flat_bottom_tri);
         }else{ 
             //MAJOR RIGHT TRIANGLE
-            Triangle flat_bottom_tri(p0, p1, p_i, 0, col);
-            Triangle flat_top_tri(p1, p_i, p2, 0, col);
+
+            ///////  FIX UV COORDINATES HERE..  Triangles are bing split, UVs need to be recalculated
+            Triangle flat_bottom_tri(p0, p1, p_i, uv_p0, uv_p1, uv_p_i, 0, col, this_triangle.getTexture());
+            Triangle flat_top_tri(p1, p_i, p2, uv_p1, uv_p_i, uv_p2, 0, col, this_triangle.getTexture());
+
+
             drawFlatTopTri(flat_top_tri);
             drawFlatBottomTri(flat_bottom_tri);
             //std::cout << "Major Right" << std::endl;
@@ -161,8 +185,12 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
         //determine alpha_start (distance between v1 -> v2)
         float alpha_start = (y-p0.getY())/(p1.getY()-p0.getY());
+        if (alpha_start<0.0f){alpha_start=0.0f;}
+        if (alpha_start>1.0f){alpha_start=1.0f;}
         //determine alpha_end  (distance between v0 -> v2)
         float alpha_end = (y-p0.getY())/(p2.getY()-p0.getY());
+        if (alpha_end<0.0f){alpha_end=0.0f;}
+        if (alpha_end>1.0f){alpha_end=1.0f;}        
 
         //determine UV_start
         float UVx_start = alpha_start*(uv1.getX()-uv0.getX())+uv0.getX();
@@ -177,9 +205,9 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
             // determine alpha_scan
             float alpha_scan;
             if (x_end==x_start){
-                alpha_scan=0;
+                alpha_scan=0.0f;
             } else{
-                alpha_scan = (x-x_start)/(x_end-x_start);
+                alpha_scan = (float(x)-float(x_start))/(float(x_end)-float(x_start));
             }
             
             // determine Vec2d(U,V)

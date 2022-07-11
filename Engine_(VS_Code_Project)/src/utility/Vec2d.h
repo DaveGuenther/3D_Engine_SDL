@@ -35,6 +35,8 @@ class Vec2d{
     friend bool operator!= (const Vec2d & vec1, const Vec2d & vec2){ return !(vec1.x==vec2.x && vec1.y==vec2.y);}
     friend Vec2d operator+ (const Vec2d& vec1, const Vec2d& vec2){ return Vec2d(vec1.getX()+vec2.getX(), vec1.getY()+vec2.getY()); }
     friend Vec2d operator- (const Vec2d& vec1, const Vec2d& vec2){ return Vec2d(vec1.getX()-vec2.getX(), vec1.getY()-vec2.getY()); }    
+    friend Vec2d operator* (const float& val, const Vec2d& vec){ return Vec2d(val*vec.getX(), val*vec.getY()); }
+    friend Vec2d operator* (const Vec2d& vec, const float& val){ return Vec2d(val*vec.getX(), val*vec.getY()); }
 
   protected:
 		float x;

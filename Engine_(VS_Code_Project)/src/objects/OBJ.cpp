@@ -229,10 +229,9 @@ void OBJ::assembleChunks(){
                     }
                 }
                 int tex_ID = texIDs[normal_offset_id]-1-this->totalTextureCoords;
-                Vec3d this_tex_coord = Vec3d(this_OBJ_Chunk.textureCoords[tex_ID].u,
-                                        this_OBJ_Chunk.textureCoords[tex_ID].v,
-                                        this_OBJ_Chunk.textureCoords[tex_ID].w);
-                thisTri.setTriangleTexturePoint(i,this_tex_coord);
+                Vec2d this_tex_coord = Vec2d(this_OBJ_Chunk.textureCoords[tex_ID].u,
+                                        this_OBJ_Chunk.textureCoords[tex_ID].v);
+                thisTri.setUVPoint(i,this_tex_coord);
                 
             }
            //int tex_ID = vertIDs[normal_offset_id]-1-this->totalVertices;

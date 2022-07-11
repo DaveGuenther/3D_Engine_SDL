@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <math.h>
 #include "SDL.h"
 #include "SDL_image.h"
 #include "TexturePNG.h"
@@ -61,8 +62,28 @@ void TexturePNG::destroyTexture(){
 
 
 void TexturePNG::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
-    uint32_t x = U*this->width;
-    uint32_t y = V*this->height;
+    uint32_t x, y;
+    // set x based on U
+    if (U>1){
+        x= float(U-floor(U))*(this->width-1);
+    }else if(U<0){
+        x = float(U-ceil(U)+1.0f)*(this->width-1);
+    }else{
+        // 0 <= U <= 1
+        x = U*(this->width-1);
+    }
+
+    // set y based on U
+    if (V>1){
+        y= float(V-floor(V))*(this->height-1);
+    }else if(V<0){
+        y = float(V-ceil(V)+1.0f)*(this->height-1);
+    }else{
+        // 0 <= U <= 1
+        y = V*(this->height-1);
+    }    
+
+
     
     col.r= pixel_array[x][y].r;
     col.g= pixel_array[x][y].g; 
