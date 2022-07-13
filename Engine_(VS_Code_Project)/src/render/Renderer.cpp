@@ -173,10 +173,10 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		dp_light_source = nonVectorMathService::lerp(0.25f, 0.60f, dp_light_source); // make it so the walls aren't too shiny
 		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 		triView.setColor(col);
-		if (keyboardbreak==true){ 
+		/*if (keyboardbreak==true){ 
 			std::cout << dp_light_source << view_normal_vector.toString() << std::endl;
 			keyboardbreak=false;
-		}
+		}*/
 		// Clip this triangle against Front, left, top, right, and bottom frustum planes, then create new triangles as necessary that end at the frustum
 		std::vector<Triangle> clipped_tris = this->thisFrustumClipper->getClippedTrisAgainstFrustum(triView);
 

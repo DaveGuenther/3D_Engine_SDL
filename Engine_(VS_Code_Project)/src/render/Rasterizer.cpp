@@ -4,6 +4,7 @@
 #include <math.h>
 #include "materials/TextureList.h"
 #include "materials/TexturePNG.h"
+#include "globals.h"
 
 void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
     float z_center = this_tri.getTriangleZCenter();
@@ -104,7 +105,6 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
         }else{ 
             //MAJOR RIGHT TRIANGLE
 
-            ///////  FIX UV COORDINATES HERE..  Triangles are bing split, UVs need to be recalculated
             Triangle flat_bottom_tri(p0, p1, p_i, uv_p0, uv_p1, uv_p_i, 0, col, this_triangle.getTexture());
             Triangle flat_top_tri(p1, p_i, p2, uv_p1, uv_p_i, uv_p2, 0, col, this_triangle.getTexture());
 
@@ -121,10 +121,13 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
 
 void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
     
+    std::shared_ptr<TexturePNG> texture = this_triangle.getTexture();
     Vec3d p0 = this_triangle.getTrianglePoint(0);
+    Vec2d uv0 = this_triangle.getUVPoint(0);
     Vec3d p1 = this_triangle.getTrianglePoint(1);
+    Vec2d uv1 = this_triangle.getUVPoint(1);
     Vec3d p2 = this_triangle.getTrianglePoint(2);
-
+    Vec2d uv2 = this_triangle.getUVPoint(2);
 
 
     // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
@@ -147,14 +150,54 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
         int x_start = int(ceil(p_start-0.5f));
         int x_end = int(ceil(p_end - 0.5f));
 
-        // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
-        SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
-        //for (int x = x_start;x<x_end;x++){ SDL_RenderDrawPoint(this->renderer,x, y); }
+        //determine alpha_start (distance between v1 -> v2)
+        float alpha_start = (y-p0.getY())/(p2.getY()-p0.getY());
+        if (alpha_start<0.0f){alpha_start=0.0f;}
+        if (alpha_start>1.0f){alpha_start=1.0f;}
+        //determine alpha_end  (distance between v0 -> v2)
+        float alpha_end = (y-p1.getY())/(p2.getY()-p1.getY());
+        if (alpha_end<0.0f){alpha_end=0.0f;}
+        if (alpha_end>1.0f){alpha_end=1.0f;}        
 
+        //determine UV_start
+        float UVx_start = alpha_start*(uv2.getX()-uv0.getX())+uv0.getX();
+        float UVy_start = alpha_start*(uv2.getY()-uv0.getY())+uv0.getY();
+        //determine UV_end
+        float UVx_end = alpha_end*(uv2.getX()-uv1.getX())+uv1.getX();
+        float UVy_end = alpha_end*(uv2.getY()-uv1.getY())+uv1.getY();
+
+        // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
+        //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
+        for (int x = x_start;x<x_end;x++){ 
+            
+            // determine alpha_scan
+            float alpha_scan;
+            if (x_end==x_start){
+                alpha_scan=0.0f;
+            } else{
+                alpha_scan = (float(x)-float(x_start))/(float(x_end)-float(x_start));
+            }
+            
+            // determine Vec2d(U,V)
+            float UVx_scan = alpha_scan*(UVx_end-UVx_start)+UVx_start;
+            float UVy_scan = alpha_scan*(UVy_end-UVy_start)+UVy_start;
+            
+            SDL_Color col={255,255,255,255};
+
+            // sample texture color at (U/V)
+            texture->getPixelAtUV(UVx_scan, UVy_scan, col);
+            
+            // Set Color
+            SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
+
+            // draw point at (x,)
+            SDL_RenderDrawPoint(this->renderer,x, y); 
+        }
     }
 }
 
 void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
+
 
     std::shared_ptr<TexturePNG> texture = this_triangle.getTexture();
     Vec3d p0 = this_triangle.getTrianglePoint(0);
@@ -218,12 +261,16 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
             // sample texture color at (U/V)
             texture->getPixelAtUV(UVx_scan, UVy_scan, col);
-            
+            if (keyboardbreak==true){ 
+                std::cout << "UVx: " << UVx_scan << "    UVy: " << UVy_scan << "    col: (" << col.r << "," << col.g << "," << col.b << ")" << std::endl;
+                keyboardbreak=false;
+    }            
             // Set Color
             SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
 
             // draw point at (x,)
             SDL_RenderDrawPoint(this->renderer,x, y); 
+            
         }
         //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
 
