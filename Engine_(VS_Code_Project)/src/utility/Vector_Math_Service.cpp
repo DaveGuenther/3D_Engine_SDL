@@ -114,6 +114,7 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 
 		// Copy appearance info to new triangle
 		out_tri1.setColor(SDL_Color {0,0,255,255});
+		out_tri1.setID(in_tri.getID());
 		//out_tri1.col =  in_tri.col;
 		//out_tri1.sym = in_tri.sym;
 
@@ -137,9 +138,11 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 		// Copy appearance info to new triangles
 		
 		out_tri1.setColor(SDL_Color {0,255,0,255});
+		out_tri1.setID(in_tri.getID());
 		//out_tri1.sym = in_tri.sym;
 
 		out_tri2.setColor(SDL_Color {255,0,0,255});
+		out_tri2.setID(in_tri.getID());
 		//out_tri2.sym = in_tri.sym;
 
 		// The first triangle consists of the two inside points and a new

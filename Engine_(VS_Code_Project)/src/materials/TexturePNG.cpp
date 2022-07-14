@@ -75,12 +75,12 @@ void TexturePNG::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
 
     // set y based on U
     if (V>1){
-        y= float(V-floor(V))*(this->height-1);
+        y= (this->height-1)-(float(V-floor(V))*(this->height-1));
     }else if(V<0){
-        y = float(V-ceil(V)+1.0f)*(this->height-1);
+        y = (this->height-1)-(float(V-ceil(V)+1.0f)*(this->height-1));
     }else{
         // 0 <= U <= 1
-        y = V*(this->height-1);
+        y = (this->height-1)-(V*(this->height-1));
     }    
 
 

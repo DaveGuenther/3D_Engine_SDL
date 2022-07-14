@@ -79,6 +79,10 @@ const SDL_Color& Triangle::getColor(){
     return this->color;
 }
 
+const int Triangle::getID(){
+    return this->tri_id;
+}
+
 std::shared_ptr<TexturePNG> Triangle::getTexture(){
     return this->texture_ptr;
 }

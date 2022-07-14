@@ -53,6 +53,7 @@ class Triangle{
         const Vec2d& getUVPoint(int point);
         const float getTriangleZCenter();
         const float getDistanceToCamera(Vec3d camera_pos);
+        const int getID();
 
         void setUnitNormalFromPoints();
         const Vec3d& getUnitNormalVector();

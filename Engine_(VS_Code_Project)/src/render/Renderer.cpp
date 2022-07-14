@@ -108,7 +108,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 						Vec3d(vert2.getX(),vert2.getY(),this_triangle.getTrianglePoint(1).getZ()),
 						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),
 						this_triangle.getUVPoint(0), this_triangle.getUVPoint(1), this_triangle.getUVPoint(2), 
-						0,col, this_triangle.getTexture());
+						this_triangle.getID(),col, this_triangle.getTexture());
 						
 
 	//rasterize triangle In Out - very slow method, implemented only for learning purposes
@@ -173,6 +173,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		dp_light_source = nonVectorMathService::lerp(0.25f, 0.60f, dp_light_source); // make it so the walls aren't too shiny
 		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 		triView.setColor(col);
+		triView.setID(tri.getID());
 		/*if (keyboardbreak==true){ 
 			std::cout << dp_light_source << view_normal_vector.toString() << std::endl;
 			keyboardbreak=false;
@@ -222,6 +223,8 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			triProjected.setUVPoint(1,tri.getUVPoint(1));
 			triProjected.setUVPoint(2,tri.getUVPoint(2));
 
+			// Copy Triangle ID over
+			triProjected.setID(tri.getID());
 			
 			SDL_Color dimmed_col = applyDepthDimmer(triView);
 			triProjected.setColor(dimmed_col);

@@ -23,6 +23,7 @@ std::vector<Triangle>& Clipper::getClippedTrisAgainstFrustum(Triangle& triView){
     nClippedTriangles = VectorMathService::clipTriangleWithPlane(frustum_front_point, frustum_front_plane_normal, triView, clipped[0], clipped[1]);
     std::vector<Triangle> front_clipped_tris, left_clipped_tris, top_clipped_tris, right_clipped_tris; 
     for (int n=0; n< nClippedTriangles; n++){
+        //clipped[n].setID(triView.getID());
         front_clipped_tris.push_back(clipped[n]);
     }
     // Test along left frustum edge

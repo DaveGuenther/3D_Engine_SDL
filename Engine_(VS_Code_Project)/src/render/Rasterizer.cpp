@@ -69,7 +69,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
             Vec3d temp = p0;        p0=p1;          p1=temp; 
             Vec2d uv_temp = uv_p0;  uv_p0=uv_p1;    uv_p1=uv_temp;
         }
-        Triangle reordered_tri(p0, p1, p2, uv_p0, uv_p1, uv_p2,0, col, this_triangle.getTexture());
+        Triangle reordered_tri(p0, p1, p2, uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getTexture());
         drawFlatTopTri(reordered_tri);
         //std::cout << "Flat Top!" << std::endl;
     }
@@ -81,7 +81,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
             Vec2d uv_temp = uv_p1;  uv_p1=uv_p2;    uv_p2=uv_temp;
         } 
         //FLAT BOTTOM TRIANGLE
-        Triangle reordered_tri(p0, p1, p2,uv_p0, uv_p1, uv_p2,0, col, this_triangle.getTexture());
+        Triangle reordered_tri(p0, p1, p2,uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getTexture());
         drawFlatBottomTri(reordered_tri);
         //std::cout << "Flat Bottom" << std::endl; 
     }
@@ -89,24 +89,24 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
     // General triangle
     else {
         float alpha = (p1.getY()-p0.getY())/(p2.getY()-p0.getY());
-        float uv_alpha = (uv_p1.getY()-uv_p0.getY())/(uv_p2.getY()-uv_p0.getY());
+        //float uv_alpha = (uv_p1.getY()-uv_p0.getY())/(uv_p2.getY()-uv_p0.getY());
 
         Vec3d p_i = p0+alpha*(p2-p0);
-        Vec2d uv_p_i = uv_p0+ uv_alpha*(uv_p2-uv_p0);
+        Vec2d uv_p_i = uv_p0+ alpha*(uv_p2-uv_p0);
 
         //Test for major left triangle
         if (p_i.getX()<p1.getX()){
             //MAJOR LEFT TRIANGLE 
             //std::cout << "Major Left" << std::endl; 
-            Triangle flat_bottom_tri(p0, p_i, p1, uv_p0, uv_p_i, uv_p1, 0, col, this_triangle.getTexture());
-            Triangle flat_top_tri(p_i, p1, p2, uv_p_i, uv_p1, uv_p2, 0, col, this_triangle.getTexture());
+            Triangle flat_bottom_tri(p0, p_i, p1, uv_p0, uv_p_i, uv_p1, this_triangle.getID(), col, this_triangle.getTexture());
+            Triangle flat_top_tri(p_i, p1, p2, uv_p_i, uv_p1, uv_p2, this_triangle.getID(), col, this_triangle.getTexture());
             drawFlatTopTri(flat_top_tri);
             drawFlatBottomTri(flat_bottom_tri);
         }else{ 
             //MAJOR RIGHT TRIANGLE
 
-            Triangle flat_bottom_tri(p0, p1, p_i, uv_p0, uv_p1, uv_p_i, 0, col, this_triangle.getTexture());
-            Triangle flat_top_tri(p1, p_i, p2, uv_p1, uv_p_i, uv_p2, 0, col, this_triangle.getTexture());
+            Triangle flat_bottom_tri(p0, p1, p_i, uv_p0, uv_p1, uv_p_i, this_triangle.getID(), col, this_triangle.getTexture());
+            Triangle flat_top_tri(p1, p_i, p2, uv_p1, uv_p_i, uv_p2, this_triangle.getID(), col, this_triangle.getTexture());
 
 
             drawFlatTopTri(flat_top_tri);
