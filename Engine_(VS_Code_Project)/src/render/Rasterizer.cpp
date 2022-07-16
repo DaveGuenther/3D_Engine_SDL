@@ -89,7 +89,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
     // General triangle
     else {
         float alpha = (p1.getY()-p0.getY())/(p2.getY()-p0.getY());
-        //float uv_alpha = (uv_p1.getY()-uv_p0.getY())/(uv_p2.getY()-uv_p0.getY());
+        
 
         Vec3d p_i = p0+alpha*(p2-p0);
         Vec2d uv_p_i = uv_p0+ alpha*(uv_p2-uv_p0);

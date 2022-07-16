@@ -158,7 +158,14 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		triView.setUnitNormalFromPoints();
 		Vec3d view_normal_vector = triView.getUnitNormalVector();
 			
-		
+		// Copy UV coordinates over
+		triView.setUVPoint(0,tri.getUVPoint(0));
+		triView.setUVPoint(1,tri.getUVPoint(1));
+		triView.setUVPoint(2,tri.getUVPoint(2));
+
+		// Copy Triangle ID over
+		triView.setID(tri.getID());
+
 		// Light triangle from camera 
 		//Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f); // lit like the sun
 		Vec3d light_source_direction = camera_to_triangle_vector;  // omnidirectional liht out from camera position
@@ -219,9 +226,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			triProjected.setTexture(tri.getTexture());
 			
 			// Copy UV coordinates over
-			triProjected.setUVPoint(0,tri.getUVPoint(0));
-			triProjected.setUVPoint(1,tri.getUVPoint(1));
-			triProjected.setUVPoint(2,tri.getUVPoint(2));
+			triProjected.setUVPoint(0,this_tri.getUVPoint(0));
+			triProjected.setUVPoint(1,this_tri.getUVPoint(1));
+			triProjected.setUVPoint(2,this_tri.getUVPoint(2));
 
 			// Copy Triangle ID over
 			triProjected.setID(tri.getID());

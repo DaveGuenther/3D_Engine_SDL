@@ -69,7 +69,7 @@ class VectorMathService{
          * @param lineEnd ending point of a line to intersect with a plane
          * @return Vec3d returns a point where the line crosses the plane if it does in fact cross the plane, otherwise it returns the line start point
          */
-        static Vec3d vectorIntersectPlane(Vec3d &plane_p, Vec3d &plane_n, Vec3d &lineStart, Vec3d &lineEnd);
+        static Vec3d vectorIntersectPlane(Vec3d &plane_p, Vec3d &plane_n, Vec3d &lineStart, Vec3d &lineEnd, float &alpha);
 };
 
 #endif
