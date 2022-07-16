@@ -166,6 +166,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		// Copy Triangle ID over
 		triView.setID(tri.getID());
 
+		// Copy Texture_ptr over
+		triView.setTexture(tri.getTexture());
+
 		// Light triangle from camera 
 		//Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f); // lit like the sun
 		Vec3d light_source_direction = camera_to_triangle_vector;  // omnidirectional liht out from camera position
@@ -180,7 +183,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		dp_light_source = nonVectorMathService::lerp(0.25f, 0.60f, dp_light_source); // make it so the walls aren't too shiny
 		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 		triView.setColor(col);
-		triView.setID(tri.getID());
+		//triView.setID(tri.getID());
 		/*if (keyboardbreak==true){ 
 			std::cout << dp_light_source << view_normal_vector.toString() << std::endl;
 			keyboardbreak=false;
@@ -222,8 +225,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 				triProjected.setColor(triView.getColor());
 			}
 
-			// Copy Texture_ptr over
-			triProjected.setTexture(tri.getTexture());
+
 			
 			// Copy UV coordinates over
 			triProjected.setUVPoint(0,this_tri.getUVPoint(0));
@@ -233,6 +235,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			// Copy Triangle ID over
 			triProjected.setID(tri.getID());
 			
+			//Copy Texture Over
+			triProjected.setTexture(tri.getTexture());
+
 			SDL_Color dimmed_col = applyDepthDimmer(triView);
 			triProjected.setColor(dimmed_col);
 

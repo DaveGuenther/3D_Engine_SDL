@@ -166,9 +166,9 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 
 		Vec2d UV2 = *(inside_UVs[0]) + alpha2*(*(outside_UVs[1])-*(inside_UVs[0]));
 		out_tri1.setUVPoint(2,UV2);		
-		if (in_tri.getID()==0){
+		/*if (in_tri.getID()==0){
 			std::cout << "UV1: " << UV1.toString() << "     UV2: " << UV2.toString() << std::endl; 
-		}
+		}*/
 
 
 
@@ -198,16 +198,40 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 		// The first triangle consists of the two inside points and a new
 		// point determined by the location where one side of the triangle
 		// intersects with the plane
-		out_tri1.setTrianglePoint(0, *inside_points[0]);
-		out_tri1.setTrianglePoint(1, *inside_points[1]);
-		out_tri1.setTrianglePoint(2, VectorMathService::vectorIntersectPlane(plane_p, plane_n, *inside_points[0], *outside_points[0], alpha_tri1_point2));
+		out_tri1.setTrianglePoint(0, *(inside_points[0]));
+		out_tri1.setTrianglePoint(1, *(inside_points[1]));
+		out_tri1.setTrianglePoint(2, VectorMathService::vectorIntersectPlane(plane_p, plane_n, *(inside_points[0]), *(outside_points[0]), alpha_tri1_point2));
+
+		// Determine UV Coords:
+		out_tri1.setUVPoint(0,*(inside_UVs[0]));
+		out_tri1.setUVPoint(1,*(inside_UVs[1]));
+		
+		// Perform lerp over UV Coordinates here
+		Vec2d tri1_UV2 = *(inside_UVs[0]) + alpha_tri1_point2*(*(outside_UVs[0])-*(inside_UVs[0]));
+		out_tri1.setUVPoint(2,tri1_UV2);		
+
 
 		// The second triangle is composed of one of he inside points, a
 		// new point determined by the intersection of the other side of the 
 		// triangle and the plane, and the newly created point above
-		out_tri2.setTrianglePoint(0, *inside_points[1]);
+		out_tri2.setTrianglePoint(0, *(inside_points[1]));
 		out_tri2.setTrianglePoint(1, out_tri1.getTrianglePoint(2));
-		out_tri2.setTrianglePoint(2, VectorMathService::vectorIntersectPlane(plane_p, plane_n, *inside_points[1], *outside_points[0], alpha_tri2_point2));
+		out_tri2.setTrianglePoint(2, VectorMathService::vectorIntersectPlane(plane_p, plane_n, *(inside_points[1]), *(outside_points[0]), alpha_tri2_point2));
+
+		// Determine UV Coords:
+		out_tri2.setUVPoint(0,*(inside_UVs[1]));
+		out_tri2.setUVPoint(1,out_tri1.getUVPoint(2));
+		
+		// Perform lerp over UV Coordinates here
+		Vec2d tri2_UV2 = *(inside_UVs[1]) + alpha_tri2_point2*(*(outside_UVs[0])-*(inside_UVs[1]));
+		out_tri2.setUVPoint(2,tri2_UV2);	
+
+		// These lines are used to test UVs
+		if (in_tri.getID()==1){
+			std::cout << "TRI1  UV0: " << (*(inside_UVs[0])).toString() << "     UV1: " << (*(inside_UVs[1])).toString() << "     UV2: " << tri1_UV2.toString() << std::endl; 
+			std::cout << "TRI2  UV0: " << (*(inside_UVs[1])).toString() << "     UV1: " << tri1_UV2.toString() << "     UV2: " << tri2_UV2.toString() << std::endl; 
+		
+		}
 
 		return 2; // Return two newly formed triangles which form a quad
 	}
