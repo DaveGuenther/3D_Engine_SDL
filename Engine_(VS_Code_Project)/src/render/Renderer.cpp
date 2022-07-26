@@ -206,6 +206,8 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			pt1 = pt1/pt1.getW();
 			pt2 = pt2/pt2.getW();
 
+			
+
 			// superimpose world Z coords from View Plane into projected space where Z isn't used anymore
 			// This helps with z-lighting and z-ordering of triangles
 			pt0.setZ(newTriPoint0.getZ());
@@ -216,6 +218,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			triProjected.setTrianglePoint(1,pt1);
 			triProjected.setTrianglePoint(2,pt2);
 
+			
 		
 			// Dim Lighting by Distance
 			if (this->colorFrustumClippedTris==true){
@@ -227,10 +230,11 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 
 			
-			// Copy UV coordinates over
-			triProjected.setUVPoint(0,this_tri.getUVPoint(0));
-			triProjected.setUVPoint(1,this_tri.getUVPoint(1));
-			triProjected.setUVPoint(2,this_tri.getUVPoint(2));
+			// Copy UV coordinates over and places them in 1/z space for perspective correction.  We will bring them out just before sampling texture
+			triProjected.setUVPoint(0,Vec2d{this_tri.getUVPoint(0).getX()/pt0.getZ(),this_tri.getUVPoint(0).getY()/pt0.getZ()});
+			triProjected.setUVPoint(1,Vec2d{this_tri.getUVPoint(1).getX()/pt1.getZ(),this_tri.getUVPoint(1).getY()/pt1.getZ()});
+			triProjected.setUVPoint(2,Vec2d{this_tri.getUVPoint(2).getX()/pt2.getZ(),this_tri.getUVPoint(2).getY()/pt2.getZ()});
+
 
 			// Copy Triangle ID over
 			triProjected.setID(tri.getID());

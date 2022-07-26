@@ -162,9 +162,11 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
         //determine UV_start
         float UVx_start = alpha_start*(uv2.getX()-uv0.getX())+uv0.getX();
         float UVy_start = alpha_start*(uv2.getY()-uv0.getY())+uv0.getY();
+        float UVz_start = alpha_start*(p2.getZ()-p0.getZ())+p0.getZ();
         //determine UV_end
         float UVx_end = alpha_end*(uv2.getX()-uv1.getX())+uv1.getX();
         float UVy_end = alpha_end*(uv2.getY()-uv1.getY())+uv1.getY();
+        float UVz_end = alpha_end*(p2.getZ()-p1.getZ())+p1.getZ();
 
         // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
         //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
@@ -179,9 +181,11 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
             }
             
             // determine Vec2d(U,V)
-            float UVx_scan = alpha_scan*(UVx_end-UVx_start)+UVx_start;
-            float UVy_scan = alpha_scan*(UVy_end-UVy_start)+UVy_start;
-            
+            float UVx_scan = alpha_scan*(UVx_end-UVx_start)+UVx_start;  // UVx scan is in 1/z space for perspective correction
+            float UVy_scan = alpha_scan*(UVy_end-UVy_start)+UVy_start;  // UVy scan is in 1/z space for perspective correction
+            float UVz_scan = alpha_scan*(UVz_end-UVz_start)+UVz_start;  // UVz scan is in projected UV space because we will need it to get UVx and UVy out of 1/z space
+            UVx_scan = UVx_scan*UVz_scan;  // Brings UVx out of 1/z space into projected UV space 
+            UVy_scan = UVy_scan*UVz_scan;  // Brings UVy out of 1/z space into projected UV space            
             SDL_Color col={255,255,255,255};
 
             // sample texture color at (U/V)
@@ -238,9 +242,11 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
         //determine UV_start
         float UVx_start = alpha_start*(uv1.getX()-uv0.getX())+uv0.getX();
         float UVy_start = alpha_start*(uv1.getY()-uv0.getY())+uv0.getY();
+        float UVz_start = alpha_start*(p1.getZ()-p0.getZ())+p0.getZ();
         //determine UV_end
         float UVx_end = alpha_end*(uv2.getX()-uv0.getX())+uv0.getX();
         float UVy_end = alpha_end*(uv2.getY()-uv0.getY())+uv0.getY();
+        float UVz_end = alpha_end*(p2.getZ()-p0.getZ())+p0.getZ();
 
         // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
         for (int x = x_start;x<x_end;x++){ 
@@ -254,9 +260,12 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
             }
             
             // determine Vec2d(U,V)
-            float UVx_scan = alpha_scan*(UVx_end-UVx_start)+UVx_start;
-            float UVy_scan = alpha_scan*(UVy_end-UVy_start)+UVy_start;
-            
+            float UVx_scan = alpha_scan*(UVx_end-UVx_start)+UVx_start;  // UVx scan is in 1/z space for perspective correction
+            float UVy_scan = alpha_scan*(UVy_end-UVy_start)+UVy_start;  // UVy scan is in 1/z space for perspective correction
+            float UVz_scan = alpha_scan*(UVz_end-UVz_start)+UVz_start;  // UVz scan is in projected UV space because we will need it to get UVx and UVy out of 1/z space
+            UVx_scan = UVx_scan*UVz_scan;  // Brings UVx out of 1/z space into projected UV space 
+            UVy_scan = UVy_scan*UVz_scan;  // Brings UVy out of 1/z space into projected UV space
+
             SDL_Color col={255,255,255,255};
 
             // sample texture color at (U/V)
