@@ -23,6 +23,13 @@ class Vec3d:public Vec2d{
       w=1.0f;
     }
 
+    Vec3d(const float &x_in, const float &y_in, const float &z_in, const float &w_in){
+      x=x_in;
+      y=y_in;
+      z=z_in;
+      w=w_in;
+    }
+
     Vec3d (const Vec3d &V){
       x=V.x;
       y=V.y;

@@ -26,7 +26,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
     
 
 	// Projection Matrix
-	fNear = 5.0f;
+	fNear = 0.1f;
 	fFar = 1000.0f;
 	fFOV=90.0f;
 	this->fAspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);
@@ -104,9 +104,9 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).getX(), this_triangle.getTrianglePoint(2).getY()));
 
 	
-	Triangle screenTri(Vec3d(vert1.getX(),vert1.getY(),this_triangle.getTrianglePoint(0).getZ()), 
-						Vec3d(vert2.getX(),vert2.getY(),this_triangle.getTrianglePoint(1).getZ()),
-						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ()),
+	Triangle screenTri(Vec3d(vert1.getX(),vert1.getY(),this_triangle.getTrianglePoint(0).getZ(),this_triangle.getTrianglePoint(0).getW()), 
+						Vec3d(vert2.getX(),vert2.getY(),this_triangle.getTrianglePoint(1).getZ(),this_triangle.getTrianglePoint(0).getW()),
+						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ(),this_triangle.getTrianglePoint(0).getW()),
 						this_triangle.getUVPoint(0), this_triangle.getUVPoint(1), this_triangle.getUVPoint(2), 
 						this_triangle.getID(),col, this_triangle.getTexture());
 						
@@ -213,6 +213,10 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			pt0.setZ(newTriPoint0.getZ());
 			pt1.setZ(newTriPoint1.getZ());
 			pt2.setZ(newTriPoint2.getZ());
+			
+			//pt0.setW(1/(newTriPoint0.getZ()));
+			//pt1.setW(1/(newTriPoint1.getZ()));
+			//pt2.setW(1/(newTriPoint2.getZ()));
 
 			triProjected.setTrianglePoint(0,pt0);
 			triProjected.setTrianglePoint(1,pt1);
@@ -231,9 +235,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 			
 			// Copy UV coordinates over and places them in 1/z space for perspective correction.  We will bring them out just before sampling texture
-			triProjected.setUVPoint(0,Vec2d{this_tri.getUVPoint(0).getX()/pt0.getZ(),this_tri.getUVPoint(0).getY()/pt0.getZ()});
-			triProjected.setUVPoint(1,Vec2d{this_tri.getUVPoint(1).getX()/pt1.getZ(),this_tri.getUVPoint(1).getY()/pt1.getZ()});
-			triProjected.setUVPoint(2,Vec2d{this_tri.getUVPoint(2).getX()/pt2.getZ(),this_tri.getUVPoint(2).getY()/pt2.getZ()});
+			triProjected.setUVPoint(0,Vec2d{this_tri.getUVPoint(0).getX()/pt0.getZ(),this_tri.getUVPoint(0).getY()/pt0.getZ(),1/pt0.getZ()});
+			triProjected.setUVPoint(1,Vec2d{this_tri.getUVPoint(1).getX()/pt1.getZ(),this_tri.getUVPoint(1).getY()/pt1.getZ(),1/pt1.getZ()});
+			triProjected.setUVPoint(2,Vec2d{this_tri.getUVPoint(2).getX()/pt2.getZ(),this_tri.getUVPoint(2).getY()/pt2.getZ(),1/pt2.getZ()});
 
 
 			// Copy Triangle ID over
@@ -277,7 +281,7 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	for (auto tri: this->trianglesToRasterize)
 	{
 		drawFilledTriangle2d(tri);
-		//drawWireFrameTriangle2d(tri);
+		drawWireFrameTriangle2d(tri);
 		
 	}	
 	

@@ -193,6 +193,101 @@
 				"isDefault": false
 			},
 			"detail": "compiler: C:\\msys64\\mingw64\\bin\\g++.exe"
+		},
+
+		{
+			"type": "cppbuild",
+			"label": "GAME TEST C/C++: g++.exe",
+			"command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+			"args": [
+			
+				"-std=c++17",
+				"-lstdc++fs",
+				"-fdiagnostics-color=always",
+				"-g",
+				"${workspaceFolder}\\src\\game.cpp",
+
+				//Include only the files that need to be recompiled
+
+				//utility source code
+				//"${workspaceFolder}\\src\\utility\\Mesh.cpp",
+				//"${workspaceFolder}\\src\\utility\\Mat4x4.cpp",
+				//"${workspaceFolder}\\src\\utility\\Triangle.cpp",
+				//"${workspaceFolder}\\src\\utility\\Mesh_Pipeline.cpp",
+				//"${workspaceFolder}\\src\\utility\\Triangle_Modifier.cpp",
+				//"${workspaceFolder}\\src\\utility\\Vector_Math_Service.cpp",
+				//"${workspaceFolder}\\src\\utility\\nonVector_Math_Service.cpp",
+				//"${workspaceFolder}\\src\\utility\\TexturePNG.cpp",
+				//"${workspaceFolder}\\src\\utility\\TextureList.cpp",
+
+				//core source code
+				//"${workspaceFolder}\\src\\core\\Engine_3D.cpp",
+				//"${workspaceFolder}\\src\\core\\GameState_Observer_Pattern.cpp",
+
+				//input source code
+				//"${workspaceFolder}\\src\\input\\Event_Scanner.cpp",
+				//"${workspaceFolder}\\src\\input\\KeyBindings.cpp",		
+				//"${workspaceFolder}\\src\\input\\Input_Parser.cpp",
+
+				//action source code
+				//"${workspaceFolder}\\src\\actions\\Action_Interface.cpp",
+				//"${workspaceFolder}\\src\\actions\\Action_Updater.cpp",
+
+				//render source code
+				//"${workspaceFolder}\\src\\render\\Renderer.cpp",
+				//"${workspaceFolder}\\src\\render\\TrianglePipeline.cpp",
+				//"${workspaceFolder}\\src\\render\\Rasterizer.cpp",		
+				//"${workspaceFolder}\\src\\render\\Camera.cpp",	
+				//"${workspaceFolder}\\src\\render\\Clipper.cpp",	
+				//"${workspaceFolder}\\src\\render\\Frustum.cpp",	
+				
+				//objects source code
+				//"${workspaceFolder}\\src\\objects\\OBJ.cpp",
+				//"${workspaceFolder}\\src\\objects\\OBJ_Lex_vertex.cpp",
+				//"${workspaceFolder}\\src\\objects\\OBJ_Lex_textureCoord.cpp",
+				//"${workspaceFolder}\\src\\objects\\OBJ_Lex_normal.cpp",
+				//"${workspaceFolder}\\src\\objects\\OBJ_Lex_triFace.cpp",
+				//"${workspaceFolder}\\src\\objects\\OBJ_Chunk.cpp",
+				
+				//"${workspaceFolder}\\src\\globals.cpp",
+				
+				"-lmingw32",
+				"-lSDL2main",
+				"-lSDL2",
+				"-lSDL2_image",
+				"-mconsole",
+				"-mwindows",
+				
+				"-I",
+				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\include\\SDL2",
+				"-I",
+				"C:\\SDL\\SDL2_image-2.0.5\\x86_64-w64-mingw32\\include\\SDL2", 
+				"-I",
+				"${workspaceFolder}\\src",	
+				
+				
+				"-L",
+				"C:\\SDL\\SDL2-2.0.18\\x86_64-w64-mingw32\\lib",			
+				"-L",
+				"C:\\SDL\\SDL2_image-2.0.5\\x86_64-w64-mingw32\\lib",
+				"-o",
+				"${workspaceFolder}\\build\\${fileBasenameNoExtension}.exe",
+
+				//"-pg",          // Include this line when using gprof for profiling, otherwise exclude it
+				//"-no-pie",      // Include this line when using gprof for profiling, otherwise exclude it
+				//"-fno-builtin" // Include this line when using gprof for profiling, otherwise exclude it	
+			],
+			"options": {
+				"cwd": "${workspaceFolder}\\build"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": false
+			},
+			"detail": "compiler: C:\\msys64\\mingw64\\bin\\g++.exe"
 		}
 
 	]

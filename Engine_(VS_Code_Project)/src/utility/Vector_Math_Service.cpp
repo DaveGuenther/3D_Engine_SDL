@@ -227,11 +227,11 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 		out_tri2.setUVPoint(2,tri2_UV2);	
 
 		// These lines are used to test UVs
-		if (in_tri.getID()==1){
-			std::cout << "TRI1  UV0: " << (*(inside_UVs[0])).toString() << "     UV1: " << (*(inside_UVs[1])).toString() << "     UV2: " << tri1_UV2.toString() << std::endl; 
-			std::cout << "TRI2  UV0: " << (*(inside_UVs[1])).toString() << "     UV1: " << tri1_UV2.toString() << "     UV2: " << tri2_UV2.toString() << std::endl; 
-		
-		}
+		//if (in_tri.getID()==1){
+		//	std::cout << "TRI1  UV0: " << (*(inside_UVs[0])).toString() << "     UV1: " << (*(inside_UVs[1])).toString() << "     UV2: " << tri1_UV2.toString() << std::endl; 
+		//	std::cout << "TRI2  UV0: " << (*(inside_UVs[1])).toString() << "     UV1: " << tri1_UV2.toString() << "     UV2: " << tri2_UV2.toString() << std::endl; 
+		//
+		//}
 
 		return 2; // Return two newly formed triangles which form a quad
 	}
