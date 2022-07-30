@@ -27,8 +27,8 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 
 	// Projection Matrix
 	fNear = 0.1f;
-	fFar = 1000.0f;
-	fFOV=90.0f;
+	fFar = 500.0f;
+	fFOV=70.0f;
 	this->fAspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);
 	matProj = Mat4x4::matrixMakeProjection(fFOV, SCREEN_W, SCREEN_H, fNear, fFar);
 	
@@ -281,7 +281,7 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	for (auto tri: this->trianglesToRasterize)
 	{
 		drawFilledTriangle2d(tri);
-		drawWireFrameTriangle2d(tri);
+		//drawWireFrameTriangle2d(tri);
 		
 	}	
 	
