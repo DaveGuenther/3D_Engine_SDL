@@ -39,7 +39,7 @@ class Mesh_Pipeline{
      */
     void Add_Mesh_to_Pipeline(std::string filename, Vec3d origin);
 
-    void Add_OBJ_Mesh_to_Pipeline(std::string filename, Vec3d origin);
+    void Add_OBJ_Mesh_to_Pipeline(std::string filename, Vec3d origin, Vec3d rotation);
 
     /**
      * @brief this function adds a Mesh to the Meshes vector (the pipeline)
