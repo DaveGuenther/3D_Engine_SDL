@@ -17,14 +17,17 @@ This project is based on mingw (g++) and SDL (Simplified DirectMedia Layer) and 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/2022-07-29%20Texturemapped.png">
   <br><i>Engine Screenshot - Texturemapped Cube Rendered! 7/29/2022</i>
 </p>
+<br>
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/2022-07-13.png">
   <br><i>IRL Screenshot - Debug Cube to help with texturemapping 7/13/2022 </i>
 </p>
+<br>
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/2022-07-05%20Blender%20Cube.png">
   <br><i>Blender Screenshot - Texturemapped Test Cube 7/5/2022 </i>
 </p>
+<br>
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/Pirate%20Cave%20-%20walkthrough.gif">
   <br><i>Engine Screenshot - Pirate Cave Walkthrough (Omnidirectional lighting) 5/27/2022</i>
