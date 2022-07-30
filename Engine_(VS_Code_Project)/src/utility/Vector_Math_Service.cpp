@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "math.h"
 #include "Vector_Math_Service.h"
 #include "Vec3d.h"
@@ -32,14 +34,15 @@ Vec3d VectorMathService::MultiplyMatrixVector( const Mat4x4 &m, Vec3d &i){
 }
 
 
-Vec3d VectorMathService::vectorIntersectPlane(Vec3d &plane_p, Vec3d &plane_n, Vec3d &lineStart, Vec3d &lineEnd){
+Vec3d VectorMathService::vectorIntersectPlane(Vec3d &plane_p, Vec3d &plane_n, Vec3d &lineStart, Vec3d &lineEnd, float &alpha){
     getUnitVector(plane_n);
     float plane_d = -dotProduct(plane_n, plane_p);
     float ad = dotProduct(lineStart, plane_n);
     float bd = dotProduct(lineEnd, plane_n);
-    float t = (-plane_d - ad) / (bd - ad);
+    alpha = (-plane_d - ad) / (bd - ad);  //t is the alpha value between lineStart and lineEnd (use for lerping!)
+	// send t back for UV clipping, or define the new UV point here.
     Vec3d lineStartToEnd = lineEnd - lineStart;
-    Vec3d lineToIntersect = t * lineStartToEnd;
+    Vec3d lineToIntersect = alpha * lineStartToEnd;  
     return lineStart + lineToIntersect;
 
 }
@@ -59,7 +62,9 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 	// Create two temporary storage arrays to classify points either side of plane
 	// If distance sign is positive, point lies on "inside" of plane
 	Vec3d* inside_points[3];  int nInsidePointCount = 0;
+	Vec2d* inside_UVs[3];
 	Vec3d* outside_points[3]; int nOutsidePointCount = 0;
+	Vec2d* outside_UVs[3];
 
 	// Get signed distance of each point in triangle to plane
 	//float d0 = dist(in_tri.getTrianglePoint(0));
@@ -75,16 +80,41 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 	//float d1 = dist(in_tri.getTrianglePoint(1));
 	//float d2 = dist(in_tri.getTrianglePoint(2));
 
-	Vec3d in_tri_p0 = in_tri.getTrianglePoint(0);
+	Vec3d in_tri_p0 = in_tri.getTrianglePoint(0); // duplicate with p0?
 	Vec3d in_tri_p1 = in_tri.getTrianglePoint(1);
 	Vec3d in_tri_p2 = in_tri.getTrianglePoint(2);
 
-	if (d0 >= 0) { inside_points[nInsidePointCount++] = &(in_tri_p0); } 
-	else { outside_points[nOutsidePointCount++] = &(in_tri_p0); }
-	if (d1 >= 0) { inside_points[nInsidePointCount++] = &in_tri_p1; }
-	else { outside_points[nOutsidePointCount++] = &in_tri_p1; }
-	if (d2 >= 0) { inside_points[nInsidePointCount++] = &in_tri_p2; }
-	else { outside_points[nOutsidePointCount++] = &in_tri_p2; }
+	Vec2d in_tri_UV0 = in_tri.getUVPoint(0);
+	Vec2d in_tri_UV1 = in_tri.getUVPoint(1);
+	Vec2d in_tri_UV2 = in_tri.getUVPoint(2);
+
+	if (d0 >= 0) { 
+		inside_points[nInsidePointCount] = &(in_tri_p0);
+		inside_UVs[nInsidePointCount] = &(in_tri_UV0); 
+		nInsidePointCount++;
+	} else { 
+		outside_points[nOutsidePointCount] = &(in_tri_p0);
+		outside_UVs[nOutsidePointCount]=&(in_tri_UV0); 
+		nOutsidePointCount++;
+	}
+	if (d1 >= 0) { 
+		inside_points[nInsidePointCount] = &in_tri_p1;
+		inside_UVs[nInsidePointCount]=&(in_tri_UV1); 
+		nInsidePointCount++;
+	} else { 
+		outside_points[nOutsidePointCount] = &in_tri_p1;
+		outside_UVs[nOutsidePointCount]=&in_tri_UV1;
+		nOutsidePointCount++;
+	}
+	if (d2 >= 0) { 
+		inside_points[nInsidePointCount] = &in_tri_p2;
+		inside_UVs[nInsidePointCount]=&in_tri_UV2;
+		nInsidePointCount++;
+	} else { 
+		outside_points[nOutsidePointCount] = &in_tri_p2;
+		outside_UVs[nOutsidePointCount]=&in_tri_UV2;
+		nOutsidePointCount++;
+	}
 
 	// Now classify triangle points, and break the input triangle into 
 	// smaller output triangles if required. There are four possible
@@ -114,16 +144,33 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 
 		// Copy appearance info to new triangle
 		out_tri1.setColor(SDL_Color {0,0,255,255});
+		out_tri1.setTexture(in_tri.getTexture());
+		out_tri1.setID(in_tri.getID());
 		//out_tri1.col =  in_tri.col;
 		//out_tri1.sym = in_tri.sym;
 
 		// The inside point is valid, so keep that...
-		out_tri1.setTrianglePoint(0, *inside_points[0]);
+		out_tri1.setTrianglePoint(0, *(inside_points[0]));
+		out_tri1.setUVPoint(0,*(inside_UVs[0]));
 
 		// but the two new points are at the locations where the 
 		// original sides of the triangle (lines) intersect with the plane
-		out_tri1.setTrianglePoint(1,VectorMathService::vectorIntersectPlane(plane_p, plane_n, *inside_points[0], *outside_points[0]));
-		out_tri1.setTrianglePoint(2,VectorMathService::vectorIntersectPlane(plane_p, plane_n, *inside_points[0], *outside_points[1]));
+		float alpha1, alpha2=0.0f;
+		out_tri1.setTrianglePoint(1,VectorMathService::vectorIntersectPlane(plane_p, plane_n, *(inside_points[0]), *(outside_points[0]), alpha1));
+		out_tri1.setTrianglePoint(2,VectorMathService::vectorIntersectPlane(plane_p, plane_n, *(inside_points[0]), *(outside_points[1]), alpha2));
+
+
+		// Perform lerp over UV Coordinates here
+		Vec2d UV1 = *(inside_UVs[0]) + alpha1*(*(outside_UVs[0])-*(inside_UVs[0]));
+		out_tri1.setUVPoint(1,UV1);
+
+		Vec2d UV2 = *(inside_UVs[0]) + alpha2*(*(outside_UVs[1])-*(inside_UVs[0]));
+		out_tri1.setUVPoint(2,UV2);		
+		/*if (in_tri.getID()==0){
+			std::cout << "UV1: " << UV1.toString() << "     UV2: " << UV2.toString() << std::endl; 
+		}*/
+
+
 
 		return 1; // Return the newly formed single triangle
 	}
@@ -137,24 +184,54 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 		// Copy appearance info to new triangles
 		
 		out_tri1.setColor(SDL_Color {0,255,0,255});
+		out_tri1.setID(in_tri.getID());
+		out_tri1.setTexture(in_tri.getTexture());
 		//out_tri1.sym = in_tri.sym;
 
 		out_tri2.setColor(SDL_Color {255,0,0,255});
+		out_tri2.setID(in_tri.getID());
+		out_tri2.setTexture(in_tri.getTexture());
 		//out_tri2.sym = in_tri.sym;
+
+		float alpha_tri1_point2, alpha_tri2_point2=0.0f;
 
 		// The first triangle consists of the two inside points and a new
 		// point determined by the location where one side of the triangle
 		// intersects with the plane
-		out_tri1.setTrianglePoint(0, *inside_points[0]);
-		out_tri1.setTrianglePoint(1, *inside_points[1]);
-		out_tri1.setTrianglePoint(2, VectorMathService::vectorIntersectPlane(plane_p, plane_n, *inside_points[0], *outside_points[0]));
+		out_tri1.setTrianglePoint(0, *(inside_points[0]));
+		out_tri1.setTrianglePoint(1, *(inside_points[1]));
+		out_tri1.setTrianglePoint(2, VectorMathService::vectorIntersectPlane(plane_p, plane_n, *(inside_points[0]), *(outside_points[0]), alpha_tri1_point2));
+
+		// Determine UV Coords:
+		out_tri1.setUVPoint(0,*(inside_UVs[0]));
+		out_tri1.setUVPoint(1,*(inside_UVs[1]));
+		
+		// Perform lerp over UV Coordinates here
+		Vec2d tri1_UV2 = *(inside_UVs[0]) + alpha_tri1_point2*(*(outside_UVs[0])-*(inside_UVs[0]));
+		out_tri1.setUVPoint(2,tri1_UV2);		
+
 
 		// The second triangle is composed of one of he inside points, a
 		// new point determined by the intersection of the other side of the 
 		// triangle and the plane, and the newly created point above
-		out_tri2.setTrianglePoint(0, *inside_points[1]);
+		out_tri2.setTrianglePoint(0, *(inside_points[1]));
 		out_tri2.setTrianglePoint(1, out_tri1.getTrianglePoint(2));
-		out_tri2.setTrianglePoint(2, VectorMathService::vectorIntersectPlane(plane_p, plane_n, *inside_points[1], *outside_points[0]));
+		out_tri2.setTrianglePoint(2, VectorMathService::vectorIntersectPlane(plane_p, plane_n, *(inside_points[1]), *(outside_points[0]), alpha_tri2_point2));
+
+		// Determine UV Coords:
+		out_tri2.setUVPoint(0,*(inside_UVs[1]));
+		out_tri2.setUVPoint(1,out_tri1.getUVPoint(2));
+		
+		// Perform lerp over UV Coordinates here
+		Vec2d tri2_UV2 = *(inside_UVs[1]) + alpha_tri2_point2*(*(outside_UVs[0])-*(inside_UVs[1]));
+		out_tri2.setUVPoint(2,tri2_UV2);	
+
+		// These lines are used to test UVs
+		//if (in_tri.getID()==1){
+		//	std::cout << "TRI1  UV0: " << (*(inside_UVs[0])).toString() << "     UV1: " << (*(inside_UVs[1])).toString() << "     UV2: " << tri1_UV2.toString() << std::endl; 
+		//	std::cout << "TRI2  UV0: " << (*(inside_UVs[1])).toString() << "     UV1: " << tri1_UV2.toString() << "     UV2: " << tri2_UV2.toString() << std::endl; 
+		//
+		//}
 
 		return 2; // Return two newly formed triangles which form a quad
 	}

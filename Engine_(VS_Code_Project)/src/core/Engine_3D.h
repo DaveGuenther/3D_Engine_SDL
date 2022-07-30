@@ -8,6 +8,7 @@
 #include "input/Input_Parser.h"
 #include "actions/Action_Updater.h"
 #include "utility/Mesh_Pipeline.h"
+#include "materials/TextureList.h"
 #include "render/Renderer.h"
 #include "render/Camera.h"
 
@@ -16,6 +17,30 @@
  * 
  */
 class Engine_3D{
+    public:
+        Engine_3D(void);
+        ~Engine_3D();
+        /**
+         * @brief This method will load a file housing informations about mesh objects to load and then invoke the Mesh_Pipeline.Add_Mesh_to_Pipeline() method
+         * 
+         */
+        void load_meshes();
+        /**
+         * @brief This Getter method tells the main game loop the status of the engine, it should be used to terminate the game loop in main()
+         * 
+         */
+        bool is_running();
+        /**
+         * @brief This method is called once during the game loop.  It queries for input, requests mesh rotations and translations, and projects the new frame on the screen.
+         * 
+         */
+        void engine_update();
+        /**
+         * @brief Used to shutdown the SDL systems.
+         * 
+         */
+        void shutdown();
+
     private:
 
         
@@ -26,8 +51,7 @@ class Engine_3D{
         
         std::shared_ptr<Mesh_Pipeline> mesh_pipeline; // contains all of the objects that the engine will need to render
      
-
-
+        std::shared_ptr<TextureList> texture_list; // contains all textures used by the engine.  These can be applied to meshes or used on a menu screen
         
         GameStateSubject game_state_subject;
         std::shared_ptr<Game_Engine_State_Observer> Engine_State;
@@ -52,29 +76,7 @@ class Engine_3D{
         
         std::vector<std::shared_ptr<Triangle_Modifier>> modifications;
         
-    public:
-        Engine_3D(void);
-        ~Engine_3D();
-        /**
-         * @brief This method will load a file housing informations about mesh objects to load and then invoke the Mesh_Pipeline.Add_Mesh_to_Pipeline() method
-         * 
-         */
-        void load_meshes();
-        /**
-         * @brief This Getter method tells the main game loop the status of the engine, it should be used to terminate the game loop in main()
-         * 
-         */
-        bool is_running();
-        /**
-         * @brief This method is called once during the game loop.  It queries for input, requests mesh rotations and translations, and projects the new frame on the screen.
-         * 
-         */
-        void engine_update();
-        /**
-         * @brief Used to shutdown the SDL systems.
-         * 
-         */
-        void shutdown();
+
 
 };
 

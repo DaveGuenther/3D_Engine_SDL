@@ -3,18 +3,26 @@
 #include <filesystem>
 #include <sstream>
 #include <iostream>
+#include <stdexcept>
 
 #include "objects/OBJ_Chunk.h"
 #include "objects/OBJ.h"
+#include "materials/MTL.h"
 #include "utility/Mesh.h"
 #include "utility/Triangle.h"
+#include "materials/TextureList.h"
+#include "materials/MaterialMapper.h"
 
-OBJ::OBJ(std::string filename){
+
+OBJ::OBJ(std::string filename, std::shared_ptr<TextureList> texture_list){
 
     this->forceClockwiseWinding=true;
     this->flip_X_Coords=true;
+    this->texture_list=texture_list;
     buildMesh(filename); 
-    
+    //std::string toErase = ".obj";
+    //this->filename = filename.erase(filename.find(toErase),toErase.length());
+   
 }
 
 OBJ::OBJ(std::string filename, bool forceClockwiseWinding, bool flip_X_Coords){
@@ -28,7 +36,9 @@ OBJ::OBJ(std::string filename, bool forceClockwiseWinding, bool flip_X_Coords){
 bool OBJ::peekline( std::ifstream & is, std::string & s ){
     std::streampos sp = is.tellg();
     if(getline( is, s )){
+        std::streampos sp2 = is.tellg();
         is.seekg( sp );
+        sp = is.tellg();
         return true;
     }else{
         s = "EOF";
@@ -49,32 +59,39 @@ void OBJ::split_OBJ_Chunks(){
         std::string name;
         std::string this_usemtl;
         std::string nextToken="#";
+        std::streampos sp;
         while(nextToken!="o"){ 
             // This while loop is really just looking for the mtllib token in the obj file before 
             // the first "o" object definition
             
             // getline and extract token
+            sp = myfile.tellg();
             std::getline(myfile, line);
+            sp = myfile.tellg();
             std::stringstream this_stream(line);
             std::string keyword, lexLine, str_this_stream;   
             std::getline(this_stream,keyword,' ');
             std::getline(this_stream,lexLine);
             str_this_stream = this_stream.str();
-            
+            sp = myfile.tellg();
             // parse "mtllib" lines
             if (keyword=="mtllib"){ // mtllib line
                 //record mtllib information for this mesh
                 mtlfile = lexLine;
+                std::shared_ptr<MTL> newMTLfile(new MTL(mtlfile));
+                this->MTLfile = newMTLfile;
+                
             }         
 
             notEOF = peekline(myfile, line);
+            sp = myfile.tellg();
             // get nextToken
             std::stringstream this_peek_stream(line);
             this_peek_stream << line << std::endl;
-
+            sp = myfile.tellg();
             str_this_stream = this_peek_stream.str();
             std::getline (this_peek_stream,nextToken,' '); 
-            
+            sp = myfile.tellg();
         }   
 
         // This block works through the first "o" line 
@@ -132,7 +149,7 @@ void OBJ::split_OBJ_Chunks(){
                     (*this_datum.meshblocks) << temp_line << std::endl;
                 }
                 this_datum.mesh_name=name;
-                this_datum.mtl = this_usemtl;
+                this_datum.material.push_back(this_usemtl);
                 this_datum.this_mesh_block = this_mesh_block;
                 this_mesh_block.clear();
                 myOBJ_Data.push_back(this_datum);
@@ -151,7 +168,7 @@ void OBJ::split_OBJ_Chunks(){
 
         this_datum.mesh_name=name;
         this_datum.this_mesh_block = this_mesh_block;
-        this_datum.mtl=this_usemtl;
+        this_datum.material.push_back(this_usemtl);
         myOBJ_Data.push_back(this_datum);
         //push stringstream to vector
         mesh_streams.push_back(this_mesh_block);
@@ -168,12 +185,14 @@ void OBJ::assembleChunks(){
     int X_CoordinateInverter=1;
     if (this->flip_X_Coords==true){ X_CoordinateInverter=-1; } 
     for (auto this_chunk:this->myOBJ_Data){
-        OBJ_Chunk this_OBJ_Chunk((*this_chunk.meshblocks));
+        OBJ_Chunk this_OBJ_Chunk((*this_chunk.meshblocks), this->MTLfile->getMTL_map());
 
         Mesh thisMesh(0);
         int tri_id=0;
         for (auto triangle: this_OBJ_Chunk.triangleFaces){
             Triangle thisTri;
+
+            // Set Triangle Vertices
             std::vector<int> vertIDs = triangle.vertex_ids;
             for (int i=0;i<3;i++){
                 int normal_offset_id = i;
@@ -193,10 +212,30 @@ void OBJ::assembleChunks(){
                 
             }
             
-            /* Eventually place the information on texture coords here
+            // Set Texture File Information Here
+            std::shared_ptr<TexturePNG> this_texture_ptr = this->texture_list->getTextureByFilename(triangle.texturefile);
+            thisTri.setTexture(this_texture_ptr);
 
-            */
-
+            // Set Texture UV Vertices for triangle
+            std::vector<int> texIDs = triangle.texture_coord_ids;
+            for (int i=0;i<3;i++){
+                int normal_offset_id = i;
+                if (this->forceClockwiseWinding==true){
+                    if (i==0){
+                    normal_offset_id=2;
+                    }
+                    if (i==2){
+                        normal_offset_id=0;
+                    }
+                }
+                int tex_ID = texIDs[normal_offset_id]-1-this->totalTextureCoords;
+                Vec2d this_tex_coord = Vec2d(this_OBJ_Chunk.textureCoords[tex_ID].u,
+                                        this_OBJ_Chunk.textureCoords[tex_ID].v);
+                thisTri.setUVPoint(i,this_tex_coord);
+                
+            }
+           //int tex_ID = vertIDs[normal_offset_id]-1-this->totalVertices;
+            
             thisTri.setID(tri_id);
             thisMesh.add3dTriangle(thisTri);
             tri_id+=1;
@@ -213,9 +252,12 @@ void OBJ::buildMesh(std::string filename){
     filename = "Meshes/"+filename;
 	std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
 	myfile.open (filename);
+    if (!myfile)
+        throw std::runtime_error(std::string("OBJ::buildMesh - Could not open file: ")+filename);
 
     //std::ifstream myfile;
     split_OBJ_Chunks();
+    MaterialMapper::doMap(this->MTLfile,this->texture_list);
     assembleChunks();
     
 }

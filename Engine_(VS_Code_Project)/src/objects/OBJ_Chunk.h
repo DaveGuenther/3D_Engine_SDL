@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <unordered_map>
 
 #include "objects/OBJ_Lex_normal.h"
 #include "objects/OBJ_Lex_textureCoord.h"
@@ -25,7 +26,7 @@ class OBJ_Chunk{
          * 
          * @param this_mesh_object stringstream to the mesh object.
          */
-        OBJ_Chunk(std::stringstream& this_mesh_object);
+        OBJ_Chunk(std::stringstream& this_mesh_object, const std::unordered_map<std::string, std::string>& mesh_MTLs);
         /**
          * @brief Get the Total Vertex Num object.  This is used to ensure that we don't lose track of the vertex IDs that have already been captured 
          * in an OBJ file.

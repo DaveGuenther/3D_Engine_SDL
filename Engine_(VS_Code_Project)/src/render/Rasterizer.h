@@ -1,10 +1,12 @@
 #ifndef RASTERIZER_H
 #define RASTERIZER_H
+#include <array>
+#include <map>
 
 #include "Renderer.h"
 #include "utility/Vec2d.h"
-#include <array>
-#include <map>
+#include "materials/TexturePNG.h"
+
 
 class ITriangleRasterizer{
     protected:
@@ -31,6 +33,18 @@ class ITriangleRasterizer{
          */
         void applyDepthDimmer(Triangle& this_tri, SDL_Color &col);
 
+};
+
+class TexturemapRasterizer:public ITriangleRasterizer{
+    public:
+        TexturemapRasterizer(SDL_Renderer* my_renderer);
+        void drawTriangle(Triangle& this_triangle);
+        
+    private:
+        void drawFlatTopTri(Triangle& this_triangle);
+        void drawFlatBottomTri(Triangle& this_triangle);
+        std::shared_ptr<TexturePNG> this_texture;
+        
 };
 
 class ScanlineRasterizer:public ITriangleRasterizer{

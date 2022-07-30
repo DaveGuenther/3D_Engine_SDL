@@ -21,8 +21,8 @@ void GameStateSubject::removeSubscriber(IGameStateObserver* observer){
     }
 }
 
-Game_Engine_State_Observer::Game_Engine_State_Observer(GameStateSubject &subject){
-    this->my_subject = subject;
+Game_Engine_State_Observer::Game_Engine_State_Observer(GameStateSubject &subject):my_subject(subject){
+    //this->my_subject = subject;
     this->my_subject.addSubscriber(this);
 }
 

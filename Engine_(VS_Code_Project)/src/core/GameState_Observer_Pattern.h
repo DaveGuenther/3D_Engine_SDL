@@ -69,7 +69,7 @@ class GameStateSubject:IGameStateObservableSubject{
  */
 class Game_Engine_State_Observer:IGameStateObserver{
     private:
-        GameStateSubject my_subject;
+        GameStateSubject &my_subject;
         game_state state;
     public:
         Game_Engine_State_Observer(GameStateSubject &subject);

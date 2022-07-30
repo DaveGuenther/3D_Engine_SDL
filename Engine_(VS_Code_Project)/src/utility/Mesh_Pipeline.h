@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include "materials/TextureList.h"
 #include "Mesh.h"
 
 
@@ -25,8 +26,10 @@ class Mesh_Pipeline{
      */
     int total_mesh_ids;
 
+    std::shared_ptr<TextureList> texture_list;
+
     public:
-    Mesh_Pipeline();
+    Mesh_Pipeline(std::shared_ptr<TextureList> texture_list);
     ~Mesh_Pipeline();
     /**
      * @brief This function loads data from a file into a Mesh object and adds it to the mesh pipeline
@@ -36,7 +39,7 @@ class Mesh_Pipeline{
      */
     void Add_Mesh_to_Pipeline(std::string filename, Vec3d origin);
 
-    void Add_OBJ_Mesh_to_Pipeline(std::string filename, Vec3d origin);
+    void Add_OBJ_Mesh_to_Pipeline(std::string filename, Vec3d origin, Vec3d rotation);
 
     /**
      * @brief this function adds a Mesh to the Meshes vector (the pipeline)

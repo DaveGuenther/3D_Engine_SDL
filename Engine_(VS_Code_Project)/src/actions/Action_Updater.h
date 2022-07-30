@@ -31,7 +31,7 @@ class IAction_Updater{
 class InGame_Action_Updater: public IAction_Updater{
     public:
 
-    InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh_pipeline, std::shared_ptr<Camera> this_camera, int FPS);
+    InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh_pipeline, std::shared_ptr<Camera> this_camera, int FPS, GameStateSubject &subject);
     std::vector<std::shared_ptr<Triangle_Modifier>> getModifications() const; // This should be the Mesh_Pipeline actiually
     void update();
 

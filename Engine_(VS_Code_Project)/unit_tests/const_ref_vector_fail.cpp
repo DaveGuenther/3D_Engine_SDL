@@ -6,7 +6,7 @@ int main(){
     const std::vector<int>& my_const_ref_to_vec = this_vec;
 
     for(auto element:my_const_ref_to_vec){
-        std::cout<< element << std::endl;
+        std::cout<< element << std::endl; 
     }
 
     return 0;

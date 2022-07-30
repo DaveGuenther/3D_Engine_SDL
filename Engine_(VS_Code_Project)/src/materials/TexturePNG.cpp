@@ -1,19 +1,20 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <math.h>
 #include "SDL.h"
 #include "SDL_image.h"
-#include "PNGTexture.h"
+#include "TexturePNG.h"
 
 
-PNGTexture::PNGTexture(const char* filename){
+TexturePNG::TexturePNG(const char* filename){
     
     uint8_t* pixels;
     int pitch;
     this->image=IMG_Load(filename);
+    std::cout << filename;
     if(!this->image) {
-        printf("IMG_Load: %s\n", IMG_GetError());
-        // handle error
+        throw std::runtime_error(std::string("TexturePNG::TexturePNG - Could not open file: ")+filename);
     }    
     image = SDL_ConvertSurfaceFormat(image,SDL_PIXELFORMAT_RGB24,0);
     pixels = (uint8_t*)this->image->pixels;
@@ -36,18 +37,16 @@ PNGTexture::PNGTexture(const char* filename){
     std::cout << w << ", " << h << std::endl;
     
     std::vector<SDL_Color> this_row;
-    //SDL_Color pixel_array[w][h];
+
     for (int i=0; i<w; i++){
         for (int j=0; j<h; j++){
             pixelPosition = j * pitch + (i*image->format->BytesPerPixel);
             red = pixels[pixelPosition];
             green = pixels[pixelPosition+1];
             blue = pixels[pixelPosition+2];
-            //alpha = pixels[pixelPosition+3];
+
             this_row.push_back(SDL_Color({red,green,blue,alpha}));
 
-            //SDL_GetRGBA(pixels[pixelPosition],pixelFormat,r, g, b, a);
-            //std::cout << red << ", " << green << ", " << blue << ", " << alpha << std::endl;
         }
         this->pixel_array.push_back(this_row);
         this_row.clear();
@@ -56,14 +55,35 @@ PNGTexture::PNGTexture(const char* filename){
     std::cout << "finished initting" << std::endl;
 }
 
-PNGTexture::~PNGTexture(){
+void TexturePNG::destroyTexture(){
     IMG_Quit();
     SDL_FreeSurface(image);
 }
 
-void PNGTexture::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
-    uint32_t x = U*this->width;
-    uint32_t y = V*this->height;
+
+void TexturePNG::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
+    uint32_t x, y;
+    // set x based on U
+    if (U>1){
+        x= float(U-floor(U))*(this->width-1);
+    }else if(U<0){
+        x = float(U-ceil(U)+1.0f)*(this->width-1);
+    }else{
+        // 0 <= U <= 1
+        x = U*(this->width-1);
+    }
+
+    // set y based on U
+    if (V>1){
+        y= (this->height-1)-(float(V-floor(V))*(this->height-1));
+    }else if(V<0){
+        y = (this->height-1)-(float(V-ceil(V)+1.0f)*(this->height-1));
+    }else{
+        // 0 <= U <= 1
+        y = (this->height-1)-(V*(this->height-1));
+    }    
+
+
     
     col.r= pixel_array[x][y].r;
     col.g= pixel_array[x][y].g; 
@@ -71,13 +91,10 @@ void PNGTexture::getPixelAtUV(const float &U, const float &V, SDL_Color &col){
     col.a= 255;
 }
 
-void PNGTexture::getPixelAtXY(const int &x, const int &y, SDL_Color &col){
+void TexturePNG::getPixelAtXY(const int &x, const int &y, SDL_Color &col){
     col.r= pixel_array[x][y].r;
     col.g= pixel_array[x][y].g; 
     col.b= pixel_array[x][y].b;
     col.a= 255;
 }
 
-SDL_Surface* PNGTexture::getSDL_Surface(){
-    return image;
-}

@@ -2,8 +2,9 @@
 #include "Rasterizer.h"
 #include <iostream>
 #include <math.h>
-
-
+#include "materials/TextureList.h"
+#include "materials/TexturePNG.h"
+#include "globals.h"
 
 void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
     float z_center = this_tri.getTriangleZCenter();
@@ -22,10 +23,282 @@ void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
     SDL_SetRenderDrawColor(this->renderer, draw_col.r, draw_col.g, draw_col.b, SDL_ALPHA_OPAQUE);
 }
 
+TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer){
+    this->renderer=my_renderer;
+
+}
+
+
+void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
+
+    SDL_Color col;
+    // get points of triangle
+    Vec3d p0 = this_triangle.getTrianglePoint(0);
+    Vec3d p1 = this_triangle.getTrianglePoint(1);
+    Vec3d p2 = this_triangle.getTrianglePoint(2);
+    Vec2d uv_p0 = this_triangle.getUVPoint(0);
+    Vec2d uv_p1 = this_triangle.getUVPoint(1);
+    Vec2d uv_p2 = this_triangle.getUVPoint(2);
+
+    p0 = p0.toThousandths();
+    p1 = p1.toThousandths();
+    p2 = p2.toThousandths();
+    
+
+    //applyDepthDimmer(this_triangle, col);
+
+    // Order the points from top to bottom
+    if (p0.getY() > p1.getY()) {
+        Vec3d temp = p0;        p0=p1;          p1=temp; 
+        Vec2d uv_temp=uv_p0;    uv_p0=uv_p1;    uv_p1=uv_temp;
+    }
+    if (p1.getY() > p2.getY()) {
+        Vec3d temp = p1;        p1=p2;          p2=temp; 
+        Vec2d uv_temp = uv_p1;  uv_p1=uv_p2;    uv_p2=uv_temp;
+    }
+    if (p0.getY() > p1.getY()) {
+        Vec3d temp = p0;        p0=p1;          p1=temp; 
+        Vec2d uv_temp = uv_p0;  uv_p0=uv_p1;    uv_p1=uv_temp;
+    }
+
+
+    // test for flat top
+    if (p0.getY()==p1.getY()) { 
+        // FLAT TOP Triangle
+        if (p0.getX() > p1.getX()) {
+            Vec3d temp = p0;        p0=p1;          p1=temp; 
+            Vec2d uv_temp = uv_p0;  uv_p0=uv_p1;    uv_p1=uv_temp;
+        }
+        Triangle reordered_tri(p0, p1, p2, uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getTexture());
+        drawFlatTopTri(reordered_tri);
+        //std::cout << "Flat Top!" << std::endl;
+    }
+
+    // test for flat bottom
+    else if (p1.getY()==p2.getY()) {
+        if (p1.getX() > p2.getX()) {
+            Vec3d temp = p1;        p1=p2;          p2=temp;
+            Vec2d uv_temp = uv_p1;  uv_p1=uv_p2;    uv_p2=uv_temp;
+        } 
+        //FLAT BOTTOM TRIANGLE
+        Triangle reordered_tri(p0, p1, p2,uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getTexture());
+        drawFlatBottomTri(reordered_tri);
+        //std::cout << "Flat Bottom" << std::endl; 
+    }
+
+    // General triangle
+    else {
+        float alpha = (p1.getY()-p0.getY())/(p2.getY()-p0.getY());
+        
+
+        Vec3d p_i = p0+alpha*(p2-p0);
+        Vec2d uv_p_i = uv_p0+ alpha*(uv_p2-uv_p0);
+
+        //Test for major left triangle
+        if (p_i.getX()<p1.getX()){
+            //MAJOR LEFT TRIANGLE 
+            //std::cout << "Major Left" << std::endl; 
+            Triangle flat_bottom_tri(p0, p_i, p1, uv_p0, uv_p_i, uv_p1, this_triangle.getID(), col, this_triangle.getTexture());
+            Triangle flat_top_tri(p_i, p1, p2, uv_p_i, uv_p1, uv_p2, this_triangle.getID(), col, this_triangle.getTexture());
+            drawFlatTopTri(flat_top_tri);
+            drawFlatBottomTri(flat_bottom_tri);
+        }else{ 
+            //MAJOR RIGHT TRIANGLE
+
+            Triangle flat_bottom_tri(p0, p1, p_i, uv_p0, uv_p1, uv_p_i, this_triangle.getID(), col, this_triangle.getTexture());
+            Triangle flat_top_tri(p1, p_i, p2, uv_p1, uv_p_i, uv_p2, this_triangle.getID(), col, this_triangle.getTexture());
+
+            if (this_triangle.getID()==7){
+                std::cout << "p_i=" << p_i.toString() << "uv_p_i=" << uv_p_i.toString() << std::endl;
+            }
+            drawFlatTopTri(flat_top_tri);
+            drawFlatBottomTri(flat_bottom_tri);
+            //std::cout << "Major Right" << std::endl;
+        }
+
+    }
+
+
+}
+
+void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
+    
+    std::shared_ptr<TexturePNG> texture = this_triangle.getTexture();
+    Vec3d p0 = this_triangle.getTrianglePoint(0);
+    Vec2d uv0 = this_triangle.getUVPoint(0);
+    Vec3d p1 = this_triangle.getTrianglePoint(1);
+    Vec2d uv1 = this_triangle.getUVPoint(1);
+    Vec3d p2 = this_triangle.getTrianglePoint(2);
+    Vec2d uv2 = this_triangle.getUVPoint(2);
+
+
+    // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
+    float left_slope = (p2.getX()-p0.getX())/(p2.getY()-p0.getY());
+    float right_slope = (p2.getX()-p1.getX())/(p2.getY()-p1.getY());
+
+
+    // 2. Determine y_start and y_end pixels for the triangle
+    int y_start = int(ceil(p0.getY()-0.5f));
+    int y_end = int(ceil(p2.getY()-0.5f));
+
+    // 3. Loop through each y scanline (but don't do the last one)
+    for (int y = y_start;y<y_end;y++){
+
+        // a. Calculate start and end x float points
+        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.getX();
+        float p_end = right_slope * (float(y)+0.5f-p1.getY())+p1.getX();
+
+        // b. Calculate discrete pixels for start and end x
+        int x_start = int(ceil(p_start-0.5f));
+        int x_end = int(ceil(p_end - 0.5f));
+
+        //determine alpha_start (distance between v1 -> v2)
+        float alpha_start = (y-p0.getY())/(p2.getY()-p0.getY());
+        if (alpha_start<0.0f){alpha_start=0.0f;}
+        if (alpha_start>1.0f){alpha_start=1.0f;}
+        //determine alpha_end  (distance between v0 -> v2)
+        float alpha_end = (y-p1.getY())/(p2.getY()-p1.getY());
+        if (alpha_end<0.0f){alpha_end=0.0f;}
+        if (alpha_end>1.0f){alpha_end=1.0f;}        
+
+        //determine UV_start
+        float UVx_start = alpha_start*(uv2.getX()-uv0.getX())+uv0.getX();
+        float UVy_start = alpha_start*(uv2.getY()-uv0.getY())+uv0.getY();
+        float UVz_start = alpha_start*(uv2.getW()-uv0.getW())+uv0.getW();
+        //determine UV_end
+        float UVx_end = alpha_end*(uv2.getX()-uv1.getX())+uv1.getX();
+        float UVy_end = alpha_end*(uv2.getY()-uv1.getY())+uv1.getY();
+        float UVz_end = alpha_end*(uv2.getW()-uv1.getW())+uv1.getW();
+
+        // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
+        //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
+        for (int x = x_start;x<x_end;x++){ 
+            
+            // determine alpha_scan
+            float alpha_scan;
+            if (x_end==x_start){
+                alpha_scan=0.0f;
+            } else{
+                alpha_scan = (float(x)-float(x_start))/(float(x_end)-float(x_start));
+            }
+            
+            // determine Vec2d(U,V)
+            float UVx_scan = alpha_scan*(UVx_end-UVx_start)+UVx_start;  // UVx scan is in 1/z space for perspective correction
+            float UVy_scan = alpha_scan*(UVy_end-UVy_start)+UVy_start;  // UVy scan is in 1/z space for perspective correction
+            float UVz_scan = alpha_scan*(UVz_end-UVz_start)+UVz_start;  // UVz scan is in projected UV space because we will need it to get UVx and UVy out of 1/z space
+            UVx_scan = UVx_scan/UVz_scan;  // Brings UVx out of 1/z space into projected UV space 
+            UVy_scan = UVy_scan/UVz_scan;  // Brings UVy out of 1/z space into projected UV space            
+            SDL_Color col={255,255,255,255};
+
+            // sample texture color at (U/V)
+            texture->getPixelAtUV(UVx_scan, UVy_scan, col);
+            
+            // Set Color
+            SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
+
+            // draw point at (x,)
+            SDL_RenderDrawPoint(this->renderer,x, y); 
+        }
+    }
+}
+
+void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
+
+
+    std::shared_ptr<TexturePNG> texture = this_triangle.getTexture();
+    Vec3d p0 = this_triangle.getTrianglePoint(0);
+    Vec2d uv0 = this_triangle.getUVPoint(0);
+    Vec3d p1 = this_triangle.getTrianglePoint(1);
+    Vec2d uv1 = this_triangle.getUVPoint(1);
+    Vec3d p2 = this_triangle.getTrianglePoint(2);
+    Vec2d uv2 = this_triangle.getUVPoint(2);
+
+    // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
+    float left_slope = (p1.getX()-p0.getX())/(p1.getY()-p0.getY());
+    float right_slope = (p2.getX()-p0.getX())/(p2.getY()-p0.getY());
+
+    // 2. Determine y_start and y_end pixels for the triangle
+    int y_start = int(ceil(p0.getY()-0.5f));
+    int y_end = int(ceil(p2.getY()-0.5f));
+
+    // 3. Loop through each y scanline (but don't do the last one)
+    for (int y = y_start;y<y_end;y++){
+
+        // a. Calculate start and end x float points
+        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.getX();
+        float p_end = right_slope * (float(y)+0.5f-p0.getY())+p0.getX();
+
+        // b. Calculate discrete pixels for start and end x
+        int x_start = int(ceil(p_start-0.5f));
+        int x_end = int(ceil(p_end - 0.5f));
+
+        //determine alpha_start (distance between v1 -> v2)
+        float alpha_start = (y-p0.getY())/(p1.getY()-p0.getY());
+        if (alpha_start<0.0f){alpha_start=0.0f;}
+        if (alpha_start>1.0f){alpha_start=1.0f;}
+        //determine alpha_end  (distance between v0 -> v2)
+        float alpha_end = (y-p0.getY())/(p2.getY()-p0.getY());
+        if (alpha_end<0.0f){alpha_end=0.0f;}
+        if (alpha_end>1.0f){alpha_end=1.0f;}        
+
+        //determine UV_start
+        float UVx_start = alpha_start*(uv1.getX()-uv0.getX())+uv0.getX();
+        float UVy_start = alpha_start*(uv1.getY()-uv0.getY())+uv0.getY();
+        float UVz_start = alpha_start*(uv1.getW()-uv0.getW())+uv0.getW();
+        //float UVz_start = alpha_start*((1/p1.getZ())-(1/p0.getZ()))+(1/p0.getZ());
+        //determine UV_end
+        float UVx_end = alpha_end*(uv2.getX()-uv0.getX())+uv0.getX();
+        float UVy_end = alpha_end*(uv2.getY()-uv0.getY())+uv0.getY();
+        float UVz_end = alpha_end*(uv2.getW()-uv0.getW())+uv0.getW();
+        //float UVz_end = alpha_end*((1/p2.getZ())-(1/p0.getZ()))+(1/p0.getZ());
+
+        // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
+        for (int x = x_start;x<x_end;x++){ 
+            
+            // determine alpha_scan
+            float alpha_scan;
+            if (x_end==x_start){
+                alpha_scan=0.0f;
+            } else{
+                alpha_scan = (float(x)-float(x_start))/(float(x_end)-float(x_start));
+            }
+            
+            // determine Vec2d(U,V)
+            float UVx_scan = alpha_scan*(UVx_end-UVx_start)+UVx_start;  // UVx scan is in 1/z space for perspective correction
+            float UVy_scan = alpha_scan*(UVy_end-UVy_start)+UVy_start;  // UVy scan is in 1/z space for perspective correction
+            float UVz_scan = alpha_scan*(UVz_end-UVz_start)+UVz_start;  // UVz scan is in projected UV space because we will need it to get UVx and UVy out of 1/z space
+            UVx_scan = UVx_scan/UVz_scan;  // Brings UVx out of 1/z space into projected UV space 
+            UVy_scan = UVy_scan/UVz_scan;  // Brings UVy out of 1/z space into projected UV space
+
+            SDL_Color col={255,255,255,255};
+
+            // sample texture color at (U/V)
+            texture->getPixelAtUV(UVx_scan, UVy_scan, col);
+            if (keyboardbreak==true){ 
+                std::cout << "UVx: " << UVx_scan << "    UVy: " << UVy_scan << "    col: (" << col.r << "," << col.g << "," << col.b << ")" << std::endl;
+                keyboardbreak=false;
+    }            
+            // Set Color
+            SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
+
+            // draw point at (x,)
+            SDL_RenderDrawPoint(this->renderer,x, y); 
+            
+        }
+        //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
+
+    }
+}
+
+
+
 ScanlineRasterizer::ScanlineRasterizer(SDL_Renderer* my_renderer){
     this->renderer=my_renderer;
 
 }
+
+
+
 void ScanlineRasterizer::drawTriangle(Triangle& this_triangle){
 
     SDL_Color col = this_triangle.getColor();

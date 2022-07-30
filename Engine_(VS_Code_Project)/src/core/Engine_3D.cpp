@@ -49,10 +49,14 @@ Engine_3D::Engine_3D(void){
     this->FPS=60.0f;
     std::shared_ptr<Frame_Rate_Manager> VariableFrameRate(new Frame_Rate_Manager(FPS));
     this->VariableFrameRate = VariableFrameRate;
-    std::shared_ptr<Mesh_Pipeline> local_mesh_pipeline(new Mesh_Pipeline);
+    std::shared_ptr<TextureList> texture_list(new TextureList());
+    this->texture_list = texture_list;
+    std::shared_ptr<Mesh_Pipeline> local_mesh_pipeline(new Mesh_Pipeline(texture_list));
     this->mesh_pipeline = local_mesh_pipeline;
 
-    std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater(new InGame_Action_Updater(this->mesh_pipeline, player_camera, FPS));
+
+
+    std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater(new InGame_Action_Updater(this->mesh_pipeline, player_camera, FPS, game_state_subject));
     this->INWORLD_Action_Updater = INWORLD_Action_Updater;
       
     game_state_subject.setState(IN_WORLD);
@@ -67,13 +71,11 @@ Engine_3D::~Engine_3D(){
 
 void Engine_3D::load_meshes(){
     // Eventually allow this function to read a list of mesh file referenes and load them
-    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("cave2lowpoly.obj", Vec3d(0,0,0));
-    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("cave2.obj", Vec3d(0,0,0));
-    mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("Pirate Cave.obj", Vec3d(0,0,0));
-    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("compass.obj", Vec3d(0,0,0));
-    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("funky_little_thing.obj", Vec3d(-1.5,0.5,5));
-    //mesh_pipeline->Add_Mesh_to_Pipeline("block.mesh", Vec3d(-1.5,0.5,2));
-    //mesh_pipeline->Add_Mesh_to_Pipeline("pyramid.mesh", Vec3d(4.5,1.5,10));
+    mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("rainbow_cube(zFor_yUp).obj", Vec3d(0,0,3), Vec3d(0,45,0));
+    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("pirate_cave.obj", Vec3d(0,0,0), Vec3d(0,180,0));
+    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("Compass.obj", Vec3d(-20,0,0), Vec3d(0,0,0));
+    
+
 }
 
 bool Engine_3D::is_running(){
