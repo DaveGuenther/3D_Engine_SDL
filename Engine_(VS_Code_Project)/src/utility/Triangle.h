@@ -43,6 +43,8 @@ class Triangle{
 
         void setColor(SDL_Color this_color);
 
+        void setLightDimAmount(float lightDim);
+        const float& getLightDimAmount();
         /**
          * @brief Get a single point of a ttriangle.  Given an enumerated point (0, 1, or 2), this function will return the Vec3d value.
          * 
@@ -73,6 +75,7 @@ class Triangle{
         float distance_to_player_camera;
         int tri_id;
         SDL_Color color;
+        float dim_amount; // float form 0.0 to 1.0 that is multiplied against each color used to draw the triangle
         std::shared_ptr<TexturePNG> texture_ptr;
     
 };

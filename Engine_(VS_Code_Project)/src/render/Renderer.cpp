@@ -80,6 +80,22 @@ SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri){
 		
 }
 
+float Renderer::applyDepthDimmerModifier(Triangle& this_tri){
+    float z_center = this_tri.getTriangleZCenter();
+	SDL_Color col = this_tri.getColor();
+    float color_modifier;
+    if (z_center>=this->max_visible_z_depth){
+        color_modifier = this->min_visible_color_modifier;
+    }else{
+        color_modifier = 1-(z_center/this->max_visible_z_depth);
+		if (color_modifier<min_visible_color_modifier) { color_modifier=min_visible_color_modifier; }
+    }
+
+    return color_modifier;
+		
+}
+
+
 void Renderer::drawWireFrameTriangle2d(Triangle this_triangle)
 {
 	SDL_Color col = this_triangle.getColor();
@@ -118,6 +134,8 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 	//rasterie triangle with ScanLines - faster
 	//std::shared_ptr<ITriangleRasterizer> this_scanline_rasterizer(new ScanlineRasterizer(renderer));
 	//this_scanline_rasterizer->drawTriangle(screenTri);
+
+	screenTri.setLightDimAmount(this_triangle.getLightDimAmount());
 
 	// Here goes TextureMapping!
 	std::shared_ptr<ITriangleRasterizer> this_texturemap_rasterizer(new TexturemapRasterizer(renderer));
@@ -180,7 +198,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		
 		if(dp_light_source<0.0f) {dp_light_source=0.0f;}
 		if(dp_light_source>1.0f) {dp_light_source=1.0f;}
-		dp_light_source = nonVectorMathService::lerp(0.25f, 0.60f, dp_light_source); // make it so the walls aren't too shiny
+		dp_light_source = nonVectorMathService::lerp(0.25f, 0.75f, dp_light_source); // make it so the walls aren't too shiny
 		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 		triView.setColor(col);
 		//triView.setID(tri.getID());
@@ -232,6 +250,8 @@ void Renderer::projectTriangle3d(Triangle &tri){
 				triProjected.setColor(triView.getColor());
 			}
 
+			
+
 
 			
 			// Copy UV coordinates over and places them in 1/z space for perspective correction.  We will bring them out just before sampling texture
@@ -246,8 +266,10 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			//Copy Texture Over
 			triProjected.setTexture(tri.getTexture());
 
-			SDL_Color dimmed_col = applyDepthDimmer(triView);
-			triProjected.setColor(dimmed_col);
+			float dimmed_modifier = applyDepthDimmerModifier(triView);
+			triProjected.setLightDimAmount(dimmed_modifier*dp_light_source);
+			//SDL_Color dimmed_col = applyDepthDimmer(triView);
+			//triProjected.setColor(dimmed_col);
 
 			this->trianglesToRasterize.push_back(triProjected);
 		}

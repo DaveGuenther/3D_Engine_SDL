@@ -59,6 +59,7 @@ class Renderer{
          */
         void drawReticle();
 
+        float applyDepthDimmerModifier(Triangle& this_tri);
         SDL_Color applyDepthDimmer(Triangle& this_tri);
 
         /**
