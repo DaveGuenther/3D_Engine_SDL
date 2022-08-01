@@ -69,7 +69,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
             Vec3d temp = p0;        p0=p1;          p1=temp; 
             Vec2d uv_temp = uv_p0;  uv_p0=uv_p1;    uv_p1=uv_temp;
         }
-        Triangle reordered_tri(p0, p1, p2, uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getTexture());
+        Triangle reordered_tri(p0, p1, p2, uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
         drawFlatTopTri(reordered_tri);
         //std::cout << "Flat Top!" << std::endl;
     }
@@ -81,7 +81,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
             Vec2d uv_temp = uv_p1;  uv_p1=uv_p2;    uv_p2=uv_temp;
         } 
         //FLAT BOTTOM TRIANGLE
-        Triangle reordered_tri(p0, p1, p2,uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getTexture());
+        Triangle reordered_tri(p0, p1, p2,uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
         drawFlatBottomTri(reordered_tri);
         //std::cout << "Flat Bottom" << std::endl; 
     }
@@ -98,8 +98,8 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
         if (p_i.getX()<p1.getX()){
             //MAJOR LEFT TRIANGLE 
             //std::cout << "Major Left" << std::endl; 
-            Triangle flat_bottom_tri(p0, p_i, p1, uv_p0, uv_p_i, uv_p1, this_triangle.getID(), col, this_triangle.getTexture());
-            Triangle flat_top_tri(p_i, p1, p2, uv_p_i, uv_p1, uv_p2, this_triangle.getID(), col, this_triangle.getTexture());
+            Triangle flat_bottom_tri(p0, p_i, p1, uv_p0, uv_p_i, uv_p1, this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
+            Triangle flat_top_tri(p_i, p1, p2, uv_p_i, uv_p1, uv_p2, this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
             flat_top_tri.setLightDimAmount(this_triangle.getLightDimAmount());
             flat_bottom_tri.setLightDimAmount(this_triangle.getLightDimAmount());            
             drawFlatTopTri(flat_top_tri);
@@ -107,12 +107,12 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
         }else{ 
             //MAJOR RIGHT TRIANGLE
 
-            Triangle flat_bottom_tri(p0, p1, p_i, uv_p0, uv_p1, uv_p_i, this_triangle.getID(), col, this_triangle.getTexture());
-            Triangle flat_top_tri(p1, p_i, p2, uv_p1, uv_p_i, uv_p2, this_triangle.getID(), col, this_triangle.getTexture());
+            Triangle flat_bottom_tri(p0, p1, p_i, uv_p0, uv_p1, uv_p_i, this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
+            Triangle flat_top_tri(p1, p_i, p2, uv_p1, uv_p_i, uv_p2, this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
 
-            if (this_triangle.getID()==7){
+            /*if (this_triangle.getID()==7){
                 std::cout << "p_i=" << p_i.toString() << "uv_p_i=" << uv_p_i.toString() << std::endl;
-            }
+            }*/
             flat_top_tri.setLightDimAmount(this_triangle.getLightDimAmount());
             flat_bottom_tri.setLightDimAmount(this_triangle.getLightDimAmount());
             drawFlatTopTri(flat_top_tri);
@@ -232,6 +232,8 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
     int y_start = int(ceil(p0.getY()-0.5f));
     int y_end = int(ceil(p2.getY()-0.5f));
 
+
+
     // 3. Loop through each y scanline (but don't do the last one)
     for (int y = y_start;y<y_end;y++){
 
@@ -290,11 +292,9 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
             }
 
 
-            
-            if (keyboardbreak==true){ 
-                std::cout << "UVx: " << UVx_scan << "    UVy: " << UVy_scan << "    col: (" << col.r << "," << col.g << "," << col.b << ")" << std::endl;
-                keyboardbreak=false;
-    }            
+         
+
+           
             col.r=col.r*this_triangle.getLightDimAmount();
             col.g=col.g*this_triangle.getLightDimAmount();
             col.b=col.b*this_triangle.getLightDimAmount();

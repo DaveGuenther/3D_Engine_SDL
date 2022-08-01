@@ -124,14 +124,14 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 						Vec3d(vert2.getX(),vert2.getY(),this_triangle.getTrianglePoint(1).getZ(),this_triangle.getTrianglePoint(0).getW()),
 						Vec3d(vert3.getX(),vert3.getY(),this_triangle.getTrianglePoint(2).getZ(),this_triangle.getTrianglePoint(0).getW()),
 						this_triangle.getUVPoint(0), this_triangle.getUVPoint(1), this_triangle.getUVPoint(2), 
-						this_triangle.getID(),col, this_triangle.getTexture());
+						this_triangle.getID(),col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
 						
 
 	//rasterize triangle In Out - very slow method, implemented only for learning purposes
 	//std::shared_ptr<ITriangleRasterizer> this_inout_rasterizer(new InOutRasterizer(renderer));
 	//this_inout_rasterizer->drawTriangle(screenTri);
 
-	//rasterie triangle with ScanLines - faster
+	//rasterize triangle with ScanLines - faster
 	//std::shared_ptr<ITriangleRasterizer> this_scanline_rasterizer(new ScanlineRasterizer(renderer));
 	//this_scanline_rasterizer->drawTriangle(screenTri);
 
@@ -161,12 +161,13 @@ void Renderer::projectTriangle3d(Triangle &tri){
 	tri.setUnitNormalFromPoints();
 	Vec3d normal_vector = tri.getUnitNormalVector();
 	
-
+	
 	// perform dot product here and test <0 
 	Vec3d camera_to_triangle_vector = TriPoint0-player_camera->getCameraPos();
 	VectorMathService::getUnitVector(camera_to_triangle_vector);
 	if (VectorMathService::dotProduct(normal_vector, camera_to_triangle_vector)<0.0f){ // Checks to see if normal vector >= 90 degs away from camera to triangle view vector
-		
+		// THIS CODE RUNS only for Triangles that are facing the camera
+
 		// Project worldspace to Camera view
 		triView.setTrianglePoint(0, VectorMathService::MultiplyMatrixVector(matView, TriPoint0));
 		triView.setTrianglePoint(1, VectorMathService::MultiplyMatrixVector(matView, TriPoint1));
@@ -199,13 +200,10 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		if(dp_light_source<0.0f) {dp_light_source=0.0f;}
 		if(dp_light_source>1.0f) {dp_light_source=1.0f;}
 		dp_light_source = nonVectorMathService::lerp(0.25f, 0.75f, dp_light_source); // make it so the walls aren't too shiny
+		dp_light_source = 0.7f;
 		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 		triView.setColor(col);
-		//triView.setID(tri.getID());
-		/*if (keyboardbreak==true){ 
-			std::cout << dp_light_source << view_normal_vector.toString() << std::endl;
-			keyboardbreak=false;
-		}*/
+
 		// Clip this triangle against Front, left, top, right, and bottom frustum planes, then create new triangles as necessary that end at the frustum
 		std::vector<Triangle> clipped_tris = this->thisFrustumClipper->getClippedTrisAgainstFrustum(triView);
 
@@ -232,9 +230,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			pt1.setZ(newTriPoint1.getZ());
 			pt2.setZ(newTriPoint2.getZ());
 			
-			//pt0.setW(1/(newTriPoint0.getZ()));
-			//pt1.setW(1/(newTriPoint1.getZ()));
-			//pt2.setW(1/(newTriPoint2.getZ()));
+
 
 			triProjected.setTrianglePoint(0,pt0);
 			triProjected.setTrianglePoint(1,pt1);
@@ -268,6 +264,13 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 			float dimmed_modifier = applyDepthDimmerModifier(triView);
 			triProjected.setLightDimAmount(dimmed_modifier*dp_light_source);
+
+			/*if ((triProjected.getID()==0)){ 
+				std::cout << "Dim modifier: " << dimmed_modifier << "  Light_source_mod: " << dp_light_source << "  Total light Mod: " << triProjected.getLightDimAmount()<< std::endl;
+				//std::cout << "UVx: " << UVx_scan << "    UVy: " << UVy_scan << "    col: (" << col.r << "," << col.g << "," << col.b << ")" << std::endl;
+				keyboardbreak=false;   
+    		}*/
+
 			//SDL_Color dimmed_col = applyDepthDimmer(triView);
 			//triProjected.setColor(dimmed_col);
 

@@ -36,7 +36,7 @@ Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const i
     this->dim_amount=1.0f;
 }
 
-Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id, const SDL_Color this_color, std::shared_ptr<TexturePNG> this_texture_ptr){
+Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id, const SDL_Color this_color, const float dim_amount, std::shared_ptr<TexturePNG> this_texture_ptr){
     p[0]=pt1;
     p[1]=pt2;
     p[2]=pt3;
@@ -46,7 +46,7 @@ Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const V
     tri_id=triangle_id;    
     color = SDL_Color {255, 0, 255, 255};
     this->texture_ptr=this_texture_ptr;
-    this->dim_amount=1.0f;
+    this->dim_amount=dim_amount;
 }
 
 Triangle::Triangle (const Triangle &T){
