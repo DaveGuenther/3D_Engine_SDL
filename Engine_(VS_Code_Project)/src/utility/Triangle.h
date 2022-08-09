@@ -18,7 +18,7 @@ class Triangle{
         Triangle();
         Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id);
         Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id, const SDL_Color this_color);
-        Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id, const SDL_Color this_color, std::shared_ptr<TexturePNG> this_texture_ptr);
+        Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id, const SDL_Color this_color, const float dim_amount, std::shared_ptr<TexturePNG> this_texture_ptr);
 
         Triangle (const Triangle &T);
 
@@ -43,6 +43,8 @@ class Triangle{
 
         void setColor(SDL_Color this_color);
 
+        void setLightDimAmount(float lightDim);
+        const float& getLightDimAmount();
         /**
          * @brief Get a single point of a ttriangle.  Given an enumerated point (0, 1, or 2), this function will return the Vec3d value.
          * 
@@ -73,6 +75,7 @@ class Triangle{
         float distance_to_player_camera;
         int tri_id;
         SDL_Color color;
+        float dim_amount; // float form 0.0 to 1.0 that is multiplied against each color used to draw the triangle
         std::shared_ptr<TexturePNG> texture_ptr;
     
 };

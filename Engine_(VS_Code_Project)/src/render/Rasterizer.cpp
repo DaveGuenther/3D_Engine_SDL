@@ -69,7 +69,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
             Vec3d temp = p0;        p0=p1;          p1=temp; 
             Vec2d uv_temp = uv_p0;  uv_p0=uv_p1;    uv_p1=uv_temp;
         }
-        Triangle reordered_tri(p0, p1, p2, uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getTexture());
+        Triangle reordered_tri(p0, p1, p2, uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
         drawFlatTopTri(reordered_tri);
         //std::cout << "Flat Top!" << std::endl;
     }
@@ -81,7 +81,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
             Vec2d uv_temp = uv_p1;  uv_p1=uv_p2;    uv_p2=uv_temp;
         } 
         //FLAT BOTTOM TRIANGLE
-        Triangle reordered_tri(p0, p1, p2,uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getTexture());
+        Triangle reordered_tri(p0, p1, p2,uv_p0, uv_p1, uv_p2,this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
         drawFlatBottomTri(reordered_tri);
         //std::cout << "Flat Bottom" << std::endl; 
     }
@@ -98,19 +98,23 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
         if (p_i.getX()<p1.getX()){
             //MAJOR LEFT TRIANGLE 
             //std::cout << "Major Left" << std::endl; 
-            Triangle flat_bottom_tri(p0, p_i, p1, uv_p0, uv_p_i, uv_p1, this_triangle.getID(), col, this_triangle.getTexture());
-            Triangle flat_top_tri(p_i, p1, p2, uv_p_i, uv_p1, uv_p2, this_triangle.getID(), col, this_triangle.getTexture());
+            Triangle flat_bottom_tri(p0, p_i, p1, uv_p0, uv_p_i, uv_p1, this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
+            Triangle flat_top_tri(p_i, p1, p2, uv_p_i, uv_p1, uv_p2, this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
+            flat_top_tri.setLightDimAmount(this_triangle.getLightDimAmount());
+            flat_bottom_tri.setLightDimAmount(this_triangle.getLightDimAmount());            
             drawFlatTopTri(flat_top_tri);
             drawFlatBottomTri(flat_bottom_tri);
         }else{ 
             //MAJOR RIGHT TRIANGLE
 
-            Triangle flat_bottom_tri(p0, p1, p_i, uv_p0, uv_p1, uv_p_i, this_triangle.getID(), col, this_triangle.getTexture());
-            Triangle flat_top_tri(p1, p_i, p2, uv_p1, uv_p_i, uv_p2, this_triangle.getID(), col, this_triangle.getTexture());
+            Triangle flat_bottom_tri(p0, p1, p_i, uv_p0, uv_p1, uv_p_i, this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
+            Triangle flat_top_tri(p1, p_i, p2, uv_p1, uv_p_i, uv_p2, this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
 
-            if (this_triangle.getID()==7){
+            /*if (this_triangle.getID()==7){
                 std::cout << "p_i=" << p_i.toString() << "uv_p_i=" << uv_p_i.toString() << std::endl;
-            }
+            }*/
+            flat_top_tri.setLightDimAmount(this_triangle.getLightDimAmount());
+            flat_bottom_tri.setLightDimAmount(this_triangle.getLightDimAmount());
             drawFlatTopTri(flat_top_tri);
             drawFlatBottomTri(flat_bottom_tri);
             //std::cout << "Major Right" << std::endl;
@@ -190,8 +194,15 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
             UVy_scan = UVy_scan/UVz_scan;  // Brings UVy out of 1/z space into projected UV space            
             SDL_Color col={255,255,255,255};
 
+            if (this_triangle.getTexture()!=NULL){
+                // There is a texture associated with this triangle
+                texture->getPixelAtUV(UVx_scan, UVy_scan, col);
+            }
             // sample texture color at (U/V)
-            texture->getPixelAtUV(UVx_scan, UVy_scan, col);
+            
+            col.r=col.r*this_triangle.getLightDimAmount();
+            col.g=col.g*this_triangle.getLightDimAmount();
+            col.b=col.b*this_triangle.getLightDimAmount();
             
             // Set Color
             SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
@@ -220,6 +231,8 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
     // 2. Determine y_start and y_end pixels for the triangle
     int y_start = int(ceil(p0.getY()-0.5f));
     int y_end = int(ceil(p2.getY()-0.5f));
+
+
 
     // 3. Loop through each y scanline (but don't do the last one)
     for (int y = y_start;y<y_end;y++){
@@ -269,15 +282,22 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
             float UVz_scan = alpha_scan*(UVz_end-UVz_start)+UVz_start;  // UVz scan is in projected UV space because we will need it to get UVx and UVy out of 1/z space
             UVx_scan = UVx_scan/UVz_scan;  // Brings UVx out of 1/z space into projected UV space 
             UVy_scan = UVy_scan/UVz_scan;  // Brings UVy out of 1/z space into projected UV space
-
+            
+            // sample texture color at (U/V)
             SDL_Color col={255,255,255,255};
 
-            // sample texture color at (U/V)
-            texture->getPixelAtUV(UVx_scan, UVy_scan, col);
-            if (keyboardbreak==true){ 
-                std::cout << "UVx: " << UVx_scan << "    UVy: " << UVy_scan << "    col: (" << col.r << "," << col.g << "," << col.b << ")" << std::endl;
-                keyboardbreak=false;
-    }            
+            if (this_triangle.getTexture()!=NULL){
+                // There is a texture associated with this triangle
+                texture->getPixelAtUV(UVx_scan, UVy_scan, col);
+            }
+
+
+         
+
+           
+            col.r=col.r*this_triangle.getLightDimAmount();
+            col.g=col.g*this_triangle.getLightDimAmount();
+            col.b=col.b*this_triangle.getLightDimAmount();
             // Set Color
             SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
 

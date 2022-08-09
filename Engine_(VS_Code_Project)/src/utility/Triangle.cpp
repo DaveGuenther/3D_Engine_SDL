@@ -14,6 +14,7 @@ Triangle::Triangle(){
     textureCoords[2] = Vec2d(0.0f, 0.0f);
     this->tri_id=0;
     color.r=255; color.g=255; color.b=255; color.a = 255;
+    this->dim_amount=1.0f;
 
 }
 
@@ -23,6 +24,7 @@ Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const i
     p[2]=pt3;
     tri_id=triangle_id;    
     color = SDL_Color {255, 0, 255, 255};
+    this->dim_amount=1.0f;
 }
 
 Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const int &triangle_id, const SDL_Color this_color){
@@ -31,9 +33,10 @@ Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const i
     p[2]=pt3;
     tri_id=triangle_id;    
     color = this_color;
+    this->dim_amount=1.0f;
 }
 
-Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id, const SDL_Color this_color, std::shared_ptr<TexturePNG> this_texture_ptr){
+Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id, const SDL_Color this_color, const float dim_amount, std::shared_ptr<TexturePNG> this_texture_ptr){
     p[0]=pt1;
     p[1]=pt2;
     p[2]=pt3;
@@ -43,6 +46,7 @@ Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const V
     tri_id=triangle_id;    
     color = SDL_Color {255, 0, 255, 255};
     this->texture_ptr=this_texture_ptr;
+    this->dim_amount=dim_amount;
 }
 
 Triangle::Triangle (const Triangle &T){
@@ -55,6 +59,7 @@ Triangle::Triangle (const Triangle &T){
     this->textureCoords[1] = T.textureCoords[1];
     this->textureCoords[2] = T.textureCoords[2];
     this->texture_ptr=T.texture_ptr;
+    this->dim_amount=T.dim_amount;
     
 }
 
@@ -100,6 +105,14 @@ void Triangle::setUnitNormalFromPoints(){
     
     this->unit_normal_vector = VectorMathService::crossProduct(viewline1, viewline2);
     VectorMathService::getUnitVector(this->unit_normal_vector);		    
+}
+
+void Triangle::setLightDimAmount(float lightDim){
+    this->dim_amount=lightDim;
+}
+
+const float& Triangle::getLightDimAmount(){
+    return this->dim_amount;
 }
 
 const Vec3d& Triangle::getUnitNormalVector(){
