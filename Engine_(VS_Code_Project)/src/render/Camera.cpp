@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Camera.h"
-#include "utility/Mat4x4.h"
-#include "utility/Vector_Math_Service.h"
+#include "../utility/Mat4x4.h"
+#include "../utility/Vector_Math_Service.h"
 #include "Frustum.h"
 
 

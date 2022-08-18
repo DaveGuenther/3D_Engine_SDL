@@ -1,10 +1,10 @@
 #ifndef CLIPPER_H
 #define CLIPPER_H
 #include <vector>
-#include "utility/Triangle.h"
-#include "utility/Vec3d.h"
-#include "render/Camera.h"
-#include "render/Frustum.h"
+#include "../utility/Triangle.h"
+#include "../utility/Vec3d.h"
+#include "../render/Camera.h"
+#include "../render/Frustum.h"
 
 /**
  * @brief This class is responsible for clipping a single triangle in viewSpace against the front, left, top, right, and bottom frustum planes.

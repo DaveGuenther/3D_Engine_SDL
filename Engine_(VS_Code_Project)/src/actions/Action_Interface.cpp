@@ -1,8 +1,8 @@
 
 #include "Action_Interface.h"
-#include "core/GameState_Observer_Pattern.h"
-#include "render/Camera.h"
-#include "globals.h"
+#include "../core/GameState_Observer_Pattern.h"
+#include "../render/Camera.h"
+#include "../globals.h"
 #include <string>
 #include <iostream>
 #include <memory>

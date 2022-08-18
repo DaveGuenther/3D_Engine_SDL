@@ -3,7 +3,7 @@
 //#include <ifstream>
 #include <filesystem>
 #include <unordered_map>
-#include "materials/MTL.h"
+#include "../materials/MTL.h"
 
 MTL::MTL(std::string filename){
     filename = "Meshes/"+filename;

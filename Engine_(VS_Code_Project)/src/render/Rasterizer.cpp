@@ -2,9 +2,9 @@
 #include "Rasterizer.h"
 #include <iostream>
 #include <math.h>
-#include "materials/TextureList.h"
-#include "materials/TexturePNG.h"
-#include "globals.h"
+#include "../materials/TextureList.h"
+#include "../materials/TexturePNG.h"
+#include "../globals.h"
 
 void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
     float z_center = this_tri.getTriangleZCenter();

@@ -2,7 +2,7 @@
 #include <memory>
 
 #include "TrianglePipeline.h"
-#include "utility/Mesh_Pipeline.h"
+#include "../utility/Mesh_Pipeline.h"
 
 
 TrianglePipeline::TrianglePipeline(){

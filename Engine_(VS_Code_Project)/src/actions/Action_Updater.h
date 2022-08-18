@@ -5,10 +5,10 @@
 #include <string>
 #include <memory>
 
-#include "actions/Action_Interface.h"
-#include "utility/Triangle_Modifier.h"
-#include "utility/Mesh_Pipeline.h"
-#include "render/Camera.h"
+#include "../actions/Action_Interface.h"
+#include "../utility/Triangle_Modifier.h"
+#include "../utility/Mesh_Pipeline.h"
+#include "../render/Camera.h"
 
 
 class IAction_Updater{

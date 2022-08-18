@@ -1,4 +1,4 @@
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include <algorithm>
 #include "Triangle_Modifier.h"
 #include "Vector_Math_Service.h"

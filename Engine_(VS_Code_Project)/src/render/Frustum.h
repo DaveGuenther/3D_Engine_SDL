@@ -1,7 +1,7 @@
 #ifndef FRUSTUM_H
 #define FRUSTUM_H
 
-#include "utility/Vec3d.h"
+#include "../utility/Vec3d.h"
 
 /**
  * @brief This class contains information about the Frustum edges of a camera used for determining when to draw objects or not and for clipping in viewSpace.

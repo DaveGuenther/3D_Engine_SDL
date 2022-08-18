@@ -2,7 +2,7 @@
 #define LEXLINE_NORMAL_H
 
 #include <string>
-#include "utility/Vec3d.h"
+#include "../utility/Vec3d.h"
 
 /**
  * @brief This class will lex the tokens for a single line if the line starts with "vn" indicating it is a vector normal definition

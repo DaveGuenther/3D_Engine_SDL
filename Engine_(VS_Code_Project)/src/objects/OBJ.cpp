@@ -5,13 +5,13 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "objects/OBJ_Chunk.h"
-#include "objects/OBJ.h"
-#include "materials/MTL.h"
-#include "utility/Mesh.h"
-#include "utility/Triangle.h"
-#include "materials/TextureList.h"
-#include "materials/MaterialMapper.h"
+#include "../objects/OBJ_Chunk.h"
+#include "../objects/OBJ.h"
+#include "../materials/MTL.h"
+#include "../utility/Mesh.h"
+#include "../utility/Triangle.h"
+#include "../materials/TextureList.h"
+#include "../materials/MaterialMapper.h"
 
 
 OBJ::OBJ(std::string filename, std::shared_ptr<TextureList> texture_list){

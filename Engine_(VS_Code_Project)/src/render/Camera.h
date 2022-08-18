@@ -2,9 +2,9 @@
 #define CAMERA_H
 
 #include <memory>
-#include "utility/Vec3d.h"
-#include "utility/Mat4x4.h"
-#include "render/Frustum.h"
+#include "../utility/Vec3d.h"
+#include "../utility/Mat4x4.h"
+#include "../render/Frustum.h"
 
 
 /**

@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "objects/OBJ_Lex_vertex.h"
+#include "../objects/OBJ_Lex_vertex.h"
 
 OBJ_Lex_vertex::OBJ_Lex_vertex(){
 

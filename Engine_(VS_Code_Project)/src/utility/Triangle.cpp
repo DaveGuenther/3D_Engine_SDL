@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include "Triangle.h"
 #include "Vector_Math_Service.h"
-#include "materials/TexturePNG.h"
+#include "../materials/TexturePNG.h"
 
 Triangle::Triangle(){
 

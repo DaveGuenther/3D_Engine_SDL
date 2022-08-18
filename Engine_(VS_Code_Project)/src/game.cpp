@@ -1,5 +1,12 @@
-#include "SDL.h"
-#include "core/Engine_3D.h"
+#include <SDL2/SDL.h>
+#include <iostream>
+#include "preprocessor.cpp"
+
+
+
+//#if defined(PREDEF_PLATFORM_UNIX)
+#	include "core/Engine_3D.h"
+//#endif
 
 
 

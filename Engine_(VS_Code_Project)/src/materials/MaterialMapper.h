@@ -2,8 +2,8 @@
 #define MATERIALMAPPER_H
 
 #include <memory>
-#include "materials/MTL.h"
-#include "materials/TextureList.h"
+#include "../materials/MTL.h"
+#include "../materials/TextureList.h"
 
 class MaterialMapper{
     public:

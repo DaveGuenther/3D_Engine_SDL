@@ -1,7 +1,7 @@
 #ifndef MAT4x4_H
 #define MAT4x4_H
 #include <string>
-#include "utility/Vec3d.h"
+#include "../utility/Vec3d.h"
 
 /**
  * @brief This just holds a 4x4 matrix and is used to house the rotation, translation, and projection matrices

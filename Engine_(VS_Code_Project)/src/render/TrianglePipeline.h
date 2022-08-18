@@ -4,8 +4,8 @@
 #include <vector>
 #include <memory>
 
-#include "utility/Mesh_Pipeline.h"
-#include "utility/Triangle.h"
+#include "../utility/Mesh_Pipeline.h"
+#include "../utility/Triangle.h"
 #include "Camera.h"
 
 

@@ -5,9 +5,9 @@
 #include <algorithm> // used for std::remove_if() string ops
 #include <filesystem>
 
-#include "utility/Vec3d.h"
-#include "utility/Triangle.h"
-#include "utility/Mesh.h"
+#include "../utility/Vec3d.h"
+#include "../utility/Triangle.h"
+#include "../utility/Mesh.h"
 
 
 Mesh::Mesh(){

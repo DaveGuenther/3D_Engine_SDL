@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "objects/OBJ_Lex_textureCoord.h"
+#include "../objects/OBJ_Lex_textureCoord.h"
 
 void OBJ_Lex_textureCoord::lex(std::string thisLine){
     std::vector<std::string> tokens;
