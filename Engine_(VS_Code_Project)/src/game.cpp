@@ -1,6 +1,12 @@
+#include "preprocessor.cpp"
+#if defined(PREDEF_PLATFORM_WINDOWS)
+	#define SDL_MAIN_HANDLED
+	#pragma message("WinMain")
+#endif
+
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "preprocessor.cpp"
+
 
 
 
