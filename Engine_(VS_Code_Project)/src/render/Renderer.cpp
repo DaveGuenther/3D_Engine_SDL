@@ -1,20 +1,20 @@
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include <map>
 #include <string>
 #include <iostream>
 
-#include "utility/Vec2d.h"
-#include "utility/Triangle.h"
-#include "utility/Mesh_Pipeline.h"
-#include "utility/Vector_Math_Service.h"
-#include "utility/nonVector_Math_Service.h"
-#include "utility/Mat4x4.h"
-#include "render/Renderer.h"
-#include "render/Rasterizer.h"
-#include "render/Clipper.h"
-#include "render/Frustum.h"
-#include "render/AspectRatio.h"
-#include "globals.h"
+#include "../utility/Vec2d.h"
+#include "../utility/Triangle.h"
+#include "../utility/Mesh_Pipeline.h"
+#include "../utility/Vector_Math_Service.h"
+#include "../utility/nonVector_Math_Service.h"
+#include "../utility/Mat4x4.h"
+#include "../render/Renderer.h"
+#include "../render/Rasterizer.h"
+#include "../render/Clipper.h"
+#include "../render/Frustum.h"
+#include "../render/AspectRatio.h"
+#include "../globals.h"
 
 
 Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera) {

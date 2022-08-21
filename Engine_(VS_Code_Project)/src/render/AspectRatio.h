@@ -15,9 +15,7 @@ class AspectRatio{
          * @param SCREEN_H coult be int of float
          * @return float
          */
-        static float getAspectRatio(float SCREEN_W, float SCREEN_H){
-            return float(float(SCREEN_H)/float(SCREEN_W));
-        }
+        static float getAspectRatio(float SCREEN_W, float SCREEN_H);
 };
 
 #endif

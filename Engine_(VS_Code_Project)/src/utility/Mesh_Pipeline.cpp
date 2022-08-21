@@ -1,10 +1,10 @@
 #include <string>
 #include <memory>
 
-#include "utility/Mesh.h"
-#include "utility/Mesh_Pipeline.h"
-#include "materials/TextureList.h"
-#include "objects/OBJ.h"
+#include "../utility/Mesh.h"
+#include "../utility/Mesh_Pipeline.h"
+#include "../materials/TextureList.h"
+#include "../objects/OBJ.h"
 
 
 

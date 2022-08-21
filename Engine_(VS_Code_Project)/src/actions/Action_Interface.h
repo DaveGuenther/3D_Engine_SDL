@@ -4,9 +4,9 @@
 #include <string>
 #include <unordered_map>
 #include <memory>
-#include "core/GameState_Observer_Pattern.h"
-#include "utility/Triangle_Modifier.h"
-#include "render/Camera.h"
+#include "../core/GameState_Observer_Pattern.h"
+#include "../utility/Triangle_Modifier.h"
+#include "../render/Camera.h"
 
 enum ActionCommandState {OFF, TRIG_ATTACK, ATTACK, SUSTAIN, TRIG_RELEASE, RELEASE};
 

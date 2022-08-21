@@ -1,8 +1,8 @@
 #include <string>
-#include "SDL.h"
+#include <SDL2/SDL.h>
 
-#include "utility/Mat4x4.h"
-#include "utility/Vector_Math_Service.h"
+#include "../utility/Mat4x4.h"
+#include "../utility/Vector_Math_Service.h"
 
 
 Mat4x4::Mat4x4(){

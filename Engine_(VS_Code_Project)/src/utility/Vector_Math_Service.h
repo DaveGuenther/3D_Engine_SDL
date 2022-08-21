@@ -1,8 +1,8 @@
 #ifndef VECTOR_MATH_SERVICE_H
 #define VECTOR_MATH_SERVICE_H
 
-#include "utility/Triangle.h"
-#include "utility/Vec3d.h"
+#include "../utility/Triangle.h"
+#include "../utility/Vec3d.h"
 #include "Mat4x4.h"
 
 class VectorMathService{

@@ -1,10 +1,10 @@
 #ifndef EVENT_SCANNER_H
 #define EVENT_SCANNER_H
 
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include <unordered_map>
 #include <memory>
-#include "render/Renderer.h"
+#include "../render/Renderer.h"
 
 enum input_map{PREVIOUS_MAP, CURRENT_MAP, MOUSE_BUTTON_MAP};
 
