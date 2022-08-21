@@ -1,5 +1,18 @@
-#include "SDL.h"
-#include "core/Engine_3D.h"
+#include "preprocessor.cpp"
+#if defined(PREDEF_PLATFORM_WINDOWS)
+	#define SDL_MAIN_HANDLED
+	#pragma message("WinMain")
+#endif
+
+#include <SDL2/SDL.h>
+#include <iostream>
+
+
+
+
+//#if defined(PREDEF_PLATFORM_UNIX)
+#	include "core/Engine_3D.h"
+//#endif
 
 
 

@@ -3,10 +3,10 @@
 
 //#include <memory>
 #include <memory>
-#include "SDL.h"
-#include "core/Gamestate_Observer_Pattern.h"
-#include "input/Event_Scanner.h"
-#include "input/KeyBindings.h"
+#include <SDL2/SDL.h>
+#include "../core/GameState_Observer_Pattern.h"
+#include "../input/Event_Scanner.h"
+#include "../input/KeyBindings.h"
 
 
 class Input_Parser{

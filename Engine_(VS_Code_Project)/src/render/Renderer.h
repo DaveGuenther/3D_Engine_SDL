@@ -3,16 +3,16 @@
 
 #include <vector>
 #include <memory>
-#include "SDL.h"
+#include <SDL2/SDL.h>
 
-#include "utility/Mesh.h"
-#include "utility/Vec2d.h"
-#include "utility/Vec3d.h"
-#include "utility/Mat4x4.h"
-#include "utility/Mesh_Pipeline.h"
-#include "render/TrianglePipeline.h"
-#include "render/Camera.h"
-#include "render/Clipper.h"
+#include "../utility/Mesh.h"
+#include "../utility/Vec2d.h"
+#include "../utility/Vec3d.h"
+#include "../utility/Mat4x4.h"
+#include "../utility/Mesh_Pipeline.h"
+#include "../render/TrianglePipeline.h"
+#include "../render/Camera.h"
+#include "../render/Clipper.h"
 
 
 

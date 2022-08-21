@@ -1,4 +1,4 @@
-#include "input/KeyBindings.h"
+#include "KeyBindings.h"
 #include <string>
 #include <unordered_map>
 #include <filesystem> // loading key bindings
@@ -45,7 +45,7 @@ void Bindings::bindKeyValuePair(std::string input_string){
 void Bindings::loadBinding(std::string filename){
     std::ifstream myfile;
 	//filename = "Meshes/"+filename;
-	std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
+	std::cout << "CWD: " << std::filesystem::current_path() << "  Filename: " << filename<<std::endl;
 	myfile.open (filename);
     if (!myfile)
     throw std::runtime_error(std::string("Bindings::loadBinding - Could not open file: ")+filename);

@@ -7,10 +7,10 @@
 #include <string>
 #include <unordered_map>
 
-#include "objects/OBJ_Lex_normal.h"
-#include "objects/OBJ_Lex_textureCoord.h"
-#include "objects/OBJ_Lex_triFace.h"
-#include "objects/OBJ_Lex_vertex.h"
+#include "../objects/OBJ_Lex_normal.h"
+#include "../objects/OBJ_Lex_textureCoord.h"
+#include "../objects/OBJ_Lex_triFace.h"
+#include "../objects/OBJ_Lex_vertex.h"
 
 /**
  * @brief This class will examine a single stringstream consistin of the lines of an fstream file that define a single mesh

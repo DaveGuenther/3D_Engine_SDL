@@ -3,27 +3,27 @@
 #include <vector>
 #include <memory>
 
-#include "SDL.h"
+#include <SDL2/SDL.h>
 
-#include "core/Engine_3D.h"
-#include "core/Frame_Rate_Manager.h"
-#include "core/GameState_Observer_Pattern.h"
+#include "../core/Engine_3D.h"
+#include "../core/Frame_Rate_Manager.h"
+#include "../core/GameState_Observer_Pattern.h"
 
-#include "input/Event_Scanner.h"
-#include "input/KeyBindings.h"
-#include "input/Input_Parser.h"
+#include "../input/Event_Scanner.h"
+#include "../input/KeyBindings.h"
+#include "../input/Input_Parser.h"
 
-#include "actions/Action_Interface.h"
-#include "actions/Action_Updater.h"
+#include "../actions/Action_Interface.h"
+#include "../actions/Action_Updater.h"
 
-#include "utility/Mesh.h"
-#include "utility/Mesh_Pipeline.h"
-#include "utility/Triangle_Modifier.h"
+#include "../utility/Mesh.h"
+#include "../utility/Mesh_Pipeline.h"
+#include "../utility/Triangle_Modifier.h"
 
-#include "render/Renderer.h"
-#include "render/TrianglePipeline.h"
-#include "render/Camera.h"
-#include "render/AspectRatio.h"
+#include "../render/Renderer.h"
+#include "../render/TrianglePipeline.h"
+#include "../render/Camera.h"
+#include "../render/AspectRatio.h"
 
 Engine_3D::Engine_3D(void){
 

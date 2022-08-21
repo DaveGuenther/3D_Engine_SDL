@@ -2,3 +2,5 @@
 *.exe
 gmon.out
 profout.txt
+*.log
+*.o

@@ -2,9 +2,9 @@
 #define TRIANGLE_H
 #include <string>
 #include <memory>
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include "Vec3d.h"
-#include "materials/TexturePNG.h"
+#include "../materials/TexturePNG.h"
 
 
 /**

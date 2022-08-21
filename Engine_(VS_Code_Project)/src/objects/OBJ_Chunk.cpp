@@ -3,9 +3,9 @@
 #include <sstream>
 #include <iostream>
 
-#include "SDL.h"
-#include "objects/OBJ_Chunk.h"
-#include "materials/MTL.h"
+#include <SDL2/SDL.h>
+#include "../objects/OBJ_Chunk.h"
+#include "../materials/MTL.h"
 
 
 OBJ_Chunk::OBJ_Chunk(std::stringstream& this_mesh_object, const std::unordered_map<std::string, std::string>& mesh_MTLs){

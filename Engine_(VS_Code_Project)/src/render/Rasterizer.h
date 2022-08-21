@@ -4,8 +4,8 @@
 #include <map>
 
 #include "Renderer.h"
-#include "utility/Vec2d.h"
-#include "materials/TexturePNG.h"
+#include "../utility/Vec2d.h"
+#include "../materials/TexturePNG.h"
 
 
 class ITriangleRasterizer{

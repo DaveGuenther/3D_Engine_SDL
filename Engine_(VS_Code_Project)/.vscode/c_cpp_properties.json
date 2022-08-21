@@ -1,27 +1,18 @@
 {
     "configurations": [
         {
-            "name": "GCC",
+            "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/src/**",
                 "${workspaceFolder}/**",
-                "C:/SDL/SDL2-2.0.18/x86_64-w64-mingw32/include/SDL2",
-                "C:/SDL/SDL2_image-2.0.5/x86_64-w64-mingw32/include/SDL2", 
-                "${workspaceFolder}/build"
-                
+                "${workspaceFolder}/src/**"
             ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
-            ],
-            "cStandard": "gnu17",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "windows-gcc-x64",
-            "compilerPath": "C:/msys64/mingw64/bin/g++.exe"
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64",
+            "configurationProvider": "ms-vscode.makefile-tools"
         }
-
-        
     ],
     "version": 4
 }

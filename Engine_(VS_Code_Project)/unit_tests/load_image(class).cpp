@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 #include <filesystem>
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include "SDL_image.h"
 #include "utility/TexturePNG.h"
 #include "utility/TextureList.h"

@@ -1,4 +1,4 @@
-#include "render/Frustum.h"
+#include "../render/Frustum.h"
 
 Frustum::Frustum(float aspectRatio): frustum_front_plane_normal(Vec3d(0.0f, 0.0f, 1.0f)),
                                     frustum_front_point(Vec3d(0.0f, 0.0f, 0.1f)),
