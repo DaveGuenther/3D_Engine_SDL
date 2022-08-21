@@ -29,10 +29,10 @@ Engine_3D::Engine_3D(void){
 
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
-    float aspectRatio = AspectRatio::getAspectRatio(640,380);
+    float aspectRatio = AspectRatio::getAspectRatio(480,285);  //640x380   //480x285    320x190  
     std::shared_ptr<Camera> player_camera(new Camera(aspectRatio));
     player_camera = player_camera;
-    std::shared_ptr<Renderer> this_Renderer(new Renderer(640, 380, player_camera));
+    std::shared_ptr<Renderer> this_Renderer(new Renderer(480, 285, player_camera));
     this->Engine_Renderer=this_Renderer;
     this_Renderer->setColorFrustumClippedTris(false); // don't show RGB clipped tris.  Instead show intended color
 
