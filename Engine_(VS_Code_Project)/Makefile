@@ -1,6 +1,6 @@
 
 # Compiler settings 
-CC = clang++
+CC = g++
 
 ifeq ($(OS), Windows_NT)
 	CXXFLAGS = -c -std=c++17 -Wall -I /c/SDL/SDL2-2.0.18/x86_64-w64-mingw32/include -I /c/SDL/SDL2_image-2.0.5/x86_64-w64-mingw32/include
