@@ -8,11 +8,7 @@ ifeq ($(OS), Windows_NT)
 else
 	CXXFLAGS = -c -std=c++17 -Wall
 	LDFLAGS = -lstdc++fs -lSDL2main -lSDL2 -lSDL2_image -I /usr/include/SDL2
-endif
-
-#"-pg",          // Include this line when using gprof for profiling, otherwise exclude it
-#"-no-pie",      // Include this line when using gprof for profiling, otherwise exclude it
-#"-fno-builtin" // Include this line when using gprof for profiling, otherwise exclude it	
+endif	
 
 # Makefile settings 
 APPNAME = game
@@ -31,15 +27,39 @@ OBJ_utility_LIST = $(OBJ)/utility/Mat4x4.o $(OBJ)/utility/Mesh_Pipeline.o $(OBJ)
 
 all: $(BUILD)/game
 
+.PHONY: release
+release: clean
+release: $(BUILD)/game
+
+.PHONY: prof
 prof: LDFLAGS += -lprofiler -ltcmalloc
 prof: remove-executable
-prof: $(BUILD)/game
+prof: debug
 prof:
 	bash profile.sh
 
-
+.PHONY: debug
 debug: CXXFLAGS += -g -D_GLIBCXX_DEBUG
 debug: $(BUILD)/game
+
+.PHONY: clean 
+clean: remove-executable
+	rm -f $(OBJ)/*.o 
+	rm -f $(OBJ)/actions/*.o
+	rm -f $(OBJ)/core/*.o
+	rm -f $(OBJ)/input/*.o
+	rm -f $(OBJ)/materials/*.o
+	rm -f $(OBJ)/objects/*.o
+	rm -f $(OBJ)/render/*.o
+	rm -f $(OBJ)/utility/*.o
+	rm -f $(BUILD)/game.gif
+	rm -f $(BUILD)/*.prof
+	rm -f $(BUILD)/*.callgrind
+
+
+.PHONY: remove-executable 
+remove-executable:
+	rm -f $(BUILD)/game
 
 $(BUILD)/game: $(OBJ_LIST)
 	$(info ***** Linking objects and building target *****)
@@ -235,18 +255,3 @@ $(OBJ)/preprocessor.o: $(SRC)/preprocessor.cpp
 	$(info ***** Building Crossplatform Preprocessor (preprocessor.o) *****)
 	$(CC) $(CXXFLAGS) $(SRC)/preprocessor.cpp -o $(OBJ)/preprocessor.o
 
-.PHONY: clean #so that adding a file called src/clean doesn't mess up the makefile
-clean: remove-executable
-	rm -f $(OBJ)/*.o 
-	rm -f $(OBJ)/actions/*.o
-	rm -f $(OBJ)/core/*.o
-	rm -f $(OBJ)/input/*.o
-	rm -f $(OBJ)/materials/*.o
-	rm -f $(OBJ)/objects/*.o
-	rm -f $(OBJ)/render/*.o
-	rm -f $(OBJ)/utility/*.o
-
-
-.PHONY: remove-executable
-remove-executable:
-	rm -f $(BUILD)/game
