@@ -10,6 +10,10 @@ else
 	LDFLAGS = -lstdc++fs -lSDL2main -lSDL2 -lSDL2_image -I /usr/include/SDL2
 endif
 
+#"-pg",          // Include this line when using gprof for profiling, otherwise exclude it
+#"-no-pie",      // Include this line when using gprof for profiling, otherwise exclude it
+#"-fno-builtin" // Include this line when using gprof for profiling, otherwise exclude it	
+
 # Makefile settings 
 APPNAME = game
 SRC = src
@@ -27,8 +31,14 @@ OBJ_utility_LIST = $(OBJ)/utility/Mat4x4.o $(OBJ)/utility/Mesh_Pipeline.o $(OBJ)
 
 all: $(BUILD)/game
 
+prof: LDFLAGS += -lprofiler -ltcmalloc
+prof: remove-executable
+prof: $(BUILD)/game
+prof:
+	bash profile.sh
+
+
 debug: CXXFLAGS += -g -D_GLIBCXX_DEBUG
-debug: CCFLAGS += -g -D_GLIBCXX_DEBUG
 debug: $(BUILD)/game
 
 $(BUILD)/game: $(OBJ_LIST)
@@ -226,6 +236,17 @@ $(OBJ)/preprocessor.o: $(SRC)/preprocessor.cpp
 	$(CC) $(CXXFLAGS) $(SRC)/preprocessor.cpp -o $(OBJ)/preprocessor.o
 
 .PHONY: clean #so that adding a file called src/clean doesn't mess up the makefile
-clean:
-	rm -f $(OBJ)/*.o $(BUILD)/main
+clean: remove-executable
+	rm -f $(OBJ)/*.o 
+	rm -f $(OBJ)/actions/*.o
+	rm -f $(OBJ)/core/*.o
+	rm -f $(OBJ)/input/*.o
+	rm -f $(OBJ)/materials/*.o
+	rm -f $(OBJ)/objects/*.o
+	rm -f $(OBJ)/render/*.o
+	rm -f $(OBJ)/utility/*.o
 
+
+.PHONY: remove-executable
+remove-executable:
+	rm -f $(BUILD)/game

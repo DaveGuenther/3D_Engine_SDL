@@ -4,3 +4,6 @@ gmon.out
 profout.txt
 *.log
 *.o
+*.prof
+*.callgrind
+game.gif
