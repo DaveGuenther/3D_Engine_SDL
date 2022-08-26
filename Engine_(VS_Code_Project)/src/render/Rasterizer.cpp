@@ -102,8 +102,9 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
             Triangle flat_top_tri(p_i, p1, p2, uv_p_i, uv_p1, uv_p2, this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
             flat_top_tri.setLightDimAmount(this_triangle.getLightDimAmount());
             flat_bottom_tri.setLightDimAmount(this_triangle.getLightDimAmount());            
-            drawFlatTopTri(flat_top_tri);
             drawFlatBottomTri(flat_bottom_tri);
+            drawFlatTopTri(flat_top_tri);
+
         }else{ 
             //MAJOR RIGHT TRIANGLE
 
@@ -115,8 +116,9 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
             }*/
             flat_top_tri.setLightDimAmount(this_triangle.getLightDimAmount());
             flat_bottom_tri.setLightDimAmount(this_triangle.getLightDimAmount());
-            drawFlatTopTri(flat_top_tri);
             drawFlatBottomTri(flat_bottom_tri);
+            drawFlatTopTri(flat_top_tri);
+
             //std::cout << "Major Right" << std::endl;
         }
 
