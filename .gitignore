@@ -4,6 +4,13 @@ gmon.out
 profout.txt
 *.log
 *.o
-*.prof
-*.callgrind
-game.gif
+Engine_\(VS_Code_Project\)/build/game.callgrind
+Engine_\(VS_Code_Project\)/build/game.prof
+Engine_\(VS_Code_Project\)/build/game.gif
+Engine_\(VS_Code_Project\)/build/flamegraph.collapse
+Engine_\(VS_Code_Project\)/build/flamegraph_out.svg
+!Engine_\(VS_Code_Project\)/build/prof/game.callgrind
+!Engine_\(VS_Code_Project\)/build/prof/game.prof
+!Engine_\(VS_Code_Project\)/build/prof/game.gif
+!Engine_\(VS_Code_Project\)/build/prof/flamegraph.collapse
+!Engine_\(VS_Code_Project\)/build/prof/flamegraph_out.svg
