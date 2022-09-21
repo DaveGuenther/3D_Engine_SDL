@@ -18,11 +18,11 @@ class Vec2d{
 
     void setX(const float &x_in);
     void setY(const float &y_in);
-    void setW(const float &w_in);
+    //void setW(const float &w_in);
 
     const float& getX()const;
     const float& getY()const;
-    const float& getW()const;
+    //const float& getW()const;
 
     std::string toString();
 
@@ -33,10 +33,11 @@ class Vec2d{
     friend Vec2d operator* (const float& val, const Vec2d& vec);
     friend Vec2d operator* (const Vec2d& vec, const float& val);
 
+    float uv_w; // used for perspective correction during texturemapping
+
   protected:
 		float x;
 		float y;
-    float w; // used for perspective correction during texturemapping
 
 };
 

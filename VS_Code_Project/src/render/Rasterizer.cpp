@@ -170,11 +170,11 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
         //determine UV_start
         float UVx_start = alpha_start*(uv2.getX()-uv0.getX())+uv0.getX();
         float UVy_start = alpha_start*(uv2.getY()-uv0.getY())+uv0.getY();
-        float UVz_start = alpha_start*(uv2.getW()-uv0.getW())+uv0.getW();
+        float UVz_start = alpha_start*(uv2.uv_w-uv0.uv_w)+uv0.uv_w;
         //determine UV_end
         float UVx_end = alpha_end*(uv2.getX()-uv1.getX())+uv1.getX();
         float UVy_end = alpha_end*(uv2.getY()-uv1.getY())+uv1.getY();
-        float UVz_end = alpha_end*(uv2.getW()-uv1.getW())+uv1.getW();
+        float UVz_end = alpha_end*(uv2.uv_w-uv1.uv_w)+uv1.uv_w;
 
         // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
         //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
@@ -259,12 +259,12 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
         //determine UV_start
         float UVx_start = alpha_start*(uv1.getX()-uv0.getX())+uv0.getX();
         float UVy_start = alpha_start*(uv1.getY()-uv0.getY())+uv0.getY();
-        float UVz_start = alpha_start*(uv1.getW()-uv0.getW())+uv0.getW();
+        float UVz_start = alpha_start*(uv1.uv_w-uv0.uv_w)+uv0.uv_w;
         //float UVz_start = alpha_start*((1/p1.getZ())-(1/p0.getZ()))+(1/p0.getZ());
         //determine UV_end
         float UVx_end = alpha_end*(uv2.getX()-uv0.getX())+uv0.getX();
         float UVy_end = alpha_end*(uv2.getY()-uv0.getY())+uv0.getY();
-        float UVz_end = alpha_end*(uv2.getW()-uv0.getW())+uv0.getW();
+        float UVz_end = alpha_end*(uv2.uv_w-uv0.uv_w)+uv0.uv_w;
         //float UVz_end = alpha_end*((1/p2.getZ())-(1/p0.getZ()))+(1/p0.getZ());
 
         // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
