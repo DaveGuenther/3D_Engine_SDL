@@ -65,7 +65,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
     // test for flat top
     if (p0.getY()==p1.getY()) { 
         // FLAT TOP Triangle
-        if (p0.getX() > p1.getX()) {
+        if (p0.x > p1.x) {
             Vec3d temp = p0;        p0=p1;          p1=temp; 
             Vec2d uv_temp = uv_p0;  uv_p0=uv_p1;    uv_p1=uv_temp;
         }
@@ -76,7 +76,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
 
     // test for flat bottom
     else if (p1.getY()==p2.getY()) {
-        if (p1.getX() > p2.getX()) {
+        if (p1.x > p2.x) {
             Vec3d temp = p1;        p1=p2;          p2=temp;
             Vec2d uv_temp = uv_p1;  uv_p1=uv_p2;    uv_p2=uv_temp;
         } 
@@ -95,7 +95,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
         Vec2d uv_p_i = uv_p0+ alpha*(uv_p2-uv_p0);
 
         //Test for major left triangle
-        if (p_i.getX()<p1.getX()){
+        if (p_i.x<p1.x){
             //MAJOR LEFT TRIANGLE 
             //std::cout << "Major Left" << std::endl; 
             Triangle flat_bottom_tri(p0, p_i, p1, uv_p0, uv_p_i, uv_p1, this_triangle.getID(), col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
@@ -139,8 +139,8 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
 
 
     // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
-    float left_slope = (p2.getX()-p0.getX())/(p2.getY()-p0.getY());
-    float right_slope = (p2.getX()-p1.getX())/(p2.getY()-p1.getY());
+    float left_slope = (p2.x-p0.x)/(p2.getY()-p0.getY());
+    float right_slope = (p2.x-p1.x)/(p2.getY()-p1.getY());
 
 
     // 2. Determine y_start and y_end pixels for the triangle
@@ -151,8 +151,8 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
     for (int y = y_start;y<y_end;y++){
 
         // a. Calculate start and end x float points
-        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.getX();
-        float p_end = right_slope * (float(y)+0.5f-p1.getY())+p1.getX();
+        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.x;
+        float p_end = right_slope * (float(y)+0.5f-p1.getY())+p1.x;
 
         // b. Calculate discrete pixels for start and end x
         int x_start = int(ceil(p_start-0.5f));
@@ -168,11 +168,11 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
         if (alpha_end>1.0f){alpha_end=1.0f;}        
 
         //determine UV_start
-        float UVx_start = alpha_start*(uv2.getX()-uv0.getX())+uv0.getX();
+        float UVx_start = alpha_start*(uv2.x-uv0.x)+uv0.x;
         float UVy_start = alpha_start*(uv2.getY()-uv0.getY())+uv0.getY();
         float UVz_start = alpha_start*(uv2.uv_w-uv0.uv_w)+uv0.uv_w;
         //determine UV_end
-        float UVx_end = alpha_end*(uv2.getX()-uv1.getX())+uv1.getX();
+        float UVx_end = alpha_end*(uv2.x-uv1.x)+uv1.x;
         float UVy_end = alpha_end*(uv2.getY()-uv1.getY())+uv1.getY();
         float UVz_end = alpha_end*(uv2.uv_w-uv1.uv_w)+uv1.uv_w;
 
@@ -227,8 +227,8 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
     Vec2d uv2 = this_triangle.getUVPoint(2);
 
     // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
-    float left_slope = (p1.getX()-p0.getX())/(p1.getY()-p0.getY());
-    float right_slope = (p2.getX()-p0.getX())/(p2.getY()-p0.getY());
+    float left_slope = (p1.x-p0.x)/(p1.getY()-p0.getY());
+    float right_slope = (p2.x-p0.x)/(p2.getY()-p0.getY());
 
     // 2. Determine y_start and y_end pixels for the triangle
     int y_start = int(ceil(p0.getY()-0.5f));
@@ -240,8 +240,8 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
     for (int y = y_start;y<y_end;y++){
 
         // a. Calculate start and end x float points
-        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.getX();
-        float p_end = right_slope * (float(y)+0.5f-p0.getY())+p0.getX();
+        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.x;
+        float p_end = right_slope * (float(y)+0.5f-p0.getY())+p0.x;
 
         // b. Calculate discrete pixels for start and end x
         int x_start = int(ceil(p_start-0.5f));
@@ -257,12 +257,12 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
         if (alpha_end>1.0f){alpha_end=1.0f;}        
 
         //determine UV_start
-        float UVx_start = alpha_start*(uv1.getX()-uv0.getX())+uv0.getX();
+        float UVx_start = alpha_start*(uv1.x-uv0.x)+uv0.x;
         float UVy_start = alpha_start*(uv1.getY()-uv0.getY())+uv0.getY();
         float UVz_start = alpha_start*(uv1.uv_w-uv0.uv_w)+uv0.uv_w;
         //float UVz_start = alpha_start*((1/p1.getZ())-(1/p0.getZ()))+(1/p0.getZ());
         //determine UV_end
-        float UVx_end = alpha_end*(uv2.getX()-uv0.getX())+uv0.getX();
+        float UVx_end = alpha_end*(uv2.x-uv0.x)+uv0.x;
         float UVy_end = alpha_end*(uv2.getY()-uv0.getY())+uv0.getY();
         float UVz_end = alpha_end*(uv2.uv_w-uv0.uv_w)+uv0.uv_w;
         //float UVz_end = alpha_end*((1/p2.getZ())-(1/p0.getZ()))+(1/p0.getZ());
@@ -346,7 +346,7 @@ void ScanlineRasterizer::drawTriangle(Triangle& this_triangle){
     // test for flat top
     if (p0.getY()==p1.getY()) { 
         // FLAT TOP Triangle
-        if (p0.getX() > p1.getX()) { Vec3d temp = p0; p0=p1; p1=temp; }
+        if (p0.x > p1.x) { Vec3d temp = p0; p0=p1; p1=temp; }
         Triangle reordered_tri(p0, p1, p2,0, col);
         drawFlatTopTri(reordered_tri, col);
         //std::cout << "Flat Top!" << std::endl;
@@ -354,7 +354,7 @@ void ScanlineRasterizer::drawTriangle(Triangle& this_triangle){
 
     // test for flat bottom
     else if (p1.getY()==p2.getY()) { 
-        if (p1.getX() > p2.getX()) { Vec3d temp = p1; p1=p2; p2=temp; } 
+        if (p1.x > p2.x) { Vec3d temp = p1; p1=p2; p2=temp; } 
         //FLAT BOTTOM TRIANGLE
         Triangle reordered_tri(p0, p1, p2,0, col);
         drawFlatBottomTri(reordered_tri, col);
@@ -367,7 +367,7 @@ void ScanlineRasterizer::drawTriangle(Triangle& this_triangle){
         Vec3d p_i = p0+alpha*(p2-p0);
 
         //Test for major left triangle
-        if (p_i.getX()<p1.getX()){
+        if (p_i.x<p1.x){
             //MAJOR LEFT TRIANGLE 
             //std::cout << "Major Left" << std::endl; 
             Triangle flat_bottom_tri(p0, p_i, p1,0, col);
@@ -397,8 +397,8 @@ void ScanlineRasterizer::drawFlatTopTri(Triangle& this_triangle, SDL_Color col){
 
 
     // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
-    float left_slope = (p2.getX()-p0.getX())/(p2.getY()-p0.getY());
-    float right_slope = (p2.getX()-p1.getX())/(p2.getY()-p1.getY());
+    float left_slope = (p2.x-p0.x)/(p2.getY()-p0.getY());
+    float right_slope = (p2.x-p1.x)/(p2.getY()-p1.getY());
 
 
     // 2. Determine y_start and y_end pixels for the triangle
@@ -409,8 +409,8 @@ void ScanlineRasterizer::drawFlatTopTri(Triangle& this_triangle, SDL_Color col){
     for (int y = y_start;y<y_end;y++){
 
         // a. Calculate start and end x float points
-        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.getX();
-        float p_end = right_slope * (float(y)+0.5f-p1.getY())+p1.getX();
+        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.x;
+        float p_end = right_slope * (float(y)+0.5f-p1.getY())+p1.x;
 
         // b. Calculate discrete pixels for start and end x
         int x_start = int(ceil(p_start-0.5f));
@@ -431,8 +431,8 @@ void ScanlineRasterizer::drawFlatBottomTri(Triangle& this_triangle, SDL_Color co
 
 
     // 1. Calculate left and right slopes using run/rise so that vertical likes aren't infinite
-    float left_slope = (p1.getX()-p0.getX())/(p1.getY()-p0.getY());
-    float right_slope = (p2.getX()-p0.getX())/(p2.getY()-p0.getY());
+    float left_slope = (p1.x-p0.x)/(p1.getY()-p0.getY());
+    float right_slope = (p2.x-p0.x)/(p2.getY()-p0.getY());
 
     // 2. Determine y_start and y_end pixels for the triangle
     int y_start = int(ceil(p0.getY()-0.5f));
@@ -442,8 +442,8 @@ void ScanlineRasterizer::drawFlatBottomTri(Triangle& this_triangle, SDL_Color co
     for (int y = y_start;y<y_end;y++){
 
         // a. Calculate start and end x float points
-        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.getX();
-        float p_end = right_slope * (float(y)+0.5f-p0.getY())+p0.getX();
+        float p_start = left_slope * (float(y)+0.5f-p0.getY())+p0.x;
+        float p_end = right_slope * (float(y)+0.5f-p0.getY())+p0.x;
 
         // b. Calculate discrete pixels for start and end x
         int x_start = int(ceil(p_start-0.5f));
@@ -464,17 +464,17 @@ InOutRasterizer::InOutRasterizer(SDL_Renderer* my_renderer){
 void InOutRasterizer::drawTriangle(Triangle& this_triangle){
     //applyDepthDimmer(this_triangle, col);
     SDL_Color col = this_triangle.getColor();
-    bound_box_min_x = std::min(std::min(this_triangle.getTrianglePoint(0).getX(), this_triangle.getTrianglePoint(1).getX()), this_triangle.getTrianglePoint(2).getX());
+    bound_box_min_x = std::min(std::min(this_triangle.getTrianglePoint(0).x, this_triangle.getTrianglePoint(1).x), this_triangle.getTrianglePoint(2).x);
     bound_box_min_y = std::min(std::min(this_triangle.getTrianglePoint(0).getY(), this_triangle.getTrianglePoint(1).getY()), this_triangle.getTrianglePoint(2).getY());
-    bound_box_max_x = std::max(std::max(this_triangle.getTrianglePoint(0).getX(), this_triangle.getTrianglePoint(1).getX()), this_triangle.getTrianglePoint(2).getX());
+    bound_box_max_x = std::max(std::max(this_triangle.getTrianglePoint(0).x, this_triangle.getTrianglePoint(1).x), this_triangle.getTrianglePoint(2).x);
     bound_box_max_y = std::max(std::max(this_triangle.getTrianglePoint(0).getY(), this_triangle.getTrianglePoint(1).getY()), this_triangle.getTrianglePoint(2).getY());
-    v0_x = this_triangle.getTrianglePoint(0).getX();
+    v0_x = this_triangle.getTrianglePoint(0).x;
     v0_y = this_triangle.getTrianglePoint(0).getY();
     v0_z = this_triangle.getTrianglePoint(0).getZ();
-    v1_x = this_triangle.getTrianglePoint(1).getX();
+    v1_x = this_triangle.getTrianglePoint(1).x;
     v1_y = this_triangle.getTrianglePoint(1).getY();
     v1_z = this_triangle.getTrianglePoint(1).getZ();
-    v2_x = this_triangle.getTrianglePoint(2).getX();
+    v2_x = this_triangle.getTrianglePoint(2).x;
     v2_y = this_triangle.getTrianglePoint(2).getY();
     v2_z = this_triangle.getTrianglePoint(2).getZ();
 

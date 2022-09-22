@@ -39,6 +39,7 @@ prof:
 	bash profile.sh
 
 .PHONY: debug
+debug: clean
 debug: LDFLAGS += -lprofiler -ltcmalloc
 debug: CXXFLAGS += -O0 -fno-inline-functions -g -D_GLIBCXX_DEBUG
 debug: $(BUILD)/game

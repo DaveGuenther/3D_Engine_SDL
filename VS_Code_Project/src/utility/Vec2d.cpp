@@ -20,11 +20,11 @@ Vec2d::Vec2d (const Vec2d &V){
     uv_w=V.uv_w;
 }
 
-void Vec2d::setX(const float &x_in){ x=x_in; }
+//void Vec2d::setX(const float &x_in){ x=x_in; }
 void Vec2d::setY(const float &y_in){ y=y_in; }
 //void Vec2d::setW(const float &w_in){ w=w_in; }
 
-const float& Vec2d::getX()const { return x; }
+//const float& Vec2d::getX()const { return x; }
 const float& Vec2d::getY()const { return y; }
 //const float& Vec2d::getW()const { return w; }
 
@@ -35,7 +35,7 @@ std::string Vec2d::toString(){
 
 bool operator== (const Vec2d & vec1, const Vec2d & vec2){ return (vec1.x==vec2.x && vec1.y==vec2.y&& vec1.uv_w==vec2.uv_w);}
 bool operator!= (const Vec2d & vec1, const Vec2d & vec2){ return !(vec1.x==vec2.x && vec1.y==vec2.y && vec1.uv_w==vec2.uv_w);}
-Vec2d operator+ (const Vec2d& vec1, const Vec2d& vec2){ return Vec2d(vec1.getX()+vec2.getX(), vec1.getY()+vec2.getY(), vec1.uv_w+vec2.uv_w); }
-Vec2d operator- (const Vec2d& vec1, const Vec2d& vec2){ return Vec2d(vec1.getX()-vec2.getX(), vec1.getY()-vec2.getY(), vec1.uv_w-vec2.uv_w); }    
-Vec2d operator* (const float& val, const Vec2d& vec){ return Vec2d(val*vec.getX(), val*vec.getY(), val*vec.uv_w); }
-Vec2d operator* (const Vec2d& vec, const float& val){ return Vec2d(val*vec.getX(), val*vec.getY(), val*vec.uv_w); }
+Vec2d operator+ (const Vec2d& vec1, const Vec2d& vec2){ return Vec2d(vec1.x+vec2.x, vec1.getY()+vec2.getY(), vec1.uv_w+vec2.uv_w); }
+Vec2d operator- (const Vec2d& vec1, const Vec2d& vec2){ return Vec2d(vec1.x-vec2.x, vec1.getY()-vec2.getY(), vec1.uv_w-vec2.uv_w); }    
+Vec2d operator* (const float& val, const Vec2d& vec){ return Vec2d(val*vec.x, val*vec.getY(), val*vec.uv_w); }
+Vec2d operator* (const Vec2d& vec, const float& val){ return Vec2d(val*vec.x, val*vec.getY(), val*vec.uv_w); }

@@ -39,7 +39,7 @@ Mat4x4 Camera::buildViewMatrix(){
 void Camera::rotateCamera(Vec3d rotation_vector){
     // Update total pitch and yaw
     this->yaw_total = rotation_vector.getY()+yaw_total; // Amount of rotation around the Y axis (turn the camera left or right)
-    this->pitch_total = rotation_vector.getX()+pitch_total; // Amount of rotation around X axis (pitch the camera up and down)
+    this->pitch_total = rotation_vector.x+pitch_total; // Amount of rotation around X axis (pitch the camera up and down)
     this->vTarget = Vec3d(0,0,1);
 
 
@@ -72,7 +72,7 @@ void Camera::setCameraPos(Vec3d transform_from_forward){
     Vec3d vLeftdir = VectorMathService::crossProduct(this->lookVector,Vec3d(0.0f,1.0f,0.0f));
     VectorMathService::getUnitVector(vLeftdir);
     // Determine magnitude of Left/Right movement in the direction that is left to the camera, then add that vector to the camera's position
-    Vec3d vLeftRight = vLeftdir*transform_from_forward.getX();
+    Vec3d vLeftRight = vLeftdir*transform_from_forward.x;
     this->camera = this->camera-vLeftRight; 
 
 
