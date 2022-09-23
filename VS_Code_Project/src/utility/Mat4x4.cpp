@@ -187,10 +187,10 @@ Mat4x4 Mat4x4::matrixPointAt(Vec3d& pos, Vec3d& target, Vec3d& up){
 
 // Construct Dimensioning and Translation Matrix	
     Mat4x4 matrix;
-    matrix.m[0][0] = new_right.getX();	    matrix.m[0][1] = new_right.getY();	    matrix.m[0][2] = new_right.getZ();	    matrix.m[0][3] = 0.0f;
-    matrix.m[1][0] = new_up.getX();		    matrix.m[1][1] = new_up.getY();		    matrix.m[1][2] = new_up.getZ();		    matrix.m[1][3] = 0.0f;
-    matrix.m[2][0] = new_forward.getX();	matrix.m[2][1] = new_forward.getY();	matrix.m[2][2] = new_forward.getZ();	matrix.m[2][3] = 0.0f;
-    matrix.m[3][0] = pos.getX();			matrix.m[3][1] = pos.getY();			matrix.m[3][2] = pos.getZ();			matrix.m[3][3] = 1.0f;
+    matrix.m[0][0] = new_right.x;	    matrix.m[0][1] = new_right.getY();	    matrix.m[0][2] = new_right.getZ();	    matrix.m[0][3] = 0.0f;
+    matrix.m[1][0] = new_up.x;		    matrix.m[1][1] = new_up.getY();		    matrix.m[1][2] = new_up.getZ();		    matrix.m[1][3] = 0.0f;
+    matrix.m[2][0] = new_forward.x;	    matrix.m[2][1] = new_forward.getY();	matrix.m[2][2] = new_forward.getZ();	matrix.m[2][3] = 0.0f;
+    matrix.m[3][0] = pos.x;			    matrix.m[3][1] = pos.getY();			matrix.m[3][2] = pos.getZ();			matrix.m[3][3] = 1.0f;
     return matrix;
 
 }

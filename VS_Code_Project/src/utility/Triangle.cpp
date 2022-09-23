@@ -149,7 +149,7 @@ const float Triangle::getTriangleYCenter(){
 }
 
 const float Triangle::getTriangleXCenter(){
-    return (this->p[0].getX()+ this->p[1].getX() + this->p[2].getX())/3.0f;
+    return (this->p[0].x+ this->p[1].x + this->p[2].x)/3.0f;
 }
 
 const Vec3d Triangle::getTriangleCenter(){

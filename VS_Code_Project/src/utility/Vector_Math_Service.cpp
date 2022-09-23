@@ -6,30 +6,30 @@
 #include "Triangle.h"
 
 float VectorMathService::dotProduct(const Vec3d& A, const Vec3d& B){
-    return (A.getX()*B.getX())+(A.getY()*B.getY())+(A.getZ()*B.getZ());
+    return (A.x*B.x)+(A.getY()*B.getY())+(A.getZ()*B.getZ());
 }
 
 Vec3d VectorMathService::crossProduct(const Vec3d& A, const Vec3d& B){
-    return Vec3d(((A.getY()*B.getZ()) - (A.getZ()*B.getY())), ((A.getZ()*B.getX()) - (A.getX()*B.getZ())), ((A.getX()*B.getY()) - (A.getY()*B.getX())));
+    return Vec3d(((A.getY()*B.getZ()) - (A.getZ()*B.getY())), ((A.getZ()*B.x) - (A.x*B.getZ())), ((A.x*B.getY()) - (A.getY()*B.x)));
 }
 
 float VectorMathService::getVectorLength(const Vec3d& this_vec){
-    return sqrt((this_vec.getX()*this_vec.getX())+(this_vec.getY()*this_vec.getY())+(this_vec.getZ()*this_vec.getZ()));
+    return sqrt((this_vec.x*this_vec.x)+(this_vec.getY()*this_vec.getY())+(this_vec.getZ()*this_vec.getZ()));
 }
 
 void VectorMathService::getUnitVector(Vec3d& this_vec){
     float vector_length = getVectorLength(this_vec);
-    this_vec.setX(this_vec.getX()/vector_length);
+    this_vec.x= this_vec.x/vector_length;
     this_vec.setY(this_vec.getY()/vector_length);
     this_vec.setZ(this_vec.getZ()/vector_length);
 }
 
 Vec3d VectorMathService::MultiplyMatrixVector( const Mat4x4 &m, Vec3d &i){
     Vec3d v;
-    v.setX(i.getX()*m.m[0][0] + i.getY()*m.m[1][0] + i.getZ()*m.m[2][0] + i.getW() * m.m[3][0]);
-    v.setY(i.getX()*m.m[0][1] + i.getY()*m.m[1][1] + i.getZ()*m.m[2][1] + i.getW() * m.m[3][1]);
-    v.setZ(i.getX()*m.m[0][2] + i.getY()*m.m[1][2] + i.getZ()*m.m[2][2] + i.getW() * m.m[3][2]);
-    v.setW(i.getX()*m.m[0][3] + i.getY()*m.m[1][3] + i.getZ()*m.m[2][3] + i.getW() * m.m[3][3]);
+    v.x=i.x*m.m[0][0] + i.getY()*m.m[1][0] + i.getZ()*m.m[2][0] + i.getW() * m.m[3][0];
+    v.setY(i.x*m.m[0][1] + i.getY()*m.m[1][1] + i.getZ()*m.m[2][1] + i.getW() * m.m[3][1]);
+    v.setZ(i.x*m.m[0][2] + i.getY()*m.m[1][2] + i.getZ()*m.m[2][2] + i.getW() * m.m[3][2]);
+    v.setW(i.x*m.m[0][3] + i.getY()*m.m[1][3] + i.getZ()*m.m[2][3] + i.getW() * m.m[3][3]);
     return v;
 }
 
@@ -50,7 +50,7 @@ Vec3d VectorMathService::vectorIntersectPlane(Vec3d &plane_p, Vec3d &plane_n, Ve
 float VectorMathService::getSignedShortestDist(Vec3d& plane_p, Vec3d& plane_n, Vec3d& point1){
 	Vec3d n = point1;
 	VectorMathService::getUnitVector(n);
-	return (plane_n.getX() * point1.getX() + plane_n.getY() * point1.getY() + plane_n.getZ() * point1.getZ() - VectorMathService::dotProduct(plane_n, plane_p));
+	return (plane_n.x * point1.x + plane_n.getY() * point1.getY() + plane_n.getZ() * point1.getZ() - VectorMathService::dotProduct(plane_n, plane_p));
 }
 
 int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Triangle &in_tri, Triangle &out_tri1, Triangle &out_tri2)
