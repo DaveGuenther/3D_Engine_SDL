@@ -145,7 +145,7 @@ const float Triangle::getTriangleZCenter(){
 }
 
 const float Triangle::getTriangleYCenter(){
-    return (this->p[0].getY()+ this->p[1].getY() + this->p[2].getY())/3.0f;
+    return (this->p[0].y+ this->p[1].y + this->p[2].y)/3.0f;
 }
 
 const float Triangle::getTriangleXCenter(){

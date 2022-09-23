@@ -95,7 +95,7 @@ void Translator::modifyTriangle(Triangle& tri){
     for (int i=0;i<3;i++){
         Vec3d point = tri.getTrianglePoint(i);
         if (x_dist!=0){ point.x=point.x+x_dist;}
-        if (y_dist!=0){ point.setY(point.getY()+y_dist);}
+        if (y_dist!=0){ point.y=point.y+y_dist;}
         if (z_dist!=0){ point.setZ(point.getZ()+z_dist);}
         tri.setTrianglePoint(i,point);
     

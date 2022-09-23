@@ -38,7 +38,7 @@ Mat4x4 Camera::buildViewMatrix(){
 
 void Camera::rotateCamera(Vec3d rotation_vector){
     // Update total pitch and yaw
-    this->yaw_total = rotation_vector.getY()+yaw_total; // Amount of rotation around the Y axis (turn the camera left or right)
+    this->yaw_total = rotation_vector.y+yaw_total; // Amount of rotation around the Y axis (turn the camera left or right)
     this->pitch_total = rotation_vector.x+pitch_total; // Amount of rotation around X axis (pitch the camera up and down)
     this->vTarget = Vec3d(0,0,1);
 
@@ -62,7 +62,7 @@ void Camera::setCameraPos(Vec3d transform_from_forward){
     //Forward and Backward movement
     // Determine magnitude of Forward/Backward movement in the direction that is forward to the camera, then add that vector to the camera's position
     Vec3d vForwardBackward = this->lookVector*transform_from_forward.getZ();
-    vForwardBackward.setY(0.0f); // make it so you don't travel up or down by looking that direction and moving foward
+    vForwardBackward.y=0.0f; // make it so you don't travel up or down by looking that direction and moving foward
     this->camera=this->camera+vForwardBackward;
 
 
@@ -78,7 +78,7 @@ void Camera::setCameraPos(Vec3d transform_from_forward){
 
     // Up Down movement
     // Apply movement directly to the camera's y value.  This is Quake, not Descent.
-    this->camera.setY(this->camera.getY()+transform_from_forward.getY());
+    this->camera.y=this->camera.y+transform_from_forward.y;
 
 }
 

@@ -18,7 +18,7 @@ void OBJ_Lex_normal::lex(std::string thisLine){
     // assign tokens to private structure up to 3 elements
     if (tokens.size()>=3){
         this->thisNormal.x=std::stof(tokens[0]);
-        this->thisNormal.setY(std::stof(tokens[1]));
+        this->thisNormal.y=std::stof(tokens[1]);
         this->thisNormal.setZ(std::stof(tokens[2]));
 
     }

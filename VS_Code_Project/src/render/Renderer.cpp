@@ -101,12 +101,12 @@ void Renderer::drawWireFrameTriangle2d(Triangle this_triangle)
 	SDL_Color col = this_triangle.getColor();
 	SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
 	Vec2d vert1, vert2, vert3;
-	vert1 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(0).x, this_triangle.getTrianglePoint(0).getY()));
-	vert2 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(1).x, this_triangle.getTrianglePoint(1).getY()));
-	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).x, this_triangle.getTrianglePoint(2).getY()));
-	SDL_RenderDrawLineF(renderer, vert1.x, vert1.getY(), vert2.x, vert2.getY());
-	SDL_RenderDrawLineF(renderer, vert2.x, vert2.getY(), vert3.x, vert3.getY());
-	SDL_RenderDrawLineF(renderer, vert3.x, vert3.getY(), vert1.x, vert1.getY());
+	vert1 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(0).x, this_triangle.getTrianglePoint(0).y));
+	vert2 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(1).x, this_triangle.getTrianglePoint(1).y));
+	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).x, this_triangle.getTrianglePoint(2).y));
+	SDL_RenderDrawLineF(renderer, vert1.x, vert1.y, vert2.x, vert2.y);
+	SDL_RenderDrawLineF(renderer, vert2.x, vert2.y, vert3.x, vert3.y);
+	SDL_RenderDrawLineF(renderer, vert3.x, vert3.y, vert1.x, vert1.y);
 }
 
 void Renderer::drawFilledTriangle2d(Triangle this_triangle){
@@ -115,14 +115,14 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
     
 	//convert triangle x and y coords to pixel screen coords
 	Vec2d vert1, vert2, vert3;
-	vert1 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(0).x, this_triangle.getTrianglePoint(0).getY()));
-	vert2 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(1).x, this_triangle.getTrianglePoint(1).getY()));
-	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).x, this_triangle.getTrianglePoint(2).getY()));
+	vert1 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(0).x, this_triangle.getTrianglePoint(0).y));
+	vert2 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(1).x, this_triangle.getTrianglePoint(1).y));
+	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).x, this_triangle.getTrianglePoint(2).y));
 
 	
-	Triangle screenTri(Vec3d(vert1.x,vert1.getY(),this_triangle.getTrianglePoint(0).getZ(),this_triangle.getTrianglePoint(0).getW()), 
-						Vec3d(vert2.x,vert2.getY(),this_triangle.getTrianglePoint(1).getZ(),this_triangle.getTrianglePoint(0).getW()),
-						Vec3d(vert3.x,vert3.getY(),this_triangle.getTrianglePoint(2).getZ(),this_triangle.getTrianglePoint(0).getW()),
+	Triangle screenTri(Vec3d(vert1.x,vert1.y,this_triangle.getTrianglePoint(0).getZ(),this_triangle.getTrianglePoint(0).getW()), 
+						Vec3d(vert2.x,vert2.y,this_triangle.getTrianglePoint(1).getZ(),this_triangle.getTrianglePoint(0).getW()),
+						Vec3d(vert3.x,vert3.y,this_triangle.getTrianglePoint(2).getZ(),this_triangle.getTrianglePoint(0).getW()),
 						this_triangle.getUVPoint(0), this_triangle.getUVPoint(1), this_triangle.getUVPoint(2), 
 						this_triangle.getID(),col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
 						
@@ -251,9 +251,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 			
 			// Copy UV coordinates over and places them in 1/z space for perspective correction.  We will bring them out just before sampling texture
-			triProjected.setUVPoint(0,Vec2d{this_tri.getUVPoint(0).x/pt0.getZ(),this_tri.getUVPoint(0).getY()/pt0.getZ(),1/pt0.getZ()});
-			triProjected.setUVPoint(1,Vec2d{this_tri.getUVPoint(1).x/pt1.getZ(),this_tri.getUVPoint(1).getY()/pt1.getZ(),1/pt1.getZ()});
-			triProjected.setUVPoint(2,Vec2d{this_tri.getUVPoint(2).x/pt2.getZ(),this_tri.getUVPoint(2).getY()/pt2.getZ(),1/pt2.getZ()});
+			triProjected.setUVPoint(0,Vec2d{this_tri.getUVPoint(0).x/pt0.getZ(),this_tri.getUVPoint(0).y/pt0.getZ(),1/pt0.getZ()});
+			triProjected.setUVPoint(1,Vec2d{this_tri.getUVPoint(1).x/pt1.getZ(),this_tri.getUVPoint(1).y/pt1.getZ(),1/pt1.getZ()});
+			triProjected.setUVPoint(2,Vec2d{this_tri.getUVPoint(2).x/pt2.getZ(),this_tri.getUVPoint(2).y/pt2.getZ(),1/pt2.getZ()});
 
 
 			// Copy Triangle ID over
@@ -323,11 +323,11 @@ void Renderer::drawReticle(){
 	// Draw Reticle
 	Vec2d single_point;
 	single_point.x=0;
-	single_point.setY(0);
+	single_point.y=0;
 	single_point = cartesianToScreen(single_point);
 
 	float x = single_point.x;
-	float y = single_point.getY();
+	float y = single_point.y;
 	SDL_RenderDrawPointF(renderer, x, y);
 }
 
@@ -341,8 +341,8 @@ void Renderer::cartesianToScreen_inplace(Vec2d& this_point)
 	this_point.x=scaled_x+(HALF_SCREEN_W);
 
 	float HALF_SCREEN_H = (SCREEN_H)/2;
-	float scaled_y = this_point.getY()*(HALF_SCREEN_H);
-	this_point.setY(SCREEN_H-(scaled_y+(HALF_SCREEN_H)));
+	float scaled_y = this_point.y*(HALF_SCREEN_H);
+	this_point.y=SCREEN_H-(scaled_y+(HALF_SCREEN_H));
 } 
 
 
@@ -353,8 +353,8 @@ Vec2d Renderer::cartesianToScreen(Vec2d this_point)
 	this_point.x=scaled_x+(HALF_SCREEN_W);
 
 	float HALF_SCREEN_H = (SCREEN_H)/2;
-	float scaled_y = this_point.getY()*(HALF_SCREEN_H);
-	this_point.setY(SCREEN_H-(scaled_y+(HALF_SCREEN_H)));
+	float scaled_y = this_point.y*(HALF_SCREEN_H);
+	this_point.y=SCREEN_H-(scaled_y+(HALF_SCREEN_H));
 	return this_point;
 } 
 
