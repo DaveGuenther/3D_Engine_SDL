@@ -120,9 +120,9 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).x, this_triangle.getTrianglePoint(2).y));
 
 	
-	Triangle screenTri(Vec3d(vert1.x,vert1.y,this_triangle.getTrianglePoint(0).getZ(),this_triangle.getTrianglePoint(0).getW()), 
-						Vec3d(vert2.x,vert2.y,this_triangle.getTrianglePoint(1).getZ(),this_triangle.getTrianglePoint(0).getW()),
-						Vec3d(vert3.x,vert3.y,this_triangle.getTrianglePoint(2).getZ(),this_triangle.getTrianglePoint(0).getW()),
+	Triangle screenTri(Vec3d(vert1.x,vert1.y,this_triangle.getTrianglePoint(0).z,this_triangle.getTrianglePoint(0).getW()), 
+						Vec3d(vert2.x,vert2.y,this_triangle.getTrianglePoint(1).z,this_triangle.getTrianglePoint(0).getW()),
+						Vec3d(vert3.x,vert3.y,this_triangle.getTrianglePoint(2).z,this_triangle.getTrianglePoint(0).getW()),
 						this_triangle.getUVPoint(0), this_triangle.getUVPoint(1), this_triangle.getUVPoint(2), 
 						this_triangle.getID(),col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
 						
@@ -226,9 +226,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 			// superimpose world Z coords from View Plane into projected space where Z isn't used anymore
 			// This helps with z-lighting and z-ordering of triangles
-			pt0.setZ(newTriPoint0.getZ());
-			pt1.setZ(newTriPoint1.getZ());
-			pt2.setZ(newTriPoint2.getZ());
+			pt0.z=newTriPoint0.z;
+			pt1.z=newTriPoint1.z;
+			pt2.z=newTriPoint2.z;
 			
 
 
@@ -251,9 +251,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 
 			
 			// Copy UV coordinates over and places them in 1/z space for perspective correction.  We will bring them out just before sampling texture
-			triProjected.setUVPoint(0,Vec2d{this_tri.getUVPoint(0).x/pt0.getZ(),this_tri.getUVPoint(0).y/pt0.getZ(),1/pt0.getZ()});
-			triProjected.setUVPoint(1,Vec2d{this_tri.getUVPoint(1).x/pt1.getZ(),this_tri.getUVPoint(1).y/pt1.getZ(),1/pt1.getZ()});
-			triProjected.setUVPoint(2,Vec2d{this_tri.getUVPoint(2).x/pt2.getZ(),this_tri.getUVPoint(2).y/pt2.getZ(),1/pt2.getZ()});
+			triProjected.setUVPoint(0,Vec2d{this_tri.getUVPoint(0).x/pt0.z,this_tri.getUVPoint(0).y/pt0.z,1/pt0.z});
+			triProjected.setUVPoint(1,Vec2d{this_tri.getUVPoint(1).x/pt1.z,this_tri.getUVPoint(1).y/pt1.z,1/pt1.z});
+			triProjected.setUVPoint(2,Vec2d{this_tri.getUVPoint(2).x/pt2.z,this_tri.getUVPoint(2).y/pt2.z,1/pt2.z});
 
 
 			// Copy Triangle ID over

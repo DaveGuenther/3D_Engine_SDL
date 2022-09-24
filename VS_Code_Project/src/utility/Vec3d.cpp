@@ -34,11 +34,11 @@ std::string Vec3d::toString(){
     return ret_val;
 }
 
-void Vec3d::setZ(const float &z_in){ z=z_in; }
+//void Vec3d::setZ(const float &z_in){ z=z_in; }
 void Vec3d::setW(const float &w_in){ w=w_in; }
 
 
-const float& Vec3d::getZ()const { return z; }
+//const float& Vec3d::getZ()const { return z; }
 const float& Vec3d::getW()const { return w; }
 
 const Vec3d Vec3d::toThousandths(){
@@ -50,20 +50,20 @@ const Vec3d Vec3d::toThousandths(){
 bool operator== (const Vec3d & vec1, const Vec3d & vec2){ return (vec1.x==vec2.x && vec1.y==vec2.y && vec1.z==vec2.z);}
 bool operator!= (const Vec3d & vec1, const Vec3d & vec2){ return !(vec1.x==vec2.x && vec1.y==vec2.y && vec1.z==vec2.z);}
 
-Vec3d operator/ (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.x/vec2.x, vec1.y/vec2.y, vec1.getZ()/vec2.getZ());}
-Vec3d operator/ (const Vec3d& vec, const float& val){ return Vec3d(vec.x/val, vec.y/val, vec.getZ()/val);}
-Vec3d operator/ (const float& val, const Vec3d& vec){ return Vec3d(val/vec.x, val/vec.y, val/vec.getZ());}
+Vec3d operator/ (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.x/vec2.x, vec1.y/vec2.y, vec1.z/vec2.z);}
+Vec3d operator/ (const Vec3d& vec, const float& val){ return Vec3d(vec.x/val, vec.y/val, vec.z/val);}
+Vec3d operator/ (const float& val, const Vec3d& vec){ return Vec3d(val/vec.x, val/vec.y, val/vec.z);}
 
 
-Vec3d operator+ (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.x+vec2.x, vec1.y+vec2.y, vec1.getZ()+vec2.getZ()); }
-Vec3d operator+ (const Vec3d& vec, const float& val){ return Vec3d(val+vec.x, val+vec.y, val+vec.getZ()); }
-Vec3d operator+ (const float& val, const Vec3d& vec){ return Vec3d(val+vec.x, val+vec.y, val+vec.getZ()); }
+Vec3d operator+ (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.x+vec2.x, vec1.y+vec2.y, vec1.z+vec2.z); }
+Vec3d operator+ (const Vec3d& vec, const float& val){ return Vec3d(val+vec.x, val+vec.y, val+vec.z); }
+Vec3d operator+ (const float& val, const Vec3d& vec){ return Vec3d(val+vec.x, val+vec.y, val+vec.z); }
 
-Vec3d operator* (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.x*vec2.x, vec1.y*vec2.y, vec1.getZ()*vec2.getZ()); }
-Vec3d operator* (const float& val, const Vec3d& vec){ return Vec3d(val*vec.x, val*vec.y, val*vec.getZ()); }
-Vec3d operator* (const Vec3d& vec, const float& val){ return Vec3d(val*vec.x, val*vec.y, val*vec.getZ()); }
+Vec3d operator* (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.x*vec2.x, vec1.y*vec2.y, vec1.z*vec2.z); }
+Vec3d operator* (const float& val, const Vec3d& vec){ return Vec3d(val*vec.x, val*vec.y, val*vec.z); }
+Vec3d operator* (const Vec3d& vec, const float& val){ return Vec3d(val*vec.x, val*vec.y, val*vec.z); }
 
 
-Vec3d operator- (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.x-vec2.x, vec1.y-vec2.y, vec1.getZ()-vec2.getZ()); }
-Vec3d operator- (const Vec3d& vec, const float& val){ return Vec3d(vec.x-val, vec.y-val, vec.getZ()-val); }
-Vec3d operator- (const float& val, const Vec3d& vec){ return Vec3d(val-vec.x, val-vec.y, val-vec.getZ()); }
+Vec3d operator- (const Vec3d& vec1, const Vec3d& vec2){ return Vec3d(vec1.x-vec2.x, vec1.y-vec2.y, vec1.z-vec2.z); }
+Vec3d operator- (const Vec3d& vec, const float& val){ return Vec3d(vec.x-val, vec.y-val, vec.z-val); }
+Vec3d operator- (const float& val, const Vec3d& vec){ return Vec3d(val-vec.x, val-vec.y, val-vec.z); }

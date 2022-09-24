@@ -115,7 +115,7 @@ void JumpAction::update(bool key_pressed){
         Vec3d translation_vector;
         translation_vector.x=0.0f;
         translation_vector.y=0.01f;
-        translation_vector.setZ(0.0f);
+        translation_vector.z=0.0f;
 	    this->this_camera->setCameraPos(translation_vector);
 
     }
@@ -139,7 +139,7 @@ void TwoAxisRangeCommand::update(bool key_pressed){
         float mouse_sensitivity=360.0f;
         rotation_vector.x=-y_range*mouse_sensitivity;
         rotation_vector.y=x_range*mouse_sensitivity;
-        rotation_vector.setZ(0);
+        rotation_vector.z=0;
         this_camera->rotateCamera(rotation_vector);
         
         //mesh_modification = new Rotator(rotation_vector.getX(), rotation_vector.getY(), rotation_vector.getZ(),Vec3d(0,0,0));
@@ -276,14 +276,14 @@ void MoveAction::update(bool key_pressed){
         Vec3d translation_vector;
         translation_vector.x=direction.x*speed;
         translation_vector.y=direction.y*speed;
-        translation_vector.setZ(direction.getZ()*speed);
+        translation_vector.z=direction.z*speed;
 
         //Vec3d currCameraPos = this->this_camera->getCameraPos();
         //Vec3d newCameraPos = currCameraPos + translation_vector;
         //Vec3d newCameraPos = Vec3d(currCameraPos.getX()*speed, currCameraPos.getY()*speed, currCameraPos.getZ()*speed);
 
 	    this->this_camera->setCameraPos(translation_vector);
-        std::cout << "    " << command_name << ": " << translation_vector.x << "," << translation_vector.y << ", " << translation_vector.getZ() << ": " << this->speed;
+        std::cout << "    " << command_name << ": " << translation_vector.x << "," << translation_vector.y << ", " << translation_vector.z << ": " << this->speed;
         
         /*        
         

@@ -6,30 +6,30 @@
 #include "Triangle.h"
 
 float VectorMathService::dotProduct(const Vec3d& A, const Vec3d& B){
-    return (A.x*B.x)+(A.y*B.y)+(A.getZ()*B.getZ());
+    return (A.x*B.x)+(A.y*B.y)+(A.z*B.z);
 }
 
 Vec3d VectorMathService::crossProduct(const Vec3d& A, const Vec3d& B){
-    return Vec3d(((A.y*B.getZ()) - (A.getZ()*B.y)), ((A.getZ()*B.x) - (A.x*B.getZ())), ((A.x*B.y) - (A.y*B.x)));
+    return Vec3d(((A.y*B.z) - (A.z*B.y)), ((A.z*B.x) - (A.x*B.z)), ((A.x*B.y) - (A.y*B.x)));
 }
 
 float VectorMathService::getVectorLength(const Vec3d& this_vec){
-    return sqrt((this_vec.x*this_vec.x)+(this_vec.y*this_vec.y)+(this_vec.getZ()*this_vec.getZ()));
+    return sqrt((this_vec.x*this_vec.x)+(this_vec.y*this_vec.y)+(this_vec.z*this_vec.z));
 }
 
 void VectorMathService::getUnitVector(Vec3d& this_vec){
     float vector_length = getVectorLength(this_vec);
     this_vec.x= this_vec.x/vector_length;
     this_vec.y=this_vec.y/vector_length;
-    this_vec.setZ(this_vec.getZ()/vector_length);
+    this_vec.z=this_vec.z/vector_length;
 }
 
 Vec3d VectorMathService::MultiplyMatrixVector( const Mat4x4 &m, Vec3d &i){
     Vec3d v;
-    v.x=i.x*m.m[0][0] + i.y*m.m[1][0] + i.getZ()*m.m[2][0] + i.getW() * m.m[3][0];
-    v.y=i.x*m.m[0][1] + i.y*m.m[1][1] + i.getZ()*m.m[2][1] + i.getW() * m.m[3][1];
-    v.setZ(i.x*m.m[0][2] + i.y*m.m[1][2] + i.getZ()*m.m[2][2] + i.getW() * m.m[3][2]);
-    v.setW(i.x*m.m[0][3] + i.y*m.m[1][3] + i.getZ()*m.m[2][3] + i.getW() * m.m[3][3]);
+    v.x=i.x*m.m[0][0] + i.y*m.m[1][0] + i.z*m.m[2][0] + i.getW() * m.m[3][0];
+    v.y=i.x*m.m[0][1] + i.y*m.m[1][1] + i.z*m.m[2][1] + i.getW() * m.m[3][1];
+    v.z=i.x*m.m[0][2] + i.y*m.m[1][2] + i.z*m.m[2][2] + i.getW() * m.m[3][2];
+    v.setW(i.x*m.m[0][3] + i.y*m.m[1][3] + i.z*m.m[2][3] + i.getW() * m.m[3][3]);
     return v;
 }
 
@@ -50,7 +50,7 @@ Vec3d VectorMathService::vectorIntersectPlane(Vec3d &plane_p, Vec3d &plane_n, Ve
 float VectorMathService::getSignedShortestDist(Vec3d& plane_p, Vec3d& plane_n, Vec3d& point1){
 	Vec3d n = point1;
 	VectorMathService::getUnitVector(n);
-	return (plane_n.x * point1.x + plane_n.y * point1.y + plane_n.getZ() * point1.getZ() - VectorMathService::dotProduct(plane_n, plane_p));
+	return (plane_n.x * point1.x + plane_n.y * point1.y + plane_n.z * point1.z - VectorMathService::dotProduct(plane_n, plane_p));
 }
 
 int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Triangle &in_tri, Triangle &out_tri1, Triangle &out_tri2)

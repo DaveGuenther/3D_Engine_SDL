@@ -470,13 +470,13 @@ void InOutRasterizer::drawTriangle(Triangle& this_triangle){
     bound_box_max_y = std::max(std::max(this_triangle.getTrianglePoint(0).y, this_triangle.getTrianglePoint(1).y), this_triangle.getTrianglePoint(2).y);
     v0_x = this_triangle.getTrianglePoint(0).x;
     v0_y = this_triangle.getTrianglePoint(0).y;
-    v0_z = this_triangle.getTrianglePoint(0).getZ();
+    v0_z = this_triangle.getTrianglePoint(0).z;
     v1_x = this_triangle.getTrianglePoint(1).x;
     v1_y = this_triangle.getTrianglePoint(1).y;
-    v1_z = this_triangle.getTrianglePoint(1).getZ();
+    v1_z = this_triangle.getTrianglePoint(1).z;
     v2_x = this_triangle.getTrianglePoint(2).x;
     v2_y = this_triangle.getTrianglePoint(2).y;
-    v2_z = this_triangle.getTrianglePoint(2).getZ();
+    v2_z = this_triangle.getTrianglePoint(2).z;
 
     this->width = bound_box_max_x-bound_box_min_x;
     this->height = bound_box_max_y-bound_box_min_y;

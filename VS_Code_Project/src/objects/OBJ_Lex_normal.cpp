@@ -19,7 +19,7 @@ void OBJ_Lex_normal::lex(std::string thisLine){
     if (tokens.size()>=3){
         this->thisNormal.x=std::stof(tokens[0]);
         this->thisNormal.y=std::stof(tokens[1]);
-        this->thisNormal.setZ(std::stof(tokens[2]));
+        this->thisNormal.z=std::stof(tokens[2]);
 
     }
 

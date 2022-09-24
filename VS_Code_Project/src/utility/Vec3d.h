@@ -16,7 +16,7 @@
  */
 class Vec3d:public Vec2d{
   private:
-    float z;
+
     float w;
     
   public:
@@ -30,11 +30,11 @@ class Vec3d:public Vec2d{
 
     std::string toString();
 
-    void setZ(const float &z_in);
+    //void setZ(const float &z_in);
     void setW(const float &w_in);
     
 
-    const float& getZ()const;
+    //const float& getZ()const;
     const float& getW()const;
 
     const Vec3d toThousandths();
@@ -63,6 +63,8 @@ class Vec3d:public Vec2d{
     friend Vec3d operator- (const Vec3d& vec, const float& val);
     friend Vec3d operator- (const float& val, const Vec3d& vec);
     
+    float z;
+
 };
 
 #endif

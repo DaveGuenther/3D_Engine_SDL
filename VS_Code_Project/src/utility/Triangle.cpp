@@ -141,7 +141,7 @@ const float Triangle::getDistanceToCamera(Vec3d camera_pos){
 }
 
 const float Triangle::getTriangleZCenter(){
-    return (this->p[0].getZ()+ this->p[1].getZ() + this->p[2].getZ())/3.0f;
+    return (this->p[0].z+ this->p[1].z + this->p[2].z)/3.0f;
 }
 
 const float Triangle::getTriangleYCenter(){

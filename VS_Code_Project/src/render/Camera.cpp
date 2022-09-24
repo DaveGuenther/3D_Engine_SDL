@@ -61,7 +61,7 @@ void Camera::setCameraPos(Vec3d transform_from_forward){
 
     //Forward and Backward movement
     // Determine magnitude of Forward/Backward movement in the direction that is forward to the camera, then add that vector to the camera's position
-    Vec3d vForwardBackward = this->lookVector*transform_from_forward.getZ();
+    Vec3d vForwardBackward = this->lookVector*transform_from_forward.z;
     vForwardBackward.y=0.0f; // make it so you don't travel up or down by looking that direction and moving foward
     this->camera=this->camera+vForwardBackward;
 
