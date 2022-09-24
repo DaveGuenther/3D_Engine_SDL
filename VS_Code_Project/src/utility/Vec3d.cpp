@@ -35,11 +35,11 @@ std::string Vec3d::toString(){
 }
 
 //void Vec3d::setZ(const float &z_in){ z=z_in; }
-void Vec3d::setW(const float &w_in){ w=w_in; }
+//void Vec3d::setW(const float &w_in){ w=w_in; }
 
 
 //const float& Vec3d::getZ()const { return z; }
-const float& Vec3d::getW()const { return w; }
+//const float& Vec3d::getW()const { return w; }
 
 const Vec3d Vec3d::toThousandths(){
     return Vec3d(floor(this->x * 1000 + .5 )/1000, floor(this->y * 1000 + .5 )/1000, floor(this->z * 1000 + .5 )/1000);

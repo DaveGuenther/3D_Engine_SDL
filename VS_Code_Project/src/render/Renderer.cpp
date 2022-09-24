@@ -120,9 +120,9 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).x, this_triangle.getTrianglePoint(2).y));
 
 	
-	Triangle screenTri(Vec3d(vert1.x,vert1.y,this_triangle.getTrianglePoint(0).z,this_triangle.getTrianglePoint(0).getW()), 
-						Vec3d(vert2.x,vert2.y,this_triangle.getTrianglePoint(1).z,this_triangle.getTrianglePoint(0).getW()),
-						Vec3d(vert3.x,vert3.y,this_triangle.getTrianglePoint(2).z,this_triangle.getTrianglePoint(0).getW()),
+	Triangle screenTri(Vec3d(vert1.x,vert1.y,this_triangle.getTrianglePoint(0).z,this_triangle.getTrianglePoint(0).w), 
+						Vec3d(vert2.x,vert2.y,this_triangle.getTrianglePoint(1).z,this_triangle.getTrianglePoint(0).w),
+						Vec3d(vert3.x,vert3.y,this_triangle.getTrianglePoint(2).z,this_triangle.getTrianglePoint(0).w),
 						this_triangle.getUVPoint(0), this_triangle.getUVPoint(1), this_triangle.getUVPoint(2), 
 						this_triangle.getID(),col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
 						
@@ -218,9 +218,9 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			pt0 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint0);
 			pt1 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint1);
 			pt2 = VectorMathService::MultiplyMatrixVector(matProj, newTriPoint2);
-			pt0 = pt0/pt0.getW();
-			pt1 = pt1/pt1.getW();
-			pt2 = pt2/pt2.getW();
+			pt0 = pt0/pt0.w;
+			pt1 = pt1/pt1.w;
+			pt2 = pt2/pt2.w;
 
 			
 
