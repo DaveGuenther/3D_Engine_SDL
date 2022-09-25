@@ -1,7 +1,7 @@
 #include <memory>
 #include <unordered_map>
 #include "Triangle.h"
-//#include "Vector_Math_Service.h"
+#include "Vector_Math_Service.h"
 #include "../materials/TexturePNG.h"
 
 Triangle::Triangle(){
@@ -65,27 +65,36 @@ Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const V
 }
 
 Triangle::Triangle (const Triangle &T){
-    Vec3d pt1(*(T.p[0]));
-    Vec3d pt2(*(T.p[1]));
-    Vec3d pt3(*(T.p[2]));
 
-    p[0]=std::make_unique<Vec3d>(pt1);
-    p[1]=std::make_unique<Vec3d>(pt2);
-    p[2]=std::make_unique<Vec3d>(pt3);
-    //p[1]=std::make_unique<Vec3d>(T.p[1]->x, T.p[1]->y, T.p[1]->z);
-    //p[2]=std::make_unique<Vec3d>(T.p[2]->x, T.p[2]->y, T.p[2]->z);
-    
-    //p[0]=T.p[0];
-    //p[1]=T.p[1];
-    //p[2]=T.p[2];
+    p[0]=std::make_unique<Vec3d>(*(T.p[0]));
+    p[1]=std::make_unique<Vec3d>(*(T.p[1]));
+    p[2]=std::make_unique<Vec3d>(*(T.p[2]));
+
     tri_id = T.tri_id;
     this->color = T.color;
     this->textureCoords[0] = T.textureCoords[0];
     this->textureCoords[1] = T.textureCoords[1];
     this->textureCoords[2] = T.textureCoords[2];
-    this->texture_ptr=T.texture_ptr;
+    this->texture_ptr=T.texture_ptr;  // Careful changing this to a unique_ptr!  It's used by MANY triangles
     this->dim_amount=T.dim_amount;
     
+}
+
+Triangle Triangle::operator=(const Triangle &T){
+
+    Triangle this_tri;
+    this_tri.p[0]=std::make_unique<Vec3d>(*(T.p[0]));
+    this_tri.p[1]=std::make_unique<Vec3d>(*(T.p[1]));
+    this_tri.p[2]=std::make_unique<Vec3d>(*(T.p[2]));
+
+    this_tri.tri_id = T.tri_id;
+    this_tri.color = T.color;
+    this_tri.textureCoords[0] = T.textureCoords[0];
+    this_tri.textureCoords[1] = T.textureCoords[1];
+    this_tri.textureCoords[2] = T.textureCoords[2];
+    this_tri.texture_ptr=T.texture_ptr;  // Careful changing this to a unique_ptr!  It's used by MANY triangles
+    this_tri.dim_amount=T.dim_amount;    
+    return this_tri;
 }
 
 void Triangle::setTrianglePoint(int point, const Vec3d &vec){
@@ -124,7 +133,7 @@ void Triangle::setColor(SDL_Color this_color){
 }
 
 
-/*
+
 void Triangle::setUnitNormalFromPoints(){
 // Generate triangle normal in view space
     Vec3d viewline1 = *p[1]-*p[0];
@@ -132,7 +141,7 @@ void Triangle::setUnitNormalFromPoints(){
     
     this->unit_normal_vector = VectorMathService::crossProduct(viewline1, viewline2);
     VectorMathService::getUnitVector(this->unit_normal_vector);		    
-}*/
+}
 
 void Triangle::setLightDimAmount(float lightDim){
     this->dim_amount=lightDim;
@@ -162,11 +171,11 @@ const Vec2d& Triangle::getUVPoint(int point){
     return textureCoords[point];
 }
 
-/*
+
 const float Triangle::getDistanceToCamera(Vec3d camera_pos){
     return VectorMathService::getVectorLength(this->getTriangleCenter()-camera_pos);
 }
-*/
+
 const float Triangle::getTriangleZCenter(){
     return (this->p[0]->z+ this->p[1]->z + this->p[2]->z)/3.0f;
 }

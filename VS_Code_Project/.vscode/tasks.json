@@ -32,7 +32,7 @@
                 "${workspaceFolder}/src/utility/Triangle.cpp",
                 //"${workspaceFolder}/src/utility/Mesh_Pipeline.cpp",
                 //"${workspaceFolder}/src/utility/Triangle_Modifier.cpp",
-                //"${workspaceFolder}/src/utility/Vector_Math_Service.cpp",
+                "${workspaceFolder}/src/utility/Vector_Math_Service.cpp",
                 //"${workspaceFolder}/src/utility/nonVector_Math_Service.cpp",
 
 

@@ -21,7 +21,8 @@ class Triangle{
         Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const Vec2d &tex_p1, const Vec2d &tex_p2, const Vec2d &tex_p3, const int &triangle_id, const SDL_Color this_color, const float dim_amount, std::shared_ptr<TexturePNG> this_texture_ptr);
 
         Triangle (const Triangle &T);
-
+        Triangle operator=(const Triangle &T);
+        
         /**
          * @brief Set a single point on the Triangle by it's right-hand (clockwise) position.
          * 
@@ -65,7 +66,7 @@ class Triangle{
 
 
 
-    private:
+    //private:
         const float getTriangleYCenter();
         const float getTriangleXCenter();
         const Vec3d getTriangleCenter();
