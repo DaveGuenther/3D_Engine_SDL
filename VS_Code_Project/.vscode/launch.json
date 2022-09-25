@@ -12,6 +12,15 @@
             "args": [],
             "cwd": "${workspaceFolder}/build",
             "preLaunchTask": "Run Make (clang++)"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Unit Debug",
+            "program": "${workspaceFolder}/unit_tests/${fileBasenameNoExtension}",
+            "args": [],
+            "cwd": "${workspaceFolder}/unit_tests",
+            "preLaunchTask": "Linux C/C++: clang++ build active file"
         }
     ]
 }
