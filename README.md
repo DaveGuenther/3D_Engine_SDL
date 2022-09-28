@@ -77,11 +77,12 @@ Install to: c:\msys64\
 7. <code>pacman -S --needed base-devel mingw-w64-x86_64-toolchain</code> type 'y' or 'yes' at every prompt.
 8. <code>pacman --needed -Sy bash pacman pacman-mirrors msys2-runtime</code> type 'y' or 'yes' at every prompt.
 9. <code>pacman -S mingw-w64-x86_64-clang</code> type 'y' or 'yes' at every prompt.
+10. <code>pacman -S mingw-w64-x86_64-lldb</code> to install lldb (clang++ debugger)
 This should install both g++ and clang++.  
-10. <code>pacman -S vim</code> type 'y' or 'yes' at every prompt.
-11. Add Clang++ and g++ to your Msys path.  Run Msys to get to prompt in home folder.  type <code>vim .bash_profile</code> (install vim with <code>pacman -S vim</code> if needed).  Go to end of file and add a path definition to point your Msys terminal to clang++ and g++ directories.  In my case I used <code>PATH="/mingw64/bin:${PATH}"</code>.  Save changes to the file and restart Msys
-12. Install git if needed in Msys <code>pacman -S git</code> type 'y' or 'yes' at every prompt.
-13. From Msys home (~) folder, clode this repo <code>git clone git@github.com:DaveGuenther/3D_Engine_SDL.git</code>
+11. <code>pacman -S vim</code> type 'y' or 'yes' at every prompt.
+12. Add Clang++ and g++ to your Msys path.  Run Msys to get to prompt in home folder.  type <code>vim .bash_profile</code> (install vim with <code>pacman -S vim</code> if needed).  Go to end of file and add a path definition to point your Msys terminal to clang++ and g++ directories.  In my case I used <code>PATH="/mingw64/bin:${PATH}"</code>.  Save changes to the file and restart Msys
+13. Install git if needed in Msys <code>pacman -S git</code> type 'y' or 'yes' at every prompt.
+14. From Msys home (~) folder, clode this repo <code>git clone git@github.com:DaveGuenther/3D_Engine_SDL.git</code>
 
 ### SDL Configuration:
 Follow these instructions to download and install the SDL 64 bit lib and Development Libraries: https://giovanni.codes/setup-sdl2-with-visual-studio-code-and-mingw64-on-windows/  or perform the following steps to match versions used by this project:
