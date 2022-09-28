@@ -65,7 +65,7 @@ This project is based on mingw (g++) and SDL (Simplified DirectMedia Layer) and 
 
 
 ## Windows Installation
-### Mingw Configuration:
+### Msys/Mingw Configuration:
 Follow these instructions to set up VS Code with MinGW64: https://code.visualstudio.com/docs/cpp/config-mingw  or perform the following steps to match versions used by this project:
 Install to: c:\msys64\ 
 1. Download MSys64: https://github.com/msys2/msys2-installer/releases/download/2022-01-28/msys2-x86_64-20220128.exe
@@ -77,11 +77,13 @@ Install to: c:\msys64\
 7. <code>pacman -S --needed base-devel mingw-w64-x86_64-toolchain</code> type 'y' or 'yes' at every prompt.
 8. <code>pacman --needed -Sy bash pacman pacman-mirrors msys2-runtime</code> type 'y' or 'yes' at every prompt.
 9. <code>pacman -S mingw-w64-x86_64-clang</code> type 'y' or 'yes' at every prompt.
-This should install both g++ and clang++
+This should install both g++ and clang++.  
+10. Add Clang++ and g++ to your Msys path.  Run Msys to get to prompt in home folder.  type <code>vim .bash_profile</code (install vim with <code>pacman -S vim</code> if needed).  Go to end of file and add a path definition to point your Msys terminal to clang++ and g++ directories.  In my case I used <code>PATH="/mingw64/bin:${PATH}"</code>.  Save changes to the file and restart Msys
 
 ### SDL Configuration:
 Follow these instructions to download and install the SDL 64 bit lib and Development Libraries: https://giovanni.codes/setup-sdl2-with-visual-studio-code-and-mingw64-on-windows/  or perform the following steps to match versions used by this project:
 
+Visit https://www.libsdl.org/release/ for most recent SDL releases (referencing items 1 and 2 below)
 1. download: SDL2-2.0.18-win32-x64.zip (64-bit Windows) -- https://www.libsdl.org/release/SDL2-2.0.18-win32-x64.zip
 Copy the .DLL file in this to the build/ folder of the repo after you've cloned it.  (.gitignore won't include it in the remote repo)
 
@@ -90,6 +92,7 @@ Open the archive with 7zip and go down one level in the archive until you see a 
 Extract that folder to c:\SDL\
 If you did it right, you should have the following active path: c:\SDL\SDL2-2.0.18\x86_64-w64-mingw32\include
 
+Visit https://www.libsdl.org/projects/SDL_image/release for most recent SDL_image releases (recerending items 3 and 4 below)
 3. download: SDL2_image-2.0.5-win32-x64.zip (64-bit Windows) -- https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.5-win32-x64.zip
 Copy the .DLL file in this archive to the build/ folder off the repo after you've cloned it.
 
