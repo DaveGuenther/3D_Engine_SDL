@@ -78,7 +78,10 @@ Install to: c:\msys64\
 8. <code>pacman --needed -Sy bash pacman pacman-mirrors msys2-runtime</code> type 'y' or 'yes' at every prompt.
 9. <code>pacman -S mingw-w64-x86_64-clang</code> type 'y' or 'yes' at every prompt.
 This should install both g++ and clang++.  
-10. Add Clang++ and g++ to your Msys path.  Run Msys to get to prompt in home folder.  type <code>vim .bash_profile</code> (install vim with <code>pacman -S vim</code> if needed).  Go to end of file and add a path definition to point your Msys terminal to clang++ and g++ directories.  In my case I used <code>PATH="/mingw64/bin:${PATH}"</code>.  Save changes to the file and restart Msys
+10. <code>pacman -S vim</code> type 'y' or 'yes' at every prompt.
+11. Add Clang++ and g++ to your Msys path.  Run Msys to get to prompt in home folder.  type <code>vim .bash_profile</code> (install vim with <code>pacman -S vim</code> if needed).  Go to end of file and add a path definition to point your Msys terminal to clang++ and g++ directories.  In my case I used <code>PATH="/mingw64/bin:${PATH}"</code>.  Save changes to the file and restart Msys
+12. Install git if needed in Msys <code>pacman -S git</code> type 'y' or 'yes' at every prompt.
+
 
 ### SDL Configuration:
 Follow these instructions to download and install the SDL 64 bit lib and Development Libraries: https://giovanni.codes/setup-sdl2-with-visual-studio-code-and-mingw64-on-windows/  or perform the following steps to match versions used by this project:
