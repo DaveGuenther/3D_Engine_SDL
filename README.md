@@ -92,7 +92,7 @@ Copy the .DLL file in this to the build/ folder of the repo after you've cloned 
 
 2. download: SDL2-devel-2.0.18-mingw.tar.gz (MinGW 32/64-bit) -- https://www.libsdl.org/release/SDL2-devel-2.0.18-mingw.tar.gz
 Open the archive with 7zip and go down one level in the archive until you see a folder called "SDL2-2.0.18"
-Extract that folder to c:\SDL\
+Extract that folder to c:\SDL2\
 If you did it right, you should have the following active path: c:\SDL\SDL2-2.0.18\x86_64-w64-mingw32\include
 
 Visit https://www.libsdl.org/projects/SDL_image/release for most recent SDL_image releases (recerending items 3 and 4 below)
@@ -101,8 +101,8 @@ Copy the .DLL file in this archive to the build/ folder off the repo after you'v
 
 4. download: SDL2_image-devel-2.0.5-mingw.tar.gz (MinGW 32/64-bit) -- https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-mingw.tar.gz
 Open the archive with 7zip and go down two levels in the archive until you see the folder "SDL2_image-2.0.5/x86_64-w64-mingw32/"
-Extract that folder to c:\SDL\SDL2-2.0.18\
-If you did it right, you should have the file SDL_image.h located in the following active path: C:\SDL\SDL2-2.0.18\x86_64-w64-mingw32\include\SDL\
+Extract that folder to c:\SDL2\SDL2-2.0.18\
+If you did it right, you should have the file SDL_image.h located in the following active path: C:\SDL2\SDL2-2.0.18\x86_64-w64-mingw32\include\SDL\
 
 ## Running the Engine
 1. Once in VS Code, open the 'Engine_(VS_Code_Project)' folder
