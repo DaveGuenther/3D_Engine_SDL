@@ -3,8 +3,8 @@
 CC = clang++
 
 ifeq ($(OS), Windows_NT)
-	CXXFLAGS = -c -std=c++17 -Wall -I /c/SDL/SDL2-2.0.18/x86_64-w64-mingw32/include -I /c/SDL/SDL2_image-2.0.5/x86_64-w64-mingw32/include
-	LDFLAGS =  -L /c/SDL/SDL2-2.0.18/x86_64-w64-mingw32/lib -L /c/SDL/SDL2_image-2.0.5/x86_64-w64-mingw32/lib -lstdc++fs -lSDL2main -lSDL2 -lSDL2_image
+	CXXFLAGS = -c -std=c++17 -Wall -I /c/SDL2/SDL2-2.24.0/x86_64-w64-mingw32/include
+	LDFLAGS =  -L /c/SDL2/SDL2-2.24.0/x86_64-w64-mingw32/lib -lstdc++fs -lSDL2main -lSDL2 -lSDL2_image
 else
 	CXXFLAGS = -c -std=c++17 -Wall
 	LDFLAGS = -lstdc++fs -lSDL2main -lSDL2 -lSDL2_image -I /usr/include/SDL2
@@ -40,7 +40,6 @@ prof:
 
 .PHONY: debug
 debug: clean
-debug: LDFLAGS += -lprofiler -ltcmalloc
 debug: CXXFLAGS += -O0 -fno-inline-functions -g -D_GLIBCXX_DEBUG
 debug: $(BUILD)/game
 
