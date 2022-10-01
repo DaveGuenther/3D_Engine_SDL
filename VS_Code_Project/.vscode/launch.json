@@ -11,7 +11,12 @@
             "program": "${workspaceFolder}\\build\\game.exe",
             "args": [],
             "cwd": "${workspaceFolder}\\build",
-            //"console": "externalTerminal"
+            "console": "externalTerminal",
+            "sourceMap": { "${workspaceFolder}": "${workspaceFolder}" },
+            "preRunCommands": [
+                "breakpoint set -f src\\game.cpp -l 21",
+                "breakpoint set -f src\\render\\Renderer.cpp -l 148",
+            ]
         },
         {
             "type": "lldb",

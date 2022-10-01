@@ -15,11 +15,10 @@
 //#endif
 
 
-
 int main(int argv, char** args)
 {
 
-	
+	std::cout << "Hello World" << std::endl;
 	Engine_3D Game_Engine;
 	Game_Engine.load_meshes();
  
@@ -28,6 +27,7 @@ int main(int argv, char** args)
 	}
 	
 	Game_Engine.shutdown();
-	
+
+	std::cout << "Goodbye" << std::endl;
 	return 0;
 }
