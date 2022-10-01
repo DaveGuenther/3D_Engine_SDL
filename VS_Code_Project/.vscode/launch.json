@@ -5,20 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Windows Game Debug",
-            "type": "lldb",
-            "request": "launch",
-            "program": "${workspaceFolder}\\build\\game.exe",
-            "args": [],
-            "cwd": "${workspaceFolder}\\build",
-            "console": "externalTerminal",
-            "sourceMap": { "${workspaceFolder}": "${workspaceFolder}" },
-            "preRunCommands": [
-                "breakpoint set -f src\\game.cpp -l 21",
-                "breakpoint set -f src\\render\\Renderer.cpp -l 148",
-            ]
-        },
-        {
             "type": "lldb",
             "request": "launch",
             "name": "Linux Game Debug",
@@ -35,6 +21,20 @@
             "args": [],
             "cwd": "${workspaceFolder}/unit_tests",
             "preLaunchTask": "Linux C/C++: clang++ build active file"
+        },
+        {
+            "name": "Windows Game Debug",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}\\build\\game.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}\\build",
+            "console": "externalTerminal",
+            "sourceMap": { "${workspaceFolder}": "${workspaceFolder}" },
+            "preRunCommands": [
+                "breakpoint set -f src\\game.cpp -l 21",
+                "breakpoint set -f src\\render\\Renderer.cpp -l 148",
+            ]
         }
     ]
 }
