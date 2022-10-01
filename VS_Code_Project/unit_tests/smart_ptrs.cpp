@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <vector>
 #include "../src/utility/Triangle.h"
 
 int main(){
@@ -20,7 +21,8 @@ int main(){
     Triangle third_tri;
     third_tri=second_tri;
     
-    
+    std::vector<Triangle> my_vec;
+    my_vec.push_back(second_tri);
    
     std::unique_ptr<Triangle> my_tri_ptr = std::make_unique<Triangle>(first_tri);
     

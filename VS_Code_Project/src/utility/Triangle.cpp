@@ -80,21 +80,21 @@ Triangle::Triangle (const Triangle &T){
     
 }
 
-Triangle Triangle::operator=(const Triangle &T){
+Triangle& Triangle::operator=(const Triangle &T){
 
-    Triangle this_tri;
-    this_tri.p[0]=std::make_unique<Vec3d>(*(T.p[0]));
-    this_tri.p[1]=std::make_unique<Vec3d>(*(T.p[1]));
-    this_tri.p[2]=std::make_unique<Vec3d>(*(T.p[2]));
+    //Triangle this_tri;
+    this->p[0]=std::make_unique<Vec3d>(*(T.p[0]));
+    this->p[1]=std::make_unique<Vec3d>(*(T.p[1]));
+    this->p[2]=std::make_unique<Vec3d>(*(T.p[2]));
 
-    this_tri.tri_id = T.tri_id;
-    this_tri.color = T.color;
-    this_tri.textureCoords[0] = T.textureCoords[0];
-    this_tri.textureCoords[1] = T.textureCoords[1];
-    this_tri.textureCoords[2] = T.textureCoords[2];
-    this_tri.texture_ptr=T.texture_ptr;  // Careful changing this to a unique_ptr!  It's used by MANY triangles
-    this_tri.dim_amount=T.dim_amount;    
-    return this_tri;
+    this->tri_id = T.tri_id;
+    this->color = T.color;
+    this->textureCoords[0] = T.textureCoords[0];
+    this->textureCoords[1] = T.textureCoords[1];
+    this->textureCoords[2] = T.textureCoords[2];
+    this->texture_ptr=T.texture_ptr;  // Careful changing this to a unique_ptr!  It's used by MANY triangles
+    this->dim_amount=T.dim_amount;    
+    return *this;
 }
 
 void Triangle::setTrianglePoint(int point, const Vec3d &vec){

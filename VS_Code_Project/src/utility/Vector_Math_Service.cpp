@@ -132,7 +132,9 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 	{
 		// All points lie on the inside of plane, so do nothing
 		// and allow the triangle to simply pass through
-		out_tri1 = in_tri;
+		Triangle temp_tri;
+		temp_tri=in_tri;
+		out_tri1 = temp_tri;
 
 		return 1; // Just the one returned original triangle is valid
 	}
