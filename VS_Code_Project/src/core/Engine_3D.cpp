@@ -94,6 +94,7 @@ void Engine_3D::engine_update(){
             SDL_SetRelativeMouseMode(SDL_TRUE);
             
             INWORLD_Input_Parser->scanInput();
+            SDL_SetRelativeMouseMode(SDL_FALSE);
             INWORLD_Action_Updater->AddTactileInputMap(INWORLD_Input_Parser->getCurrentCommands());
             INWORLD_Action_Updater->AddRangeInputMap(INWORLD_Input_Parser->getRangeInput(), INWORLD_Input_Parser->didRangeInputChange());
             INWORLD_Action_Updater->update();
