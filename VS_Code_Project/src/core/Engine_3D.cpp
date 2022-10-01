@@ -91,10 +91,9 @@ void Engine_3D::engine_update(){
             isRunning=false;
             break;
         case IN_WORLD:{
-            SDL_SetRelativeMouseMode(SDL_TRUE);
-            
+            SDL_SetRelativeMouseMode(SDL_TRUE); 
             INWORLD_Input_Parser->scanInput();
-            SDL_SetRelativeMouseMode(SDL_FALSE);
+            SDL_SetRelativeMouseMode(SDL_FALSE);  // This must be here if you wish to set and stop at breakpoints in Linux and want to retain the mouse cursor
             INWORLD_Action_Updater->AddTactileInputMap(INWORLD_Input_Parser->getCurrentCommands());
             INWORLD_Action_Updater->AddRangeInputMap(INWORLD_Input_Parser->getRangeInput(), INWORLD_Input_Parser->didRangeInputChange());
             INWORLD_Action_Updater->update();

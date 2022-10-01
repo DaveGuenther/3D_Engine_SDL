@@ -10,8 +10,7 @@
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "clang-x64",
-            "configurationProvider": "ms-vscode.makefile-tools"
+            "intelliSenseMode": "linux-clang-x64"
         },
         {
             "name": "Win32",
@@ -29,7 +28,6 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64"
-            //"configurationProvider": "ms-vscode.makefile-tools"
         }
     ],
     "version": 4

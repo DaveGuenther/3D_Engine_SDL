@@ -10,10 +10,13 @@
 
 
 
-//#if defined(PREDEF_PLATFORM_UNIX)
-#include "src/core/Engine_3D.h"
-//#endif
+#if defined(PREDEF_PLATFORM_UNIX)
+	#include "core/Engine_3D.h"
+#endif
 
+#if defined(PREDEF_PLATFORM_WINDOWS)
+	#include "src/core/Engine_3D.h"
+#endif
 
 int main(int argv, char** args)
 {

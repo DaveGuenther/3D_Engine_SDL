@@ -6,7 +6,7 @@ ifeq ($(OS), Windows_NT)
 	CXXFLAGS = -c -std=c++17 -Wall -I /c/SDL2/SDL2-2.24.0/x86_64-w64-mingw32/include -I ./
 	LDFLAGS =  -L /c/SDL2/SDL2-2.24.0/x86_64-w64-mingw32/lib -lstdc++fs -lSDL2main -lSDL2 -lSDL2_image
 else
-	CXXFLAGS = -c -std=c++17 -Wall -I /usr/include/SDL2 -I ./
+	CXXFLAGS = -c -std=c++17 -Wall -I /usr/include/SDL2
 	LDFLAGS = -lstdc++fs -lSDL2main -lSDL2 -lSDL2_image 
 endif	
 
