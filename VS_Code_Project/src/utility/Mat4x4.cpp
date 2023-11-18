@@ -4,6 +4,7 @@
 #include "../utility/Mat4x4.h"
 #include "../utility/Vector_Math_Service.h"
 
+const float PI_by_180 = 3.14159265/180.0;
 
 Mat4x4::Mat4x4(){
     // Initialize empty 4x4 matrix to 0.0f
@@ -41,13 +42,13 @@ Mat4x4 Mat4x4::matrixMakeRotationX(float x_degs){
     mat_XRot.m[0][3] = 0;
 
     mat_XRot.m[1][0] = 0;
-    mat_XRot.m[1][1] = SDL_cosf(x_degs*(3.14159265/180.0));
-    mat_XRot.m[1][2] = SDL_sinf(x_degs*(3.14159265/180.0));
+    mat_XRot.m[1][1] = SDL_cosf(x_degs*(PI_by_180));
+    mat_XRot.m[1][2] = SDL_sinf(x_degs*(PI_by_180));
     mat_XRot.m[1][3] = 0;
 
     mat_XRot.m[2][0] = 0;
-    mat_XRot.m[2][1] = -SDL_sinf(x_degs*(3.14159265/180.0));
-    mat_XRot.m[2][2] = SDL_cosf(x_degs*(3.14159265/180.0));
+    mat_XRot.m[2][1] = -SDL_sinf(x_degs*(PI_by_180));
+    mat_XRot.m[2][2] = SDL_cosf(x_degs*(PI_by_180));
     mat_XRot.m[2][3] = 0;
 
     mat_XRot.m[3][0] = 0;
@@ -60,9 +61,9 @@ Mat4x4 Mat4x4::matrixMakeRotationX(float x_degs){
 Mat4x4 Mat4x4::matrixMakeRotationY(float y_degs){
     Mat4x4 mat_YRot;
     //Y Rotation MAtrix
-    mat_YRot.m[0][0] = SDL_cosf(y_degs*(3.14159265/180.0));
+    mat_YRot.m[0][0] = SDL_cosf(y_degs*(PI_by_180));
     mat_YRot.m[0][1] = 0;
-    mat_YRot.m[0][2] = -SDL_sinf(y_degs*(3.14159265/180.0));
+    mat_YRot.m[0][2] = -SDL_sinf(y_degs*(PI_by_180));
     mat_YRot.m[0][3] = 0;
 
     mat_YRot.m[1][0] = 0;
@@ -70,9 +71,9 @@ Mat4x4 Mat4x4::matrixMakeRotationY(float y_degs){
     mat_YRot.m[1][2] = 0;
     mat_YRot.m[1][3] = 0;
 
-    mat_YRot.m[2][0] = SDL_sinf(y_degs*(3.14159265/180.0));
+    mat_YRot.m[2][0] = SDL_sinf(y_degs*(PI_by_180));
     mat_YRot.m[2][1] = 0;
-    mat_YRot.m[2][2] = SDL_cosf(y_degs*(3.14159265/180.0));
+    mat_YRot.m[2][2] = SDL_cosf(y_degs*(PI_by_180));
     mat_YRot.m[2][3] = 0;
 
     mat_YRot.m[3][0] = 0;
@@ -86,13 +87,13 @@ Mat4x4 Mat4x4::matrixMakeRotationY(float y_degs){
 Mat4x4 Mat4x4::matrixMakeRotationZ(float z_degs){
     Mat4x4 mat_ZRot;
     //Z Rotation Matrix
-    mat_ZRot.m[0][0] = SDL_cosf(z_degs*(3.14159265/180.0));
-    mat_ZRot.m[0][1] = SDL_sinf(z_degs*(3.14159265/180.0));
+    mat_ZRot.m[0][0] = SDL_cosf(z_degs*(PI_by_180));
+    mat_ZRot.m[0][1] = SDL_sinf(z_degs*(PI_by_180));
     mat_ZRot.m[0][2] = 0;
     mat_ZRot.m[0][3] = 0;
 
-    mat_ZRot.m[1][0] = -SDL_sinf(z_degs*(3.14159265/180.0));
-    mat_ZRot.m[1][1] = SDL_cosf(z_degs*(3.14159265/180.0));
+    mat_ZRot.m[1][0] = -SDL_sinf(z_degs*(PI_by_180));
+    mat_ZRot.m[1][1] = SDL_cosf(z_degs*(PI_by_180));
     mat_ZRot.m[1][2] = 0;
     mat_ZRot.m[1][3] = 0;
 
@@ -137,7 +138,7 @@ Mat4x4 Mat4x4::matrixMakeTranslation(float x, float y, float z){
 Mat4x4 Mat4x4::matrixMakeProjection(float fFOV, int SCREEN_W, int SCREEN_H, float fNear, float fFar){
 
 	float fAspectRatio = (float)SCREEN_H/(float)SCREEN_W;
-	float fFOV_rad = 1.0/(SDL_tanf((fFOV/2)*(3.14159265f/180.0f)));
+	float fFOV_rad = 1.0/(SDL_tanf((fFOV/2)*(PI_by_180)));
     Mat4x4 matProj;
 	matProj.m[0][0] = fAspectRatio*fFOV_rad;
 	matProj.m[1][0] = 0.0;

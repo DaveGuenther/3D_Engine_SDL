@@ -42,7 +42,7 @@ std::string Vec3d::toString(){
 //const float& Vec3d::getW()const { return w; }
 
 const Vec3d Vec3d::toThousandths(){
-    return Vec3d(floor(this->x * 1000 + .5 )/1000, floor(this->y * 1000 + .5 )/1000, floor(this->z * 1000 + .5 )/1000);
+    return Vec3d(floor(this->x * 1000 + .5 )*.001, floor(this->y * 1000 + .5 )*.001, floor(this->z * 1000 + .5 )*.001);  // swapped out /1000 for *.001
 }
 
 

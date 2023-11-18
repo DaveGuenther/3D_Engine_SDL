@@ -30,6 +30,8 @@ class Renderer{
 
         int SCREEN_W;
         int SCREEN_H;
+        int HALF_SCREEN_W;
+        int HALF_SCREEN_H;
         int screen_mode=0;  // 0 for Windowed, 1 for Fullscreen
 
         // Projection Matrix
@@ -43,7 +45,8 @@ class Renderer{
         std::shared_ptr<Clipper> thisFrustumClipper;
         //Clipper* thisFrustumClipper;
         Mat4x4 matView;
-        float max_visible_z_depth = 10.0f;  // distance from the camera at which things are no lonver visible
+        float max_visible_z_depth; // distance from the camera at which things are no lonver visible
+        float inv_max_visible_z_depth; // used to avoid divising by max_visible_z_depth a bunch of times
         float min_visible_color_modifier = 0.1f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
         Uint8 min_red_value, min_green_value, min_blue_value;
         
