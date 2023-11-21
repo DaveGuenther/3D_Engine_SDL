@@ -136,20 +136,20 @@ const Vec2d& Triangle::getUVPoint(int point){
 }
 
 
-const float Triangle::getDistanceToCamera(Vec3d camera_pos){
-    return VectorMathService::getVectorLength(this->getTriangleCenter()-camera_pos);
+const float Triangle::getInverseDistanceToCamera(Vec3d camera_pos){
+    return VectorMathService::getInverseVectorLength(this->getTriangleCenter()-camera_pos);
 }
 
 const float Triangle::getTriangleZCenter(){
-    return (this->p[0].z+ this->p[1].z + this->p[2].z)/3.0f;
+    return (this->p[0].z+ this->p[1].z + this->p[2].z)*0.33f;
 }
 
 const float Triangle::getTriangleYCenter(){
-    return (this->p[0].y+ this->p[1].y + this->p[2].y)/3.0f;
+    return (this->p[0].y+ this->p[1].y + this->p[2].y)*0.33f;
 }
 
 const float Triangle::getTriangleXCenter(){
-    return (this->p[0].x+ this->p[1].x + this->p[2].x)/3.0f;
+    return (this->p[0].x+ this->p[1].x + this->p[2].x)*0.33f;
 }
 
 const Vec3d Triangle::getTriangleCenter(){

@@ -25,7 +25,7 @@ class Camera{
          * 
          * @param aspectRatio is required to build the frustum 
          */
-        Camera(float aspectRatio);
+        Camera(float aspectRatio, float max_draw_dist);
         Mat4x4 buildViewMatrix();
         
         
@@ -57,6 +57,12 @@ class Camera{
         std::shared_ptr<Frustum> cameraViewFrustum;
         //Frustum* cameraViewFrustum;
 
+        /**
+         * @brief Gets the camera's maximum z draw distance (relative to the camera's position and direction)
+         * This information is also used to help dim triangles as we go further back
+        */
+        float getMaxDrawDist();
+
     private:
         /**
          * @brief creates a new "point at" vector for the camera to render by adding the camera's current position vector and the direction unit vector.
@@ -70,7 +76,7 @@ class Camera{
         float pitch_total=0.0f; // Amount of rotation around X axis (pitch the camera up and down)
         float yaw_total=0.0f; // Amount of rotation around the Y axis (turn the camera left or right)
         //Vec3d frustum_top_normal, frustum_bottom_normal, frustum_left_normal, frustum_right_normal;
-        
+        float maxDrawDist;
 };
 
 #endif

@@ -21,6 +21,8 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
     // SDL and Screen initializing
 	this->SCREEN_W = SCREEN_W;
     this->SCREEN_H = SCREEN_H;
+	this->HALF_SCREEN_W = SCREEN_W/2;
+	this->HALF_SCREEN_H = SCREEN_H/2;
 	window = SDL_CreateWindow("3D Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, screen_mode);
 	renderer = SDL_CreateRenderer(window, -1, 0);
     
@@ -31,7 +33,8 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	fFOV=70.0f;
 	this->fAspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);
 	matProj = Mat4x4::matrixMakeProjection(fFOV, SCREEN_W, SCREEN_H, fNear, fFar);
-	
+	this->max_visible_z_depth = player_camera->getMaxDrawDist();
+	this->inv_max_visible_z_depth = 1/this->max_visible_z_depth;  
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
@@ -53,7 +56,7 @@ void Renderer::setWindowTitle(std::string title){
 }
 
 void Renderer::resetMouseXY(){
-	SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
+	SDL_WarpMouseInWindow(this->window, HALF_SCREEN_W, HALF_SCREEN_H);
 }
 
 SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri){
@@ -63,7 +66,7 @@ SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri){
     if (z_center>=this->max_visible_z_depth){
         color_modifier = this->min_visible_color_modifier;
     }else{
-        color_modifier = 1-(z_center/this->max_visible_z_depth);
+        color_modifier = 1-(z_center*this->inv_max_visible_z_depth);
 		if (color_modifier<min_visible_color_modifier) { color_modifier=min_visible_color_modifier; }
     }
     SDL_Color draw_col;
@@ -87,7 +90,7 @@ float Renderer::applyDepthDimmerModifier(Triangle& this_tri){
     if (z_center>=this->max_visible_z_depth){
         color_modifier = this->min_visible_color_modifier;
     }else{
-        color_modifier = 1-(z_center/this->max_visible_z_depth);
+        color_modifier = 1-(z_center*this->inv_max_visible_z_depth);
 		if (color_modifier<min_visible_color_modifier) { color_modifier=min_visible_color_modifier; }
     }
 
@@ -199,7 +202,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		
 		if(dp_light_source<0.0f) {dp_light_source=0.0f;}
 		if(dp_light_source>1.0f) {dp_light_source=1.0f;}
-		dp_light_source = nonVectorMathService::lerp(0.25f, 0.75f, dp_light_source); // make it so the walls aren't too shiny
+		//dp_light_source = nonVectorMathService::lerp(0.25f, 0.75f, dp_light_source); // make it so the walls aren't too shiny
 		dp_light_source = 0.7f;
 		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 		triView.setColor(col);
@@ -229,7 +232,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			pt0.z=newTriPoint0.z;
 			pt1.z=newTriPoint1.z;
 			pt2.z=newTriPoint2.z;
-			
+
 
 
 			triProjected.setTrianglePoint(0,pt0);
@@ -247,13 +250,15 @@ void Renderer::projectTriangle3d(Triangle &tri){
 			}
 
 			
-
+			float inv_pt0_z = 1/pt0.z;
+			float inv_pt1_z = 1/pt1.z;
+			float inv_pt2_z = 1/pt2.z;
 
 			
 			// Copy UV coordinates over and places them in 1/z space for perspective correction.  We will bring them out just before sampling texture
-			triProjected.setUVPoint(0,Vec2d{this_tri.getUVPoint(0).x/pt0.z,this_tri.getUVPoint(0).y/pt0.z,1/pt0.z});
-			triProjected.setUVPoint(1,Vec2d{this_tri.getUVPoint(1).x/pt1.z,this_tri.getUVPoint(1).y/pt1.z,1/pt1.z});
-			triProjected.setUVPoint(2,Vec2d{this_tri.getUVPoint(2).x/pt2.z,this_tri.getUVPoint(2).y/pt2.z,1/pt2.z});
+			triProjected.setUVPoint(0,Vec2d{this_tri.getUVPoint(0).x*inv_pt0_z,this_tri.getUVPoint(0).y*inv_pt0_z,inv_pt0_z});
+			triProjected.setUVPoint(1,Vec2d{this_tri.getUVPoint(1).x*inv_pt1_z,this_tri.getUVPoint(1).y*inv_pt1_z,inv_pt1_z});
+			triProjected.setUVPoint(2,Vec2d{this_tri.getUVPoint(2).x*inv_pt2_z,this_tri.getUVPoint(2).y*inv_pt2_z,inv_pt2_z});
 
 
 			// Copy Triangle ID over

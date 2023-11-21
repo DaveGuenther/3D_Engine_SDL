@@ -29,7 +29,7 @@ class Frustum{
          * 
          * @param aspectRatio - this variable is required to define the left and right frustum edges
          */
-        Frustum(float aspectRatio);
+        Frustum(float aspectRatio, float max_draw_dist);
 
         const Vec3d& getFrustumFrontPlaneNormal();
         const Vec3d& getFrustumFrontPoint();
@@ -38,6 +38,8 @@ class Frustum{
         const Vec3d& getFrustumTopPlaneNormal();
         const Vec3d& getFrustumBottomPlaneNormal();
         const Vec3d& getFrustumOriginPoint();
+        const Vec3d& getFrustrumBackPlaneNormal();
+        const Vec3d& getFrustrumBackPoint();
 
 
     private: 
@@ -50,6 +52,12 @@ class Frustum{
     Vec3d frustum_bottom_plane_normal;
     Vec3d frustum_origin_point;
 
+    // Attempting to define a back plane where nothing further is drawn.  This is an attempt to 
+    // increase the framerate.  
+    Vec3d frustrum_back_plane_normal; // I think this can be the inverse of the front plane normal
+    Vec3d frustrum_back_point; // This can be the same as the max draw distance.  That point can be used to define the plane.
+
+ 
 };
 
 

@@ -2,6 +2,7 @@
 
 #include "math.h"
 #include "Vector_Math_Service.h"
+#include "nonVector_Math_Service.h"
 #include "Vec3d.h"
 #include "Triangle.h"
 
@@ -13,15 +14,24 @@ Vec3d VectorMathService::crossProduct(const Vec3d& A, const Vec3d& B){
     return Vec3d(((A.y*B.z) - (A.z*B.y)), ((A.z*B.x) - (A.x*B.z)), ((A.x*B.y) - (A.y*B.x)));
 }
 
-float VectorMathService::getVectorLength(const Vec3d& this_vec){
-    return sqrt((this_vec.x*this_vec.x)+(this_vec.y*this_vec.y)+(this_vec.z*this_vec.z));
+float VectorMathService::getInverseVectorLength(const Vec3d& this_vec){
+	return nonVectorMathService::FastInvSqrt((this_vec.x*this_vec.x)+(this_vec.y*this_vec.y)+(this_vec.z*this_vec.z));
 }
 
+/*float VectorMathService::getVectorLength(const Vec3d& this_vec){
+    return sqrt((this_vec.x*this_vec.x)+(this_vec.y*this_vec.y)+(this_vec.z*this_vec.z));
+}*/
+
 void VectorMathService::getUnitVector(Vec3d& this_vec){
-    float vector_length = getVectorLength(this_vec);
-    this_vec.x= this_vec.x/vector_length;
-    this_vec.y=this_vec.y/vector_length;
-    this_vec.z=this_vec.z/vector_length;
+    //float vector_length = 1/getVectorLength(this_vec);
+	//this_vec.x= this_vec.x/vector_length;
+    //this_vec.y=this_vec.y/vector_length;
+    //this_vec.z=this_vec.z/vector_length;
+
+    float inv_vec_length = getInverseVectorLength(this_vec);
+	this_vec.x= this_vec.x*inv_vec_length;
+    this_vec.y=this_vec.y*inv_vec_length;
+    this_vec.z=this_vec.z*inv_vec_length;
 }
 
 Vec3d VectorMathService::MultiplyMatrixVector( const Mat4x4 &m, Vec3d &i){

@@ -11,23 +11,34 @@ Clipper::Clipper(std::shared_ptr<Camera> thisCamera):thisCameraFrustum(thisCamer
     this->frustum_origin_point = this->thisCameraFrustum->getFrustumOriginPoint();
     this->frustum_right_plane_normal = this->thisCameraFrustum->getFrustumRightPlaneNormal();
     this->frustum_top_plane_normal = this->thisCameraFrustum->getFrustumTopPlaneNormal();
+    this->frustum_back_plane_normal=this->thisCameraFrustum->getFrustrumBackPlaneNormal();
+    this->frustum_back_point=this->thisCameraFrustum->getFrustrumBackPoint();
 
 }
 
 std::vector<Triangle>& Clipper::getClippedTrisAgainstFrustum(Triangle& triView){
     this->frustum_clipped_tris.clear();
 
-    // Clip triangle against z_near plane
+    // Clip triangle against z_near (front) plane
     int nClippedTriangles=0;
     Triangle clipped[2];
     nClippedTriangles = VectorMathService::clipTriangleWithPlane(frustum_front_point, frustum_front_plane_normal, triView, clipped[0], clipped[1]);
-    std::vector<Triangle> front_clipped_tris, left_clipped_tris, top_clipped_tris, right_clipped_tris; 
+    std::vector<Triangle> front_clipped_tris, back_clipped_tris, left_clipped_tris, top_clipped_tris, right_clipped_tris; 
     for (int n=0; n< nClippedTriangles; n++){
         //clipped[n].setID(triView.getID());
         front_clipped_tris.push_back(clipped[n]);
     }
-    // Test along left frustum edge
+
+    // Clip triangle against back plane
     for (Triangle this_tri:front_clipped_tris){
+        nClippedTriangles = VectorMathService::clipTriangleWithPlane(frustum_back_point, frustum_back_plane_normal, this_tri, clipped[0], clipped[1]);
+        for (int n=0;n<nClippedTriangles;n++){
+            back_clipped_tris.push_back(clipped[n]);
+        }
+    }
+
+    // Test along left frustum edge
+    for (Triangle this_tri:back_clipped_tris){
         nClippedTriangles = VectorMathService::clipTriangleWithPlane(frustum_origin_point, frustum_left_plane_normal, this_tri, clipped[0], clipped[1]);
         for (int n=0;n<nClippedTriangles;n++){
             left_clipped_tris.push_back(clipped[n]);

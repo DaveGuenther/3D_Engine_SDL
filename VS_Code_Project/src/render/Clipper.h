@@ -21,6 +21,9 @@ class Clipper{
         Vec3d frustum_right_plane_normal;
         Vec3d frustum_bottom_plane_normal = Vec3d(0.0f, 1.0f, 1.0f);
         Vec3d frustum_origin_point = Vec3d(0.0f, 0.0f, 0.0f);
+        Vec3d frustum_back_plane_normal;
+        Vec3d frustum_back_point;
+
         Triangle triView;
         std::vector<Triangle> frustum_clipped_tris;
         std::shared_ptr<Frustum> thisCameraFrustum;

@@ -5,13 +5,14 @@
 #include "Frustum.h"
 
 
-Camera::Camera(float aspectRatio):camera(Vec3d(0.0f, 0.0f, 0.0f)), 
+Camera::Camera(float aspectRatio, float max_draw_dist):camera(Vec3d(0.0f, 0.0f, 0.0f)), 
                                 lookVector(Vec3d(0.0f, 0.0f, 1.0f)),
                                 vTarget(Vec3d(0.0f, 0.0f, 1.0f)), 
-                                cameraViewFrustum(new Frustum(aspectRatio)){
+                                cameraViewFrustum(new Frustum(aspectRatio, max_draw_dist)){
     //this->camera = Vec3d(0.0f, 0.0f, 0.0f);
     //this->lookVector = Vec3d(0.0f, 0.0f, 1.0f);
     //this->vTarget = Vec3d(0.0f,0.0f,1.0f);
+    this->maxDrawDist = max_draw_dist;
 }
 
 Mat4x4 Camera::buildViewMatrix(){
@@ -84,4 +85,8 @@ void Camera::setCameraPos(Vec3d transform_from_forward){
 
 Vec3d Camera::getCameraPos(){
     return this->camera;
+}
+
+float Camera::getMaxDrawDist(){
+    return float(this->maxDrawDist);
 }

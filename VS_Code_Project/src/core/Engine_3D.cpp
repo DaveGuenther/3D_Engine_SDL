@@ -29,9 +29,11 @@ Engine_3D::Engine_3D(void){
 
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
-    float aspectRatio = AspectRatio::getAspectRatio(480,285);  //640x380   //480x285    320x190  
-    std::shared_ptr<Camera> player_camera(new Camera(aspectRatio));
-    player_camera = player_camera;
+    float max_draw_dist = 5.0f;
+    float aspectRatio = AspectRatio::getAspectRatio(480,285);  //640x380   //480x285    320x190  //256x160
+    std::shared_ptr<Camera> player_camera(new Camera(aspectRatio, max_draw_dist));
+    std::cout << player_camera->getMaxDrawDist() << std::endl;
+    //player_camera = player_camera;
     std::shared_ptr<Renderer> this_Renderer(new Renderer(480, 285, player_camera));
     this->Engine_Renderer=this_Renderer;
     this_Renderer->setColorFrustumClippedTris(false); // don't show RGB clipped tris.  Instead show intended color
@@ -40,6 +42,7 @@ Engine_3D::Engine_3D(void){
 
     std::shared_ptr<Game_Engine_State_Observer> Engine_State(new Game_Engine_State_Observer(game_state_subject));
     this->Engine_State=Engine_State;
+    
     std::shared_ptr<Input_Parser> MENU_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "menu_bindings.cfg"));
     this->MENU_Input_Parser = MENU_Input_Parser;
     std::shared_ptr<Input_Parser> INWORLD_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "in_game_bindings.cfg"));
@@ -91,7 +94,7 @@ void Engine_3D::engine_update(){
             isRunning=false;
             break;
         case IN_WORLD:{
-            SDL_SetRelativeMouseMode(SDL_TRUE);
+            //SDL_SetRelativeMouseMode(SDL_TRUE);
             
             INWORLD_Input_Parser->scanInput();
             INWORLD_Action_Updater->AddTactileInputMap(INWORLD_Input_Parser->getCurrentCommands());

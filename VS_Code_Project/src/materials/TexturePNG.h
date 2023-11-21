@@ -27,14 +27,23 @@ class TexturePNG{
 
         
         /**
-         * @brief Get the Pixel At U V location of texture.
+         * @brief Get the Pixel At U V location of texture sampling from the precached pixel arrays.
          * 
          * @param U floating point between 0.0 and 1.0
          * @param V floating point between 0.0 and 1.0
          * @param col Pass a color in by reference to be set from within the function
          */
-        void getPixelAtUV(const float &U, const float &V, SDL_Color &col);
-        
+        //void getPixelAtUV(const float &U, const float &V, SDL_Color &col);
+
+        /**
+         * @brief Get the Pixel At U V location of texture sampling directly from the surface.
+         * 
+         * @param U floating point between 0.0 and 1.0
+         * @param V floating point between 0.0 and 1.0
+         * @param col Pass a color in by reference to be set from within the function
+         */        
+        void getPixelAtSurfaceUV(const float &U, const float &V, SDL_Color &col);
+
         /**
          * @brief Get the Pixel At X Y location of texture.  
          * 
