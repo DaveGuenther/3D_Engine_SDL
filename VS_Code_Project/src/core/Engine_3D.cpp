@@ -26,15 +26,16 @@
 #include "../render/AspectRatio.h"
 
 Engine_3D::Engine_3D(void){
-
+    int SCREEN_W = 400; //640x380   //480x285    320x190  //256x160
+    int SCREEN_H = 285;
     SDL_Init(SDL_INIT_EVERYTHING);
     isRunning = true;
     float max_draw_dist = 5.0f;
-    float aspectRatio = AspectRatio::getAspectRatio(480,285);  //640x380   //480x285    320x190  //256x160
+    float aspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);  
     std::shared_ptr<Camera> player_camera(new Camera(aspectRatio, max_draw_dist));
     std::cout << player_camera->getMaxDrawDist() << std::endl;
     //player_camera = player_camera;
-    std::shared_ptr<Renderer> this_Renderer(new Renderer(480, 285, player_camera));
+    std::shared_ptr<Renderer> this_Renderer(new Renderer(SCREEN_W, SCREEN_H, player_camera));
     this->Engine_Renderer=this_Renderer;
     this_Renderer->setColorFrustumClippedTris(false); // don't show RGB clipped tris.  Instead show intended color
 
@@ -92,6 +93,8 @@ void Engine_3D::engine_update(){
     switch (this->game_state_subject.getState()){
         case QUIT:
             isRunning=false;
+            break;
+        case CONSOLE:
             break;
         case IN_WORLD:{
             //SDL_SetRelativeMouseMode(SDL_TRUE);

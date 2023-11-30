@@ -41,7 +41,7 @@ prof:
 .PHONY: debug
 debug: clean
 debug: LDFLAGS += -lprofiler -ltcmalloc
-debug: CXXFLAGS += -O0 -fno-inline-functions -g -D_GLIBCXX_DEBUG
+debug: CXXFLAGS += -O0 -fno-inline-functions -glldb -D_GLIBCXX_DEBUG
 debug: $(BUILD)/game
 
 .PHONY: clean 

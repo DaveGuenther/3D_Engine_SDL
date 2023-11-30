@@ -162,6 +162,7 @@ int VectorMathService::clipTriangleWithPlane(Vec3d plane_p, Vec3d plane_n, Trian
 		// The inside point is valid, so keep that...
 		out_tri1.setTrianglePoint(0, *(inside_points[0]));
 		out_tri1.setUVPoint(0,*(inside_UVs[0]));
+		
 
 		// but the two new points are at the locations where the 
 		// original sides of the triangle (lines) intersect with the plane

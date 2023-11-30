@@ -32,7 +32,7 @@ class Renderer{
         int SCREEN_H;
         int HALF_SCREEN_W;
         int HALF_SCREEN_H;
-        int screen_mode=0;  // 0 for Windowed, 1 for Fullscreen
+        int screen_mode=0;  // 0 for Windowed, 1 for Fullscreen, 128 for full screen maximized
 
         // Projection Matrix
         float fNear;

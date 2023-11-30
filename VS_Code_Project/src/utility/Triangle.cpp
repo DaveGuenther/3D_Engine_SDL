@@ -44,7 +44,7 @@ Triangle::Triangle(const Vec3d &pt1, const Vec3d &pt2, const Vec3d &pt3, const V
     this->textureCoords[1]=tex_p2;
     this->textureCoords[2]=tex_p3;
     tri_id=triangle_id;    
-    color = SDL_Color {255, 0, 255, 255};
+    color = this_color;
     this->texture_ptr=this_texture_ptr;
     this->dim_amount=dim_amount;
 }
@@ -141,15 +141,15 @@ const float Triangle::getInverseDistanceToCamera(Vec3d camera_pos){
 }
 
 const float Triangle::getTriangleZCenter(){
-    return (this->p[0].z+ this->p[1].z + this->p[2].z)*0.33f;
+    return (this->p[0].z+ this->p[1].z + this->p[2].z)*0.33f;  //   *.33 instead of /3 to avoid divide
 }
 
 const float Triangle::getTriangleYCenter(){
-    return (this->p[0].y+ this->p[1].y + this->p[2].y)*0.33f;
+    return (this->p[0].y+ this->p[1].y + this->p[2].y)*0.33f;  //   *.33 instead of /3 to avoid divide
 }
 
 const float Triangle::getTriangleXCenter(){
-    return (this->p[0].x+ this->p[1].x + this->p[2].x)*0.33f;
+    return (this->p[0].x+ this->p[1].x + this->p[2].x)*0.33f;  //   *.33 instead of /3 to avoid divide
 }
 
 const Vec3d Triangle::getTriangleCenter(){

@@ -42,10 +42,48 @@ class TexturemapRasterizer:public ITriangleRasterizer{
         void drawTriangle(Triangle& this_triangle);
         
     private:
+        //Functions for both flat top and flat bottom
+        void texelDetermineAlphaX();
+        void texelDetermineUV(Triangle& this_triangle);
+        void texelDimPixel(Triangle& this_triangle);
+        void texelDrawUV_Point();
+        void scanlineDetermineDist();
+        void scanlineCalcStartEnd(Triangle &this_triangle);
+        void drawTriangleInitializer(Triangle &this_triangle);
+        
+        //Functions specific to FT or FB
+        void drawFT_CalcSlopes(Triangle &this_triangle);
+        void drawFT_Scanline_prep(Triangle &this_triangle);
+        void drawFB_CalcSlopes(Triangle &this_triangle);
+        void drawFB_Scanline_prep(Triangle &this_triangle);
         void drawFlatTopTri(Triangle& this_triangle);
         void drawFlatBottomTri(Triangle& this_triangle);
+        
         std::shared_ptr<TexturePNG> this_texture;
         
+        ///// FlatTop and FlatBottom Triangle Data members are instantiated here and then data is overwritten during each
+        ///// run of drawFlatTopTri or drawFlatBottomTri routines.  Instead of creating and destroying all these data members each
+        ///// cycle, we'll use these and pass by ref everywhere to control overwriting.
+        
+        //Triangle vars
+        //std::shared_ptr<TexturePNG> texture;
+        Vec3d p0, p1, p2;
+        Vec2d uv0, uv1, uv2;
+        float left_slope, right_slope, inv_left_slope_denom, inv_right_slope_demon;
+        int y_start, y_end;
+
+        //vertical scanline vars
+        int y, x_start, x_end;
+        float p_start, p_end, alpha_start, alpha_end, UVx_start, UVy_start, UVz_start, UVx_end, UVy_end, UVz_end, inv_scanline_dist;
+
+        //pixel vars
+        int x;
+        float alpha_scan, UVx_scan, UVy_scan, inv_UVz_scan;
+        SDL_Color col={255,255,255,255};
+
+        ///// end of FlatTop and FlatBottom variables
+        
+
 };
 
 class ScanlineRasterizer:public ITriangleRasterizer{
