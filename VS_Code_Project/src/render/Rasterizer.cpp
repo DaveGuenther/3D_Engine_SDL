@@ -339,9 +339,8 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
                 this->this_texture->getPixelAtSurfaceUV(this->UVx_scan, this->UVy_scan, this->col);
             }
            
-            this->col.r=col.r*this_triangle.getLightDimAmount();
-            this->col.g=col.g*this_triangle.getLightDimAmount();
-            this->col.b=col.b*this_triangle.getLightDimAmount();
+            // apply depth dimmer
+            texelDimPixel(this_triangle);
             
             // Set Color
             SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
