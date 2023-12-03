@@ -24,7 +24,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	this->HALF_SCREEN_W = SCREEN_W/2;
 	this->HALF_SCREEN_H = SCREEN_H/2;
 	window = SDL_CreateWindow("3D Engine", 0,0, SCREEN_W, SCREEN_H, screen_mode);
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
     
 
 	// Projection Matrix

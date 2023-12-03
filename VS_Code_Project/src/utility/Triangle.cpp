@@ -92,6 +92,10 @@ std::shared_ptr<TexturePNG> Triangle::getTexture(){
     return this->texture_ptr;
 }
 
+TexturePNG* Triangle::getTextureRawPtr(){
+    return this->texture_ptr.get();
+}
+
 void Triangle::setColor(SDL_Color this_color){
     this->color = this_color;
 }

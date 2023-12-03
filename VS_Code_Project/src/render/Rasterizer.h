@@ -59,7 +59,8 @@ class TexturemapRasterizer:public ITriangleRasterizer{
         void drawFlatTopTri(Triangle& this_triangle);
         void drawFlatBottomTri(Triangle& this_triangle);
         
-        std::shared_ptr<TexturePNG> this_texture;
+        //std::shared_ptr<TexturePNG> this_texture;
+        TexturePNG* this_texture;
         
         ///// FlatTop and FlatBottom Triangle Data members are instantiated here and then data is overwritten during each
         ///// run of drawFlatTopTri or drawFlatBottomTri routines.  Instead of creating and destroying all these data members each

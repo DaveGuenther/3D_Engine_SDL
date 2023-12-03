@@ -61,6 +61,7 @@ class Triangle{
         const Vec3d& getUnitNormalVector();
         const SDL_Color& getColor();
         std::shared_ptr<TexturePNG> getTexture();
+        TexturePNG* getTextureRawPtr();
         const std::string toString();
 
 

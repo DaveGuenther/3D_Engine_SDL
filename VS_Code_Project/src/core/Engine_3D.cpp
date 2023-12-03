@@ -28,7 +28,7 @@
 Engine_3D::Engine_3D(void){
     int SCREEN_W = 400; //640x380   //480x285    320x190  //256x160
     int SCREEN_H = 285;
-    SDL_Init(SDL_INIT_EVERYTHING);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     isRunning = true;
     float max_draw_dist = 5.0f;
     float aspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);  

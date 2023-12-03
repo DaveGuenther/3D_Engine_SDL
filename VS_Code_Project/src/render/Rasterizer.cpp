@@ -131,7 +131,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
 
 void TexturemapRasterizer::drawTriangleInitializer(Triangle &this_triangle){
     //std::shared_ptr<TexturePNG> 
-    this->this_texture = this_triangle.getTexture();
+    this->this_texture = this_triangle.getTextureRawPtr();
     this->p0 = this_triangle.getTrianglePoint(0);
     this->uv0 = this_triangle.getUVPoint(0);
     this->p1 = this_triangle.getTrianglePoint(1);
@@ -253,7 +253,7 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
             texelDetermineUV(this_triangle);
 
             // sample texture color at (U/V)
-            if (this_triangle.getTexture()!=NULL){
+            if (this_triangle.getTextureRawPtr()!=NULL){
                 // There is a texture associated with this triangle
                 this->this_texture->getPixelAtSurfaceUV(this->UVx_scan, this->UVy_scan, this->col);
             }
@@ -334,7 +334,7 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
             
             texelDetermineUV(this_triangle);
 
-            if (this_triangle.getTexture()!=NULL){
+            if (this_triangle.getTextureRawPtr()!=NULL){
                 // There is a texture associated with this triangle
                 this->this_texture->getPixelAtSurfaceUV(this->UVx_scan, this->UVy_scan, this->col);
             }
