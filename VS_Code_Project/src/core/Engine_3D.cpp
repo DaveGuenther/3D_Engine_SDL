@@ -30,7 +30,7 @@ Engine_3D::Engine_3D(void){
     int SCREEN_H = 285;
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     isRunning = true;
-    float max_draw_dist = 5.0f;
+    float max_draw_dist = 10.0f;
     float aspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);  
     std::shared_ptr<Camera> player_camera(new Camera(aspectRatio, max_draw_dist));
     std::cout << player_camera->getMaxDrawDist() << std::endl;
