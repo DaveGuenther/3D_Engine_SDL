@@ -26,7 +26,7 @@
 #include "../render/AspectRatio.h"
 
 Engine_3D::Engine_3D(void){
-    int SCREEN_W = 400; // 1280X800  640x380   //480x285    320x190  //256x160
+    int SCREEN_W = 400; // 1280X800  640x380   //480x225    320x190  //256x160
     int SCREEN_H = 225;
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     isRunning = true;
