@@ -11,7 +11,7 @@ This is a personal learning project that uses the core math and code presented b
 
 Everything uses software rendering (no open GL support) in an effort to build something similar to what might have been possible in the mid 90's but on stronger hardware.
 
-This project is currently built using clang++ (used to be g++) and SDL (Simplified DirectMedia Layer) and includes VSCode project files
+This project is currently built using clang++ and SDL (Simplified DirectMedia Layer) and includes VSCode project files
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/pirate_cave_textured.png">
   <br><i>Engine Screenshot - Pirate Cave Texturemapped! 12/4/2023</i>
