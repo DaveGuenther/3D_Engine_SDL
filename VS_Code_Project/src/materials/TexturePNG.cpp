@@ -98,8 +98,10 @@ void TexturePNG::getPixelAtSurfaceUV(const float &U, const float &V, SDL_Color &
     // set x based on U
     if (U>1){
         x= float(U-floor(U))*(this->width-1);
+        //x= U-floor(U)*(this->width-1);
     }else if(U<0){
         x = float(U-ceil(U)+1.0f)*(this->width-1);
+        //x = U-ceil(U)+1*(this->width-1);
     }else{
         // 0 <= U <= 1
         x = U*(this->width-1);
@@ -108,8 +110,10 @@ void TexturePNG::getPixelAtSurfaceUV(const float &U, const float &V, SDL_Color &
     // set y based on U
     if (V>1){
         y= (this->height-1)-(float(V-floor(V))*(this->height-1));
+        //y= (this->height-1)-(V-floor(V))*(this->height-1);
     }else if(V<0){
         y = (this->height-1)-(float(V-ceil(V)+1.0f)*(this->height-1));
+        //y = (this->height-1)-(V-ceil(V)+1.0f)*(this->height-1);
     }else{
         // 0 <= U <= 1
         y = (this->height-1)-(V*(this->height-1));

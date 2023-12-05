@@ -4,6 +4,9 @@
 #include <filesystem>
 #include <unordered_map>
 #include "../materials/MTL.h"
+#if __has_include(<sstream>)
+#   include <sstream>
+#endif
 
 MTL::MTL(std::string filename){
     filename = "Meshes/"+filename;

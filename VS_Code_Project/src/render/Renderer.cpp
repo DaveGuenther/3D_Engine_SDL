@@ -23,8 +23,8 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
     this->SCREEN_H = SCREEN_H;
 	this->HALF_SCREEN_W = SCREEN_W/2;
 	this->HALF_SCREEN_H = SCREEN_H/2;
-	window = SDL_CreateWindow("3D Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, screen_mode);
-	renderer = SDL_CreateRenderer(window, -1, 0);
+	window = SDL_CreateWindow("3D Engine", HALF_SCREEN_W,HALF_SCREEN_H, SCREEN_W, SCREEN_H, screen_mode);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
     
 
 	// Projection Matrix
@@ -130,16 +130,15 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 						this_triangle.getID(),col, this_triangle.getLightDimAmount(), this_triangle.getTexture());
 						
 
-	//rasterize triangle In Out - very slow method, implemented only for learning purposes
-	//std::shared_ptr<ITriangleRasterizer> this_inout_rasterizer(new InOutRasterizer(renderer));
-	//this_inout_rasterizer->drawTriangle(screenTri);
+
+	screenTri.setLightDimAmount(this_triangle.getLightDimAmount());	
+
 
 	//rasterize triangle with ScanLines - faster
 	//std::shared_ptr<ITriangleRasterizer> this_scanline_rasterizer(new ScanlineRasterizer(renderer));
 	//this_scanline_rasterizer->drawTriangle(screenTri);
 
-	screenTri.setLightDimAmount(this_triangle.getLightDimAmount());
-
+	
 	// Here goes TextureMapping!
 	std::shared_ptr<ITriangleRasterizer> this_texturemap_rasterizer(new TexturemapRasterizer(renderer));
 	this_texturemap_rasterizer->drawTriangle(screenTri);
@@ -191,6 +190,10 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		// Copy Texture_ptr over
 		triView.setTexture(tri.getTexture());
 
+		// Clip this triangle against Front, left, top, right, and bottom frustum planes, then create new triangles as necessary that end at the frustum
+		std::vector<Triangle> clipped_tris = this->thisFrustumClipper->getClippedTrisAgainstFrustum(triView);
+		
+
 		// Light triangle from camera 
 		//Vec3d light_source_direction = Vec3d(0.0f,0.0f,1.0f); // lit like the sun
 		Vec3d light_source_direction = camera_to_triangle_vector;  // omnidirectional liht out from camera position
@@ -207,8 +210,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		SDL_Color col; col.r=255*dp_light_source; col.g=255*dp_light_source; col.b=255*dp_light_source; col.a = 255;
 		triView.setColor(col);
 
-		// Clip this triangle against Front, left, top, right, and bottom frustum planes, then create new triangles as necessary that end at the frustum
-		std::vector<Triangle> clipped_tris = this->thisFrustumClipper->getClippedTrisAgainstFrustum(triView);
+
 
 		//Project 3d triangles to 2d screen space with camera space Z information
 		for(Triangle this_tri:clipped_tris)
@@ -243,6 +245,7 @@ void Renderer::projectTriangle3d(Triangle &tri){
 		
 			// Dim Lighting by Distance
 			if (this->colorFrustumClippedTris==true){
+				//Adds RGB colors to frustrum clipped triangles
 				triProjected.setColor(this_tri.getColor());
 				triView.setColor(this_tri.getColor());
 			}else{
@@ -353,13 +356,13 @@ void Renderer::cartesianToScreen_inplace(Vec2d& this_point)
 
 Vec2d Renderer::cartesianToScreen(Vec2d this_point)
 {
-	float HALF_SCREEN_W = (SCREEN_W)/2;
-	float scaled_x = this_point.x*(HALF_SCREEN_W);
-	this_point.x=scaled_x+(HALF_SCREEN_W);
+	//float HALF_SCREEN_W = (SCREEN_W)*.5;
+	float scaled_x = this_point.x*(this->HALF_SCREEN_W);
+	this_point.x=scaled_x+(this->HALF_SCREEN_W);
 
-	float HALF_SCREEN_H = (SCREEN_H)/2;
-	float scaled_y = this_point.y*(HALF_SCREEN_H);
-	this_point.y=SCREEN_H-(scaled_y+(HALF_SCREEN_H));
+	//float HALF_SCREEN_H = (SCREEN_H)*.5;
+	float scaled_y = this_point.y*(this->HALF_SCREEN_H);
+	this_point.y=SCREEN_H-(scaled_y+(this->HALF_SCREEN_H));
 	return this_point;
 } 
 
