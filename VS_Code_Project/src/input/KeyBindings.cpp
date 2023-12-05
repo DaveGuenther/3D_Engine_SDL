@@ -5,7 +5,9 @@
 #include <fstream>
 #include <algorithm>
 #include <iostream>
-
+#if __has_include(<sstream>)
+#   include <sstream>
+#endif
 
 std::string Bindings::getCommand(std::string key_code){
     std::string command;
