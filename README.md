@@ -13,6 +13,15 @@ Everything uses software rendering (no open GL support) in an effort to build so
 
 This project is based on mingw (g++) and SDL (Simplified DirectMedia Layer) and includes VSCode project files
 
+<p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/pirate_cave_textured.png">
+  <br><i>Engine Screenshot - Pirate Cave Texturemapped! 12/4/2023</i>
+</p>
+<br>
+
+<p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/control_room_textured.png">
+  <br><i>Engine Screenshot - Control Room Texturemapped! 12/4/2023</i>
+</p>
+<br>
 
 <p align="center"><img src="https://github.com/GumpherDM3/3D_Engine_SDL/blob/main/Screenshots/2022-07-29%20Texturemapped.png">
   <br><i>Engine Screenshot - Texturemapped Cube Rendered! 7/29/2022</i>
