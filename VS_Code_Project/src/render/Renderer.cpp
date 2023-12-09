@@ -25,7 +25,9 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	this->HALF_SCREEN_H = SCREEN_H/2;
 	window = SDL_CreateWindow("3D Engine", HALF_SCREEN_W,HALF_SCREEN_H, SCREEN_W, SCREEN_H, screen_mode);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
-    
+	framebuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, SCREEN_W, SCREEN_H);
+    //this->framebufferpitch = SCREEN_W*4;
+	
 
 	// Projection Matrix
 	fNear = 0.1f;
@@ -135,12 +137,12 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 
 
 	//rasterize triangle with ScanLines - faster
-	//std::shared_ptr<ITriangleRasterizer> this_scanline_rasterizer(new ScanlineRasterizer(renderer));
+	//std::shared_ptr<ITriangleRasterizer> this_scanline_rasterizer(new ScanlineRasterizer(renderer, framebufferpixels));
 	//this_scanline_rasterizer->drawTriangle(screenTri);
 
 	
 	// Here goes TextureMapping!
-	std::shared_ptr<ITriangleRasterizer> this_texturemap_rasterizer(new TexturemapRasterizer(renderer));
+	std::shared_ptr<ITriangleRasterizer> this_texturemap_rasterizer(new TexturemapRasterizer(renderer, framebufferpixels, framebufferpitch));
 	this_texturemap_rasterizer->drawTriangle(screenTri);
 
 }
@@ -295,6 +297,7 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
+	SDL_LockTexture(this->framebuffer, NULL, (void **) &this->framebufferpixels, &this->framebufferpitch);
 
 	// start with empty triangle buffer to rasterize each frame
 	this->trianglesToRasterize.clear();
@@ -317,7 +320,8 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 		//drawWireFrameTriangle2d(tri);
 		
 	}	
-	
+	SDL_UnlockTexture(this->framebuffer);
+	SDL_RenderCopy(renderer, this->framebuffer, NULL, NULL);
 	drawReticle();
 
 	// Flip video page to screen

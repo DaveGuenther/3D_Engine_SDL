@@ -19,12 +19,23 @@ void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
     draw_col.g= col.g*color_modifier;
     draw_col.b= col.b*color_modifier;
     draw_col.a=255;
-    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_SetRenderDrawColor(this->renderer, draw_col.r, draw_col.g, draw_col.b, SDL_ALPHA_OPAQUE);
+    //SDL_SetRenderDrawColor(this->renderer, draw_col.r, draw_col.g, draw_col.b, SDL_ALPHA_OPAQUE);
+    
 }
 
-TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer){
+void ITriangleRasterizer::resetTexturePtr(){
+
+}
+
+void ITriangleRasterizer::pixelBlit(const int &r, const int &g, const int&b, const int &a){
+    
+}
+
+TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, uint8_t* framebufferpixels, int framebufferpitch){
     this->renderer=my_renderer;
+    this->framebufferpixels = framebufferpixels;
+    this->framebufferpitch = framebufferpitch;
+    
     this->inv_max_visible_z_depth=1/this->max_visible_z_depth;
 }
 
@@ -201,12 +212,19 @@ void TexturemapRasterizer::texelDimPixel(Triangle& this_triangle){
     this->col.b=col.b*this_triangle.getLightDimAmount();
 }
 
+
+
 void TexturemapRasterizer::texelDrawUV_Point(){
     // Set Color
-    SDL_SetRenderDrawColor(this->renderer, this->col.r, this->col.g, this->col.b, this->col.a);
+    //SDL_SetRenderDrawColor(this->renderer, this->col.r, this->col.g, this->col.b, this->col.a);
 
     // draw point at (x,)
-    SDL_RenderDrawPoint(this->renderer,this->x, this->y); 
+    //SDL_RenderDrawPoint(this->renderer,this->x, this->y); 
+    this->p = this->texture_head+(this->framebufferpitch*this->y)+this->x;
+    
+    // write a pixel to the Texture framebuffer
+    *this->p = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888),this->col.r, this->col.g, this->col.b, this->col.a);
+    
 }
 
 void TexturemapRasterizer::scanlineDetermineDist(){
@@ -232,7 +250,9 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
     this->drawFT_CalcSlopes(this_triangle);
     this->scanlineCalcStartEnd(this_triangle);
     
-
+    // Create pointer to pixels at this y line for drawing to a Texture
+    this->pixels = (Uint32 *)(this->framebufferpixels);
+    this->texture_head=pixels;
     
     // 3. Loop through each y scanline (but don't do the last one)
     for (this->y = this->y_start; this->y < this->y_end; this->y++){
@@ -242,6 +262,7 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
         // determine scanline dist
         scanlineDetermineDist();
         
+
         // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
         //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
         for (this->x = this->x_start; this->x < this->x_end; this->x++){ 
@@ -316,15 +337,19 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
     // 2. Determine y_start and y_end pixels for the triangle
     scanlineCalcStartEnd(this_triangle);
 
-
+    // Create pointer to pixels at this y line for drawing to a Texture
+    this->pixels = (Uint32 *)(this->framebufferpixels);
+    this->texture_head=pixels;
 
     // 3. Loop through each y scanline (but don't do the last one)
     for (this->y = this->y_start; this->y < this->y_end; this->y++){
-        
+
         drawFB_Scanline_prep(this_triangle);
 
         // determine scanline dist
         scanlineDetermineDist();
+
+
 
         // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
         for (this->x = this->x_start; this->x < this->x_end; this->x++){ 
@@ -346,8 +371,10 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
             SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
 
             // draw point at (x,)
-            SDL_RenderDrawPoint(this->renderer,x, y); 
-            
+            //SDL_RenderDrawPoint(this->renderer,x, y); 
+
+            //Draw Point
+            texelDrawUV_Point();
         }
         //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
 

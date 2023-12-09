@@ -12,9 +12,16 @@ class ITriangleRasterizer{
     protected:
         //Renderer* my_renderer;
         SDL_Renderer *renderer;
+        uint8_t* framebufferpixels;
+        Uint32 *pixels;
+        Uint32 *p= (Uint32 *)(pixels); // cast for a pointer increments by 4 bytes.(RGBA)
+        Uint32 *texture_head=p; // pointer to the head of the rendering texture for debugging purposes
+        int framebufferpitch;
         float max_visible_z_depth = 5.0f;  // distance from the camera at which things are no lonver visible
         float inv_max_visible_z_depth;
         float min_visible_color_modifier = 0.1f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
+        void pixelBlit(const int &r, const int &g, const int&b, const int &a);
+        void resetTexturePtr();
     
     public:
     /**
@@ -33,15 +40,18 @@ class ITriangleRasterizer{
          * 
          */
         void applyDepthDimmer(Triangle& this_tri, SDL_Color &col);
+        ~ITriangleRasterizer();
 
 };
 
 class TexturemapRasterizer:public ITriangleRasterizer{
     public:
-        TexturemapRasterizer(SDL_Renderer* my_renderer);
+        TexturemapRasterizer(SDL_Renderer* my_renderer, uint8_t* framebufferpixels, int framebufferpitch);
         void drawTriangle(Triangle& this_triangle);
         
     private:
+        
+
         //Functions for both flat top and flat bottom
         void texelDetermineAlphaX();
         void texelDetermineUV(Triangle& this_triangle);

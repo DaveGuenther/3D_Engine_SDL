@@ -22,7 +22,7 @@ OBJ_core_LIST= $(OBJ)/core/Engine_3D.o $(OBJ)/core/Frame_Rate_Manager.o $(OBJ)/c
 OBJ_input_LIST= $(OBJ)/input/Event_Scanner.o $(OBJ)/input/Input_Parser.o $(OBJ)/input/KeyBindings.o
 OBJ_materials_LIST = $(OBJ)/materials/MaterialMapper.o $(OBJ)/materials/MTL.o $(OBJ)/materials/TextureList.o $(OBJ)/materials/TexturePNG.o
 OBJ_objects_LIST = $(OBJ)/objects/OBJ_Chunk.o $(OBJ)/objects/OBJ_Lex_normal.o $(OBJ)/objects/OBJ_Lex_textureCoord.o $(OBJ)/objects/OBJ_Lex_triFace.o $(OBJ)/objects/OBJ_Lex_vertex.o $(OBJ)/objects/OBJ.o
-OBJ_render_LIST = $(OBJ)/render/AspectRatio.o $(OBJ)/render/Camera.o $(OBJ)/render/Clipper.o $(OBJ)/render/Frustum.o $(OBJ)/render/Rasterizer.o $(OBJ)/render/Renderer.o $(OBJ)/render/TrianglePipeline.o
+OBJ_render_LIST = $(OBJ)/render/AspectRatio.o $(OBJ)/render/Camera.o $(OBJ)/render/Clipper.o $(OBJ)/render/Frustum.o $(OBJ)/render/Rasterizer.o $(OBJ)/render/Renderer.o $(OBJ)/render/TrianglePipeline.o $(OBJ)/render/SDLTextureBlit.o
 OBJ_utility_LIST = $(OBJ)/utility/Mat4x4.o $(OBJ)/utility/Mesh_Pipeline.o $(OBJ)/utility/Mesh.o $(OBJ)/utility/nonVector_Math_Service.o $(OBJ)/utility/Triangle_Modifier.o $(OBJ)/utility/Triangle.o $(OBJ)/utility/Vec2d.o $(OBJ)/utility/Vec3d.o $(OBJ)/utility/Vector_Math_Service.o
 
 all: $(BUILD)/game
@@ -184,6 +184,11 @@ Clipper_SRC= $(SRC)/render/Clipper.cpp $(SRC)/render/Clipper.h
 $(OBJ)/render/Clipper.o: $(Clipper_SRC)
 	$(info ***** Building Clipper.o *****)
 	$(CC) $(CXXFLAGS) $(SRC)/render/Clipper.cpp -o $(OBJ)/render/Clipper.o
+
+PNGTextureBlit_SRC= $(SRC)/render/PNGTextureBlit.cpp $(SRC)/render/PNGTextureBlit.h  
+$(OBJ)/render/PNGTextureBlit.o: $(PNGTextureBlit_SRC)
+	$(info ***** Building PNGTextureBlit.o *****)
+	$(CC) $(CXXFLAGS) $(SRC)/render/PNGTextureBlit.cpp -o $(OBJ)/render/PNGTextureBlit.o
 
 Frustum_SRC= $(SRC)/render/Frustum.cpp $(SRC)/render/Frustum.h  
 $(OBJ)/render/Frustum.o: $(Frustum_SRC)

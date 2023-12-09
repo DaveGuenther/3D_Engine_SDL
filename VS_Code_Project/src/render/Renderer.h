@@ -27,6 +27,9 @@ class Renderer{
         // SDL Objects
         SDL_Window *window;
         SDL_Renderer *renderer;
+        SDL_Texture *framebuffer;
+        uint8_t *framebufferpixels = NULL;
+        int framebufferpitch;
 
         int SCREEN_W;
         int SCREEN_H;
