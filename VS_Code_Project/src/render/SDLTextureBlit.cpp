@@ -1,4 +1,4 @@
-#include "SDL_Texture_Blit.h"
+#include "SDLTextureBlit.h"
 #include <SDL2/SDL.h>
 
 

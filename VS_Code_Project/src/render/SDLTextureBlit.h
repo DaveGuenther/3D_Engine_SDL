@@ -5,13 +5,13 @@
 
 /*
 How to use:
-Instantiate from scope that has an SDL_Renderer* defined with dimensions of pixelbuffer
-lock() the texture so it can be edited
-blit() pixels to the texture as muich as you want (use RGBA8888 format for now)
-unlock() the texture so that it's ready for the render
-RenderCopy() to apply the texture to the renderer.
+-Instantiate from scope that has an SDL_Renderer* defined with dimensions of pixelbuffer then run these commands in sequece during the game loop
+  -lock() the texture so it can be edited
+  -blit() pixels to the texture as muich as you want (use RGBA8888 format for now)
+  -unlock() the texture so that it's ready for the render
+  -RenderCopy() to apply the texture to the renderer.
 
-Outside this class, present the renderer using SDL_RenderPresent(renderer); to show the pixel buffer
+- Outside this class, present the renderer using SDL_RenderPresent(renderer); to show the pixel buffer
 The instance of this class should be destroyed when the calling object goes out of scope (just before it destroys the SDL_Renderer object).
 */
 

@@ -4,14 +4,17 @@
 #include <map>
 
 #include "Renderer.h"
+#include "../render/SDLTextureBlit.h"
 #include "../utility/Vec2d.h"
 #include "../materials/TexturePNG.h"
 
 
 class ITriangleRasterizer{
     protected:
+        
         //Renderer* my_renderer;
         SDL_Renderer *renderer;
+        SDL_Texture_Blit *textureBlit = NULL;
         uint8_t* framebufferpixels;
         Uint32 *pixels;
         Uint32 *p= (Uint32 *)(pixels); // cast for a pointer increments by 4 bytes.(RGBA)
@@ -46,7 +49,7 @@ class ITriangleRasterizer{
 
 class TexturemapRasterizer:public ITriangleRasterizer{
     public:
-        TexturemapRasterizer(SDL_Renderer* my_renderer, uint8_t* framebufferpixels, int framebufferpitch);
+        TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Texture_Blit* myTexBlit, uint8_t* framebufferpixels, int framebufferpitch);
         void drawTriangle(Triangle& this_triangle);
         
     private:

@@ -10,10 +10,12 @@
 #include "../utility/nonVector_Math_Service.h"
 #include "../utility/Mat4x4.h"
 #include "../render/Renderer.h"
+#include "../render/SDLTextureBlit.h"
 #include "../render/Rasterizer.h"
 #include "../render/Clipper.h"
 #include "../render/Frustum.h"
 #include "../render/AspectRatio.h"
+#include "../render/SDLTextureBlit.h"
 #include "../globals.h"
 
 
@@ -27,7 +29,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 	framebuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, SCREEN_W, SCREEN_H);
     //this->framebufferpitch = SCREEN_W*4;
-	
+	this->textureBlit = new SDL_Texture_Blit(this->renderer, this->SCREEN_W, this->SCREEN_H);
 
 	// Projection Matrix
 	fNear = 0.1f;
@@ -142,7 +144,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 
 	
 	// Here goes TextureMapping!
-	std::shared_ptr<ITriangleRasterizer> this_texturemap_rasterizer(new TexturemapRasterizer(renderer, framebufferpixels, framebufferpitch));
+	std::shared_ptr<ITriangleRasterizer> this_texturemap_rasterizer(new TexturemapRasterizer(renderer, this->textureBlit, framebufferpixels, framebufferpitch));
 	this_texturemap_rasterizer->drawTriangle(screenTri);
 
 }
@@ -298,6 +300,7 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
 	SDL_LockTexture(this->framebuffer, NULL, (void **) &this->framebufferpixels, &this->framebufferpitch);
+	this->textureBlit->lock(); // prepare framebuffer for write only operation
 
 	// start with empty triangle buffer to rasterize each frame
 	this->trianglesToRasterize.clear();
@@ -319,9 +322,12 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 		drawFilledTriangle2d(tri);
 		//drawWireFrameTriangle2d(tri);
 		
-	}	
+	}
+	this->textureBlit->unlock(); // pixel write complete, ready to render
+
 	SDL_UnlockTexture(this->framebuffer);
-	SDL_RenderCopy(renderer, this->framebuffer, NULL, NULL);
+	SDL_RenderCopy(renderer, this->textureBlit->getFrameBuffer(), NULL, NULL); // Copy texture pixel buffer to renderer
+	//SDL_RenderCopy(renderer, this->framebuffer, NULL, NULL);
 	drawReticle();
 
 	// Flip video page to screen

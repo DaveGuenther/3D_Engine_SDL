@@ -10,6 +10,7 @@
 #include "../utility/Vec3d.h"
 #include "../utility/Mat4x4.h"
 #include "../utility/Mesh_Pipeline.h"
+#include "../render/SDLTextureBlit.h"
 #include "../render/TrianglePipeline.h"
 #include "../render/Camera.h"
 #include "../render/Clipper.h"
@@ -30,6 +31,7 @@ class Renderer{
         SDL_Texture *framebuffer;
         uint8_t *framebufferpixels = NULL;
         int framebufferpitch;
+        SDL_Texture_Blit *textureBlit = NULL;
 
         int SCREEN_W;
         int SCREEN_H;

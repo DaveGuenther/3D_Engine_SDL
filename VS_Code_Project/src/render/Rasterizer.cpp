@@ -1,7 +1,9 @@
 
-#include "Rasterizer.h"
 #include <iostream>
 #include <math.h>
+#include "Rasterizer.h"
+
+#include "../render/SDLTextureBlit.h"
 #include "../materials/TextureList.h"
 #include "../materials/TexturePNG.h"
 #include "../globals.h"
@@ -31,11 +33,11 @@ void ITriangleRasterizer::pixelBlit(const int &r, const int &g, const int&b, con
     
 }
 
-TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, uint8_t* framebufferpixels, int framebufferpitch){
+TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Texture_Blit* myTexBlit, uint8_t* framebufferpixels, int framebufferpitch){
     this->renderer=my_renderer;
     this->framebufferpixels = framebufferpixels;
     this->framebufferpitch = framebufferpitch;
-    
+    this->textureBlit = myTexBlit;
     this->inv_max_visible_z_depth=1/this->max_visible_z_depth;
 }
 
@@ -220,10 +222,11 @@ void TexturemapRasterizer::texelDrawUV_Point(){
 
     // draw point at (x,)
     //SDL_RenderDrawPoint(this->renderer,this->x, this->y); 
-    this->p = this->texture_head+(this->framebufferpitch*this->y)+this->x;
+    //this->p = this->texture_head+(this->framebufferpitch*this->y)+this->x;
     
     // write a pixel to the Texture framebuffer
-    *this->p = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888),this->col.r, this->col.g, this->col.b, this->col.a);
+    //*this->p = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888),this->col.r, this->col.g, this->col.b, this->col.a);
+    this->textureBlit->blit(this->x, this->y, this->col.r, this->col.g, this->col.b, this->col.a);
     
 }
 
