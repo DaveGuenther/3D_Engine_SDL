@@ -28,7 +28,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	window = SDL_CreateWindow("3D Engine", HALF_SCREEN_W,HALF_SCREEN_H, SCREEN_W, SCREEN_H, screen_mode);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     //this->framebufferpitch = SCREEN_W*4;
-	this->textureBlit = new SDL_Texture_Blit(this->renderer, this->SCREEN_W, this->SCREEN_H);
+	this->textureBlit = new SDL_Texture_Blit(renderer, this->SCREEN_W, this->SCREEN_H);
 
 	// Projection Matrix
 	fNear = 0.1f;

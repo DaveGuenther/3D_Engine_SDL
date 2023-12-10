@@ -3,6 +3,7 @@
 
 
 SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, int SCREEN_W, int SCREEN_H){
+    this->renderer = renderer;
     this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
     this->texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_STREAMING, SCREEN_W, SCREEN_H);
     SDL_QueryTexture(this->texture, &this->textureFormat, NULL, &this->tex_w, &this->tex_h);
