@@ -1,0 +1,1757 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" width="1200" height="854" onload="init(evt)" viewBox="0 0 1200 854" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<!-- Flame graph stack visualization. See https://github.com/brendangregg/FlameGraph for latest version, and http://www.brendangregg.com/flamegraphs.html for examples. -->
+<!-- NOTES:  -->
+<defs>
+	<linearGradient id="background" y1="0" y2="1" x1="0" x2="0" >
+		<stop stop-color="#eeeeee" offset="5%" />
+		<stop stop-color="#eeeeb0" offset="95%" />
+	</linearGradient>
+</defs>
+<style type="text/css">
+	text { font-family:Verdana; font-size:12px; fill:rgb(0,0,0); }
+	#search, #ignorecase { opacity:0.1; cursor:pointer; }
+	#search:hover, #search.show, #ignorecase:hover, #ignorecase.show { opacity:1; }
+	#subtitle { text-anchor:middle; font-color:rgb(160,160,160); }
+	#title { text-anchor:middle; font-size:17px}
+	#unzoom { cursor:pointer; }
+	#frames > *:hover { stroke:black; stroke-width:0.5; cursor:pointer; }
+	.hide { display:none; }
+	.parent { opacity:0.5; }
+</style>
+<script type="text/ecmascript">
+<![CDATA[
+	"use strict";
+	var details, searchbtn, unzoombtn, matchedtxt, svg, searching, currentSearchTerm, ignorecase, ignorecaseBtn;
+	function init(evt) {
+		details = document.getElementById("details").firstChild;
+		searchbtn = document.getElementById("search");
+		ignorecaseBtn = document.getElementById("ignorecase");
+		unzoombtn = document.getElementById("unzoom");
+		matchedtxt = document.getElementById("matched");
+		svg = document.getElementsByTagName("svg")[0];
+		searching = 0;
+		currentSearchTerm = null;
+
+		// use GET parameters to restore a flamegraphs state.
+		var params = get_params();
+		if (params.x && params.y)
+			zoom(find_group(document.querySelector('[x="' + params.x + '"][y="' + params.y + '"]')));
+                if (params.s) search(params.s);
+	}
+
+	// event listeners
+	window.addEventListener("click", function(e) {
+		var target = find_group(e.target);
+		if (target) {
+			if (target.nodeName == "a") {
+				if (e.ctrlKey === false) return;
+				e.preventDefault();
+			}
+			if (target.classList.contains("parent")) unzoom(true);
+			zoom(target);
+			if (!document.querySelector('.parent')) {
+				// we have basically done a clearzoom so clear the url
+				var params = get_params();
+				if (params.x) delete params.x;
+				if (params.y) delete params.y;
+				history.replaceState(null, null, parse_params(params));
+				unzoombtn.classList.add("hide");
+				return;
+			}
+
+			// set parameters for zoom state
+			var el = target.querySelector("rect");
+			if (el && el.attributes && el.attributes.y && el.attributes._orig_x) {
+				var params = get_params()
+				params.x = el.attributes._orig_x.value;
+				params.y = el.attributes.y.value;
+				history.replaceState(null, null, parse_params(params));
+			}
+		}
+		else if (e.target.id == "unzoom") clearzoom();
+		else if (e.target.id == "search") search_prompt();
+		else if (e.target.id == "ignorecase") toggle_ignorecase();
+	}, false)
+
+	// mouse-over for info
+	// show
+	window.addEventListener("mouseover", function(e) {
+		var target = find_group(e.target);
+		if (target) details.nodeValue = "Function: " + g_to_text(target);
+	}, false)
+
+	// clear
+	window.addEventListener("mouseout", function(e) {
+		var target = find_group(e.target);
+		if (target) details.nodeValue = ' ';
+	}, false)
+
+	// ctrl-F for search
+	// ctrl-I to toggle case-sensitive search
+	window.addEventListener("keydown",function (e) {
+		if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
+			e.preventDefault();
+			search_prompt();
+		}
+		else if (e.ctrlKey && e.keyCode === 73) {
+			e.preventDefault();
+			toggle_ignorecase();
+		}
+	}, false)
+
+	// functions
+	function get_params() {
+		var params = {};
+		var paramsarr = window.location.search.substr(1).split('&');
+		for (var i = 0; i < paramsarr.length; ++i) {
+			var tmp = paramsarr[i].split("=");
+			if (!tmp[0] || !tmp[1]) continue;
+			params[tmp[0]]  = decodeURIComponent(tmp[1]);
+		}
+		return params;
+	}
+	function parse_params(params) {
+		var uri = "?";
+		for (var key in params) {
+			uri += key + '=' + encodeURIComponent(params[key]) + '&';
+		}
+		if (uri.slice(-1) == "&")
+			uri = uri.substring(0, uri.length - 1);
+		if (uri == '?')
+			uri = window.location.href.split('?')[0];
+		return uri;
+	}
+	function find_child(node, selector) {
+		var children = node.querySelectorAll(selector);
+		if (children.length) return children[0];
+	}
+	function find_group(node) {
+		var parent = node.parentElement;
+		if (!parent) return;
+		if (parent.id == "frames") return node;
+		return find_group(parent);
+	}
+	function orig_save(e, attr, val) {
+		if (e.attributes["_orig_" + attr] != undefined) return;
+		if (e.attributes[attr] == undefined) return;
+		if (val == undefined) val = e.attributes[attr].value;
+		e.setAttribute("_orig_" + attr, val);
+	}
+	function orig_load(e, attr) {
+		if (e.attributes["_orig_"+attr] == undefined) return;
+		e.attributes[attr].value = e.attributes["_orig_" + attr].value;
+		e.removeAttribute("_orig_"+attr);
+	}
+	function g_to_text(e) {
+		var text = find_child(e, "title").firstChild.nodeValue;
+		return (text)
+	}
+	function g_to_func(e) {
+		var func = g_to_text(e);
+		// if there's any manipulation we want to do to the function
+		// name before it's searched, do it here before returning.
+		return (func);
+	}
+	function update_text(e) {
+		var r = find_child(e, "rect");
+		var t = find_child(e, "text");
+		var w = parseFloat(r.attributes.width.value) -3;
+		var txt = find_child(e, "title").textContent.replace(/\([^(]*\)$/,"");
+		t.attributes.x.value = parseFloat(r.attributes.x.value) + 3;
+
+		// Smaller than this size won't fit anything
+		if (w < 2 * 12 * 0.59) {
+			t.textContent = "";
+			return;
+		}
+
+		t.textContent = txt;
+		var sl = t.getSubStringLength(0, txt.length);
+		// check if only whitespace or if we can fit the entire string into width w
+		if (/^ *$/.test(txt) || sl < w)
+			return;
+
+		// this isn't perfect, but gives a good starting point
+		// and avoids calling getSubStringLength too often
+		var start = Math.floor((w/sl) * txt.length);
+		for (var x = start; x > 0; x = x-2) {
+			if (t.getSubStringLength(0, x + 2) <= w) {
+				t.textContent = txt.substring(0, x) + "..";
+				return;
+			}
+		}
+		t.textContent = "";
+	}
+
+	// zoom
+	function zoom_reset(e) {
+		if (e.attributes != undefined) {
+			orig_load(e, "x");
+			orig_load(e, "width");
+		}
+		if (e.childNodes == undefined) return;
+		for (var i = 0, c = e.childNodes; i < c.length; i++) {
+			zoom_reset(c[i]);
+		}
+	}
+	function zoom_child(e, x, ratio) {
+		if (e.attributes != undefined) {
+			if (e.attributes.x != undefined) {
+				orig_save(e, "x");
+				e.attributes.x.value = (parseFloat(e.attributes.x.value) - x - 10) * ratio + 10;
+				if (e.tagName == "text")
+					e.attributes.x.value = find_child(e.parentNode, "rect[x]").attributes.x.value + 3;
+			}
+			if (e.attributes.width != undefined) {
+				orig_save(e, "width");
+				e.attributes.width.value = parseFloat(e.attributes.width.value) * ratio;
+			}
+		}
+
+		if (e.childNodes == undefined) return;
+		for (var i = 0, c = e.childNodes; i < c.length; i++) {
+			zoom_child(c[i], x - 10, ratio);
+		}
+	}
+	function zoom_parent(e) {
+		if (e.attributes) {
+			if (e.attributes.x != undefined) {
+				orig_save(e, "x");
+				e.attributes.x.value = 10;
+			}
+			if (e.attributes.width != undefined) {
+				orig_save(e, "width");
+				e.attributes.width.value = parseInt(svg.width.baseVal.value) - (10 * 2);
+			}
+		}
+		if (e.childNodes == undefined) return;
+		for (var i = 0, c = e.childNodes; i < c.length; i++) {
+			zoom_parent(c[i]);
+		}
+	}
+	function zoom(node) {
+		var attr = find_child(node, "rect").attributes;
+		var width = parseFloat(attr.width.value);
+		var xmin = parseFloat(attr.x.value);
+		var xmax = parseFloat(xmin + width);
+		var ymin = parseFloat(attr.y.value);
+		var ratio = (svg.width.baseVal.value - 2 * 10) / width;
+
+		// XXX: Workaround for JavaScript float issues (fix me)
+		var fudge = 0.0001;
+
+		unzoombtn.classList.remove("hide");
+
+		var el = document.getElementById("frames").children;
+		for (var i = 0; i < el.length; i++) {
+			var e = el[i];
+			var a = find_child(e, "rect").attributes;
+			var ex = parseFloat(a.x.value);
+			var ew = parseFloat(a.width.value);
+			var upstack;
+			// Is it an ancestor
+			if (0 == 0) {
+				upstack = parseFloat(a.y.value) > ymin;
+			} else {
+				upstack = parseFloat(a.y.value) < ymin;
+			}
+			if (upstack) {
+				// Direct ancestor
+				if (ex <= xmin && (ex+ew+fudge) >= xmax) {
+					e.classList.add("parent");
+					zoom_parent(e);
+					update_text(e);
+				}
+				// not in current path
+				else
+					e.classList.add("hide");
+			}
+			// Children maybe
+			else {
+				// no common path
+				if (ex < xmin || ex + fudge >= xmax) {
+					e.classList.add("hide");
+				}
+				else {
+					zoom_child(e, xmin, ratio);
+					update_text(e);
+				}
+			}
+		}
+		search();
+	}
+	function unzoom(dont_update_text) {
+		unzoombtn.classList.add("hide");
+		var el = document.getElementById("frames").children;
+		for(var i = 0; i < el.length; i++) {
+			el[i].classList.remove("parent");
+			el[i].classList.remove("hide");
+			zoom_reset(el[i]);
+			if(!dont_update_text) update_text(el[i]);
+		}
+		search();
+	}
+	function clearzoom() {
+		unzoom();
+
+		// remove zoom state
+		var params = get_params();
+		if (params.x) delete params.x;
+		if (params.y) delete params.y;
+		history.replaceState(null, null, parse_params(params));
+	}
+
+	// search
+	function toggle_ignorecase() {
+		ignorecase = !ignorecase;
+		if (ignorecase) {
+			ignorecaseBtn.classList.add("show");
+		} else {
+			ignorecaseBtn.classList.remove("show");
+		}
+		reset_search();
+		search();
+	}
+	function reset_search() {
+		var el = document.querySelectorAll("#frames rect");
+		for (var i = 0; i < el.length; i++) {
+			orig_load(el[i], "fill")
+		}
+		var params = get_params();
+		delete params.s;
+		history.replaceState(null, null, parse_params(params));
+	}
+	function search_prompt() {
+		if (!searching) {
+			var term = prompt("Enter a search term (regexp " +
+			    "allowed, eg: ^ext4_)"
+			    + (ignorecase ? ", ignoring case" : "")
+			    + "\nPress Ctrl-i to toggle case sensitivity", "");
+			if (term != null) search(term);
+		} else {
+			reset_search();
+			searching = 0;
+			currentSearchTerm = null;
+			searchbtn.classList.remove("show");
+			searchbtn.firstChild.nodeValue = "Search"
+			matchedtxt.classList.add("hide");
+			matchedtxt.firstChild.nodeValue = ""
+		}
+	}
+	function search(term) {
+		if (term) currentSearchTerm = term;
+
+		var re = new RegExp(currentSearchTerm, ignorecase ? 'i' : '');
+		var el = document.getElementById("frames").children;
+		var matches = new Object();
+		var maxwidth = 0;
+		for (var i = 0; i < el.length; i++) {
+			var e = el[i];
+			var func = g_to_func(e);
+			var rect = find_child(e, "rect");
+			if (func == null || rect == null)
+				continue;
+
+			// Save max width. Only works as we have a root frame
+			var w = parseFloat(rect.attributes.width.value);
+			if (w > maxwidth)
+				maxwidth = w;
+
+			if (func.match(re)) {
+				// highlight
+				var x = parseFloat(rect.attributes.x.value);
+				orig_save(rect, "fill");
+				rect.attributes.fill.value = "rgb(230,0,230)";
+
+				// remember matches
+				if (matches[x] == undefined) {
+					matches[x] = w;
+				} else {
+					if (w > matches[x]) {
+						// overwrite with parent
+						matches[x] = w;
+					}
+				}
+				searching = 1;
+			}
+		}
+		if (!searching)
+			return;
+		var params = get_params();
+		params.s = currentSearchTerm;
+		history.replaceState(null, null, parse_params(params));
+
+		searchbtn.classList.add("show");
+		searchbtn.firstChild.nodeValue = "Reset Search";
+
+		// calculate percent matched, excluding vertical overlap
+		var count = 0;
+		var lastx = -1;
+		var lastw = 0;
+		var keys = Array();
+		for (k in matches) {
+			if (matches.hasOwnProperty(k))
+				keys.push(k);
+		}
+		// sort the matched frames by their x location
+		// ascending, then width descending
+		keys.sort(function(a, b){
+			return a - b;
+		});
+		// Step through frames saving only the biggest bottom-up frames
+		// thanks to the sort order. This relies on the tree property
+		// where children are always smaller than their parents.
+		var fudge = 0.0001;	// JavaScript floating point
+		for (var k in keys) {
+			var x = parseFloat(keys[k]);
+			var w = matches[keys[k]];
+			if (x >= lastx + lastw - fudge) {
+				count += w;
+				lastx = x;
+				lastw = w;
+			}
+		}
+		// display matched percent
+		matchedtxt.classList.remove("hide");
+		var pct = 100 * count / maxwidth;
+		if (pct != 100) pct = pct.toFixed(1)
+		matchedtxt.firstChild.nodeValue = "Matched: " + pct + "%";
+	}
+]]>
+</script>
+<rect x="0.0" y="0" width="1200.0" height="854.0" fill="url(#background)"  />
+<text id="title" x="600.00" y="24" >Flame Graph</text>
+<text id="details" x="10.00" y="837" > </text>
+<text id="unzoom" x="10.00" y="24" class="hide">Reset Zoom</text>
+<text id="search" x="1090.00" y="24" >Search</text>
+<text id="ignorecase" x="1174.00" y="24" >ic</text>
+<text id="matched" x="1090.00" y="837" > </text>
+<g id="frames">
+<g >
+<title>void std::_Destroy_aux&lt;false&gt;::__destroy&lt;Triangle*&gt;(Triangle*, Triangle*) (4 samples, 2.14%)</title><rect x="981.8" y="469" width="25.2" height="15.0" fill="rgb(246,189,45)" rx="2" ry="2" />
+<text  x="984.76" y="479.5" >v..</text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_vector&lt;std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;::_Safe_vector(__gnu_debug::_Safe_vector&lt;std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt; const&amp;) (1 samples, 0.53%)</title><rect x="729.4" y="693" width="6.3" height="15.0" fill="rgb(224,89,21)" rx="2" ry="2" />
+<text  x="732.36" y="703.5" ></text>
+</g>
+<g >
+<title>std::__new_allocator&lt;SDL_Color&gt;::allocate(unsigned long, void const*) (1 samples, 0.53%)</title><rect x="798.8" y="325" width="6.3" height="15.0" fill="rgb(205,0,0)" rx="2" ry="2" />
+<text  x="801.77" y="335.5" ></text>
+</g>
+<g >
+<title>Mesh_Pipeline::Add_OBJ_Mesh_to_Pipeline(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;, Vec3d, Vec3d)&lt;0000000000072610&gt; (29 samples, 15.51%)</title><rect x="798.8" y="741" width="183.0" height="15.0" fill="rgb(215,47,11)" rx="2" ry="2" />
+<text  x="801.77" y="751.5" >Mesh_Pipeline::Add_OBJ_..</text>
+</g>
+<g >
+<title>std::__new_allocator&lt;SDL_Color&gt;::deallocate(SDL_Color*, unsigned long) (1 samples, 0.53%)</title><rect x="1007.0" y="229" width="6.3" height="15.0" fill="rgb(245,185,44)" rx="2" ry="2" />
+<text  x="1010.01" y="239.5" ></text>
+</g>
+<g >
+<title>TexturePNG::getPixelAtSurfaceUV(float const&amp;, float const&amp;, SDL_Color&amp;)&lt;00000000000464d0&gt; (7 samples, 3.74%)</title><rect x="426.5" y="677" width="44.1" height="15.0" fill="rgb(223,85,20)" rx="2" ry="2" />
+<text  x="429.47" y="687.5" >Text..</text>
+</g>
+<g >
+<title>std::_Sp_counted_base&lt;(__gnu_cxx::_Lock_policy)2&gt;::_M_release() (3 samples, 1.60%)</title><rect x="988.1" y="373" width="18.9" height="15.0" fill="rgb(240,165,39)" rx="2" ry="2" />
+<text  x="991.07" y="383.5" ></text>
+</g>
+<g >
+<title>void std::__final_insertion_sort&lt;__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt; &gt;(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt;) (1 samples, 0.53%)</title><rect x="754.6" y="677" width="6.3" height="15.0" fill="rgb(210,24,5)" rx="2" ry="2" />
+<text  x="757.60" y="687.5" ></text>
+</g>
+<g >
+<title>void std::_Construct&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const&amp;&gt;(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="437" width="6.3" height="15.0" fill="rgb(208,13,3)" rx="2" ry="2" />
+<text  x="801.77" y="447.5" ></text>
+</g>
+<g >
+<title>Triangle::getTextureRawPtr()&lt;000000000007bb70&gt; (2 samples, 1.07%)</title><rect x="369.7" y="677" width="12.6" height="15.0" fill="rgb(236,143,34)" rx="2" ry="2" />
+<text  x="372.68" y="687.5" ></text>
+</g>
+<g >
+<title>std::__shared_ptr&lt;TexturePNG, (__gnu_cxx::_Lock_policy)2&gt;::__shared_ptr&lt;std::allocator&lt;void&gt;, TexturePNG&amp;&gt;(std::_Sp_alloc_shared_tag&lt;std::allocator&lt;void&gt; &gt;, TexturePNG&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="629" width="6.3" height="15.0" fill="rgb(250,207,49)" rx="2" ry="2" />
+<text  x="801.77" y="639.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::~vector() (1 samples, 0.53%)</title><rect x="1007.0" y="293" width="6.3" height="15.0" fill="rgb(212,34,8)" rx="2" ry="2" />
+<text  x="1010.01" y="303.5" ></text>
+</g>
+<g >
+<title>Triangle* std::__uninitialized_copy_a&lt;Triangle const*, Triangle*, Triangle&gt;(Triangle const*, Triangle const*, Triangle*, std::allocator&lt;Triangle&gt;&amp;) (1 samples, 0.53%)</title><rect x="786.1" y="661" width="6.4" height="15.0" fill="rgb(224,88,21)" rx="2" ry="2" />
+<text  x="789.15" y="671.5" ></text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::Populate()&lt;0000000000027560&gt; (15 samples, 8.02%)</title><rect x="887.1" y="261" width="94.7" height="15.0" fill="rgb(241,167,40)" rx="2" ry="2" />
+<text  x="890.11" y="271.5" >tcmalloc::C..</text>
+</g>
+<g >
+<title>std::__debug::vector&lt;Mesh, std::allocator&lt;Mesh&gt; &gt;::~vector() (4 samples, 2.14%)</title><rect x="981.8" y="645" width="25.2" height="15.0" fill="rgb(247,194,46)" rx="2" ry="2" />
+<text  x="984.76" y="655.5" >s..</text>
+</g>
+<g >
+<title>SDL_Color* std::copy&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, SDL_Color*&gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, SDL_Color*) (9 samples, 4.81%)</title><rect x="830.3" y="341" width="56.8" height="15.0" fill="rgb(206,4,1)" rx="2" ry="2" />
+<text  x="833.32" y="351.5" >SDL_Co..</text>
+</g>
+<g >
+<title>std::_Sp_counted_base&lt;(__gnu_cxx::_Lock_policy)2&gt;::_M_release() (4 samples, 2.14%)</title><rect x="981.8" y="693" width="25.2" height="15.0" fill="rgb(240,165,39)" rx="2" ry="2" />
+<text  x="984.76" y="703.5" >s..</text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::_M_create_storage(unsigned long) (1 samples, 0.53%)</title><rect x="798.8" y="373" width="6.3" height="15.0" fill="rgb(212,36,8)" rx="2" ry="2" />
+<text  x="801.77" y="383.5" ></text>
+</g>
+<g >
+<title>TextureList::insertOrAssignTexture(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;)&lt;000000000003cbe0&gt; (1 samples, 0.53%)</title><rect x="798.8" y="677" width="6.3" height="15.0" fill="rgb(226,98,23)" rx="2" ry="2" />
+<text  x="801.77" y="687.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::bidirectional_iterator_tag&gt;::_Safe_iterator(__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, __gnu_debug::_Safe_sequence_base const*) (1 samples, 0.53%)</title><rect x="716.7" y="677" width="6.3" height="15.0" fill="rgb(234,134,32)" rx="2" ry="2" />
+<text  x="719.74" y="687.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_container&lt;std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::allocator&lt;Triangle&gt;, __gnu_debug::_Safe_sequence, true&gt;::_Safe_container() (1 samples, 0.53%)</title><rect x="678.9" y="677" width="6.3" height="15.0" fill="rgb(246,191,45)" rx="2" ry="2" />
+<text  x="681.88" y="687.5" ></text>
+</g>
+<g >
+<title>Triangle::getUVPoint(int)&lt;000000000007c110&gt; (1 samples, 0.53%)</title><rect x="628.4" y="693" width="6.3" height="15.0" fill="rgb(211,31,7)" rx="2" ry="2" />
+<text  x="631.40" y="703.5" ></text>
+</g>
+<g >
+<title>Triangle::setUnitNormalFromPoints()&lt;000000000007bbf0&gt; (2 samples, 1.07%)</title><rect x="691.5" y="709" width="12.6" height="15.0" fill="rgb(249,202,48)" rx="2" ry="2" />
+<text  x="694.50" y="719.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_sequence&lt;std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;::_Safe_sequence() (1 samples, 0.53%)</title><rect x="678.9" y="661" width="6.3" height="15.0" fill="rgb(232,126,30)" rx="2" ry="2" />
+<text  x="681.88" y="671.5" ></text>
+</g>
+<g >
+<title>SDL_DYNAPI_entry (1 samples, 0.53%)</title><rect x="344.4" y="661" width="6.3" height="15.0" fill="rgb(212,36,8)" rx="2" ry="2" />
+<text  x="347.44" y="671.5" ></text>
+</g>
+<g >
+<title>tcmalloc::ThreadCache::FetchFromCentralCache(unsigned int, int, void* (*)(unsigned long))&lt;0000000000027940&gt; (15 samples, 8.02%)</title><rect x="887.1" y="309" width="94.7" height="15.0" fill="rgb(239,158,37)" rx="2" ry="2" />
+<text  x="890.11" y="319.5" >tcmalloc::T..</text>
+</g>
+<g >
+<title>TexturemapRasterizer::texelDrawUV_Point()&lt;0000000000062060&gt; (8 samples, 4.28%)</title><rect x="559.0" y="677" width="50.5" height="15.0" fill="rgb(251,213,51)" rx="2" ry="2" />
+<text  x="561.98" y="687.5" >Textu..</text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::_M_deallocate(SDL_Color*, unsigned long) (1 samples, 0.53%)</title><rect x="1000.7" y="149" width="6.3" height="15.0" fill="rgb(224,91,21)" rx="2" ry="2" />
+<text  x="1003.70" y="159.5" ></text>
+</g>
+<g >
+<title>std::shared_ptr&lt;TexturePNG&gt;::~shared_ptr() (1 samples, 0.53%)</title><rect x="634.7" y="677" width="6.3" height="15.0" fill="rgb(209,20,4)" rx="2" ry="2" />
+<text  x="637.71" y="687.5" ></text>
+</g>
+<g >
+<title>std::_Sp_counted_ptr_inplace&lt;TexturePNG, std::allocator&lt;void&gt;, (__gnu_cxx::_Lock_policy)2&gt;::_M_dispose() (1 samples, 0.53%)</title><rect x="1007.0" y="469" width="6.3" height="15.0" fill="rgb(239,158,37)" rx="2" ry="2" />
+<text  x="1010.01" y="479.5" ></text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::InsertRange(void*, void*, int)&lt;00000000000262b0&gt; (1 samples, 0.53%)</title><rect x="1000.7" y="69" width="6.3" height="15.0" fill="rgb(254,227,54)" rx="2" ry="2" />
+<text  x="1003.70" y="79.5" ></text>
+</g>
+<g >
+<title>f64xsubf128@@GLIBC_2.28&lt;0000000000071480&gt; (1 samples, 0.53%)</title><rect x="464.3" y="661" width="6.3" height="15.0" fill="rgb(248,199,47)" rx="2" ry="2" />
+<text  x="467.33" y="671.5" ></text>
+</g>
+<g >
+<title>write (1 samples, 0.53%)</title><rect x="104.7" y="773" width="6.3" height="15.0" fill="rgb(228,107,25)" rx="2" ry="2" />
+<text  x="107.65" y="783.5" ></text>
+</g>
+<g >
+<title>tcmalloc::PageHeap::NewWithSizeClass(unsigned long, unsigned int)&lt;0000000000027480&gt; (1 samples, 0.53%)</title><rect x="975.5" y="245" width="6.3" height="15.0" fill="rgb(214,44,10)" rx="2" ry="2" />
+<text  x="978.45" y="255.5" ></text>
+</g>
+<g >
+<title>TrianglePipeline::setPipelineFromMeshes(std::shared_ptr&lt;Mesh_Pipeline&gt;)&lt;0000000000066580&gt; (4 samples, 2.14%)</title><rect x="773.5" y="741" width="25.3" height="15.0" fill="rgb(222,80,19)" rx="2" ry="2" />
+<text  x="776.53" y="751.5" >T..</text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::FetchFromOneSpansSafe(int, void**, void**)&lt;0000000000027760&gt; (1 samples, 0.53%)</title><rect x="136.2" y="741" width="6.3" height="15.0" fill="rgb(242,173,41)" rx="2" ry="2" />
+<text  x="139.20" y="751.5" ></text>
+</g>
+<g >
+<title>std::_Sp_counted_ptr&lt;Renderer*, (__gnu_cxx::_Lock_policy)2&gt;::_M_dispose() (1 samples, 0.53%)</title><rect x="1007.0" y="677" width="6.3" height="15.0" fill="rgb(215,49,11)" rx="2" ry="2" />
+<text  x="1010.01" y="687.5" ></text>
+</g>
+<g >
+<title>SDL_MapRGBA&lt;0000000000042e10&gt; (1 samples, 0.53%)</title><rect x="350.7" y="661" width="6.4" height="15.0" fill="rgb(214,43,10)" rx="2" ry="2" />
+<text  x="353.75" y="671.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;Mesh&gt;(Mesh*) (4 samples, 2.14%)</title><rect x="981.8" y="565" width="25.2" height="15.0" fill="rgb(221,73,17)" rx="2" ry="2" />
+<text  x="984.76" y="575.5" >v..</text>
+</g>
+<g >
+<title>tcmalloc::ThreadCache::ListTooLong(tcmalloc::ThreadCache::FreeList*, unsigned int)&lt;0000000000026710&gt; (1 samples, 0.53%)</title><rect x="1000.7" y="101" width="6.3" height="15.0" fill="rgb(252,218,52)" rx="2" ry="2" />
+<text  x="1003.70" y="111.5" ></text>
+</g>
+<g >
+<title>SDL_Color* std::__copy_move_a2&lt;false, SDL_Color const*, SDL_Color*&gt;(SDL_Color const*, SDL_Color const*, SDL_Color*) (2 samples, 1.07%)</title><rect x="830.3" y="293" width="12.6" height="15.0" fill="rgb(250,210,50)" rx="2" ry="2" />
+<text  x="833.32" y="303.5" ></text>
+</g>
+<g >
+<title>SDL_MapRGBA&lt;0000000000042e10&gt; (1 samples, 0.53%)</title><rect x="577.9" y="661" width="6.3" height="15.0" fill="rgb(214,43,10)" rx="2" ry="2" />
+<text  x="580.91" y="671.5" ></text>
+</g>
+<g >
+<title>__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;::base() const (1 samples, 0.53%)</title><rect x="811.4" y="421" width="6.3" height="15.0" fill="rgb(236,143,34)" rx="2" ry="2" />
+<text  x="814.39" y="431.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;TexturePNG&gt;(TexturePNG*) (3 samples, 1.60%)</title><rect x="988.1" y="325" width="18.9" height="15.0" fill="rgb(213,36,8)" rx="2" ry="2" />
+<text  x="991.07" y="335.5" ></text>
+</g>
+<g >
+<title>all (187 samples, 100%)</title><rect x="10.0" y="805" width="1180.0" height="15.0" fill="rgb(213,39,9)" rx="2" ry="2" />
+<text  x="13.00" y="815.5" ></text>
+</g>
+<g >
+<title>void std::allocator_traits&lt;std::allocator&lt;void&gt; &gt;::construct&lt;TexturePNG, TexturePNG&amp;&gt;(std::allocator&lt;void&gt;&amp;, TexturePNG*, TexturePNG&amp;)[inline] (27 samples, 14.44%)</title><rect x="811.4" y="581" width="170.4" height="15.0" fill="rgb(219,65,15)" rx="2" ry="2" />
+<text  x="814.39" y="591.5" >void std::allocator_tr..</text>
+</g>
+<g >
+<title>void std::_Destroy_aux&lt;false&gt;::__destroy&lt;Triangle*&gt;(Triangle*, Triangle*) (1 samples, 0.53%)</title><rect x="1007.0" y="581" width="6.3" height="15.0" fill="rgb(246,189,45)" rx="2" ry="2" />
+<text  x="1010.01" y="591.5" ></text>
+</g>
+<g >
+<title>std::shared_ptr&lt;TexturePNG&gt;::shared_ptr&lt;std::allocator&lt;void&gt;, TexturePNG&amp;&gt;(std::_Sp_alloc_shared_tag&lt;std::allocator&lt;void&gt; &gt;, TexturePNG&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="645" width="6.3" height="15.0" fill="rgb(207,13,3)" rx="2" ry="2" />
+<text  x="801.77" y="655.5" ></text>
+</g>
+<g >
+<title>TexturePNG::TexturePNG(TexturePNG const&amp;)&lt;000000000003dcb0&gt; (27 samples, 14.44%)</title><rect x="811.4" y="549" width="170.4" height="15.0" fill="rgb(241,167,40)" rx="2" ry="2" />
+<text  x="814.39" y="559.5" >TexturePNG::TexturePNG..</text>
+</g>
+<g >
+<title>SDL_Color* std::__copy_move_a&lt;false, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, SDL_Color*&gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, SDL_Color*) (3 samples, 1.60%)</title><rect x="830.3" y="325" width="19.0" height="15.0" fill="rgb(219,65,15)" rx="2" ry="2" />
+<text  x="833.32" y="335.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::vector(std::__debug::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; const&amp;) (27 samples, 14.44%)</title><rect x="811.4" y="533" width="170.4" height="15.0" fill="rgb(249,205,49)" rx="2" ry="2" />
+<text  x="814.39" y="543.5" >std::__debug::vector&lt;s..</text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::vector(std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="405" width="6.3" height="15.0" fill="rgb(207,10,2)" rx="2" ry="2" />
+<text  x="801.77" y="415.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::vector(std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; const&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="517" width="6.3" height="15.0" fill="rgb(245,187,44)" rx="2" ry="2" />
+<text  x="801.77" y="527.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::begin() (1 samples, 0.53%)</title><rect x="716.7" y="709" width="6.3" height="15.0" fill="rgb(237,150,35)" rx="2" ry="2" />
+<text  x="719.74" y="719.5" ></text>
+</g>
+<g >
+<title>Renderer::refreshScreen(std::shared_ptr&lt;TrianglePipeline&gt;)&lt;0000000000065220&gt; (98 samples, 52.41%)</title><rect x="155.1" y="741" width="618.4" height="15.0" fill="rgb(254,227,54)" rx="2" ry="2" />
+<text  x="158.13" y="751.5" >Renderer::refreshScreen(std::shared_ptr&lt;TrianglePipeline&gt;)&lt;0000000000065220&gt;</text>
+</g>
+<g >
+<title>VectorMathService::crossProduct(Vec3d const&amp;, Vec3d const&amp;)&lt;000000000007db40&gt; (1 samples, 0.53%)</title><rect x="691.5" y="693" width="6.3" height="15.0" fill="rgb(208,17,4)" rx="2" ry="2" />
+<text  x="694.50" y="703.5" ></text>
+</g>
+<g >
+<title>pthread_mutex_lock@@GLIBC_2.2.5 (1 samples, 0.53%)</title><rect x="1171.1" y="789" width="6.3" height="15.0" fill="rgb(244,179,42)" rx="2" ry="2" />
+<text  x="1174.07" y="799.5" ></text>
+</g>
+<g >
+<title>std::__shared_ptr&lt;TexturePNG, (__gnu_cxx::_Lock_policy)2&gt;::get() const (2 samples, 1.07%)</title><rect x="369.7" y="661" width="12.6" height="15.0" fill="rgb(208,17,4)" rx="2" ry="2" />
+<text  x="372.68" y="671.5" ></text>
+</g>
+<g >
+<title>void std::__unguarded_insertion_sort&lt;__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt; &gt;(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt;) (1 samples, 0.53%)</title><rect x="754.6" y="661" width="6.3" height="15.0" fill="rgb(237,149,35)" rx="2" ry="2" />
+<text  x="757.60" y="671.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::~vector() (3 samples, 1.60%)</title><rect x="988.1" y="293" width="18.9" height="15.0" fill="rgb(208,16,3)" rx="2" ry="2" />
+<text  x="991.07" y="303.5" ></text>
+</g>
+<g >
+<title>void std::__introsort_loop&lt;__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, long, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt; &gt;(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, long, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt;) (1 samples, 0.53%)</title><rect x="760.9" y="661" width="6.3" height="15.0" fill="rgb(211,31,7)" rx="2" ry="2" />
+<text  x="763.91" y="671.5" ></text>
+</g>
+<g >
+<title>Mesh::~Mesh()&lt;00000000000543e0&gt; (4 samples, 2.14%)</title><rect x="981.8" y="549" width="25.2" height="15.0" fill="rgb(228,108,26)" rx="2" ry="2" />
+<text  x="984.76" y="559.5" >M..</text>
+</g>
+<g >
+<title>Vec3d::Vec3d(Vec3d const&amp;) (1 samples, 0.53%)</title><rect x="641.0" y="661" width="6.3" height="15.0" fill="rgb(210,25,5)" rx="2" ry="2" />
+<text  x="644.02" y="671.5" ></text>
+</g>
+<g >
+<title>Renderer::drawFilledTriangle2d(Triangle)&lt;0000000000063d40&gt; (75 samples, 40.11%)</title><rect x="155.1" y="725" width="473.3" height="15.0" fill="rgb(214,42,10)" rx="2" ry="2" />
+<text  x="158.13" y="735.5" >Renderer::drawFilledTriangle2d(Triangle)&lt;0000000000063d40&gt;</text>
+</g>
+<g >
+<title>Triangle* std::__do_uninit_copy&lt;Triangle const*, Triangle*&gt;(Triangle const*, Triangle const*, Triangle*) (1 samples, 0.53%)</title><rect x="786.1" y="613" width="6.4" height="15.0" fill="rgb(236,143,34)" rx="2" ry="2" />
+<text  x="789.15" y="623.5" ></text>
+</g>
+<g >
+<title>_XimOpenIM&lt;0000000000069e70&gt; (1 samples, 0.53%)</title><rect x="16.3" y="773" width="6.3" height="15.0" fill="rgb(249,203,48)" rx="2" ry="2" />
+<text  x="19.31" y="783.5" ></text>
+</g>
+<g >
+<title>SDL_Texture_Blit::blit(unsigned int, unsigned int, unsigned char, unsigned char, unsigned char, unsigned char)&lt;000000000005c8e0&gt; (4 samples, 2.14%)</title><rect x="584.2" y="661" width="25.3" height="15.0" fill="rgb(226,100,24)" rx="2" ry="2" />
+<text  x="587.22" y="671.5" >S..</text>
+</g>
+<g >
+<title>OBJ::buildMesh(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;)&lt;00000000000510a0&gt; (29 samples, 15.51%)</title><rect x="798.8" y="709" width="183.0" height="15.0" fill="rgb(211,31,7)" rx="2" ry="2" />
+<text  x="801.77" y="719.5" >OBJ::buildMesh(std::__c..</text>
+</g>
+<g >
+<title>TexturemapRasterizer::drawTriangle(Triangle&amp;)&lt;0000000000060800&gt; (74 samples, 39.57%)</title><rect x="155.1" y="709" width="467.0" height="15.0" fill="rgb(246,191,45)" rx="2" ry="2" />
+<text  x="158.13" y="719.5" >TexturemapRasterizer::drawTriangle(Triangle&amp;)&lt;0000000000060800&gt;</text>
+</g>
+<g >
+<title>__gnu_internal::get_mutex(unsigned char)&lt;00000000000e0e80&gt; (1 samples, 0.53%)</title><rect x="142.5" y="789" width="6.3" height="15.0" fill="rgb(209,21,5)" rx="2" ry="2" />
+<text  x="145.51" y="799.5" ></text>
+</g>
+<g >
+<title>TexturemapRasterizer::texelDrawUV_Point()&lt;0000000000062060&gt; (4 samples, 2.14%)</title><rect x="344.4" y="677" width="25.3" height="15.0" fill="rgb(251,213,51)" rx="2" ry="2" />
+<text  x="347.44" y="687.5" >T..</text>
+</g>
+<g >
+<title>void std::_Destroy&lt;Triangle&gt;(Triangle*) (4 samples, 2.14%)</title><rect x="981.8" y="453" width="25.2" height="15.0" fill="rgb(230,115,27)" rx="2" ry="2" />
+<text  x="984.76" y="463.5" >v..</text>
+</g>
+<g >
+<title>writev@@GLIBC_2.2.5&lt;0000000000110470&gt; (8 samples, 4.28%)</title><rect x="41.6" y="773" width="50.4" height="15.0" fill="rgb(229,111,26)" rx="2" ry="2" />
+<text  x="44.55" y="783.5" >write..</text>
+</g>
+<g >
+<title>OBJ_Chunk::OBJ_Chunk(std::__cxx11::basic_stringstream&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;&amp;, std::__debug::unordered_map&lt;std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;, std::hash&lt;std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;, std::equal_to&lt;std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;, std::allocator&lt;std::pair&lt;std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt; &gt; const&amp;) (1 samples, 0.53%)</title><rect x="805.1" y="677" width="6.3" height="15.0" fill="rgb(247,193,46)" rx="2" ry="2" />
+<text  x="808.08" y="687.5" ></text>
+</g>
+<g >
+<title>0x636e0a20204b4340 (1 samples, 0.53%)</title><rect x="104.7" y="789" width="6.3" height="15.0" fill="rgb(215,48,11)" rx="2" ry="2" />
+<text  x="107.65" y="799.5" ></text>
+</g>
+<g >
+<title>inflate&lt;000000000000c680&gt; (1 samples, 0.53%)</title><rect x="1152.1" y="789" width="6.3" height="15.0" fill="rgb(220,71,17)" rx="2" ry="2" />
+<text  x="1155.14" y="799.5" ></text>
+</g>
+<g >
+<title>__libc_init_first@@GLIBC_2.2.5&lt;0000000000027c40&gt; (137 samples, 73.26%)</title><rect x="148.8" y="789" width="864.5" height="15.0" fill="rgb(211,30,7)" rx="2" ry="2" />
+<text  x="151.82" y="799.5" >__libc_init_first@@GLIBC_2.2.5&lt;0000000000027c40&gt;</text>
+</g>
+<g >
+<title>std::shared_ptr&lt;Renderer&gt;::~shared_ptr() (1 samples, 0.53%)</title><rect x="1007.0" y="741" width="6.3" height="15.0" fill="rgb(236,145,34)" rx="2" ry="2" />
+<text  x="1010.01" y="751.5" ></text>
+</g>
+<g >
+<title>void std::__unguarded_linear_insert&lt;__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Val_comp_iter&lt;bool (*)(Triangle, Triangle)&gt; &gt;(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Val_comp_iter&lt;bool (*)(Triangle, Triangle)&gt;) (1 samples, 0.53%)</title><rect x="754.6" y="645" width="6.3" height="15.0" fill="rgb(218,61,14)" rx="2" ry="2" />
+<text  x="757.60" y="655.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::vector(std::__debug::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; const&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="533" width="6.3" height="15.0" fill="rgb(249,205,49)" rx="2" ry="2" />
+<text  x="801.77" y="543.5" ></text>
+</g>
+<g >
+<title>std::shared_ptr&lt;std::enable_if&lt;!is_array&lt;TexturePNG&gt;::value, TexturePNG&gt;::type&gt; std::make_shared&lt;TexturePNG, TexturePNG&amp;&gt;(TexturePNG&amp;) (27 samples, 14.44%)</title><rect x="811.4" y="661" width="170.4" height="15.0" fill="rgb(234,134,32)" rx="2" ry="2" />
+<text  x="814.39" y="671.5" >std::shared_ptr&lt;std::e..</text>
+</g>
+<g >
+<title>void std::allocator_traits&lt;std::allocator&lt;void&gt; &gt;::destroy&lt;TexturePNG&gt;(std::allocator&lt;void&gt;&amp;, TexturePNG*)[inline] (3 samples, 1.60%)</title><rect x="988.1" y="341" width="18.9" height="15.0" fill="rgb(243,179,42)" rx="2" ry="2" />
+<text  x="991.07" y="351.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::_Vector_impl_data::_Vector_impl_data() (1 samples, 0.53%)</title><rect x="735.7" y="645" width="6.3" height="15.0" fill="rgb(213,38,9)" rx="2" ry="2" />
+<text  x="738.67" y="655.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::~vector() (1 samples, 0.53%)</title><rect x="1007.0" y="389" width="6.3" height="15.0" fill="rgb(206,7,1)" rx="2" ry="2" />
+<text  x="1010.01" y="399.5" ></text>
+</g>
+<g >
+<title>VectorMathService::clipTriangleWithPlane(Vec3d, Vec3d, Triangle&amp;, Triangle&amp;, Triangle&amp;)&lt;000000000007e0b0&gt; (2 samples, 1.07%)</title><rect x="641.0" y="693" width="12.6" height="15.0" fill="rgb(237,147,35)" rx="2" ry="2" />
+<text  x="644.02" y="703.5" ></text>
+</g>
+<g >
+<title>TexturePNG::~TexturePNG()&lt;000000000003d8c0&gt; (1 samples, 0.53%)</title><rect x="1007.0" y="421" width="6.3" height="15.0" fill="rgb(254,225,53)" rx="2" ry="2" />
+<text  x="1010.01" y="431.5" ></text>
+</g>
+<g >
+<title>std::__shared_ptr&lt;TexturePNG, (__gnu_cxx::_Lock_policy)2&gt;::~__shared_ptr() (1 samples, 0.53%)</title><rect x="1007.0" y="517" width="6.3" height="15.0" fill="rgb(251,214,51)" rx="2" ry="2" />
+<text  x="1010.01" y="527.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::vector(std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; const&amp;) (1 samples, 0.53%)</title><rect x="735.7" y="693" width="6.3" height="15.0" fill="rgb(241,167,40)" rx="2" ry="2" />
+<text  x="738.67" y="703.5" ></text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::RemoveRange(void**, void**, int)&lt;00000000000277c0&gt; (1 samples, 0.53%)</title><rect x="798.8" y="293" width="6.3" height="15.0" fill="rgb(211,31,7)" rx="2" ry="2" />
+<text  x="801.77" y="303.5" ></text>
+</g>
+<g >
+<title>void std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::_M_realloc_insert&lt;Triangle const&amp;&gt;(__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, Triangle const&amp;) (1 samples, 0.53%)</title><rect x="786.1" y="693" width="6.4" height="15.0" fill="rgb(242,174,41)" rx="2" ry="2" />
+<text  x="789.15" y="703.5" ></text>
+</g>
+<g >
+<title>bool __gnu_cxx::operator!=&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;(__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt; const&amp;, __gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt; const&amp;) (1 samples, 0.53%)</title><rect x="811.4" y="437" width="6.3" height="15.0" fill="rgb(217,55,13)" rx="2" ry="2" />
+<text  x="814.39" y="447.5" ></text>
+</g>
+<g >
+<title>__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;::difference_type __gnu_cxx::operator-&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; const&amp;, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; const&amp;) (1 samples, 0.53%)</title><rect x="874.5" y="261" width="6.3" height="15.0" fill="rgb(229,114,27)" rx="2" ry="2" />
+<text  x="877.49" y="271.5" ></text>
+</g>
+<g >
+<title>SDL_Color* std::__uninitialized_copy_a&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, SDL_Color*, SDL_Color&gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, SDL_Color*, std::allocator&lt;SDL_Color&gt;&amp;) (10 samples, 5.35%)</title><rect x="824.0" y="389" width="63.1" height="15.0" fill="rgb(251,212,50)" rx="2" ry="2" />
+<text  x="827.01" y="399.5" >SDL_Co..</text>
+</g>
+<g >
+<title>std::__shared_ptr&lt;Renderer, (__gnu_cxx::_Lock_policy)2&gt;::~__shared_ptr() (1 samples, 0.53%)</title><rect x="1007.0" y="725" width="6.3" height="15.0" fill="rgb(228,109,26)" rx="2" ry="2" />
+<text  x="1010.01" y="735.5" ></text>
+</g>
+<g >
+<title>Triangle::~Triangle()&lt;0000000000026760&gt; (1 samples, 0.53%)</title><rect x="1007.0" y="549" width="6.3" height="15.0" fill="rgb(221,78,18)" rx="2" ry="2" />
+<text  x="1010.01" y="559.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;Mesh, std::allocator&lt;Mesh&gt; &gt;::~vector() (4 samples, 2.14%)</title><rect x="981.8" y="629" width="25.2" height="15.0" fill="rgb(245,185,44)" rx="2" ry="2" />
+<text  x="984.76" y="639.5" >s..</text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::_M_create_storage(unsigned long) (15 samples, 8.02%)</title><rect x="887.1" y="373" width="94.7" height="15.0" fill="rgb(212,36,8)" rx="2" ry="2" />
+<text  x="890.11" y="383.5" >std::__cxx1..</text>
+</g>
+<g >
+<title>main&lt;000000000000a860&gt; (137 samples, 73.26%)</title><rect x="148.8" y="773" width="864.5" height="15.0" fill="rgb(237,150,35)" rx="2" ry="2" />
+<text  x="151.82" y="783.5" >main&lt;000000000000a860&gt;</text>
+</g>
+<g >
+<title>std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::~vector() (4 samples, 2.14%)</title><rect x="981.8" y="533" width="25.2" height="15.0" fill="rgb(206,6,1)" rx="2" ry="2" />
+<text  x="984.76" y="543.5" >s..</text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::RemoveRange(void**, void**, int)&lt;00000000000277c0&gt; (15 samples, 8.02%)</title><rect x="887.1" y="293" width="94.7" height="15.0" fill="rgb(211,31,7)" rx="2" ry="2" />
+<text  x="890.11" y="303.5" >tcmalloc::C..</text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;* std::__do_uninit_copy&lt;__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*&gt;(__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (27 samples, 14.44%)</title><rect x="811.4" y="453" width="170.4" height="15.0" fill="rgb(240,165,39)" rx="2" ry="2" />
+<text  x="814.39" y="463.5" >std::__debug::vector&lt;S..</text>
+</g>
+<g >
+<title>std::__new_allocator&lt;SDL_Color&gt;::deallocate(SDL_Color*, unsigned long) (1 samples, 0.53%)</title><rect x="1000.7" y="117" width="6.3" height="15.0" fill="rgb(245,185,44)" rx="2" ry="2" />
+<text  x="1003.70" y="127.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::vector(std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const&amp;) (25 samples, 13.37%)</title><rect x="824.0" y="405" width="157.8" height="15.0" fill="rgb(207,10,2)" rx="2" ry="2" />
+<text  x="827.01" y="415.5" >std::__cxx1998::vect..</text>
+</g>
+<g >
+<title>ioctl@@GLIBC_2.2.5&lt;000000000010c370&gt; (16 samples, 8.56%)</title><rect x="1051.2" y="773" width="100.9" height="15.0" fill="rgb(228,107,25)" rx="2" ry="2" />
+<text  x="1054.18" y="783.5" >ioctl@@GLIBC..</text>
+</g>
+<g >
+<title>void std::allocator_traits&lt;std::allocator&lt;void&gt; &gt;::construct&lt;TexturePNG, TexturePNG&amp;&gt;(std::allocator&lt;void&gt;&amp;, TexturePNG*, TexturePNG&amp;)[inline] (1 samples, 0.53%)</title><rect x="798.8" y="581" width="6.3" height="15.0" fill="rgb(219,65,15)" rx="2" ry="2" />
+<text  x="801.77" y="591.5" ></text>
+</g>
+<g >
+<title>operator-(Vec3d const&amp;, Vec3d const&amp;)&lt;000000000007d8d0&gt; (1 samples, 0.53%)</title><rect x="697.8" y="693" width="6.3" height="15.0" fill="rgb(212,35,8)" rx="2" ry="2" />
+<text  x="700.81" y="703.5" ></text>
+</g>
+<g >
+<title>void std::__introsort_loop&lt;__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, long, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt; &gt;(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, long, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt;) (1 samples, 0.53%)</title><rect x="760.9" y="645" width="6.3" height="15.0" fill="rgb(211,31,7)" rx="2" ry="2" />
+<text  x="763.91" y="655.5" ></text>
+</g>
+<g >
+<title>void std::__sort&lt;__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt; &gt;(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt;) (2 samples, 1.07%)</title><rect x="754.6" y="693" width="12.6" height="15.0" fill="rgb(235,141,33)" rx="2" ry="2" />
+<text  x="757.60" y="703.5" ></text>
+</g>
+<g >
+<title>std::allocator_traits&lt;std::allocator&lt;SDL_Color&gt; &gt;::allocate(std::allocator&lt;SDL_Color&gt;&amp;, unsigned long)[inline] (1 samples, 0.53%)</title><rect x="798.8" y="341" width="6.3" height="15.0" fill="rgb(205,1,0)" rx="2" ry="2" />
+<text  x="801.77" y="351.5" ></text>
+</g>
+<g >
+<title>std::shared_ptr&lt;TexturePNG&gt;::~shared_ptr() (1 samples, 0.53%)</title><rect x="1007.0" y="533" width="6.3" height="15.0" fill="rgb(209,20,4)" rx="2" ry="2" />
+<text  x="1010.01" y="543.5" ></text>
+</g>
+<g >
+<title>TexturemapRasterizer::drawFlatBottomTri(Triangle&amp;)&lt;0000000000061850&gt; (34 samples, 18.18%)</title><rect x="167.8" y="693" width="214.5" height="15.0" fill="rgb(221,76,18)" rx="2" ry="2" />
+<text  x="170.75" y="703.5" >TexturemapRasterizer::drawFl..</text>
+</g>
+<g >
+<title>TexturePNG::~TexturePNG()&lt;000000000003d8c0&gt; (3 samples, 1.60%)</title><rect x="988.1" y="309" width="18.9" height="15.0" fill="rgb(254,225,53)" rx="2" ry="2" />
+<text  x="991.07" y="319.5" ></text>
+</g>
+<g >
+<title>std::__shared_count&lt;(__gnu_cxx::_Lock_policy)2&gt;::~__shared_count() (4 samples, 2.14%)</title><rect x="981.8" y="389" width="25.2" height="15.0" fill="rgb(210,23,5)" rx="2" ry="2" />
+<text  x="984.76" y="399.5" >s..</text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::push_back(Triangle const&amp;) (1 samples, 0.53%)</title><rect x="672.6" y="677" width="6.3" height="15.0" fill="rgb(205,3,0)" rx="2" ry="2" />
+<text  x="675.57" y="687.5" ></text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::FetchFromOneSpansSafe(int, void**, void**)&lt;0000000000027760&gt; (15 samples, 8.02%)</title><rect x="887.1" y="277" width="94.7" height="15.0" fill="rgb(242,173,41)" rx="2" ry="2" />
+<text  x="890.11" y="287.5" >tcmalloc::C..</text>
+</g>
+<g >
+<title>tcmalloc::ThreadCache::ReleaseToCentralCache(tcmalloc::ThreadCache::FreeList*, unsigned int, int)&lt;0000000000026390&gt; (1 samples, 0.53%)</title><rect x="1000.7" y="85" width="6.3" height="15.0" fill="rgb(226,99,23)" rx="2" ry="2" />
+<text  x="1003.70" y="95.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::_M_get_Tp_allocator() (1 samples, 0.53%)</title><rect x="994.4" y="181" width="6.3" height="15.0" fill="rgb(214,42,10)" rx="2" ry="2" />
+<text  x="997.39" y="191.5" ></text>
+</g>
+<g >
+<title>std::__shared_count&lt;(__gnu_cxx::_Lock_policy)2&gt;::__shared_count&lt;TexturePNG, std::allocator&lt;void&gt;, TexturePNG&amp;&gt;(TexturePNG*&amp;, std::_Sp_alloc_shared_tag&lt;std::allocator&lt;void&gt; &gt;, TexturePNG&amp;) (27 samples, 14.44%)</title><rect x="811.4" y="613" width="170.4" height="15.0" fill="rgb(222,81,19)" rx="2" ry="2" />
+<text  x="814.39" y="623.5" >std::__shared_count&lt;(_..</text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::_Vector_base(unsigned long, std::allocator&lt;SDL_Color&gt; const&amp;) (15 samples, 8.02%)</title><rect x="887.1" y="389" width="94.7" height="15.0" fill="rgb(248,199,47)" rx="2" ry="2" />
+<text  x="890.11" y="399.5" >std::__cxx1..</text>
+</g>
+<g >
+<title>0x78697274614d6571 (1 samples, 0.53%)</title><rect x="111.0" y="789" width="6.3" height="15.0" fill="rgb(214,43,10)" rx="2" ry="2" />
+<text  x="113.96" y="799.5" ></text>
+</g>
+<g >
+<title>SDL_DYNAPI_entry (2 samples, 1.07%)</title><rect x="155.1" y="693" width="12.7" height="15.0" fill="rgb(212,36,8)" rx="2" ry="2" />
+<text  x="158.13" y="703.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;Triangle*, Triangle&gt;(Triangle*, Triangle*, std::allocator&lt;Triangle&gt;&amp;)[inline] (4 samples, 2.14%)</title><rect x="981.8" y="501" width="25.2" height="15.0" fill="rgb(239,156,37)" rx="2" ry="2" />
+<text  x="984.76" y="511.5" >v..</text>
+</g>
+<g >
+<title>std::allocator_traits&lt;std::allocator&lt;SDL_Color&gt; &gt;::allocate(std::allocator&lt;SDL_Color&gt;&amp;, unsigned long)[inline] (15 samples, 8.02%)</title><rect x="887.1" y="341" width="94.7" height="15.0" fill="rgb(205,1,0)" rx="2" ry="2" />
+<text  x="890.11" y="351.5" >std::alloca..</text>
+</g>
+<g >
+<title>TexturemapRasterizer::texelDetermineAlphaX()&lt;0000000000062110&gt; (3 samples, 1.60%)</title><rect x="477.0" y="677" width="18.9" height="15.0" fill="rgb(205,1,0)" rx="2" ry="2" />
+<text  x="479.95" y="687.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::vector(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const&amp;) (26 samples, 13.90%)</title><rect x="817.7" y="421" width="164.1" height="15.0" fill="rgb(211,28,6)" rx="2" ry="2" />
+<text  x="820.70" y="431.5" >std::__debug::vector&lt;..</text>
+</g>
+<g >
+<title>_init&lt;000000000000a000&gt; (16 samples, 8.56%)</title><rect x="1051.2" y="789" width="100.9" height="15.0" fill="rgb(217,57,13)" rx="2" ry="2" />
+<text  x="1054.18" y="799.5" >_init&lt;000000..</text>
+</g>
+<g >
+<title>void std::_Destroy&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;&amp;)[inline] (1 samples, 0.53%)</title><rect x="1007.0" y="373" width="6.3" height="15.0" fill="rgb(247,196,46)" rx="2" ry="2" />
+<text  x="1010.01" y="383.5" ></text>
+</g>
+<g >
+<title>Triangle::~Triangle()&lt;0000000000026760&gt; (1 samples, 0.53%)</title><rect x="748.3" y="725" width="6.3" height="15.0" fill="rgb(221,78,18)" rx="2" ry="2" />
+<text  x="751.29" y="735.5" ></text>
+</g>
+<g >
+<title>Renderer::~Renderer() (1 samples, 0.53%)</title><rect x="1007.0" y="661" width="6.3" height="15.0" fill="rgb(244,179,42)" rx="2" ry="2" />
+<text  x="1010.01" y="671.5" ></text>
+</g>
+<g >
+<title>Clipper::getClippedTrisAgainstFrustum(Triangle&amp;)&lt;000000000005d7f0&gt; (10 samples, 5.35%)</title><rect x="628.4" y="709" width="63.1" height="15.0" fill="rgb(218,59,14)" rx="2" ry="2" />
+<text  x="631.40" y="719.5" >Clippe..</text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::~_Vector_base() (1 samples, 0.53%)</title><rect x="1000.7" y="165" width="6.3" height="15.0" fill="rgb(211,27,6)" rx="2" ry="2" />
+<text  x="1003.70" y="175.5" ></text>
+</g>
+<g >
+<title>VectorMathService::getSignedShortestDist(Vec3d&amp;, Vec3d&amp;, Vec3d&amp;)&lt;000000000007dff0&gt; (1 samples, 0.53%)</title><rect x="641.0" y="677" width="6.3" height="15.0" fill="rgb(251,212,50)" rx="2" ry="2" />
+<text  x="644.02" y="687.5" ></text>
+</g>
+<g >
+<title>std::_Sp_counted_base&lt;(__gnu_cxx::_Lock_policy)2&gt;::_M_release() (1 samples, 0.53%)</title><rect x="1007.0" y="485" width="6.3" height="15.0" fill="rgb(240,165,39)" rx="2" ry="2" />
+<text  x="1010.01" y="495.5" ></text>
+</g>
+<g >
+<title>bool __gnu_cxx::operator!=&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;(__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt; const&amp;, __gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt; const&amp;) (1 samples, 0.53%)</title><rect x="710.4" y="693" width="6.3" height="15.0" fill="rgb(245,187,44)" rx="2" ry="2" />
+<text  x="713.43" y="703.5" ></text>
+</g>
+<g >
+<title>__gnu_cxx::__scoped_lock::__scoped_lock(__gnu_cxx::__mutex&amp;)&lt;0000000000012950&gt; (2 samples, 1.07%)</title><rect x="773.5" y="677" width="12.6" height="15.0" fill="rgb(232,124,29)" rx="2" ry="2" />
+<text  x="776.53" y="687.5" ></text>
+</g>
+<g >
+<title>std::_Sp_counted_ptr_inplace&lt;TexturePNG, std::allocator&lt;void&gt;, (__gnu_cxx::_Lock_policy)2&gt;::_Sp_counted_ptr_inplace&lt;TexturePNG&amp;&gt;(std::allocator&lt;void&gt;, TexturePNG&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="597" width="6.3" height="15.0" fill="rgb(249,206,49)" rx="2" ry="2" />
+<text  x="801.77" y="607.5" ></text>
+</g>
+<g >
+<title>__driDriverGetExtensions_swrast&lt;00000000000c0c30&gt; (2 samples, 1.07%)</title><rect x="129.9" y="789" width="12.6" height="15.0" fill="rgb(226,99,23)" rx="2" ry="2" />
+<text  x="132.89" y="799.5" ></text>
+</g>
+<g >
+<title>_IO_vfprintf (1 samples, 0.53%)</title><rect x="117.3" y="789" width="6.3" height="15.0" fill="rgb(226,96,23)" rx="2" ry="2" />
+<text  x="120.27" y="799.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::~vector() (4 samples, 2.14%)</title><rect x="981.8" y="517" width="25.2" height="15.0" fill="rgb(254,227,54)" rx="2" ry="2" />
+<text  x="984.76" y="527.5" >s..</text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::vector(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="421" width="6.3" height="15.0" fill="rgb(211,28,6)" rx="2" ry="2" />
+<text  x="801.77" y="431.5" ></text>
+</g>
+<g >
+<title>SDL_Texture_Blit::blit(unsigned int, unsigned int, unsigned char, unsigned char, unsigned char, unsigned char)&lt;000000000005c8e0&gt; (2 samples, 1.07%)</title><rect x="357.1" y="661" width="12.6" height="15.0" fill="rgb(226,100,24)" rx="2" ry="2" />
+<text  x="360.06" y="671.5" ></text>
+</g>
+<g >
+<title>Engine_3D::engine_update()&lt;0000000000022a20&gt; (103 samples, 55.08%)</title><rect x="148.8" y="757" width="650.0" height="15.0" fill="rgb(253,224,53)" rx="2" ry="2" />
+<text  x="151.82" y="767.5" >Engine_3D::engine_update()&lt;0000000000022a20&gt;</text>
+</g>
+<g >
+<title>std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::push_back(Triangle const&amp;) (1 samples, 0.53%)</title><rect x="672.6" y="693" width="6.3" height="15.0" fill="rgb(207,12,2)" rx="2" ry="2" />
+<text  x="675.57" y="703.5" ></text>
+</g>
+<g >
+<title>TexturemapRasterizer::drawFlatTopTri(Triangle&amp;)&lt;0000000000061710&gt; (37 samples, 19.79%)</title><rect x="382.3" y="693" width="233.5" height="15.0" fill="rgb(233,133,31)" rx="2" ry="2" />
+<text  x="385.30" y="703.5" >TexturemapRasterizer::drawFlat..</text>
+</g>
+<g >
+<title>SDL_Color* std::__niter_wrap&lt;SDL_Color*&gt;(SDL_Color* const&amp;, SDL_Color*) (1 samples, 0.53%)</title><rect x="849.3" y="325" width="6.3" height="15.0" fill="rgb(222,79,19)" rx="2" ry="2" />
+<text  x="852.25" y="335.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::vector(std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; const&amp;) (27 samples, 14.44%)</title><rect x="811.4" y="517" width="170.4" height="15.0" fill="rgb(245,187,44)" rx="2" ry="2" />
+<text  x="814.39" y="527.5" >std::__cxx1998::vector..</text>
+</g>
+<g >
+<title>TexturemapRasterizer::texelDetermineUV(Triangle&amp;)&lt;0000000000061eb0&gt; (4 samples, 2.14%)</title><rect x="275.0" y="677" width="25.3" height="15.0" fill="rgb(207,10,2)" rx="2" ry="2" />
+<text  x="278.03" y="687.5" >T..</text>
+</g>
+<g >
+<title>Triangle::Triangle(Triangle const&amp;) (1 samples, 0.53%)</title><rect x="786.1" y="581" width="6.4" height="15.0" fill="rgb(249,203,48)" rx="2" ry="2" />
+<text  x="789.15" y="591.5" ></text>
+</g>
+<g >
+<title>std::__shared_ptr&lt;TexturePNG, (__gnu_cxx::_Lock_policy)2&gt;::~__shared_ptr() (1 samples, 0.53%)</title><rect x="634.7" y="661" width="6.3" height="15.0" fill="rgb(251,214,51)" rx="2" ry="2" />
+<text  x="637.71" y="671.5" ></text>
+</g>
+<g >
+<title>void std::sort&lt;__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, bool (*)(Triangle, Triangle)&gt;(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, bool (*)(Triangle, Triangle)) (2 samples, 1.07%)</title><rect x="754.6" y="709" width="12.6" height="15.0" fill="rgb(243,177,42)" rx="2" ry="2" />
+<text  x="757.60" y="719.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::~vector() (1 samples, 0.53%)</title><rect x="1007.0" y="405" width="6.3" height="15.0" fill="rgb(208,16,3)" rx="2" ry="2" />
+<text  x="1010.01" y="415.5" ></text>
+</g>
+<g >
+<title>Triangle::~Triangle()&lt;0000000000026760&gt; (4 samples, 2.14%)</title><rect x="981.8" y="437" width="25.2" height="15.0" fill="rgb(221,78,18)" rx="2" ry="2" />
+<text  x="984.76" y="447.5" >T..</text>
+</g>
+<g >
+<title>TexturemapRasterizer::texelDetermineUV(Triangle&amp;)&lt;0000000000061eb0&gt; (5 samples, 2.67%)</title><rect x="495.9" y="677" width="31.5" height="15.0" fill="rgb(207,10,2)" rx="2" ry="2" />
+<text  x="498.88" y="687.5" >Te..</text>
+</g>
+<g >
+<title>OBJ::OBJ(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;, std::shared_ptr&lt;TextureList&gt;) (29 samples, 15.51%)</title><rect x="798.8" y="725" width="183.0" height="15.0" fill="rgb(235,140,33)" rx="2" ry="2" />
+<text  x="801.77" y="735.5" >OBJ::OBJ(std::__cxx11::..</text>
+</g>
+<g >
+<title>std::shared_ptr&lt;std::enable_if&lt;!is_array&lt;TexturePNG&gt;::value, TexturePNG&gt;::type&gt; std::make_shared&lt;TexturePNG, TexturePNG&amp;&gt;(TexturePNG&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="661" width="6.3" height="15.0" fill="rgb(234,134,32)" rx="2" ry="2" />
+<text  x="801.77" y="671.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::push_back(Triangle const&amp;) (2 samples, 1.07%)</title><rect x="786.1" y="709" width="12.7" height="15.0" fill="rgb(205,3,0)" rx="2" ry="2" />
+<text  x="789.15" y="719.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::vector() (1 samples, 0.53%)</title><rect x="678.9" y="693" width="6.3" height="15.0" fill="rgb(220,70,16)" rx="2" ry="2" />
+<text  x="681.88" y="703.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::bidirectional_iterator_tag&gt;::operator++() (1 samples, 0.53%)</title><rect x="767.2" y="709" width="6.3" height="15.0" fill="rgb(250,210,50)" rx="2" ry="2" />
+<text  x="770.22" y="719.5" ></text>
+</g>
+<g >
+<title>void std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::_M_realloc_insert&lt;Triangle const&amp;&gt;(__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, Triangle const&amp;) (1 samples, 0.53%)</title><rect x="672.6" y="661" width="6.3" height="15.0" fill="rgb(242,174,41)" rx="2" ry="2" />
+<text  x="675.57" y="671.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::~vector() (1 samples, 0.53%)</title><rect x="1007.0" y="629" width="6.3" height="15.0" fill="rgb(254,227,54)" rx="2" ry="2" />
+<text  x="1010.01" y="639.5" ></text>
+</g>
+<g >
+<title>Vec2d::Vec2d() (1 samples, 0.53%)</title><rect x="641.0" y="645" width="6.3" height="15.0" fill="rgb(207,13,3)" rx="2" ry="2" />
+<text  x="644.02" y="655.5" ></text>
+</g>
+<g >
+<title>std::ceil(float)&lt;00000000000469c0&gt; (1 samples, 0.53%)</title><rect x="262.4" y="661" width="6.3" height="15.0" fill="rgb(233,132,31)" rx="2" ry="2" />
+<text  x="265.41" y="671.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::_M_allocate(unsigned long) (15 samples, 8.02%)</title><rect x="887.1" y="357" width="94.7" height="15.0" fill="rgb(216,53,12)" rx="2" ry="2" />
+<text  x="890.11" y="367.5" >std::__cxx1..</text>
+</g>
+<g >
+<title>TexturePNG::getPixelAtSurfaceUV(float const&amp;, float const&amp;, SDL_Color&amp;)&lt;00000000000464d0&gt; (14 samples, 7.49%)</title><rect x="180.4" y="677" width="88.3" height="15.0" fill="rgb(223,85,20)" rx="2" ry="2" />
+<text  x="183.37" y="687.5" >TexturePNG..</text>
+</g>
+<g >
+<title>std::__debug::vector&lt;std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;, std::allocator&lt;std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt;::operator[](unsigned long) (1 samples, 0.53%)</title><rect x="805.1" y="645" width="6.3" height="15.0" fill="rgb(215,46,11)" rx="2" ry="2" />
+<text  x="808.08" y="655.5" ></text>
+</g>
+<g >
+<title>Triangle* std::__uninitialized_copy&lt;false&gt;::__uninit_copy&lt;Triangle const*, Triangle*&gt;(Triangle const*, Triangle const*, Triangle*) (1 samples, 0.53%)</title><rect x="786.1" y="629" width="6.4" height="15.0" fill="rgb(243,178,42)" rx="2" ry="2" />
+<text  x="789.15" y="639.5" ></text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::Populate()&lt;0000000000027560&gt; (1 samples, 0.53%)</title><rect x="136.2" y="725" width="6.3" height="15.0" fill="rgb(241,167,40)" rx="2" ry="2" />
+<text  x="139.20" y="735.5" ></text>
+</g>
+<g >
+<title>_dl_audit_symbind_alt@@GLIBC_PRIVATE&lt;0000000000017b50&gt; (1 samples, 0.53%)</title><rect x="1019.6" y="789" width="6.3" height="15.0" fill="rgb(229,114,27)" rx="2" ry="2" />
+<text  x="1022.63" y="799.5" ></text>
+</g>
+<g >
+<title>0x000055c0b0333fff (10 samples, 5.35%)</title><rect x="28.9" y="789" width="63.1" height="15.0" fill="rgb(245,185,44)" rx="2" ry="2" />
+<text  x="31.93" y="799.5" >0x0000..</text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;* std::__uninitialized_copy&lt;false&gt;::__uninit_copy&lt;__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*&gt;(__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (1 samples, 0.53%)</title><rect x="798.8" y="469" width="6.3" height="15.0" fill="rgb(248,200,47)" rx="2" ry="2" />
+<text  x="801.77" y="479.5" ></text>
+</g>
+<g >
+<title>__nss_database_lookup@GLIBC_2.2.5&lt;0000000000157730&gt; (2 samples, 1.07%)</title><rect x="830.3" y="277" width="12.6" height="15.0" fill="rgb(218,62,14)" rx="2" ry="2" />
+<text  x="833.32" y="287.5" ></text>
+</g>
+<g >
+<title>TrianglePipeline::orderPipelineByZ()&lt;0000000000066870&gt; (2 samples, 1.07%)</title><rect x="754.6" y="725" width="12.6" height="15.0" fill="rgb(209,20,4)" rx="2" ry="2" />
+<text  x="757.60" y="735.5" ></text>
+</g>
+<g >
+<title>Triangle* std::__uninitialized_move_if_noexcept_a&lt;Triangle*, Triangle*, std::allocator&lt;Triangle&gt; &gt;(Triangle*, Triangle*, Triangle*, std::allocator&lt;Triangle&gt;&amp;) (1 samples, 0.53%)</title><rect x="786.1" y="677" width="6.4" height="15.0" fill="rgb(223,84,20)" rx="2" ry="2" />
+<text  x="789.15" y="687.5" ></text>
+</g>
+<g >
+<title>Vec3d::Vec3d() (1 samples, 0.53%)</title><rect x="622.1" y="693" width="6.3" height="15.0" fill="rgb(245,184,44)" rx="2" ry="2" />
+<text  x="625.09" y="703.5" ></text>
+</g>
+<g >
+<title>OBJ::assembleChunks()&lt;0000000000052970&gt; (28 samples, 14.97%)</title><rect x="805.1" y="693" width="176.7" height="15.0" fill="rgb(221,73,17)" rx="2" ry="2" />
+<text  x="808.08" y="703.5" >OBJ::assembleChunks()&lt;..</text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::~_Vector_base() (1 samples, 0.53%)</title><rect x="1007.0" y="277" width="6.3" height="15.0" fill="rgb(211,27,6)" rx="2" ry="2" />
+<text  x="1010.01" y="287.5" ></text>
+</g>
+<g >
+<title>TextureList::getTextureByFilename(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;)&lt;000000000003cdb0&gt; (27 samples, 14.44%)</title><rect x="811.4" y="677" width="170.4" height="15.0" fill="rgb(209,22,5)" rx="2" ry="2" />
+<text  x="814.39" y="687.5" >TextureList::getTextur..</text>
+</g>
+<g >
+<title>void std::_Destroy&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*&gt;(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (3 samples, 1.60%)</title><rect x="988.1" y="245" width="18.9" height="15.0" fill="rgb(249,206,49)" rx="2" ry="2" />
+<text  x="991.07" y="255.5" ></text>
+</g>
+<g >
+<title>MaterialMapper::doMap(std::shared_ptr&lt;MTL&gt;, std::shared_ptr&lt;TextureList&gt;)&lt;0000000000039980&gt; (1 samples, 0.53%)</title><rect x="798.8" y="693" width="6.3" height="15.0" fill="rgb(221,76,18)" rx="2" ry="2" />
+<text  x="801.77" y="703.5" ></text>
+</g>
+<g >
+<title>void std::__introsort_loop&lt;__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, long, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt; &gt;(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, long, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt;) (1 samples, 0.53%)</title><rect x="760.9" y="677" width="6.3" height="15.0" fill="rgb(211,31,7)" rx="2" ry="2" />
+<text  x="763.91" y="687.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::_Vector_base(unsigned long, std::allocator&lt;SDL_Color&gt; const&amp;) (1 samples, 0.53%)</title><rect x="817.7" y="405" width="6.3" height="15.0" fill="rgb(248,199,47)" rx="2" ry="2" />
+<text  x="820.70" y="415.5" ></text>
+</g>
+<g >
+<title>std::__shared_ptr&lt;TexturePNG, (__gnu_cxx::_Lock_policy)2&gt;::~__shared_ptr() (4 samples, 2.14%)</title><rect x="981.8" y="405" width="25.2" height="15.0" fill="rgb(251,214,51)" rx="2" ry="2" />
+<text  x="984.76" y="415.5" >s..</text>
+</g>
+<g >
+<title>Triangle::Triangle(Vec3d const&amp;, Vec3d const&amp;, Vec3d const&amp;, Vec2d const&amp;, Vec2d const&amp;, Vec2d const&amp;, int const&amp;, SDL_Color, float, std::shared_ptr&lt;TexturePNG&gt;) (1 samples, 0.53%)</title><rect x="622.1" y="709" width="6.3" height="15.0" fill="rgb(215,48,11)" rx="2" ry="2" />
+<text  x="625.09" y="719.5" ></text>
+</g>
+<g >
+<title>void std::_Construct&lt;TexturePNG, TexturePNG&amp;&gt;(TexturePNG*, TexturePNG&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="565" width="6.3" height="15.0" fill="rgb(238,152,36)" rx="2" ry="2" />
+<text  x="801.77" y="575.5" ></text>
+</g>
+<g >
+<title>TexturePNG::TexturePNG(TexturePNG const&amp;)&lt;000000000003dcb0&gt; (1 samples, 0.53%)</title><rect x="798.8" y="549" width="6.3" height="15.0" fill="rgb(241,167,40)" rx="2" ry="2" />
+<text  x="801.77" y="559.5" ></text>
+</g>
+<g >
+<title>Engine_3D::~Engine_3D() (5 samples, 2.67%)</title><rect x="981.8" y="757" width="31.5" height="15.0" fill="rgb(236,143,34)" rx="2" ry="2" />
+<text  x="984.76" y="767.5" >En..</text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::_Vector_base(unsigned long, std::allocator&lt;SDL_Color&gt; const&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="389" width="6.3" height="15.0" fill="rgb(248,199,47)" rx="2" ry="2" />
+<text  x="801.77" y="399.5" ></text>
+</g>
+<g >
+<title>__poll@@GLIBC_2.2.5&lt;0000000000102f20&gt; (2 samples, 1.07%)</title><rect x="28.9" y="773" width="12.7" height="15.0" fill="rgb(216,51,12)" rx="2" ry="2" />
+<text  x="31.93" y="783.5" ></text>
+</g>
+<g >
+<title>__gnu_internal::get_mutex(unsigned char)&lt;00000000000e0e80&gt; (1 samples, 0.53%)</title><rect x="716.7" y="645" width="6.3" height="15.0" fill="rgb(209,21,5)" rx="2" ry="2" />
+<text  x="719.74" y="655.5" ></text>
+</g>
+<g >
+<title>Renderer::projectTriangle3d(Triangle&amp;)&lt;0000000000064380&gt; (18 samples, 9.63%)</title><rect x="628.4" y="725" width="113.6" height="15.0" fill="rgb(245,186,44)" rx="2" ry="2" />
+<text  x="631.40" y="735.5" >Renderer::proj..</text>
+</g>
+<g >
+<title>SDL_Color* std::uninitialized_copy&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, SDL_Color*&gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, SDL_Color*) (10 samples, 5.35%)</title><rect x="824.0" y="373" width="63.1" height="15.0" fill="rgb(242,170,40)" rx="2" ry="2" />
+<text  x="827.01" y="383.5" >SDL_Co..</text>
+</g>
+<g >
+<title>Vec3d::Vec3d(float const&amp;, float const&amp;, float const&amp;) (1 samples, 0.53%)</title><rect x="697.8" y="677" width="6.3" height="15.0" fill="rgb(229,113,27)" rx="2" ry="2" />
+<text  x="700.81" y="687.5" ></text>
+</g>
+<g >
+<title>_dl_rtld_di_serinfo@@GLIBC_PRIVATE&lt;0000000000008fa0&gt; (1 samples, 0.53%)</title><rect x="1044.9" y="789" width="6.3" height="15.0" fill="rgb(245,187,44)" rx="2" ry="2" />
+<text  x="1047.87" y="799.5" ></text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::ReleaseToSpans(void*)&lt;0000000000025f00&gt; (1 samples, 0.53%)</title><rect x="1000.7" y="37" width="6.3" height="15.0" fill="rgb(237,148,35)" rx="2" ry="2" />
+<text  x="1003.70" y="47.5" ></text>
+</g>
+<g >
+<title>__gnu_cxx::__mutex::lock()&lt;0000000000012a80&gt; (1 samples, 0.53%)</title><rect x="779.8" y="661" width="6.3" height="15.0" fill="rgb(232,125,29)" rx="2" ry="2" />
+<text  x="782.84" y="671.5" ></text>
+</g>
+<g >
+<title>std::__shared_count&lt;(__gnu_cxx::_Lock_policy)2&gt;::~__shared_count() (1 samples, 0.53%)</title><rect x="748.3" y="677" width="6.3" height="15.0" fill="rgb(210,23,5)" rx="2" ry="2" />
+<text  x="751.29" y="687.5" ></text>
+</g>
+<g >
+<title>std::_Sp_counted_ptr_inplace&lt;TexturePNG, std::allocator&lt;void&gt;, (__gnu_cxx::_Lock_policy)2&gt;::_M_dispose() (3 samples, 1.60%)</title><rect x="988.1" y="357" width="18.9" height="15.0" fill="rgb(239,158,37)" rx="2" ry="2" />
+<text  x="991.07" y="367.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::~vector() (1 samples, 0.53%)</title><rect x="1000.7" y="181" width="6.3" height="15.0" fill="rgb(212,34,8)" rx="2" ry="2" />
+<text  x="1003.70" y="191.5" ></text>
+</g>
+<g >
+<title>SDL_Color* std::__niter_base&lt;SDL_Color*&gt;(SDL_Color*) (1 samples, 0.53%)</title><rect x="842.9" y="309" width="6.4" height="15.0" fill="rgb(227,103,24)" rx="2" ry="2" />
+<text  x="845.94" y="319.5" ></text>
+</g>
+<g >
+<title>std::__new_allocator&lt;SDL_Color&gt;::allocate(unsigned long, void const*) (15 samples, 8.02%)</title><rect x="887.1" y="325" width="94.7" height="15.0" fill="rgb(205,0,0)" rx="2" ry="2" />
+<text  x="890.11" y="335.5" >std::__new_..</text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::bidirectional_iterator_tag&gt;::operator++() (2 samples, 1.07%)</title><rect x="773.5" y="709" width="12.6" height="15.0" fill="rgb(250,210,50)" rx="2" ry="2" />
+<text  x="776.53" y="719.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;* std::uninitialized_copy&lt;__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*&gt;(__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (1 samples, 0.53%)</title><rect x="798.8" y="485" width="6.3" height="15.0" fill="rgb(227,104,24)" rx="2" ry="2" />
+<text  x="801.77" y="495.5" ></text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::FetchFromOneSpansSafe(int, void**, void**)&lt;0000000000027760&gt; (1 samples, 0.53%)</title><rect x="798.8" y="277" width="6.3" height="15.0" fill="rgb(242,173,41)" rx="2" ry="2" />
+<text  x="801.77" y="287.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;Triangle*, Triangle&gt;(Triangle*, Triangle*, std::allocator&lt;Triangle&gt;&amp;)[inline] (1 samples, 0.53%)</title><rect x="1007.0" y="613" width="6.3" height="15.0" fill="rgb(239,156,37)" rx="2" ry="2" />
+<text  x="1010.01" y="623.5" ></text>
+</g>
+<g >
+<title>tcmalloc::ThreadCache::FetchFromCentralCache(unsigned int, int, void* (*)(unsigned long))&lt;0000000000027940&gt; (1 samples, 0.53%)</title><rect x="798.8" y="309" width="6.3" height="15.0" fill="rgb(239,158,37)" rx="2" ry="2" />
+<text  x="801.77" y="319.5" ></text>
+</g>
+<g >
+<title>__nss_database_lookup@GLIBC_2.2.5&lt;0000000000157730&gt; (1 samples, 0.53%)</title><rect x="647.3" y="677" width="6.3" height="15.0" fill="rgb(218,62,14)" rx="2" ry="2" />
+<text  x="650.33" y="687.5" ></text>
+</g>
+<g >
+<title>void std::allocator_traits&lt;std::allocator&lt;Triangle&gt; &gt;::construct&lt;Triangle, Triangle const&amp;&gt;(std::allocator&lt;Triangle&gt;&amp;, Triangle*, Triangle const&amp;)[inline] (1 samples, 0.53%)</title><rect x="792.5" y="693" width="6.3" height="15.0" fill="rgb(208,15,3)" rx="2" ry="2" />
+<text  x="795.46" y="703.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;TexturePNG&gt;(TexturePNG*) (1 samples, 0.53%)</title><rect x="1007.0" y="437" width="6.3" height="15.0" fill="rgb(213,36,8)" rx="2" ry="2" />
+<text  x="1010.01" y="447.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy_aux&lt;false&gt;::__destroy&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*&gt;(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (1 samples, 0.53%)</title><rect x="1007.0" y="341" width="6.3" height="15.0" fill="rgb(209,20,4)" rx="2" ry="2" />
+<text  x="1010.01" y="351.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;::operator++() (2 samples, 1.07%)</title><rect x="773.5" y="725" width="12.6" height="15.0" fill="rgb(246,188,45)" rx="2" ry="2" />
+<text  x="776.53" y="735.5" ></text>
+</g>
+<g >
+<title>tcmalloc::EnterStacktraceScope()&lt;000000000000b680&gt; (1 samples, 0.53%)</title><rect x="975.5" y="213" width="6.3" height="15.0" fill="rgb(246,189,45)" rx="2" ry="2" />
+<text  x="978.45" y="223.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*&gt;(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (1 samples, 0.53%)</title><rect x="1007.0" y="357" width="6.3" height="15.0" fill="rgb(249,206,49)" rx="2" ry="2" />
+<text  x="1010.01" y="367.5" ></text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::ReleaseListToSpans(void*)&lt;0000000000026020&gt; (1 samples, 0.53%)</title><rect x="1000.7" y="53" width="6.3" height="15.0" fill="rgb(205,1,0)" rx="2" ry="2" />
+<text  x="1003.70" y="63.5" ></text>
+</g>
+<g >
+<title>void std::__new_allocator&lt;Triangle&gt;::construct&lt;Triangle, Triangle const&amp;&gt;(Triangle*, Triangle const&amp;)[inline] (1 samples, 0.53%)</title><rect x="792.5" y="677" width="6.3" height="15.0" fill="rgb(252,218,52)" rx="2" ry="2" />
+<text  x="795.46" y="687.5" ></text>
+</g>
+<g >
+<title>std::__shared_count&lt;(__gnu_cxx::_Lock_policy)2&gt;::~__shared_count() (1 samples, 0.53%)</title><rect x="634.7" y="645" width="6.3" height="15.0" fill="rgb(210,23,5)" rx="2" ry="2" />
+<text  x="637.71" y="655.5" ></text>
+</g>
+<g >
+<title>memcpy@GLIBC_2.2.5&lt;00000000000a78b0&gt; (1 samples, 0.53%)</title><rect x="111.0" y="773" width="6.3" height="15.0" fill="rgb(232,125,30)" rx="2" ry="2" />
+<text  x="113.96" y="783.5" ></text>
+</g>
+<g >
+<title>_dl_find_dso_for_object@@GLIBC_PRIVATE&lt;000000000000ba70&gt; (3 samples, 1.60%)</title><rect x="1025.9" y="789" width="19.0" height="15.0" fill="rgb(226,98,23)" rx="2" ry="2" />
+<text  x="1028.94" y="799.5" ></text>
+</g>
+<g >
+<title>std::_Sp_counted_ptr&lt;Mesh_Pipeline*, (__gnu_cxx::_Lock_policy)2&gt;::_M_dispose() (4 samples, 2.14%)</title><rect x="981.8" y="677" width="25.2" height="15.0" fill="rgb(243,179,42)" rx="2" ry="2" />
+<text  x="984.76" y="687.5" >s..</text>
+</g>
+<g >
+<title>tcmalloc::ThreadCache::FetchFromCentralCache(unsigned int, int, void* (*)(unsigned long))&lt;0000000000027940&gt; (1 samples, 0.53%)</title><rect x="136.2" y="773" width="6.3" height="15.0" fill="rgb(239,158,37)" rx="2" ry="2" />
+<text  x="139.20" y="783.5" ></text>
+</g>
+<g >
+<title>SDL_Texture_Blit::inPixelRange(int const&amp;, int const&amp;)&lt;000000000005c9e0&gt; (1 samples, 0.53%)</title><rect x="603.2" y="645" width="6.3" height="15.0" fill="rgb(235,138,33)" rx="2" ry="2" />
+<text  x="606.16" y="655.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;* std::__uninitialized_copy&lt;false&gt;::__uninit_copy&lt;__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*&gt;(__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (27 samples, 14.44%)</title><rect x="811.4" y="469" width="170.4" height="15.0" fill="rgb(248,200,47)" rx="2" ry="2" />
+<text  x="814.39" y="479.5" >std::__debug::vector&lt;S..</text>
+</g>
+<g >
+<title>void std::__move_median_to_first&lt;__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt; &gt;(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt;) (1 samples, 0.53%)</title><rect x="760.9" y="613" width="6.3" height="15.0" fill="rgb(211,29,6)" rx="2" ry="2" />
+<text  x="763.91" y="623.5" ></text>
+</g>
+<g >
+<title>void std::_Construct&lt;TexturePNG, TexturePNG&amp;&gt;(TexturePNG*, TexturePNG&amp;) (27 samples, 14.44%)</title><rect x="811.4" y="565" width="170.4" height="15.0" fill="rgb(238,152,36)" rx="2" ry="2" />
+<text  x="814.39" y="575.5" >void std::_Construct&lt;T..</text>
+</g>
+<g >
+<title>void std::_Destroy_aux&lt;false&gt;::__destroy&lt;Mesh*&gt;(Mesh*, Mesh*) (4 samples, 2.14%)</title><rect x="981.8" y="581" width="25.2" height="15.0" fill="rgb(232,126,30)" rx="2" ry="2" />
+<text  x="984.76" y="591.5" >v..</text>
+</g>
+<g >
+<title>nouveau_drm_screen_create (1 samples, 0.53%)</title><rect x="1164.8" y="789" width="6.3" height="15.0" fill="rgb(214,42,10)" rx="2" ry="2" />
+<text  x="1167.76" y="799.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;&amp;)[inline] (3 samples, 1.60%)</title><rect x="988.1" y="261" width="18.9" height="15.0" fill="rgb(247,196,46)" rx="2" ry="2" />
+<text  x="991.07" y="271.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_sequence_base::_Safe_sequence_base()&lt;0000000000015e20&gt; (1 samples, 0.53%)</title><rect x="678.9" y="645" width="6.3" height="15.0" fill="rgb(210,23,5)" rx="2" ry="2" />
+<text  x="681.88" y="655.5" ></text>
+</g>
+<g >
+<title>std::shared_ptr&lt;TexturePNG&gt;::~shared_ptr() (4 samples, 2.14%)</title><rect x="981.8" y="421" width="25.2" height="15.0" fill="rgb(209,20,4)" rx="2" ry="2" />
+<text  x="984.76" y="431.5" >s..</text>
+</g>
+<g >
+<title>std::__shared_count&lt;(__gnu_cxx::_Lock_policy)2&gt;::~__shared_count() (1 samples, 0.53%)</title><rect x="1007.0" y="709" width="6.3" height="15.0" fill="rgb(210,23,5)" rx="2" ry="2" />
+<text  x="1010.01" y="719.5" ></text>
+</g>
+<g >
+<title>std::shared_ptr&lt;TexturePNG&gt;::~shared_ptr() (1 samples, 0.53%)</title><rect x="748.3" y="709" width="6.3" height="15.0" fill="rgb(209,20,4)" rx="2" ry="2" />
+<text  x="751.29" y="719.5" ></text>
+</g>
+<g >
+<title>SDL_DYNAPI_entry (2 samples, 1.07%)</title><rect x="565.3" y="661" width="12.6" height="15.0" fill="rgb(212,36,8)" rx="2" ry="2" />
+<text  x="568.29" y="671.5" ></text>
+</g>
+<g >
+<title>_dl_mcount@@GLIBC_2.2.5&lt;000000000000dda0&gt; (2 samples, 1.07%)</title><rect x="1032.2" y="773" width="12.7" height="15.0" fill="rgb(224,91,21)" rx="2" ry="2" />
+<text  x="1035.25" y="783.5" ></text>
+</g>
+<g >
+<title>OBJ_Lex_normal::lex(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;)&lt;000000000004ecd0&gt; (1 samples, 0.53%)</title><rect x="805.1" y="661" width="6.3" height="15.0" fill="rgb(245,184,44)" rx="2" ry="2" />
+<text  x="808.08" y="671.5" ></text>
+</g>
+<g >
+<title>std::shared_ptr&lt;Mesh_Pipeline&gt;::~shared_ptr() (4 samples, 2.14%)</title><rect x="981.8" y="741" width="25.2" height="15.0" fill="rgb(214,44,10)" rx="2" ry="2" />
+<text  x="984.76" y="751.5" >s..</text>
+</g>
+<g >
+<title>TexturemapRasterizer::texelDimPixel(Triangle&amp;)&lt;0000000000061f90&gt; (5 samples, 2.67%)</title><rect x="527.4" y="677" width="31.6" height="15.0" fill="rgb(253,223,53)" rx="2" ry="2" />
+<text  x="530.43" y="687.5" >Te..</text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::~vector() (1 samples, 0.53%)</title><rect x="1007.0" y="309" width="6.3" height="15.0" fill="rgb(214,42,10)" rx="2" ry="2" />
+<text  x="1010.01" y="319.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::operator!=(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt; const&amp;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt; const&amp;)&lt;000000000005e7a0&gt; (1 samples, 0.53%)</title><rect x="710.4" y="709" width="6.3" height="15.0" fill="rgb(238,154,36)" rx="2" ry="2" />
+<text  x="713.43" y="719.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;* std::__do_uninit_copy&lt;__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*&gt;(__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (1 samples, 0.53%)</title><rect x="798.8" y="453" width="6.3" height="15.0" fill="rgb(240,165,39)" rx="2" ry="2" />
+<text  x="801.77" y="463.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::_Vector_base(unsigned long, std::allocator&lt;Triangle&gt; const&amp;) (1 samples, 0.53%)</title><rect x="735.7" y="677" width="6.3" height="15.0" fill="rgb(211,30,7)" rx="2" ry="2" />
+<text  x="738.67" y="687.5" ></text>
+</g>
+<g >
+<title>pthread_mutex_unlock@@GLIBC_2.2.5 (1 samples, 0.53%)</title><rect x="10.0" y="773" width="6.3" height="15.0" fill="rgb(227,104,24)" rx="2" ry="2" />
+<text  x="13.00" y="783.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::~vector() (2 samples, 1.07%)</title><rect x="994.4" y="197" width="12.6" height="15.0" fill="rgb(214,42,10)" rx="2" ry="2" />
+<text  x="997.39" y="207.5" ></text>
+</g>
+<g >
+<title>_XimOpenIM&lt;0000000000069e70&gt; (1 samples, 0.53%)</title><rect x="22.6" y="773" width="6.3" height="15.0" fill="rgb(249,203,48)" rx="2" ry="2" />
+<text  x="25.62" y="783.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;, std::allocator&lt;std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt;::operator[](unsigned long) (1 samples, 0.53%)</title><rect x="805.1" y="629" width="6.3" height="15.0" fill="rgb(213,37,9)" rx="2" ry="2" />
+<text  x="808.08" y="639.5" ></text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::Populate()&lt;0000000000027560&gt; (1 samples, 0.53%)</title><rect x="798.8" y="261" width="6.3" height="15.0" fill="rgb(241,167,40)" rx="2" ry="2" />
+<text  x="801.77" y="271.5" ></text>
+</g>
+<g >
+<title>write (2 samples, 1.07%)</title><rect x="92.0" y="773" width="12.7" height="15.0" fill="rgb(228,107,25)" rx="2" ry="2" />
+<text  x="95.03" y="783.5" ></text>
+</g>
+<g >
+<title>std::_Sp_counted_base&lt;(__gnu_cxx::_Lock_policy)2&gt;::_M_release() (1 samples, 0.53%)</title><rect x="1007.0" y="693" width="6.3" height="15.0" fill="rgb(240,165,39)" rx="2" ry="2" />
+<text  x="1010.01" y="703.5" ></text>
+</g>
+<g >
+<title>SDL_DYNAPI_entry (1 samples, 0.53%)</title><rect x="174.1" y="677" width="6.3" height="15.0" fill="rgb(212,36,8)" rx="2" ry="2" />
+<text  x="177.06" y="687.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;* std::uninitialized_copy&lt;__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*&gt;(__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (27 samples, 14.44%)</title><rect x="811.4" y="485" width="170.4" height="15.0" fill="rgb(227,104,24)" rx="2" ry="2" />
+<text  x="814.39" y="495.5" >std::__debug::vector&lt;S..</text>
+</g>
+<g >
+<title>bool __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt;::operator()&lt;__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt; &gt;(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;) (1 samples, 0.53%)</title><rect x="760.9" y="597" width="6.3" height="15.0" fill="rgb(226,98,23)" rx="2" ry="2" />
+<text  x="763.91" y="607.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::forward_iterator_tag&gt;::operator++() (1 samples, 0.53%)</title><rect x="767.2" y="693" width="6.3" height="15.0" fill="rgb(254,226,54)" rx="2" ry="2" />
+<text  x="770.22" y="703.5" ></text>
+</g>
+<g >
+<title>Triangle::~Triangle()&lt;0000000000026760&gt; (1 samples, 0.53%)</title><rect x="634.7" y="693" width="6.3" height="15.0" fill="rgb(221,78,18)" rx="2" ry="2" />
+<text  x="637.71" y="703.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::operator!=(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt; const&amp;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt; const&amp;)&lt;000000000005e7a0&gt; (1 samples, 0.53%)</title><rect x="666.3" y="693" width="6.3" height="15.0" fill="rgb(238,154,36)" rx="2" ry="2" />
+<text  x="669.26" y="703.5" ></text>
+</g>
+<g >
+<title>0x000055c0b032c85e (1 samples, 0.53%)</title><rect x="16.3" y="789" width="6.3" height="15.0" fill="rgb(211,31,7)" rx="2" ry="2" />
+<text  x="19.31" y="799.5" ></text>
+</g>
+<g >
+<title>Mesh_Pipeline::~Mesh_Pipeline() (4 samples, 2.14%)</title><rect x="981.8" y="661" width="25.2" height="15.0" fill="rgb(250,208,49)" rx="2" ry="2" />
+<text  x="984.76" y="671.5" >M..</text>
+</g>
+<g >
+<title>void std::_Construct&lt;Triangle, Triangle const&amp;&gt;(Triangle*, Triangle const&amp;) (1 samples, 0.53%)</title><rect x="786.1" y="597" width="6.4" height="15.0" fill="rgb(240,162,38)" rx="2" ry="2" />
+<text  x="789.15" y="607.5" ></text>
+</g>
+<g >
+<title>std::__shared_count&lt;(__gnu_cxx::_Lock_policy)2&gt;::~__shared_count() (1 samples, 0.53%)</title><rect x="1007.0" y="501" width="6.3" height="15.0" fill="rgb(210,23,5)" rx="2" ry="2" />
+<text  x="1010.01" y="511.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::size() const (1 samples, 0.53%)</title><rect x="729.4" y="661" width="6.3" height="15.0" fill="rgb(247,196,46)" rx="2" ry="2" />
+<text  x="732.36" y="671.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::_Vector_impl::_Vector_impl(std::allocator&lt;Triangle&gt; const&amp;) (1 samples, 0.53%)</title><rect x="735.7" y="661" width="6.3" height="15.0" fill="rgb(232,127,30)" rx="2" ry="2" />
+<text  x="738.67" y="671.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_container&lt;std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::allocator&lt;Triangle&gt;, __gnu_debug::_Safe_sequence, true&gt;::~_Safe_container() (1 samples, 0.53%)</title><rect x="685.2" y="677" width="6.3" height="15.0" fill="rgb(232,127,30)" rx="2" ry="2" />
+<text  x="688.19" y="687.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;::operator++() (1 samples, 0.53%)</title><rect x="767.2" y="725" width="6.3" height="15.0" fill="rgb(246,188,45)" rx="2" ry="2" />
+<text  x="770.22" y="735.5" ></text>
+</g>
+<g >
+<title>bool __gnu_debug::__valid_range_aux&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, std::input_iterator_tag) (1 samples, 0.53%)</title><rect x="880.8" y="293" width="6.3" height="15.0" fill="rgb(222,81,19)" rx="2" ry="2" />
+<text  x="883.80" y="303.5" ></text>
+</g>
+<g >
+<title>std::_Sp_counted_base&lt;(__gnu_cxx::_Lock_policy)2&gt;::_M_release() (1 samples, 0.53%)</title><rect x="748.3" y="661" width="6.3" height="15.0" fill="rgb(240,165,39)" rx="2" ry="2" />
+<text  x="751.29" y="671.5" ></text>
+</g>
+<g >
+<title>bool __gnu_debug::__valid_range_aux&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_debug::_Distance_traits&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, std::__is_integer&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::__type&gt;::__type&amp;, std::__false_type) (4 samples, 2.14%)</title><rect x="861.9" y="309" width="25.2" height="15.0" fill="rgb(225,92,22)" rx="2" ry="2" />
+<text  x="864.87" y="319.5" >b..</text>
+</g>
+<g >
+<title>__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;::base() const (1 samples, 0.53%)</title><rect x="666.3" y="677" width="6.3" height="15.0" fill="rgb(245,187,44)" rx="2" ry="2" />
+<text  x="669.26" y="687.5" ></text>
+</g>
+<g >
+<title>Triangle::Triangle(Triangle const&amp;) (1 samples, 0.53%)</title><rect x="792.5" y="661" width="6.3" height="15.0" fill="rgb(249,203,48)" rx="2" ry="2" />
+<text  x="795.46" y="671.5" ></text>
+</g>
+<g >
+<title>f64xsubf128@@GLIBC_2.28&lt;0000000000071480&gt; (2 samples, 1.07%)</title><rect x="249.8" y="661" width="12.6" height="15.0" fill="rgb(248,199,47)" rx="2" ry="2" />
+<text  x="252.79" y="671.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::push_back(Triangle const&amp;) (2 samples, 1.07%)</title><rect x="786.1" y="725" width="12.7" height="15.0" fill="rgb(207,12,2)" rx="2" ry="2" />
+<text  x="789.15" y="735.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy_aux&lt;false&gt;::__destroy&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*&gt;(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (3 samples, 1.60%)</title><rect x="988.1" y="229" width="18.9" height="15.0" fill="rgb(209,20,4)" rx="2" ry="2" />
+<text  x="991.07" y="239.5" ></text>
+</g>
+<g >
+<title>TexturemapRasterizer::texelDimPixel(Triangle&amp;)&lt;0000000000061f90&gt; (1 samples, 0.53%)</title><rect x="615.8" y="693" width="6.3" height="15.0" fill="rgb(253,223,53)" rx="2" ry="2" />
+<text  x="618.78" y="703.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::~vector() (3 samples, 1.60%)</title><rect x="988.1" y="277" width="18.9" height="15.0" fill="rgb(206,7,1)" rx="2" ry="2" />
+<text  x="991.07" y="287.5" ></text>
+</g>
+<g >
+<title>Triangle* std::uninitialized_copy&lt;Triangle const*, Triangle*&gt;(Triangle const*, Triangle const*, Triangle*) (1 samples, 0.53%)</title><rect x="786.1" y="645" width="6.4" height="15.0" fill="rgb(222,82,19)" rx="2" ry="2" />
+<text  x="789.15" y="655.5" ></text>
+</g>
+<g >
+<title>std::allocator_traits&lt;std::allocator&lt;SDL_Color&gt; &gt;::deallocate(std::allocator&lt;SDL_Color&gt;&amp;, SDL_Color*, unsigned long)[inline] (1 samples, 0.53%)</title><rect x="1000.7" y="133" width="6.3" height="15.0" fill="rgb(213,39,9)" rx="2" ry="2" />
+<text  x="1003.70" y="143.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt; std::__unguarded_partition_pivot&lt;__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt; &gt;(__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;, __gnu_cxx::__ops::_Iter_comp_iter&lt;bool (*)(Triangle, Triangle)&gt;) (1 samples, 0.53%)</title><rect x="760.9" y="629" width="6.3" height="15.0" fill="rgb(232,125,29)" rx="2" ry="2" />
+<text  x="763.91" y="639.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::random_access_iterator_tag&gt;::_Safe_iterator(__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, __gnu_debug::_Safe_sequence_base const*) (1 samples, 0.53%)</title><rect x="716.7" y="693" width="6.3" height="15.0" fill="rgb(229,112,26)" rx="2" ry="2" />
+<text  x="719.74" y="703.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Distance_traits&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, std::__is_integer&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::__type&gt;::__type __gnu_debug::__get_distance&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, std::random_access_iterator_tag) (1 samples, 0.53%)</title><rect x="874.5" y="277" width="6.3" height="15.0" fill="rgb(250,209,50)" rx="2" ry="2" />
+<text  x="877.49" y="287.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;Triangle*&gt;(Triangle*, Triangle*) (1 samples, 0.53%)</title><rect x="1007.0" y="597" width="6.3" height="15.0" fill="rgb(236,145,34)" rx="2" ry="2" />
+<text  x="1010.01" y="607.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::~vector() (1 samples, 0.53%)</title><rect x="685.2" y="693" width="6.3" height="15.0" fill="rgb(206,6,1)" rx="2" ry="2" />
+<text  x="688.19" y="703.5" ></text>
+</g>
+<g >
+<title>std::shared_ptr&lt;TexturePNG&gt;::shared_ptr&lt;std::allocator&lt;void&gt;, TexturePNG&amp;&gt;(std::_Sp_alloc_shared_tag&lt;std::allocator&lt;void&gt; &gt;, TexturePNG&amp;) (27 samples, 14.44%)</title><rect x="811.4" y="645" width="170.4" height="15.0" fill="rgb(207,13,3)" rx="2" ry="2" />
+<text  x="814.39" y="655.5" >std::shared_ptr&lt;Textur..</text>
+</g>
+<g >
+<title>TexturemapRasterizer::texelDimPixel(Triangle&amp;)&lt;0000000000061f90&gt; (7 samples, 3.74%)</title><rect x="300.3" y="677" width="44.1" height="15.0" fill="rgb(253,223,53)" rx="2" ry="2" />
+<text  x="303.27" y="687.5" >Text..</text>
+</g>
+<g >
+<title>tcmalloc::PageHeap::HandleUnlock(tcmalloc::PageHeap::LockingContext*)&lt;00000000000272e0&gt; (1 samples, 0.53%)</title><rect x="975.5" y="229" width="6.3" height="15.0" fill="rgb(224,90,21)" rx="2" ry="2" />
+<text  x="978.45" y="239.5" ></text>
+</g>
+<g >
+<title>__nss_database_lookup@GLIBC_2.2.5&lt;0000000000157730&gt; (1 samples, 0.53%)</title><rect x="1013.3" y="789" width="6.3" height="15.0" fill="rgb(218,62,14)" rx="2" ry="2" />
+<text  x="1016.32" y="799.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::~vector() (1 samples, 0.53%)</title><rect x="1007.0" y="645" width="6.3" height="15.0" fill="rgb(206,6,1)" rx="2" ry="2" />
+<text  x="1010.01" y="655.5" ></text>
+</g>
+<g >
+<title>bool __gnu_debug::__valid_range&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_debug::_Distance_traits&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, std::__is_integer&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::__type&gt;::__type&amp;) (4 samples, 2.14%)</title><rect x="861.9" y="325" width="25.2" height="15.0" fill="rgb(251,213,51)" rx="2" ry="2" />
+<text  x="864.87" y="335.5" >b..</text>
+</g>
+<g >
+<title>0x000055c0b032cc44 (1 samples, 0.53%)</title><rect x="22.6" y="789" width="6.3" height="15.0" fill="rgb(207,9,2)" rx="2" ry="2" />
+<text  x="25.62" y="799.5" ></text>
+</g>
+<g >
+<title>std::__shared_ptr&lt;TexturePNG, (__gnu_cxx::_Lock_policy)2&gt;::~__shared_ptr() (1 samples, 0.53%)</title><rect x="748.3" y="693" width="6.3" height="15.0" fill="rgb(251,214,51)" rx="2" ry="2" />
+<text  x="751.29" y="703.5" ></text>
+</g>
+<g >
+<title>SDL_Color* std::__copy_move_a1&lt;false, SDL_Color const*, SDL_Color*&gt;(SDL_Color const*, SDL_Color const*, SDL_Color*) (2 samples, 1.07%)</title><rect x="830.3" y="309" width="12.6" height="15.0" fill="rgb(207,10,2)" rx="2" ry="2" />
+<text  x="833.32" y="319.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::forward_iterator_tag&gt;::operator++() (2 samples, 1.07%)</title><rect x="773.5" y="693" width="12.6" height="15.0" fill="rgb(254,226,54)" rx="2" ry="2" />
+<text  x="776.53" y="703.5" ></text>
+</g>
+<g >
+<title>void std::_Construct&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const&amp;&gt;(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const&amp;) (26 samples, 13.90%)</title><rect x="817.7" y="437" width="164.1" height="15.0" fill="rgb(208,13,3)" rx="2" ry="2" />
+<text  x="820.70" y="447.5" >void std::_Construct&lt;..</text>
+</g>
+<g >
+<title>std::__shared_count&lt;(__gnu_cxx::_Lock_policy)2&gt;::~__shared_count() (4 samples, 2.14%)</title><rect x="981.8" y="709" width="25.2" height="15.0" fill="rgb(210,23,5)" rx="2" ry="2" />
+<text  x="984.76" y="719.5" >s..</text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_vector&lt;std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;::_M_update_guaranteed_capacity() (1 samples, 0.53%)</title><rect x="729.4" y="677" width="6.3" height="15.0" fill="rgb(250,208,49)" rx="2" ry="2" />
+<text  x="732.36" y="687.5" ></text>
+</g>
+<g >
+<title>Vec2d::Vec2d() (1 samples, 0.53%)</title><rect x="760.9" y="549" width="6.3" height="15.0" fill="rgb(207,13,3)" rx="2" ry="2" />
+<text  x="763.91" y="559.5" ></text>
+</g>
+<g >
+<title>std::allocator_traits&lt;std::allocator&lt;SDL_Color&gt; &gt;::deallocate(std::allocator&lt;SDL_Color&gt;&amp;, SDL_Color*, unsigned long)[inline] (1 samples, 0.53%)</title><rect x="1007.0" y="245" width="6.3" height="15.0" fill="rgb(213,39,9)" rx="2" ry="2" />
+<text  x="1010.01" y="255.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (3 samples, 1.60%)</title><rect x="988.1" y="213" width="18.9" height="15.0" fill="rgb(232,125,30)" rx="2" ry="2" />
+<text  x="991.07" y="223.5" ></text>
+</g>
+<g >
+<title>Vec3d::Vec3d() (1 samples, 0.53%)</title><rect x="760.9" y="565" width="6.3" height="15.0" fill="rgb(245,184,44)" rx="2" ry="2" />
+<text  x="763.91" y="575.5" ></text>
+</g>
+<g >
+<title>0x000000010000f9bc (1 samples, 0.53%)</title><rect x="10.0" y="789" width="6.3" height="15.0" fill="rgb(251,212,50)" rx="2" ry="2" />
+<text  x="13.00" y="799.5" ></text>
+</g>
+<g >
+<title>VectorMathService::dotProduct(Vec3d const&amp;, Vec3d const&amp;)&lt;000000000007dae0&gt; (1 samples, 0.53%)</title><rect x="704.1" y="709" width="6.3" height="15.0" fill="rgb(215,46,11)" rx="2" ry="2" />
+<text  x="707.12" y="719.5" ></text>
+</g>
+<g >
+<title>TexturemapRasterizer::texelDetermineAlphaX()&lt;0000000000062110&gt; (1 samples, 0.53%)</title><rect x="268.7" y="677" width="6.3" height="15.0" fill="rgb(205,1,0)" rx="2" ry="2" />
+<text  x="271.72" y="687.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;(std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*) (1 samples, 0.53%)</title><rect x="1007.0" y="325" width="6.3" height="15.0" fill="rgb(232,125,30)" rx="2" ry="2" />
+<text  x="1010.01" y="335.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Distance_traits&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, std::__is_integer&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;::__type&gt;::__type __gnu_debug::__get_distance&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;) (1 samples, 0.53%)</title><rect x="874.5" y="293" width="6.3" height="15.0" fill="rgb(242,170,40)" rx="2" ry="2" />
+<text  x="877.49" y="303.5" ></text>
+</g>
+<g >
+<title>TexturemapRasterizer::drawFT_Scanline_prep(Triangle&amp;)&lt;0000000000061bf0&gt; (1 samples, 0.53%)</title><rect x="470.6" y="677" width="6.4" height="15.0" fill="rgb(220,69,16)" rx="2" ry="2" />
+<text  x="473.64" y="687.5" ></text>
+</g>
+<g >
+<title>Engine_3D::load_meshes()&lt;0000000000022860&gt; (29 samples, 15.51%)</title><rect x="798.8" y="757" width="183.0" height="15.0" fill="rgb(212,33,8)" rx="2" ry="2" />
+<text  x="801.77" y="767.5" >Engine_3D::load_meshes(..</text>
+</g>
+<g >
+<title>std::__shared_count&lt;(__gnu_cxx::_Lock_policy)2&gt;::__shared_count&lt;TexturePNG, std::allocator&lt;void&gt;, TexturePNG&amp;&gt;(TexturePNG*&amp;, std::_Sp_alloc_shared_tag&lt;std::allocator&lt;void&gt; &gt;, TexturePNG&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="613" width="6.3" height="15.0" fill="rgb(222,81,19)" rx="2" ry="2" />
+<text  x="801.77" y="623.5" ></text>
+</g>
+<g >
+<title>SDL_Color* std::__uninitialized_copy&lt;true&gt;::__uninit_copy&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, SDL_Color*&gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;, SDL_Color*) (10 samples, 5.35%)</title><rect x="824.0" y="357" width="63.1" height="15.0" fill="rgb(247,195,46)" rx="2" ry="2" />
+<text  x="827.01" y="367.5" >SDL_Co..</text>
+</g>
+<g >
+<title>SDL_DYNAPI_entry (3 samples, 1.60%)</title><rect x="407.5" y="677" width="19.0" height="15.0" fill="rgb(212,36,8)" rx="2" ry="2" />
+<text  x="410.54" y="687.5" ></text>
+</g>
+<g >
+<title>tcmalloc::CentralFreeList::RemoveRange(void**, void**, int)&lt;00000000000277c0&gt; (1 samples, 0.53%)</title><rect x="136.2" y="757" width="6.3" height="15.0" fill="rgb(211,31,7)" rx="2" ry="2" />
+<text  x="139.20" y="767.5" ></text>
+</g>
+<g >
+<title>__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; std::__miter_base&lt;__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt;(__gnu_cxx::__normal_iterator&lt;SDL_Color const*, std::__cxx1998::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;) (1 samples, 0.53%)</title><rect x="855.6" y="325" width="6.3" height="15.0" fill="rgb(224,89,21)" rx="2" ry="2" />
+<text  x="858.56" y="335.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_iterator&lt;__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;, std::forward_iterator_tag&gt;::_Safe_iterator(__gnu_cxx::__normal_iterator&lt;Triangle*, std::__cxx1998::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; &gt;, __gnu_debug::_Safe_sequence_base const*) (1 samples, 0.53%)</title><rect x="716.7" y="661" width="6.3" height="15.0" fill="rgb(237,150,35)" rx="2" ry="2" />
+<text  x="719.74" y="671.5" ></text>
+</g>
+<g >
+<title>std::__shared_ptr&lt;Mesh_Pipeline, (__gnu_cxx::_Lock_policy)2&gt;::~__shared_ptr() (4 samples, 2.14%)</title><rect x="981.8" y="725" width="25.2" height="15.0" fill="rgb(206,8,2)" rx="2" ry="2" />
+<text  x="984.76" y="735.5" >s..</text>
+</g>
+<g >
+<title>read@@GLIBC_2.2.5 (1 samples, 0.53%)</title><rect x="1183.7" y="789" width="6.3" height="15.0" fill="rgb(248,200,47)" rx="2" ry="2" />
+<text  x="1186.69" y="799.5" ></text>
+</g>
+<g >
+<title>0x45564f4d2020201f (2 samples, 1.07%)</title><rect x="92.0" y="789" width="12.7" height="15.0" fill="rgb(207,11,2)" rx="2" ry="2" />
+<text  x="95.03" y="799.5" ></text>
+</g>
+<g >
+<title>_XimLcctstowcs&lt;000000000006dd20&gt; (1 samples, 0.53%)</title><rect x="123.6" y="789" width="6.3" height="15.0" fill="rgb(246,190,45)" rx="2" ry="2" />
+<text  x="126.58" y="799.5" ></text>
+</g>
+<g >
+<title>_dl_audit_symbind_alt@@GLIBC_PRIVATE&lt;0000000000017b50&gt; (1 samples, 0.53%)</title><rect x="1025.9" y="773" width="6.3" height="15.0" fill="rgb(229,114,27)" rx="2" ry="2" />
+<text  x="1028.94" y="783.5" ></text>
+</g>
+<g >
+<title>void std::allocator_traits&lt;std::allocator&lt;void&gt; &gt;::destroy&lt;TexturePNG&gt;(std::allocator&lt;void&gt;&amp;, TexturePNG*)[inline] (1 samples, 0.53%)</title><rect x="1007.0" y="453" width="6.3" height="15.0" fill="rgb(243,179,42)" rx="2" ry="2" />
+<text  x="1010.01" y="463.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::_M_deallocate(SDL_Color*, unsigned long) (1 samples, 0.53%)</title><rect x="1007.0" y="261" width="6.3" height="15.0" fill="rgb(224,91,21)" rx="2" ry="2" />
+<text  x="1010.01" y="271.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;* std::__uninitialized_copy_a&lt;__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;(__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;&amp;) (27 samples, 14.44%)</title><rect x="811.4" y="501" width="170.4" height="15.0" fill="rgb(224,88,21)" rx="2" ry="2" />
+<text  x="814.39" y="511.5" >std::__debug::vector&lt;S..</text>
+</g>
+<g >
+<title>std::floor(float)&lt;00000000000469a0&gt; (1 samples, 0.53%)</title><rect x="609.5" y="677" width="6.3" height="15.0" fill="rgb(237,149,35)" rx="2" ry="2" />
+<text  x="612.47" y="687.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;Mesh*&gt;(Mesh*, Mesh*) (4 samples, 2.14%)</title><rect x="981.8" y="597" width="25.2" height="15.0" fill="rgb(222,82,19)" rx="2" ry="2" />
+<text  x="984.76" y="607.5" >v..</text>
+</g>
+<g >
+<title>std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;* std::__uninitialized_copy_a&lt;__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;(__gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, __gnu_cxx::__normal_iterator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; const*, std::__cxx1998::vector&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt; &gt; &gt;, std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;*, std::allocator&lt;std::__debug::vector&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt; &gt;&amp;) (1 samples, 0.53%)</title><rect x="798.8" y="501" width="6.3" height="15.0" fill="rgb(224,88,21)" rx="2" ry="2" />
+<text  x="801.77" y="511.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;Triangle&gt;(Triangle*) (1 samples, 0.53%)</title><rect x="1007.0" y="565" width="6.3" height="15.0" fill="rgb(230,115,27)" rx="2" ry="2" />
+<text  x="1010.01" y="575.5" ></text>
+</g>
+<g >
+<title>std::_Sp_counted_ptr_inplace&lt;TexturePNG, std::allocator&lt;void&gt;, (__gnu_cxx::_Lock_policy)2&gt;::_Sp_counted_ptr_inplace&lt;TexturePNG&amp;&gt;(std::allocator&lt;void&gt;, TexturePNG&amp;) (27 samples, 14.44%)</title><rect x="811.4" y="597" width="170.4" height="15.0" fill="rgb(249,206,49)" rx="2" ry="2" />
+<text  x="814.39" y="607.5" >std::_Sp_counted_ptr_i..</text>
+</g>
+<g >
+<title>Triangle::Triangle(Triangle const&amp;) (1 samples, 0.53%)</title><rect x="760.9" y="581" width="6.3" height="15.0" fill="rgb(249,203,48)" rx="2" ry="2" />
+<text  x="763.91" y="591.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::vector(std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt; const&amp;) (2 samples, 1.07%)</title><rect x="729.4" y="709" width="12.6" height="15.0" fill="rgb(245,185,44)" rx="2" ry="2" />
+<text  x="732.36" y="719.5" ></text>
+</g>
+<g >
+<title>__gnu_debug::_Safe_iterator_base::_M_singular() const&lt;00000000000dd840&gt; (2 samples, 1.07%)</title><rect x="653.6" y="693" width="12.7" height="15.0" fill="rgb(246,192,45)" rx="2" ry="2" />
+<text  x="656.64" y="703.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;Triangle*&gt;(Triangle*, Triangle*) (4 samples, 2.14%)</title><rect x="981.8" y="485" width="25.2" height="15.0" fill="rgb(236,145,34)" rx="2" ry="2" />
+<text  x="984.76" y="495.5" >v..</text>
+</g>
+<g >
+<title>std::__shared_ptr&lt;TexturePNG, (__gnu_cxx::_Lock_policy)2&gt;::__shared_ptr&lt;std::allocator&lt;void&gt;, TexturePNG&amp;&gt;(std::_Sp_alloc_shared_tag&lt;std::allocator&lt;void&gt; &gt;, TexturePNG&amp;) (27 samples, 14.44%)</title><rect x="811.4" y="629" width="170.4" height="15.0" fill="rgb(250,207,49)" rx="2" ry="2" />
+<text  x="814.39" y="639.5" >std::__shared_ptr&lt;Text..</text>
+</g>
+<g >
+<title>llseek (1 samples, 0.53%)</title><rect x="1158.4" y="789" width="6.4" height="15.0" fill="rgb(229,111,26)" rx="2" ry="2" />
+<text  x="1161.45" y="799.5" ></text>
+</g>
+<g >
+<title>void std::_Destroy&lt;Mesh*, Mesh&gt;(Mesh*, Mesh*, std::allocator&lt;Mesh&gt;&amp;)[inline] (4 samples, 2.14%)</title><rect x="981.8" y="613" width="25.2" height="15.0" fill="rgb(216,51,12)" rx="2" ry="2" />
+<text  x="984.76" y="623.5" >v..</text>
+</g>
+<g >
+<title>pthread_mutex_trylock@GLIBC_2.2.5 (1 samples, 0.53%)</title><rect x="1177.4" y="789" width="6.3" height="15.0" fill="rgb(240,161,38)" rx="2" ry="2" />
+<text  x="1180.38" y="799.5" ></text>
+</g>
+<g >
+<title>Triangle::Triangle(Triangle const&amp;) (1 samples, 0.53%)</title><rect x="742.0" y="725" width="6.3" height="15.0" fill="rgb(249,203,48)" rx="2" ry="2" />
+<text  x="744.98" y="735.5" ></text>
+</g>
+<g >
+<title>std::__debug::vector&lt;Triangle, std::allocator&lt;Triangle&gt; &gt;::end() (1 samples, 0.53%)</title><rect x="723.0" y="709" width="6.4" height="15.0" fill="rgb(218,61,14)" rx="2" ry="2" />
+<text  x="726.05" y="719.5" ></text>
+</g>
+<g >
+<title>std::__cxx1998::_Vector_base&lt;SDL_Color, std::allocator&lt;SDL_Color&gt; &gt;::_M_allocate(unsigned long) (1 samples, 0.53%)</title><rect x="798.8" y="357" width="6.3" height="15.0" fill="rgb(216,53,12)" rx="2" ry="2" />
+<text  x="801.77" y="367.5" ></text>
+</g>
+</g>
+</svg>
