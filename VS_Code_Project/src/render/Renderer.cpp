@@ -26,8 +26,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	this->HALF_SCREEN_W = SCREEN_W/2;
 	this->HALF_SCREEN_H = SCREEN_H/2;
 	window = SDL_CreateWindow("3D Engine", HALF_SCREEN_W,HALF_SCREEN_H, SCREEN_W, SCREEN_H, screen_mode);
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
-	framebuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, SCREEN_W, SCREEN_H);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     //this->framebufferpitch = SCREEN_W*4;
 	this->textureBlit = new SDL_Texture_Blit(this->renderer, this->SCREEN_W, this->SCREEN_H);
 
@@ -144,7 +143,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 
 	
 	// Here goes TextureMapping!
-	std::shared_ptr<ITriangleRasterizer> this_texturemap_rasterizer(new TexturemapRasterizer(renderer, this->textureBlit, framebufferpixels, framebufferpitch));
+	std::shared_ptr<ITriangleRasterizer> this_texturemap_rasterizer(new TexturemapRasterizer(renderer, this->textureBlit));
 	this_texturemap_rasterizer->drawTriangle(screenTri);
 
 }
@@ -299,7 +298,7 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
-	SDL_LockTexture(this->framebuffer, NULL, (void **) &this->framebufferpixels, &this->framebufferpitch);
+	//SDL_LockTexture(this->framebuffer, NULL, (void **) &this->framebufferpixels, &this->framebufferpitch);
 	this->textureBlit->lock(); // prepare framebuffer for write only operation
 
 	// start with empty triangle buffer to rasterize each frame
@@ -325,10 +324,11 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	}
 	this->textureBlit->unlock(); // pixel write complete, ready to render
 
-	SDL_UnlockTexture(this->framebuffer);
-	SDL_RenderCopy(renderer, this->textureBlit->getFrameBuffer(), NULL, NULL); // Copy texture pixel buffer to renderer
+	//SDL_UnlockTexture(this->framebuffer);
+	SDL_Texture *this_tex = this->textureBlit->getFrameBuffer();
+	SDL_RenderCopy(renderer, this_tex, NULL, NULL); // Copy texture pixel buffer to renderer
 	//SDL_RenderCopy(renderer, this->framebuffer, NULL, NULL);
-	drawReticle();
+	//drawReticle();
 
 	// Flip video page to screen
 	SDL_RenderPresent(renderer);
@@ -381,8 +381,13 @@ const int Renderer::getWindowWidth()const { return SCREEN_W; }
 const int Renderer::getWindowHeight()const { return SCREEN_H; }
 
 void Renderer::shutdown(){
+	delete(this->textureBlit);
+	this->textureBlit=NULL;
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	
+}
+
+Renderer::~Renderer(){
 
 }

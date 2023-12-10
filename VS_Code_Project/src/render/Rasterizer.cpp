@@ -8,6 +8,10 @@
 #include "../materials/TexturePNG.h"
 #include "../globals.h"
 
+ITriangleRasterizer::~ITriangleRasterizer(){
+
+}
+
 void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
     float z_center = this_tri.getTriangleZCenter();
     float color_modifier;
@@ -33,10 +37,8 @@ void ITriangleRasterizer::pixelBlit(const int &r, const int &g, const int&b, con
     
 }
 
-TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Texture_Blit* myTexBlit, uint8_t* framebufferpixels, int framebufferpitch){
+TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Texture_Blit* myTexBlit){
     this->renderer=my_renderer;
-    this->framebufferpixels = framebufferpixels;
-    this->framebufferpitch = framebufferpitch;
     this->textureBlit = myTexBlit;
     this->inv_max_visible_z_depth=1/this->max_visible_z_depth;
 }
@@ -253,10 +255,7 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
     this->drawFT_CalcSlopes(this_triangle);
     this->scanlineCalcStartEnd(this_triangle);
     
-    // Create pointer to pixels at this y line for drawing to a Texture
-    this->pixels = (Uint32 *)(this->framebufferpixels);
-    this->texture_head=pixels;
-    
+   
     // 3. Loop through each y scanline (but don't do the last one)
     for (this->y = this->y_start; this->y < this->y_end; this->y++){
 
@@ -339,10 +338,6 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
     // 2. Determine y_start and y_end pixels for the triangle
     scanlineCalcStartEnd(this_triangle);
-
-    // Create pointer to pixels at this y line for drawing to a Texture
-    this->pixels = (Uint32 *)(this->framebufferpixels);
-    this->texture_head=pixels;
 
     // 3. Loop through each y scanline (but don't do the last one)
     for (this->y = this->y_start; this->y < this->y_end; this->y++){

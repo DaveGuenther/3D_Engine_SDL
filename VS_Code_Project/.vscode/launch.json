@@ -26,8 +26,8 @@
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
                 }
-            ],
-            "preLaunchTask": "Run Make (clang++)"
+            ]
+            //"preLaunchTask": "Run Make (clang++)"
         },
         {
             "type": "lldb",
@@ -35,8 +35,8 @@
             "name": "Debug",
             "program": "${workspaceFolder}/build/game",
             "args": [],
-            "cwd": "${workspaceFolder}/build",
-            "preLaunchTask": "Run Make (clang++)"
+            "cwd": "${workspaceFolder}/build"
+            //"preLaunchTask": "Run Make (clang++)"
         }
     ]
 }

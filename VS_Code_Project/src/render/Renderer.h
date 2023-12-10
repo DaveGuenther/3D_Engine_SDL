@@ -28,9 +28,9 @@ class Renderer{
         // SDL Objects
         SDL_Window *window;
         SDL_Renderer *renderer;
-        SDL_Texture *framebuffer;
-        uint8_t *framebufferpixels = NULL;
-        int framebufferpitch;
+        //SDL_Texture *framebuffer;
+        //uint8_t *framebufferpixels = NULL;
+        //int framebufferpitch;
         SDL_Texture_Blit *textureBlit = NULL;
 
         int SCREEN_W;
@@ -106,7 +106,7 @@ class Renderer{
     public:
 
         Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera);
-        
+        ~Renderer();
         /**
          * @brief This function will reset the mouse X and Y values to the center of the window.  It requires the window object to call so must occur in the Renderer class
          * 

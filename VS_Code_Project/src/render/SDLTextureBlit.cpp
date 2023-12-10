@@ -16,8 +16,12 @@ void SDL_Texture_Blit::lock(){
 }
 
 void SDL_Texture_Blit::blit(uint x, uint y, uint8_t r, uint8_t g, uint8_t b, uint8_t a){
-    this->p = this->tex_head+(this->pitch*y)+x;
-    *p = SDL_MapRGBA(this->pixelFormat, r, g, b, a);
+    //this->p = this->tex_head+(this->pitch*y)+x;
+    //*p = SDL_MapRGBA(this->pixelFormat, r, g, b, a);
+    if (this->inPixelRange(x, y)){
+        this->p = this->tex_head+(this->pitch*y)+x;
+        *p = SDL_MapRGBA(this->pixelFormat, r, g, b, a);
+    }
 }
 
 void SDL_Texture_Blit::unlock(){
@@ -40,4 +44,13 @@ SDL_Texture_Blit::~SDL_Texture_Blit(){
     tex_head=NULL;
     framebufferpixels=NULL;
     //SDL_Renderer* renderer gets destroyed by parent object outside this class
+}
+
+bool SDL_Texture_Blit::inPixelRange(const int &x, const int &y){
+    if (y>this->tex_h) {return false;}
+    if (x>this->tex_w) {return false;}
+    if (y<0) {return false;}
+    if (x<0) {return false;}
+    return true;
+
 }

@@ -36,6 +36,7 @@ class SDL_Texture_Blit{
         int pitch;
         Uint32 *p=NULL; // this will be the pixel pointer to a specific pixel in the buffer
         
+        bool inPixelRange(const int &x, const int &y);
 
 };
 
