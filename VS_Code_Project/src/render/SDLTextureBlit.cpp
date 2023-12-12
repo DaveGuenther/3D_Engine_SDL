@@ -11,7 +11,7 @@ SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, int SCREEN_W, int SCR
 
 void SDL_Texture_Blit::lock(){
     SDL_LockTexture(this->texture, NULL, (void **)&this->framebufferpixels, &this->pitch);
-    this->pitch=this->pitch/4;
+    this->adjusted_pitch=this->adjusted_pitch/this->pixelFormat->BytesPerPixel;
     this->p = (Uint32 *)(this->framebufferpixels); // cast for a pointer increments by 4 bytes.(RGBA)
     this->tex_head=this->p;
 }
@@ -20,7 +20,7 @@ void SDL_Texture_Blit::blit(uint x, uint y, uint8_t r, uint8_t g, uint8_t b, uin
     //this->p = this->tex_head+(this->pitch*y)+x;
     //*p = SDL_MapRGBA(this->pixelFormat, r, g, b, a);
     if (this->inPixelRange(x, y)){
-        this->p = this->tex_head+(this->pitch*y)+x;
+        this->p = this->tex_head+(this->adjusted_pitch*y)+x;
         *p = SDL_MapRGBA(this->pixelFormat, r, g, b, a);
     }
 }
