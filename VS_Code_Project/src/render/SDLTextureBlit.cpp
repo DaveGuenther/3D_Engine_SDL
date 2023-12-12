@@ -1,5 +1,6 @@
 #include "SDLTextureBlit.h"
 #include <SDL2/SDL.h>
+#include <iostream>
 
 
 SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, int SCREEN_W, int SCREEN_H){
@@ -10,15 +11,17 @@ SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, int SCREEN_W, int SCR
 }
 
 void SDL_Texture_Blit::lock(){
-    SDL_LockTexture(this->texture, NULL, (void **)&this->framebufferpixels, &this->pitch);
-    this->adjusted_pitch=this->adjusted_pitch/this->pixelFormat->BytesPerPixel;
+    if(SDL_LockTexture(this->texture, NULL, (void **)&this->framebufferpixels, &this->pitch))
+    {
+        // if return status is non-zero we have an error and want to show it here
+        std::cout << "Error Locking Texture: " << SDL_GetError() << std::endl;
+    }
+    this->adjusted_pitch=this->pitch/this->pixelFormat->BytesPerPixel;
     this->p = (Uint32 *)(this->framebufferpixels); // cast for a pointer increments by 4 bytes.(RGBA)
     this->tex_head=this->p;
 }
 
 void SDL_Texture_Blit::blit(uint x, uint y, uint8_t r, uint8_t g, uint8_t b, uint8_t a){
-    //this->p = this->tex_head+(this->pitch*y)+x;
-    //*p = SDL_MapRGBA(this->pixelFormat, r, g, b, a);
     if (this->inPixelRange(x, y)){
         this->p = this->tex_head+(this->adjusted_pitch*y)+x;
         *p = SDL_MapRGBA(this->pixelFormat, r, g, b, a);

@@ -33,8 +33,8 @@ class SDL_Texture_Blit{
         uint8_t *framebufferpixels=NULL;
         Uint32 *tex_head=NULL;
         Uint32 textureFormat;
-        int pitch; // size of one row in bytes
-        int adjusted_pitch; // this is the pitch of a single row in pixels (not bytes)
+        int pitch=0; // size of one row in bytes
+        int adjusted_pitch=0; // this is the pitch of a single row in pixels (not bytes)
         Uint32 *p=NULL; // this will be the pixel pointer to a specific pixel in the buffer
         
         bool inPixelRange(const int &x, const int &y);
