@@ -28,6 +28,7 @@ OBJ_utility_LIST = $(OBJ)/utility/Mat4x4.o $(OBJ)/utility/Mesh_Pipeline.o $(OBJ)
 all: $(BUILD)/game
 
 .PHONY: release
+release: CXXFLAGS += -O0 -fno-inline-functions
 release: clean
 release: $(BUILD)/game
 

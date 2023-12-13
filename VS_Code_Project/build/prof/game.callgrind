@@ -1,2405 +1,9465 @@
 events: Hits
 
 fl=(1) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/actions/Action_Updater.cpp
-fn=(1) __gnu_cxx::__mutex::lock
+fn=(1) IAction_Updater::numberOfActiveCommands
+cfl=(2) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/safe_iterator.h
+cfn=(2) __gnu_debug::_Safe_iterator::operator++
+calls=1 345
+29 1
+
+fl=(1)
+fn=(3) InGame_Action_Updater::update
+cfl=(1)
+cfn=(1)
+calls=1 29
+79 1
+
+fl=(1)
+fn=(3)
+cfl=(3) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/unordered_map
+cfn=(4) std::__debug::unordered_map::end
+calls=1 252
+79 1
+
+fl=(1)
+fn=(3)
+cfl=(2)
+cfn=(5) __gnu_debug::_Safe_iterator::operator*
+calls=1 301
+82 1
+
+fl=(1)
+fn=(3)
+cfl=(4) /usr/src/debug/gcc/gcc-build/x86_64-pc-linux-gnu/libstdc++-v3/include/ostream
+cfn=(6) std::operator<< 
+calls=1 662
+92 1
+
+fl=(1)
+fn=(3)
+cfl=(2)
+cfn=(2)
+calls=1 329
+103 1
+
+fl=(1)
+fn=(3)
+cfl=(3)
+cfn=(7) std::__debug::unordered_map::begin
+calls=1 240
+103 1
+
+fl=(1)
+fn=(3)
+cfl=(2)
+cfn=(5)
+calls=1 298
+103 1
+
+fl=(1)
+fn=(3)
+cfl=(3)
+cfn=(8) std::__debug::unordered_map::erase
+calls=1 666
+116 1
+
+fl=(1)
+fn=(9) __gnu_cxx::__mutex::lock
 145 1
 
 fl=(1)
-fn=(2) __gnu_cxx::__scoped_lock::__scoped_lock
+fn=(9)
+cfl=(5) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/x86_64-pc-linux-gnu/bits/gthr-default.h
+cfn=(10) __gthread_mutex_lock
+calls=2 752
+149 2
+
+fl=(1)
+fn=(9)
+cfl=??
+cfn=(11) pthread_mutex_lock@@GLIBC_2.2.5
+calls=9 0
+149 9
+
+fl=(1)
+fn=(9)
+151 1
+
+fl=(1)
+fn=(12) __gnu_cxx::__mutex::unlock
+cfl=??
+cfn=(13) pthread_mutex_trylock@GLIBC_2.2.5
+calls=6 0
+160 6
+
+fl=(1)
+fn=(12)
+162 1
+
+fl=(1)
+fn=(14) __gnu_cxx::__scoped_lock::__scoped_lock
 241 1
 
 fl=(1)
-fn=(2)
+fn=(14)
 cfl=(1)
-cfn=(1)
+cfn=(9)
 calls=1 145
 241 1
 
-fl=(2) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/core/../input/../render/../utility/Triangle.h
-fn=(3) Triangle::~Triangle
-cfl=(3) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/shared_ptr.h
-cfn=(4) std::shared_ptr::~shared_ptr
-calls=7 175
-14 7
+fl=(1)
+fn=(14)
+cfl=(5)
+cfn=(10)
+calls=1 752
+241 1
 
-fl=(4) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/core/Engine_3D.cpp
-fn=(5) Engine_3D::load_meshes
-cfl=(5) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/Mesh_Pipeline.cpp
-cfn=(6) Mesh_Pipeline::Add_OBJ_Mesh_to_Pipeline
-calls=13 44
-79 13
+fl=(1)
+fn=(14)
+cfl=(1)
+cfn=(9)
+calls=11 149
+241 11
 
-fl=(4)
-fn=(7) Engine_3D::engine_update
-104 1
+fl=(1)
+fn=(14)
+cfl=(1)
+cfn=(9)
+calls=1 151
+241 1
 
-fl=(4)
-fn=(7)
-cfl=(6) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/TrianglePipeline.cpp
-cfn=(8) TrianglePipeline::setPipelineFromMeshes
-calls=2 16
-121 2
+fl=(1)
+fn=(15) __gnu_cxx::__scoped_lock::~__scoped_lock
+cfl=(1)
+cfn=(12)
+calls=1 162
+244 1
 
-fl=(4)
-fn=(7)
-cfl=(6)
-cfn=(8)
-calls=1 17
+fl=(1)
+fn=(15)
+cfl=(1)
+cfn=(12)
+calls=6 160
+244 6
+
+fl=(1)
+fn=(15)
+244 1
+
+fl=(1)
+fn=(15)
+cfl=(5)
+cfn=(16) __gthread_mutex_unlock
+calls=1 777
+244 1
+
+fl=(6) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/core/../input/../render/../render/TrianglePipeline.h
+fn=(17) TrianglePipeline::~TrianglePipeline
+cfl=(7) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/vector
+cfn=(18) std::__debug::vector::~vector
+calls=4 230
+17 4
+
+fl=(8) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/core/../input/../render/../utility/Triangle.h
+fn=(19) Triangle::~Triangle
+14 4
+
+fl=(8)
+fn=(19)
+cfl=(9) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/shared_ptr.h
+cfn=(20) std::shared_ptr::~shared_ptr
+calls=38 175
+14 38
+
+fl=(10) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/core/Engine_3D.cpp
+fn=(21) Engine_3D::load_meshes
+cfl=(11) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/Mesh_Pipeline.cpp
+cfn=(22) Mesh_Pipeline::Add_OBJ_Mesh_to_Pipeline
+calls=5 44
+79 5
+
+fl=(10)
+fn=(23) Engine_3D::engine_update
+cfl=(12) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/input/Input_Parser.cpp
+cfn=(24) Input_Parser::scanInput
+calls=2 38
+103 2
+
+fl=(10)
+fn=(23)
+cfl=(12)
+cfn=(24)
+calls=6 36
+103 6
+
+fl=(10)
+fn=(23)
+cfl=(1)
+cfn=(3)
+calls=1 116
+106 1
+
+fl=(10)
+fn=(23)
+cfl=(1)
+cfn=(3)
+calls=1 92
+106 1
+
+fl=(10)
+fn=(23)
+cfl=(1)
+cfn=(3)
+calls=1 82
+106 1
+
+fl=(10)
+fn=(23)
+cfl=(1)
+cfn=(3)
+calls=3 103
+106 3
+
+fl=(10)
+fn=(23)
+cfl=(1)
+cfn=(3)
+calls=2 79
+106 2
+
+fl=(10)
+fn=(23)
+cfl=(13) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/TrianglePipeline.cpp
+cfn=(25) TrianglePipeline::setPipelineFromMeshes
+calls=27 16
+121 27
+
+fl=(10)
+fn=(23)
+cfl=(13)
+cfn=(25)
+calls=12 15
+121 12
+
+fl=(10)
+fn=(23)
+cfl=(13)
+cfn=(25)
+calls=24 17
+121 24
+
+fl=(10)
+fn=(23)
+cfl=(13)
+cfn=(25)
+calls=1 18
 121 1
 
-fl=(4)
-fn=(7)
-cfl=(7) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/Renderer.cpp
-cfn=(9) Renderer::refreshScreen
-calls=76 321
-128 76
+fl=(10)
+fn=(23)
+cfl=(13)
+cfn=(25)
+calls=1 0
+121 1
 
-fl=(4)
-fn=(7)
-cfl=(7)
-cfn=(9)
-calls=2 315
+fl=(10)
+fn=(23)
+cfl=(14) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/Renderer.cpp
+cfn=(26) Renderer::refreshScreen
+calls=393 311
+128 393
+
+fl=(10)
+fn=(23)
+cfl=(14)
+cfn=(26)
+calls=2 318
 128 2
 
-fl=(4)
-fn=(7)
-cfl=(7)
-cfn=(9)
-calls=20 311
-128 20
-
-fl=(8) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/game.cpp
-fn=(10) main
-cfl=(4)
-cfn=(5)
-calls=1 79
-25 1
-
-fl=(8)
-fn=(10)
-cfl=(4)
-cfn=(7)
-calls=1 104
-28 1
-
-fl=(8)
-fn=(10)
-cfl=(4)
-cfn=(7)
-calls=98 128
-28 98
-
-fl=(8)
-fn=(10)
-cfl=(4)
-cfn=(7)
-calls=3 121
-28 3
-
-fl=(9) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/materials/MaterialMapper.cpp
-fn=(11) MaterialMapper::doMap
-cfl=(10) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/materials/TextureList.cpp
-cfn=(12) TextureList::insertOrAssignTexture
-calls=1 24
-8 1
-
 fl=(10)
-fn=(12)
-cfl=(3)
-cfn=(13) std::make_shared
-calls=1 1009
-24 1
-
-fl=(10)
-fn=(14) TextureList::getTextureByFilename
-cfl=(3)
-cfn=(13)
-calls=27 1009
-38 27
-
-fl=(11) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/materials/TexturePNG.cpp
-fn=(15) TexturePNG::getPixelAtSurfaceUV
-96 1
-
-fl=(11)
-fn=(15)
-cfl=??
-cfn=(16) f64xsubf128@@GLIBC_2.28
-calls=1 0
-100 1
-
-fl=(11)
-fn=(15)
-100 3
-
-fl=(11)
-fn=(15)
-103 1
-
-fl=(11)
-fn=(15)
-cfl=??
-cfn=(16)
-calls=1 0
-112 1
-
-fl=(11)
-fn=(15)
-114 1
-
-fl=(11)
-fn=(15)
-cfl=??
-cfn=(16)
-calls=1 0
-115 1
-
-fl=(11)
-fn=(15)
-cfl=(12) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/cmath
-cfn=(17) std::ceil
-calls=1 159
-115 1
-
-fl=(11)
-fn=(15)
-115 2
-
-fl=(11)
-fn=(15)
-131 3
-
-fl=(11)
-fn=(15)
-133 3
-
-fl=(11)
-fn=(15)
-138 3
-
-fl=(13) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/materials/TexturePNG.h
-fn=(18) TexturePNG::TexturePNG
-cfl=(14) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/vector
-cfn=(19) std::__debug::vector::vector
-calls=28 212
-12 28
-
-fl=(13)
-fn=(20) TexturePNG::~TexturePNG
-cfl=(14)
-cfn=(21) std::__debug::vector::~vector
-calls=4 230
-12 4
-
-fl=(15) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/objects/../utility/Mesh.h
-fn=(22) Mesh::~Mesh
-cfl=(14)
-cfn=(21)
-calls=4 230
-16 4
-
-fl=(16) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/objects/OBJ.cpp
-fn=(23) OBJ::OBJ
-cfl=(16)
-cfn=(24) OBJ::buildMesh
-calls=28 261
-22 28
-
-fl=(16)
 fn=(23)
-cfl=(16)
-cfn=(24)
-calls=1 260
-22 1
-
-fl=(16)
-fn=(25) OBJ::assembleChunks
-cfl=(17) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/objects/OBJ_Chunk.cpp
-cfn=(26) OBJ_Chunk::OBJ_Chunk
-calls=1 40
-188 1
-
-fl=(16)
-fn=(25)
-cfl=(10)
-cfn=(14)
-calls=27 38
-216 27
-
-fl=(16)
-fn=(24)
-cfl=(9)
-cfn=(11)
-calls=1 8
-260 1
-
-fl=(16)
-fn=(24)
-cfl=(16)
-cfn=(25)
-calls=27 216
-261 27
-
-fl=(16)
-fn=(24)
-cfl=(16)
-cfn=(25)
-calls=1 188
-261 1
-
-fl=(17)
-fn=(26)
-cfl=(18) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/objects/OBJ_Lex_normal.cpp
-cfn=(27) OBJ_Lex_normal::lex
-calls=1 21
-40 1
-
-fl=(18)
-fn=(27)
 cfl=(14)
-cfn=(28) std::__debug::vector::operator[]
-calls=1 443
-21 1
+cfn=(26)
+calls=2324 321
+128 2324
 
-fl=(19) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/Clipper.cpp
-fn=(29) Clipper::getClippedTrisAgainstFrustum
+fl=(10)
+fn=(23)
 cfl=(14)
-cfn=(19)
-calls=1 172
-26 1
+cfn=(26)
+calls=96 315
+128 96
 
-fl=(19)
-fn=(29)
+fl=(10)
+fn=(23)
 cfl=(14)
-cfn=(30) std::__debug::vector::push_back
-calls=1 497
-29 1
+cfn=(26)
+calls=1 308
+128 1
 
-fl=(19)
-fn=(29)
-cfl=(20) /usr/src/debug/gcc/gcc/libstdc++-v3/src/c++11/debug.cc
-cfn=(31) __gnu_debug::_Safe_iterator_base::_M_singular
-calls=2 493
-33 2
-
-fl=(19)
-fn=(29)
-cfl=(21) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/Vector_Math_Service.cpp
-cfn=(32) VectorMathService::clipTriangleWithPlane
-calls=1 145
-42 1
-
-fl=(19)
-fn=(29)
-cfl=(22) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/Triangle.cpp
-cfn=(33) Triangle::getUVPoint
-calls=1 138
-42 1
-
-fl=(19)
-fn=(29)
-cfl=(2)
-cfn=(3)
-calls=1 14
-54 1
-
-fl=(19)
-fn=(29)
-cfl=(21)
-cfn=(32)
-calls=1 85
-58 1
-
-fl=(19)
-fn=(29)
-cfl=(23) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/safe_iterator.h
-cfn=(34) __gnu_debug::operator!=
-calls=1 493
-65 1
-
-fl=(19)
-fn=(29)
-cfl=(14)
-cfn=(21)
-calls=1 230
-73 1
-
-fl=(24) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/Rasterizer.cpp
-fn=(35) TexturemapRasterizer::drawFlatTopTri
-0 1
-
-fl=(24)
-fn=(36) TexturemapRasterizer::drawTriangle
-cfl=(24)
-cfn=(35)
-calls=2 270
-88 2
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=4 281
-88 4
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(37) TexturemapRasterizer::texelDimPixel
-calls=1 211
-88 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=1 285
-88 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=1 288
-88 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=2 276
-88 2
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38) TexturemapRasterizer::drawFlatBottomTri
-calls=4 362
-100 4
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=2 358
-100 2
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=1 366
-100 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=1 356
-100 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=1 353
-120 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=2 360
-120 2
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=6 362
-120 6
-
-fl=(24)
-fn=(36)
+fl=(10)
+fn=(23)
 cfl=??
-cfn=(39) SDL_DYNAPI_entry
-calls=1 0
-120 1
+cfn=(27) SDL_DYNAPI_entry
+calls=2 0
+128 2
 
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=1 375
-120 1
+fl=(10)
+fn=(23)
+cfl=(14)
+cfn=(26)
+calls=5 319
+128 5
 
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=2 358
-120 2
+fl=(10)
+fn=(23)
+cfl=(14)
+cfn=(26)
+calls=5 314
+128 5
 
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=2 366
-120 2
+fl=(10)
+fn=(23)
+cfl=(14)
+cfn=(26)
+calls=1 302
+128 1
 
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=1 276
-121 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=2 281
-121 2
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=1 0
-121 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=1 288
-121 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=2 285
-121 2
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=1 273
-121 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=1 270
-121 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=1 262
-121 1
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=5 362
-134 5
-
-fl=(24)
-fn=(36)
+fl=(10)
+fn=(23)
 cfl=??
-cfn=(39)
+cfn=(27)
 calls=1 0
 134 1
 
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=4 366
-134 4
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(38)
-calls=3 375
-134 3
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=2 276
-135 2
-
-fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=5 281
+fl=(10)
+fn=(23)
+cfl=(9)
+cfn=(20)
+calls=5 175
 135 5
 
-fl=(24)
-fn=(36)
+fl=(15) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/game.cpp
+fn=(28) main
+cfl=(10)
+cfn=(23)
+calls=1 134
+28 1
+
+fl=(15)
+fn=(28)
+cfl=(10)
+cfn=(23)
+calls=8 103
+28 8
+
+fl=(15)
+fn=(28)
+cfl=(10)
+cfn=(23)
+calls=2 135
+28 2
+
+fl=(15)
+fn=(28)
+cfl=(10)
+cfn=(23)
+calls=2810 128
+28 2810
+
+fl=(15)
+fn=(28)
+cfl=(10)
+cfn=(23)
+calls=60 121
+28 60
+
+fl=(15)
+fn=(28)
+cfl=(10)
+cfn=(23)
+calls=8 106
+28 8
+
+fl=(16) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/input/Event_Scanner.cpp
+fn=(29) Event_Scanner::scanInput
+cfl=(17) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/shared_ptr_base.h
+cfn=(30) std::__shared_ptr_access::operator->
+calls=1 1357
+38 1
+
+fl=(16)
+fn=(29)
+cfl=??
+cfn=(27)
+calls=1 0
+38 1
+
+fl=(16)
+fn=(29)
+cfl=(3)
+cfn=(31) std::__debug::unordered_map::operator=
+calls=2 205
+39 2
+
+fl=(16)
+fn=(29)
+cfl=(18) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/basic_string.h
+cfn=(32) std::__cxx11::to_string
+calls=1 4159
+49 1
+
+fl=(12)
+fn=(24)
+cfl=(16)
+cfn=(29)
+calls=1 49
+36 1
+
+fl=(12)
+fn=(24)
+cfl=(16)
+cfn=(29)
+calls=2 39
+36 2
+
+fl=(12)
+fn=(24)
+cfl=??
+cfn=(33) SDL_PollEvent
+calls=1 0
+36 1
+
+fl=(12)
+fn=(24)
+cfl=(16)
+cfn=(29)
+calls=2 38
+36 2
+
+fl=(12)
+fn=(24)
+cfl=(3)
+cfn=(34) std::__debug::unordered_map::unordered_map
+calls=2 136
+38 2
+
+fl=(19) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/materials/TextureList.cpp
+fn=(35) TextureList::getTextureByFilename
+cfl=(9)
+cfn=(36) std::make_shared
+calls=17 1009
+38 17
+
+fl=(20) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/materials/TexturePNG.cpp
+fn=(37) TexturePNG::getPixelAtSurfaceUV
+0 13
+
+fl=(20)
+fn=(37)
+96 32
+
+fl=(20)
+fn=(37)
+99 10
+
+fl=(20)
+fn=(37)
+cfl=??
+cfn=(38) f64xsubf128@@GLIBC_2.28
+calls=9 0
+100 9
+
+fl=(20)
+fn=(37)
+cfl=??
+cfn=(39) _init
+calls=6 0
+100 6
+
+fl=(20)
+fn=(37)
+cfl=(21) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/cmath
+cfn=(40) std::floor
+calls=13 254
+100 13
+
+fl=(20)
+fn=(37)
+100 92
+
+fl=(20)
+fn=(37)
+102 9
+
+fl=(20)
+fn=(37)
+103 55
+
+fl=(20)
+fn=(37)
+cfl=??
+cfn=(39)
+calls=1 0
+103 1
+
+fl=(20)
+fn=(37)
+cfl=??
+cfn=(38)
+calls=11 0
+103 11
+
+fl=(20)
+fn=(37)
+cfl=(21)
+cfn=(41) std::ceil
+calls=5 159
+103 5
+
+fl=(20)
+fn=(37)
+105 3
+
+fl=(20)
+fn=(37)
+107 5
+
+fl=(20)
+fn=(37)
+111 15
+
+fl=(20)
+fn=(37)
+cfl=(21)
+cfn=(40)
+calls=9 254
+112 9
+
+fl=(20)
+fn=(37)
+cfl=??
+cfn=(39)
+calls=2 0
+112 2
+
+fl=(20)
+fn=(37)
+112 46
+
+fl=(20)
+fn=(37)
+cfl=??
+cfn=(38)
+calls=9 0
+112 9
+
+fl=(20)
+fn=(37)
+114 10
+
+fl=(20)
+fn=(37)
+cfl=??
+cfn=(39)
+calls=1 0
+115 1
+
+fl=(20)
+fn=(37)
+115 36
+
+fl=(20)
+fn=(37)
+cfl=??
+cfn=(38)
+calls=5 0
+115 5
+
+fl=(20)
+fn=(37)
+cfl=(21)
+cfn=(41)
+calls=6 159
+115 6
+
+fl=(20)
+fn=(37)
+119 5
+
+fl=(20)
+fn=(37)
+123 15
+
+fl=(20)
+fn=(37)
+131 41
+
+fl=(20)
+fn=(37)
+133 99
+
+fl=(20)
+fn=(37)
+138 43
+
+fl=(20)
+fn=(37)
+141 15
+
+fl=(22) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/materials/TexturePNG.h
+fn=(42) TexturePNG::TexturePNG
+cfl=(7)
+cfn=(43) std::__debug::vector::vector
+calls=17 212
+12 17
+
+fl=(22)
+fn=(44) TexturePNG::~TexturePNG
+cfl=(7)
+cfn=(18)
+calls=2 230
+12 2
+
+fl=(23) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/objects/../utility/Mesh.h
+fn=(45) Mesh::Mesh
+cfl=(7)
+cfn=(43)
+calls=18 212
+16 18
+
+fl=(23)
+fn=(46) Mesh::~Mesh
+cfl=(7)
+cfn=(18)
+calls=4 230
+16 4
+
+fl=(24) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/objects/OBJ.cpp
+fn=(47) OBJ::OBJ
 cfl=(24)
-cfn=(35)
-calls=2 273
-135 2
+cfn=(48) OBJ::buildMesh
+calls=1 259
+22 1
 
 fl=(24)
-fn=(36)
+fn=(47)
 cfl=(24)
-cfn=(35)
-calls=6 288
-135 6
+cfn=(48)
+calls=18 261
+22 18
 
 fl=(24)
-fn=(36)
-cfl=(24)
-cfn=(35)
-calls=2 285
-135 2
+fn=(49) OBJ::split_OBJ_Chunks
+cfl=(7)
+cfn=(50) std::__debug::vector::push_back
+calls=1 497
+118 1
 
 fl=(24)
-fn=(40) TexturemapRasterizer::drawFT_Scanline_prep
+fn=(51) OBJ::assembleChunks
+cfl=(25) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/objects/OBJ_Chunk.cpp
+cfn=(52) OBJ_Chunk::OBJ_Chunk
+calls=1 56
 188 1
 
 fl=(24)
-fn=(41) TexturemapRasterizer::texelDetermineUV
-204 1
+fn=(51)
+cfl=(19)
+cfn=(35)
+calls=17 38
+216 17
 
 fl=(24)
-fn=(41)
-205 5
-
-fl=(24)
-fn=(41)
-206 1
-
-fl=(24)
-fn=(41)
-207 2
-
-fl=(24)
-fn=(37)
-211 4
-
-fl=(24)
-fn=(37)
-214 6
-
-fl=(24)
-fn=(37)
-215 2
-
-fl=(24)
-fn=(37)
-216 1
-
-fl=(24)
-fn=(42) TexturemapRasterizer::texelDrawUV_Point
-cfl=(25) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/SDLTextureBlit.cpp
-cfn=(43) SDL_Texture_Blit::blit
-calls=4 19
-231 4
-
-fl=(24)
-fn=(42)
-231 1
-
-fl=(24)
-fn=(42)
-cfl=??
-cfn=(44) SDL_MapRGBA
-calls=2 0
-231 2
-
-fl=(24)
-fn=(42)
-cfl=??
-cfn=(39)
-calls=3 0
-231 3
-
-fl=(24)
-fn=(42)
-cfl=(25)
-cfn=(43)
-calls=1 26
-231 1
-
-fl=(24)
-fn=(42)
-cfl=(25)
-cfn=(43)
-calls=1 22
-231 1
-
-fl=(24)
-fn=(45) TexturemapRasterizer::texelDetermineAlphaX
-247 4
-
-fl=(24)
-fn=(35)
-cfl=(24)
-cfn=(40)
-calls=1 188
-262 1
-
-fl=(24)
-fn=(35)
-270 3
-
-fl=(24)
-fn=(35)
-cfl=(24)
-cfn=(45)
-calls=3 247
-273 3
-
-fl=(24)
-fn=(35)
-cfl=(24)
-cfn=(41)
-calls=1 206
-276 1
-
-fl=(24)
-fn=(35)
-cfl=(24)
-cfn=(41)
-calls=1 204
-276 1
-
-fl=(24)
-fn=(35)
-cfl=(24)
-cfn=(41)
-calls=2 207
-276 2
-
-fl=(24)
-fn=(35)
-cfl=(24)
-cfn=(41)
-calls=1 205
-276 1
-
-fl=(24)
-fn=(35)
-cfl=(11)
-cfn=(15)
-calls=1 138
-281 1
-
-fl=(24)
-fn=(35)
-cfl=(11)
-cfn=(15)
-calls=1 131
-281 1
-
-fl=(24)
-fn=(35)
-cfl=(11)
-cfn=(15)
-calls=2 115
-281 2
-
-fl=(24)
-fn=(35)
-cfl=(11)
-cfn=(15)
-calls=1 96
-281 1
-
-fl=(24)
-fn=(35)
-cfl=(11)
-cfn=(15)
-calls=1 100
-281 1
-
-fl=(24)
-fn=(35)
-cfl=(12)
-cfn=(46) std::floor
-calls=1 254
-281 1
-
-fl=(24)
-fn=(35)
-cfl=(11)
-cfn=(15)
-calls=1 114
-281 1
-
-fl=(24)
-fn=(35)
-cfl=??
-cfn=(39)
-calls=3 0
-281 3
-
-fl=(24)
-fn=(35)
-cfl=(24)
-cfn=(37)
-calls=1 211
-285 1
-
-fl=(24)
-fn=(35)
-cfl=(24)
-cfn=(37)
-calls=1 216
-285 1
-
-fl=(24)
-fn=(35)
-cfl=(24)
-cfn=(37)
-calls=1 215
-285 1
-
-fl=(24)
-fn=(35)
-cfl=(24)
-cfn=(37)
-calls=2 214
-285 2
-
-fl=(24)
-fn=(35)
-cfl=(24)
-cfn=(42)
-calls=8 231
-288 8
-
-fl=(24)
-fn=(38)
-353 1
-
-fl=(24)
-fn=(38)
-cfl=(24)
-cfn=(45)
-calls=1 247
-356 1
-
-fl=(24)
-fn=(38)
-cfl=(24)
-cfn=(41)
-calls=4 205
-358 4
-
-fl=(24)
-fn=(38)
-cfl=(22)
-cfn=(47) Triangle::getTextureRawPtr
-calls=2 96
-360 2
-
-fl=(24)
-fn=(38)
-cfl=(11)
-cfn=(15)
-calls=1 112
-362 1
-
-fl=(24)
-fn=(38)
-cfl=(11)
-cfn=(15)
-calls=2 138
-362 2
-
-fl=(24)
-fn=(38)
-cfl=(11)
-cfn=(15)
-calls=1 103
-362 1
-
-fl=(24)
-fn=(38)
-cfl=(11)
-cfn=(15)
-calls=2 115
-362 2
-
-fl=(24)
-fn=(38)
-cfl=??
-cfn=(39)
-calls=1 0
-362 1
-
-fl=(24)
-fn=(38)
-cfl=(11)
-cfn=(15)
-calls=2 131
-362 2
-
-fl=(24)
-fn=(38)
-cfl=(11)
-cfn=(15)
-calls=3 133
-362 3
-
-fl=(24)
-fn=(38)
-cfl=(11)
-cfn=(15)
-calls=3 100
-362 3
-
-fl=(24)
-fn=(38)
-cfl=(24)
-cfn=(37)
-calls=4 214
-366 4
-
-fl=(24)
-fn=(38)
-cfl=(24)
-cfn=(37)
-calls=1 215
-366 1
-
-fl=(24)
-fn=(38)
-cfl=(24)
-cfn=(37)
-calls=2 211
-366 2
-
-fl=(24)
-fn=(38)
-cfl=(24)
-cfn=(42)
-calls=4 231
-375 4
-
-fl=(7)
-fn=(48) Renderer::drawFilledTriangle2d
-cfl=(22)
-cfn=(49) Triangle::Triangle
-calls=1 39
-129 1
-
-fl=(7)
 fn=(48)
 cfl=(24)
-cfn=(36)
-calls=10 121
-147 10
-
-fl=(7)
-fn=(48)
-cfl=(24)
-cfn=(36)
-calls=11 88
-147 11
-
-fl=(7)
-fn=(48)
-cfl=(24)
-cfn=(36)
-calls=17 135
-147 17
-
-fl=(7)
-fn=(48)
-cfl=(24)
-cfn=(36)
-calls=13 134
-147 13
-
-fl=(7)
-fn=(48)
-cfl=(24)
-cfn=(36)
-calls=15 120
-147 15
-
-fl=(7)
-fn=(48)
-cfl=(24)
-cfn=(36)
-calls=8 100
-147 8
-
-fl=(7)
-fn=(50) Renderer::projectTriangle3d
-cfl=(22)
-cfn=(51) Triangle::setUnitNormalFromPoints
-calls=1 110
-166 1
-
-fl=(7)
-fn=(50)
-cfl=(22)
-cfn=(51)
-calls=1 107
-166 1
-
-fl=(7)
-fn=(50)
-cfl=(19)
-cfn=(29)
-calls=1 54
-197 1
-
-fl=(7)
-fn=(50)
-cfl=(19)
-cfn=(29)
-calls=1 65
-197 1
-
-fl=(7)
-fn=(50)
-cfl=(14)
-cfn=(19)
-calls=2 212
-197 2
-
-fl=(7)
-fn=(50)
-cfl=(19)
-cfn=(29)
-calls=1 73
-197 1
-
-fl=(7)
-fn=(50)
-cfl=(19)
-cfn=(29)
-calls=2 33
-197 2
-
-fl=(7)
-fn=(50)
-cfl=(19)
-cfn=(29)
-calls=1 29
-197 1
-
-fl=(7)
-fn=(50)
-cfl=(14)
-cfn=(52) std::__debug::vector::end
-calls=1 310
-197 1
-
-fl=(7)
-fn=(50)
-cfl=(19)
-cfn=(29)
-calls=2 42
-197 2
-
-fl=(7)
-fn=(50)
-cfl=(19)
-cfn=(29)
-calls=1 26
-197 1
-
-fl=(7)
-fn=(50)
-cfl=(19)
-cfn=(29)
-calls=1 58
-197 1
-
-fl=(7)
-fn=(50)
-cfl=(21)
-cfn=(53) VectorMathService::dotProduct
-calls=1 10
-207 1
-
-fl=(7)
-fn=(50)
-cfl=(14)
-cfn=(54) std::__debug::vector::begin
-calls=1 300
-219 1
-
-fl=(7)
-fn=(50)
-cfl=(23)
-cfn=(34)
-calls=1 493
-219 1
-
-fl=(7)
-fn=(9)
-cfl=(7)
-cfn=(50)
-calls=2 219
-311 2
-
-fl=(7)
-fn=(9)
-cfl=(7)
-cfn=(50)
-calls=1 207
-311 1
-
-fl=(7)
-fn=(9)
-cfl=(23)
-cfn=(55) __gnu_debug::_Safe_iterator::operator++
-calls=1 748
-311 1
-
-fl=(7)
-fn=(9)
-cfl=(22)
 cfn=(49)
-calls=1 52
-311 1
+calls=1 118
+259 1
 
-fl=(7)
-fn=(9)
-cfl=(7)
-cfn=(50)
-calls=2 166
-311 2
+fl=(24)
+fn=(48)
+cfl=(24)
+cfn=(51)
+calls=17 216
+261 17
 
-fl=(7)
-fn=(9)
-cfl=(7)
-cfn=(50)
-calls=13 197
-311 13
+fl=(24)
+fn=(48)
+cfl=(24)
+cfn=(51)
+calls=1 188
+261 1
 
-fl=(7)
-fn=(9)
-cfl=(6)
-cfn=(56) TrianglePipeline::orderPipelineByZ
-calls=2 27
-315 2
-
-fl=(7)
-fn=(9)
-cfl=(7)
-cfn=(48)
-calls=1 129
-321 1
-
-fl=(7)
-fn=(9)
-cfl=(2)
-cfn=(3)
+fl=(25)
+fn=(52)
+cfl=(26) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/objects/OBJ_Lex_triFace.cpp
+cfn=(53) OBJ_Lex_triFace::lex
 calls=1 14
-321 1
+56 1
 
-fl=(7)
-fn=(9)
-cfl=(7)
-cfn=(48)
-calls=74 147
-321 74
-
-fl=(7)
-fn=(57) Renderer::~Renderer
-cfl=(14)
-cfn=(21)
-calls=1 230
-393 1
-
-fl=(25)
-fn=(43)
-19 4
-
-fl=(25)
-fn=(43)
-cfl=(25)
-cfn=(58) SDL_Texture_Blit::inPixelRange
-calls=1 51
-22 1
-
-fl=(25)
-fn=(43)
-26 1
-
-fl=(25)
-fn=(58)
-51 1
-
-fl=(6)
-fn=(8)
-cfl=(23)
-cfn=(55)
-calls=2 748
-16 2
-
-fl=(6)
-fn=(8)
-cfl=(14)
-cfn=(30)
-calls=2 497
-17 2
-
-fl=(6)
-fn=(56)
-cfl=(26) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_algo.h
-cfn=(59) std::sort
-calls=2 4894
-27 2
-
-fl=(5)
-fn=(60) Mesh_Pipeline::~Mesh_Pipeline
-cfl=(14)
-cfn=(21)
-calls=4 230
-21 4
-
-fl=(5)
-fn=(6)
-cfl=(16)
-cfn=(23)
-calls=29 22
-44 29
-
-fl=(22)
-fn=(49)
-cfl=(27) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/Vec3d.cpp
-cfn=(61) Vec3d::Vec3d
-calls=1 9
-39 1
-
-fl=(22)
-fn=(49)
-cfl=(27)
-cfn=(61)
-calls=1 9
-52 1
-
-fl=(22)
-fn=(49)
-52 1
-
-fl=(22)
-fn=(49)
-54 1
-
-fl=(22)
-fn=(49)
-61 1
-
-fl=(22)
-fn=(47)
-cfl=(28) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/shared_ptr_base.h
-cfn=(62) std::__shared_ptr::get
-calls=2 1666
-96 2
-
-fl=(22)
-fn=(51)
-cfl=(27)
-cfn=(63) operator-
-calls=1 67
-107 1
-
-fl=(22)
-fn=(51)
-cfl=(21)
-cfn=(64) VectorMathService::crossProduct
-calls=1 14
-110 1
-
-fl=(22)
-fn=(33)
-138 1
-
-fl=(29) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/Vec2d.cpp
-fn=(65) Vec2d::Vec2d
-3 2
-
-fl=(27)
-fn=(61)
-cfl=(29)
-cfn=(65)
-calls=1 3
-9 1
-
-fl=(27)
-fn=(61)
-9 1
-
-fl=(27)
-fn=(61)
-15 1
-
-fl=(27)
-fn=(61)
-cfl=(29)
-cfn=(65)
-calls=1 3
-25 1
-
-fl=(27)
-fn=(63)
-cfl=(27)
-cfn=(61)
-calls=1 15
-67 1
-
-fl=(21)
+fl=(26)
 fn=(53)
-10 1
-
-fl=(21)
-fn=(64)
+cfl=(7)
+cfn=(50)
+calls=1 497
 14 1
 
-fl=(21)
-fn=(66) VectorMathService::getSignedShortestDist
-cfl=(27)
-cfn=(61)
-calls=1 25
-61 1
+fl=(27) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/../render/Rasterizer.h
+fn=(54) TexturemapRasterizer::~TexturemapRasterizer
+46 1
 
-fl=(21)
-fn=(32)
-cfl=(21)
-cfn=(66)
-calls=1 61
-85 1
+fl=(28) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/../utility/Triangle.h
+fn=(55) Triangle::operator=
+cfl=(9)
+cfn=(56) std::shared_ptr::operator=
+calls=5 414
+14 5
 
-fl=(21)
-fn=(32)
-cfl=??
-cfn=(67) __nss_database_lookup@GLIBC_2.2.5
-calls=1 0
-145 1
+fl=(29) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/Camera.cpp
+fn=(57) Camera::buildViewMatrix
+cfl=(30) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/Mat4x4.cpp
+cfn=(58) Mat4x4::matrixLookAt
+calls=1 200
+29 1
 
-fl=(30) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/alloc_traits.h
-fn=(68) std::allocator_traits::allocate[inline]
-cfl=(31) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/new_allocator.h
-cfn=(69) std::__new_allocator::allocate
-calls=16 147
-482 16
+fl=(29)
+fn=(59) Camera::getCameraPos
+86 1
 
-fl=(30)
-fn=(70) std::allocator_traits::deallocate[inline]
-cfl=(31)
-cfn=(71) std::__new_allocator::deallocate
-calls=2 168
-516 2
+fl=(31) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/Clipper.cpp
+fn=(60) Clipper::getClippedTrisAgainstFrustum
+cfl=(7)
+cfn=(61) std::__debug::vector::clear
+calls=1 731
+20 1
 
-fl=(30)
-fn=(72) std::allocator_traits::construct[inline]
-cfl=(31)
-cfn=(73) std::__new_allocator::construct[inline]
-calls=1 187
-537 1
+fl=(31)
+fn=(60)
+cfl=(32) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/Triangle.cpp
+cfn=(62) Triangle::Triangle
+calls=2 10
+24 2
 
-fl=(30)
-fn=(72)
-cfl=(32) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_construct.h
-cfn=(74) std::_Construct
-calls=28 119
-660 28
-
-fl=(30)
-fn=(75) std::allocator_traits::destroy[inline]
+fl=(31)
+fn=(60)
 cfl=(32)
-cfn=(76) std::_Destroy
-calls=4 151
-674 4
+cfn=(62)
+calls=10 7
+24 10
 
-fl=(30)
-fn=(77) std::_Destroy[inline]
+fl=(31)
+fn=(60)
 cfl=(32)
-cfn=(76)
-calls=13 195
-947 13
-
-fl=(33) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/cpp_type_traits.h
-fn=(78) std::__miter_base
-608 1
+cfn=(62)
+calls=2 9
+24 2
 
 fl=(31)
-fn=(69)
-cfl=??
-cfn=(79) tcmalloc::ThreadCache::FetchFromCentralCache
-calls=16 0
-147 16
+fn=(60)
+cfl=(33) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/Vec3d.cpp
+cfn=(63) Vec3d::Vec3d
+calls=1 9
+24 1
 
 fl=(31)
-fn=(71)
-168 1
+fn=(60)
+cfl=(32)
+cfn=(62)
+calls=2 14
+24 2
 
 fl=(31)
-fn=(71)
-cfl=??
-cfn=(80) tcmalloc::ThreadCache::ListTooLong
+fn=(60)
+cfl=(32)
+cfn=(62)
+calls=1 11
+24 1
+
+fl=(31)
+fn=(60)
+cfl=(32)
+cfn=(62)
+calls=3 12
+24 3
+
+fl=(31)
+fn=(60)
+cfl=(34) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/Vector_Math_Service.cpp
+cfn=(64) VectorMathService::clipTriangleWithPlane
+calls=2 95
+25 2
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=2 84
+25 2
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(65) VectorMathService::getSignedShortestDist
+calls=2 60
+25 2
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 69
+25 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=2 94
+25 2
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=2 82
+25 2
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 98
+25 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=2 88
+25 2
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=3 85
+25 3
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(43)
+calls=17 172
+26 17
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=9 497
+29 9
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=1 500
+29 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=3 496
+29 3
+
+fl=(31)
+fn=(60)
+cfl=(32)
+cfn=(62)
+calls=2 61
+33 2
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(2)
+calls=3 748
+33 3
+
+fl=(31)
+fn=(60)
+cfl=(32)
+cfn=(62)
+calls=4 52
+33 4
+
+fl=(31)
+fn=(60)
+cfl=(35) /usr/src/debug/gcc/gcc/libstdc++-v3/src/c++11/debug.cc
+cfn=(66) __gnu_debug::_Safe_iterator_base::_M_can_compare
+calls=1 498
+33 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(67) __gnu_debug::operator!=
 calls=1 0
-168 1
+33 1
 
 fl=(31)
-fn=(73)
-cfl=(22)
-cfn=(49)
-calls=1 61
-187 1
+fn=(60)
+cfl=(2)
+cfn=(67)
+calls=2 492
+33 2
 
-fl=(34) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/predefined_ops.h
-fn=(81) __gnu_cxx::__ops::_Iter_comp_iter::operator
-cfl=(22)
-cfn=(49)
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(68) __gnu_debug::_Safe_iterator::_Safe_iterator
+calls=1 688
+33 1
+
+fl=(31)
+fn=(60)
+33 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(69) std::__debug::vector::end
+calls=1 310
+33 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(70) std::__debug::vector::begin
+calls=1 300
+33 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(5)
+calls=1 301
+33 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(5)
+calls=1 298
+33 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 94
+34 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 145
+34 1
+
+fl=(31)
+fn=(60)
+cfl=(33)
+cfn=(63)
+calls=1 26
+34 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=3 85
+34 3
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=4 88
+34 4
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 69
+34 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 95
+34 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=2 214
+34 2
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 82
+34 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 98
+34 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 97
+34 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=1 500
+36 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=7 497
+36 7
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(5)
+calls=1 298
+41 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(2)
+calls=1 748
+41 1
+
+fl=(31)
+fn=(60)
+cfl=(32)
+cfn=(62)
+calls=2 61
+41 2
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(71) __gnu_debug::_Safe_iterator::~_Safe_iterator
+calls=1 653
+41 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(67)
+calls=1 492
+41 1
+
+fl=(31)
+fn=(60)
+cfl=(32)
+cfn=(62)
+calls=2 52
+41 2
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(70)
+calls=4 300
+41 4
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(69)
+calls=1 310
+41 1
+
+fl=(31)
+fn=(60)
+41 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 145
+42 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 98
+42 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 157
+42 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 114
+42 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 69
+42 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 95
+42 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 88
+42 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 111
+42 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=8 497
+44 8
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=1 496
+44 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=5 500
+44 5
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(67)
+calls=1 491
+49 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(67)
+calls=1 492
+49 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(71)
+calls=1 653
+49 1
+
+fl=(31)
+fn=(60)
+49 1
+
+fl=(31)
+fn=(60)
+cfl=(36) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/Vec2d.cpp
+cfn=(72) Vec2d::Vec2d
+calls=1 3
+49 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(70)
+calls=2 300
+49 2
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(2)
+calls=3 748
+49 3
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(67)
+calls=1 493
+49 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(69)
+calls=1 310
+49 1
+
+fl=(31)
+fn=(60)
+cfl=(32)
+cfn=(62)
+calls=1 53
+49 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(5)
+calls=2 298
+49 2
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 82
+50 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 145
+50 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 199
+50 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 88
+50 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=7 497
+52 7
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=1 500
+52 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=1 496
+52 1
+
+fl=(31)
+fn=(60)
+cfl=(8)
+cfn=(19)
+calls=1 14
+54 1
+
+fl=(31)
+fn=(60)
+cfl=(32)
+cfn=(62)
+calls=3 61
+57 3
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(69)
+calls=4 310
+57 4
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(68)
+calls=1 688
+57 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(71)
+calls=2 653
+57 2
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(67)
+calls=2 493
+57 2
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(5)
+calls=1 298
+57 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(67)
+calls=1 492
+57 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(2)
+calls=2 748
+57 2
+
+fl=(31)
+fn=(60)
+cfl=(32)
+cfn=(62)
 calls=1 52
-158 1
+57 1
 
-fl=(3)
-fn=(4)
-cfl=(28)
-cfn=(82) std::__shared_ptr::~__shared_ptr
-calls=8 1524
-175 8
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(70)
+calls=4 300
+57 4
 
-fl=(3)
-fn=(83) std::shared_ptr::shared_ptr
-cfl=(28)
-cfn=(84) std::__shared_ptr::__shared_ptr
-calls=28 1712
-464 28
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 93
+58 1
 
-fl=(3)
-fn=(13)
-cfl=(3)
-cfn=(83)
-calls=28 464
-1009 28
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 95
+58 1
 
-fl=(28)
-fn=(85) std::__shared_count::~__shared_count
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 230
+58 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 82
+58 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 69
+58 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 84
+58 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=2 500
+60 2
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(50)
+calls=7 497
+60 7
+
+fl=(31)
+fn=(60)
+cfl=(32)
+cfn=(62)
+calls=1 52
+65 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(5)
+calls=2 298
+65 2
+
+fl=(31)
+fn=(60)
+cfl=??
+cfn=(39)
+calls=1 0
+65 1
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(71)
+calls=4 653
+65 4
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(70)
+calls=3 300
+65 3
+
+fl=(31)
+fn=(60)
+cfl=(2)
+cfn=(2)
+calls=1 748
+65 1
+
+fl=(31)
+fn=(60)
+cfl=(32)
+cfn=(62)
+calls=1 61
+65 1
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(69)
+calls=2 310
+65 2
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 88
+66 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 98
+66 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 95
+66 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=1 221
+66 1
+
+fl=(31)
+fn=(60)
+cfl=(34)
+cfn=(64)
+calls=2 111
+66 2
+
+fl=(31)
+fn=(60)
+cfl=(8)
+cfn=(19)
+calls=3 14
+73 3
+
+fl=(31)
+fn=(60)
+cfl=(7)
+cfn=(18)
+calls=13 230
+73 13
+
+fl=(31)
+fn=(60)
+cfl=(37) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/safe_container.h
+cfn=(73) __gnu_debug::_Safe_container::~_Safe_container
+calls=1 41
+73 1
+
+fl=(31)
+fn=(74) std::__cxx1998::vector::_M_realloc_insert
+453 1
+
+fl=(31)
+fn=(74)
+cfl=(38) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_vector.h
+cfn=(75) std::__cxx1998::vector::_M_check_len
+calls=1 1898
+455 1
+
+fl=(31)
+fn=(74)
+cfl=(38)
+cfn=(75)
+calls=2 1895
+455 2
+
+fl=(31)
+fn=(74)
+cfl=(39) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_algobase.h
+cfn=(76) std::max
+calls=1 258
+455 1
+
+fl=(31)
+fn=(74)
+cfl=(38)
+cfn=(75)
+calls=4 1899
+455 4
+
+fl=(31)
+fn=(74)
+458 1
+
+fl=(31)
+fn=(74)
+cfl=(38)
+cfn=(77) std::__cxx1998::vector::begin
+calls=1 871
+458 1
+
+fl=(31)
+fn=(74)
+cfl=(38)
+cfn=(78) std::__cxx1998::_Vector_base::_M_allocate
+calls=1 0
+459 1
+
+fl=(31)
+fn=(74)
+cfl=(38)
+cfn=(78)
+calls=3 378
+459 3
+
+fl=(40) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/Rasterizer.cpp
+fn=(79) TexturemapRasterizer::drawFT_Scanline_prep
 0 1
 
-fl=(28)
-fn=(86) std::_Sp_counted_base::_M_release
-cfl=(28)
-cfn=(87) std::_Sp_counted_ptr::_M_dispose
-calls=5 428
-346 5
+fl=(40)
+fn=(80) TexturemapRasterizer::drawFlatTopTri
+0 17
 
-fl=(28)
-fn=(86)
-cfl=(28)
-cfn=(88) std::_Sp_counted_ptr_inplace::_M_dispose
-calls=4 613
-346 4
+fl=(40)
+fn=(81) TexturemapRasterizer::drawFlatBottomTri
+0 9
 
-fl=(28)
-fn=(87)
-cfl=(7)
-cfn=(57)
-calls=1 393
-428 1
+fl=(40)
+fn=(82) ITriangleRasterizer::~ITriangleRasterizer
+11 2
 
-fl=(28)
-fn=(87)
-cfl=(5)
-cfn=(60)
-calls=4 21
-428 4
+fl=(40)
+fn=(83) TexturemapRasterizer::drawTriangle
+47 1
 
-fl=(28)
-fn=(89) std::_Sp_counted_ptr_inplace::_Sp_counted_ptr_inplace
-cfl=(30)
-cfn=(72)
-calls=28 660
-604 28
-
-fl=(28)
-fn=(88)
-cfl=(30)
-cfn=(75)
-calls=4 674
-613 4
-
-fl=(28)
-fn=(90) std::__shared_count::__shared_count
-cfl=(28)
-cfn=(89)
-calls=28 604
-972 28
-
-fl=(28)
-fn=(85)
-1070 1
-
-fl=(28)
-fn=(85)
-cfl=(35) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/ext/atomicity.h
-cfn=(86)
-calls=1 0
-1071 1
-
-fl=(28)
-fn=(85)
-cfl=(28)
-cfn=(86)
-calls=8 346
-1071 8
-
-fl=(28)
-fn=(82)
-cfl=(28)
-cfn=(85)
-calls=6 1071
-1524 6
-
-fl=(28)
-fn=(82)
-cfl=(28)
-cfn=(85)
-calls=1 1070
-1524 1
-
-fl=(28)
-fn=(82)
-cfl=(28)
-cfn=(85)
-calls=1 0
-1524 1
-
-fl=(28)
-fn=(62)
-1666 2
-
-fl=(28)
-fn=(84)
-cfl=(28)
-cfn=(90)
-calls=28 972
-1712 28
-
-fl=(26)
-fn=(91) std::__move_median_to_first
-cfl=(34)
-cfn=(81)
-calls=1 158
-97 1
-
-fl=(26)
-fn=(92) std::__unguarded_linear_insert
-1794 1
-
-fl=(26)
-fn=(93) std::__unguarded_insertion_sort
-cfl=(26)
-cfn=(92)
-calls=1 1794
-1840 1
-
-fl=(26)
-fn=(94) std::__final_insertion_sort
-cfl=(26)
-cfn=(93)
-calls=1 1840
-1860 1
-
-fl=(26)
-fn=(95) std::__unguarded_partition_pivot
-cfl=(26)
-cfn=(91)
-calls=1 97
-1897 1
-
-fl=(26)
-fn=(96) std::__introsort_loop
-cfl=(26)
-cfn=(95)
-calls=1 1897
-1931 1
-
-fl=(26)
-fn=(96)
-cfl=(26)
-cfn=(96)
-calls=1 1932
-1932 1
-
-fl=(26)
-fn=(96)
-cfl=(26)
-cfn=(96)
-calls=1 1931
-1932 1
-
-fl=(26)
-fn=(97) std::__sort
-cfl=(26)
-cfn=(96)
-calls=1 1932
-1947 1
-
-fl=(26)
-fn=(97)
-cfl=(26)
-cfn=(94)
-calls=1 1860
-1950 1
-
-fl=(26)
-fn=(59)
-cfl=(26)
-cfn=(97)
-calls=1 1947
-4894 1
-
-fl=(26)
-fn=(59)
-cfl=(26)
-cfn=(97)
-calls=1 1950
-4894 1
-
-fl=(36) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_algobase.h
-fn=(98) std::__niter_base
-318 1
-
-fl=(36)
-fn=(99) std::__niter_wrap
-339 1
-
-fl=(36)
-fn=(100) std::__copy_move_a2
-cfl=??
-cfn=(67)
-calls=2 0
-505 2
-
-fl=(36)
-fn=(101) std::__copy_move_a1
-cfl=(36)
-cfn=(100)
-calls=2 505
-533 2
-
-fl=(36)
-fn=(102) std::__copy_move_a
-cfl=(36)
-cfn=(101)
-calls=2 533
-541 2
-
-fl=(36)
-fn=(102)
-cfl=(36)
-cfn=(98)
-calls=1 318
-543 1
-
-fl=(36)
-fn=(103) std::copy
-cfl=(37) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/helper_functions.h
-cfn=(104) __gnu_debug::__valid_range
-calls=4 243
-630 4
-
-fl=(36)
-fn=(103)
-cfl=(36)
-cfn=(99)
-calls=1 339
-632 1
-
-fl=(36)
-fn=(103)
-cfl=(36)
-cfn=(102)
-calls=1 543
-632 1
-
-fl=(36)
-fn=(103)
-cfl=(36)
-cfn=(102)
-calls=2 541
-632 2
-
-fl=(36)
-fn=(103)
+fl=(40)
+fn=(83)
 cfl=(33)
-cfn=(78)
-calls=1 608
-633 1
+cfn=(63)
+calls=1 26
+51 1
 
-fl=(32)
-fn=(74)
-cfl=(14)
-cfn=(19)
-calls=27 212
-119 27
-
-fl=(32)
-fn=(74)
-cfl=(22)
-cfn=(49)
-calls=1 54
-119 1
-
-fl=(32)
-fn=(74)
-cfl=(13)
-cfn=(18)
-calls=28 12
-119 28
-
-fl=(32)
-fn=(76)
-cfl=(2)
-cfn=(3)
-calls=5 14
-151 5
-
-fl=(32)
-fn=(76)
-151 1
-
-fl=(32)
-fn=(76)
-cfl=(14)
-cfn=(21)
-calls=3 230
-151 3
-
-fl=(32)
-fn=(76)
-cfl=(15)
-cfn=(22)
-calls=4 16
-151 4
-
-fl=(32)
-fn=(76)
-cfl=(13)
-cfn=(20)
-calls=4 12
-151 4
-
-fl=(32)
-fn=(105) std::_Destroy_aux::__destroy
+fl=(40)
+fn=(83)
 cfl=(32)
-cfn=(76)
-calls=13 151
-163 13
+cfn=(84) Triangle::getUVPoint
+calls=1 138
+54 1
 
-fl=(32)
-fn=(76)
+fl=(40)
+fn=(83)
+cfl=(33)
+cfn=(85) Vec3d::toThousandths
+calls=2 45
+58 2
+
+fl=(40)
+fn=(83)
+cfl=??
+cfn=(38)
+calls=1 0
+59 1
+
+fl=(40)
+fn=(83)
+cfl=(33)
+cfn=(85)
+calls=1 44
+60 1
+
+fl=(40)
+fn=(83)
+68 1
+
+fl=(40)
+fn=(83)
+71 1
+
+fl=(40)
+fn=(83)
+72 1
+
+fl=(40)
+fn=(83)
 cfl=(32)
-cfn=(105)
-calls=13 163
-195 13
+cfn=(86) Triangle::getTextureRawPtr
+calls=2 95
+88 2
 
-fl=(38) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_iterator.h
-fn=(106) __gnu_cxx::__normal_iterator::base
-1163 2
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=1 254
+88 1
 
-fl=(38)
-fn=(107) __gnu_cxx::operator!=
-cfl=(38)
-cfn=(106)
-calls=1 1163
-1244 1
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=8 262
+88 8
 
-fl=(38)
-fn=(107)
-1244 1
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(87) TexturemapRasterizer::texelDimPixel
+calls=1 211
+88 1
 
-fl=(38)
-fn=(108) __gnu_cxx::operator-
-1337 1
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=4 270
+88 4
 
-fl=(39) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_uninitialized.h
-fn=(109) std::__do_uninit_copy
-cfl=(38)
-cfn=(107)
-calls=1 1244
-119 1
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=46 288
+88 46
 
-fl=(39)
-fn=(109)
-cfl=(32)
-cfn=(74)
-calls=28 119
-120 28
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=53 285
+88 53
 
-fl=(39)
-fn=(110) std::__uninitialized_copy::__uninit_copy
-cfl=(39)
-cfn=(109)
-calls=1 119
-137 1
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=122 281
+88 122
 
-fl=(39)
-fn=(110)
-cfl=(39)
-cfn=(109)
-calls=28 120
-137 28
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=6 0
+88 6
 
-fl=(39)
-fn=(110)
-cfl=(36)
-cfn=(103)
-calls=4 632
-147 4
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=7 279
+88 7
 
-fl=(39)
-fn=(110)
-147 1
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=39 276
+88 39
 
-fl=(39)
-fn=(110)
-cfl=(36)
-cfn=(103)
-calls=4 630
-147 4
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(88) TexturemapRasterizer::texelDrawUV_Point
+calls=1 221
+88 1
 
-fl=(39)
-fn=(110)
-cfl=(36)
-cfn=(103)
-calls=1 633
-147 1
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=7 273
+88 7
 
-fl=(39)
-fn=(111) std::uninitialized_copy
-cfl=(39)
-cfn=(110)
-calls=10 147
-184 10
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=50 358
+100 50
 
-fl=(39)
-fn=(111)
-cfl=(39)
-cfn=(110)
-calls=29 137
-184 29
+fl=(40)
+fn=(83)
+cfl=??
+cfn=(89) SDL_SetRenderDrawColor
+calls=2 0
+100 2
 
-fl=(39)
-fn=(112) std::__uninitialized_copy_a
-cfl=(39)
-cfn=(111)
-calls=39 184
-373 39
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=2 369
+100 2
 
-fl=(39)
-fn=(113) std::__uninitialized_move_if_noexcept_a
-cfl=(39)
-cfn=(112)
-calls=1 373
-398 1
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=8 360
+100 8
 
-fl=(40) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_vector.h
-fn=(114) std::__cxx1998::_Vector_base::_Vector_impl_data::_Vector_impl_data
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=105 362
+100 105
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=3 0
+100 3
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=18 356
+100 18
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(87)
+calls=1 211
 100 1
 
 fl=(40)
-fn=(115) std::__cxx1998::_Vector_base::_Vector_impl::_Vector_impl
+fn=(83)
 cfl=(40)
-cfn=(114)
-calls=1 100
-143 1
+cfn=(81)
+calls=6 345
+100 6
 
 fl=(40)
-fn=(116) std::__cxx1998::_Vector_base::_M_get_Tp_allocator
-299 1
-
-fl=(40)
-fn=(117) std::__cxx1998::_Vector_base::_Vector_base
+fn=(83)
 cfl=(40)
-cfn=(115)
-calls=1 143
-331 1
+cfn=(81)
+calls=1 340
+100 1
 
 fl=(40)
-fn=(117)
+fn=(83)
 cfl=(40)
-cfn=(118) std::__cxx1998::_Vector_base::_M_create_storage
-calls=16 395
-332 16
+cfn=(81)
+calls=66 366
+100 66
 
 fl=(40)
-fn=(117)
-332 1
-
-fl=(40)
-fn=(119) std::__cxx1998::_Vector_base::~_Vector_base
+fn=(83)
 cfl=(40)
-cfn=(120) std::__cxx1998::_Vector_base::_M_deallocate
-calls=2 387
-366 2
+cfn=(81)
+calls=1 353
+100 1
 
 fl=(40)
-fn=(121) std::__cxx1998::_Vector_base::_M_allocate
-cfl=(30)
-cfn=(68)
-calls=16 482
-378 16
+fn=(83)
+cfl=??
+cfn=(27)
+calls=10 0
+100 10
 
 fl=(40)
-fn=(120)
-cfl=(30)
-cfn=(70)
-calls=2 516
-387 2
-
-fl=(40)
-fn=(118)
+fn=(83)
 cfl=(40)
-cfn=(121)
-calls=16 378
-395 16
+cfn=(81)
+calls=40 375
+100 40
 
 fl=(40)
-fn=(122) std::__cxx1998::vector::vector
+fn=(83)
 cfl=(40)
-cfn=(117)
-calls=1 331
-599 1
+cfn=(88)
+calls=3 221
+100 3
 
 fl=(40)
-fn=(122)
+fn=(83)
 cfl=(40)
-cfn=(117)
-calls=16 332
-599 16
+cfn=(81)
+calls=1 348
+100 1
 
 fl=(40)
-fn=(122)
-cfl=(39)
-cfn=(112)
-calls=38 373
-603 38
+fn=(83)
+cfl=(33)
+cfn=(90) operator-
+calls=1 67
+109 1
 
 fl=(40)
-fn=(123) std::__cxx1998::vector::~vector
-cfl=(30)
-cfn=(77)
-calls=13 947
-732 13
+fn=(83)
+cfl=(36)
+cfn=(90)
+calls=1 39
+110 1
 
 fl=(40)
-fn=(123)
+fn=(83)
+cfl=(32)
+cfn=(62)
+calls=1 39
+116 1
+
+fl=(40)
+fn=(83)
 cfl=(40)
-cfn=(119)
-calls=2 366
-735 2
+cfn=(81)
+calls=12 360
+120 12
 
 fl=(40)
-fn=(124) std::__cxx1998::vector::size
-990 1
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=12 345
+120 12
 
 fl=(40)
-fn=(125) std::__cxx1998::vector::operator[]
-1126 1
+fn=(83)
+cfl=(20)
+cfn=(37)
+calls=1 96
+120 1
 
 fl=(40)
-fn=(126) std::__cxx1998::vector::push_back
-cfl=(30)
-cfn=(72)
-calls=1 537
-1283 1
+fn=(83)
+cfl=??
+cfn=(27)
+calls=23 0
+120 23
 
 fl=(40)
-fn=(126)
-cfl=(41) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/vector.tcc
-cfn=(127) std::__cxx1998::vector::_M_realloc_insert
-calls=1 492
-1289 1
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=17 356
+120 17
 
 fl=(40)
-fn=(126)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=2 353
+120 2
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=1 348
+120 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=4 0
+120 4
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(88)
+calls=4 221
+120 4
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(87)
+calls=1 211
+120 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=94 366
+120 94
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=3 369
+120 3
+
+fl=(40)
+fn=(83)
+cfl=??
+cfn=(89)
+calls=4 0
+120 4
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=69 375
+120 69
+
+fl=(40)
+fn=(83)
+cfl=(32)
+cfn=(86)
+calls=3 95
+120 3
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=146 362
+120 146
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=78 358
+120 78
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=1 265
+121 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(88)
+calls=2 221
+121 2
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=171 281
+121 171
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=13 273
+121 13
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=7 0
+121 7
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(87)
+calls=1 211
+121 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=4 270
+121 4
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(91) TexturemapRasterizer::texelDetermineAlphaX
+calls=1 242
+121 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=4 262
+121 4
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=1 260
+121 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(79)
+calls=1 174
+121 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=50 276
+121 50
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=7 279
+121 7
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=70 288
+121 70
+
+fl=(40)
+fn=(83)
+cfl=(20)
+cfn=(37)
+calls=1 141
+121 1
+
+fl=(40)
+fn=(83)
+cfl=(20)
+cfn=(37)
+calls=2 96
+121 2
+
+fl=(40)
+fn=(83)
+cfl=(32)
+cfn=(86)
+calls=2 95
+121 2
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=87 285
+121 87
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(91)
+calls=2 249
+121 2
+
+fl=(40)
+fn=(83)
+cfl=(32)
+cfn=(62)
+calls=1 39
+127 1
+
+fl=(40)
+fn=(83)
+cfl=(32)
+cfn=(92) Triangle::getTexture
+calls=1 92
+127 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(88)
+calls=1 233
+134 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=15 356
+134 15
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=8 360
+134 8
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=68 375
+134 68
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(87)
+calls=2 211
+134 2
+
+fl=(40)
+fn=(83)
+cfl=(20)
+cfn=(37)
+calls=1 96
+134 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(88)
+calls=1 221
+134 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=68 366
+134 68
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=7 369
+134 7
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=9 345
+134 9
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=2 343
+134 2
+
+fl=(40)
+fn=(83)
+cfl=??
+cfn=(27)
+calls=7 0
+134 7
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=60 358
+134 60
+
+fl=(40)
+fn=(83)
+cfl=(32)
+cfn=(86)
+calls=3 95
+134 3
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=3 353
+134 3
+
+fl=(40)
+fn=(83)
+cfl=??
+cfn=(89)
+calls=2 0
+134 2
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=2 0
+134 2
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=1 348
+134 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(81)
+calls=115 362
+134 115
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=135 281
+135 135
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(87)
+calls=3 211
+135 3
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=75 288
+135 75
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=1 260
+135 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=3 270
+135 3
+
+fl=(40)
+fn=(83)
+cfl=(20)
+cfn=(37)
+calls=1 141
+135 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=4 0
+135 4
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=61 276
+135 61
+
+fl=(40)
+fn=(83)
+cfl=(32)
+cfn=(86)
+calls=2 95
+135 2
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=20 273
+135 20
+
+fl=(40)
+fn=(83)
+cfl=(20)
+cfn=(37)
+calls=1 96
+135 1
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=85 285
+135 85
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=7 262
+135 7
+
+fl=(40)
+fn=(83)
+cfl=(40)
+cfn=(80)
+calls=8 279
+135 8
+
+fl=(40)
+fn=(93) TexturemapRasterizer::drawTriangleInitializer
+150 1
+
+fl=(40)
+fn=(79)
+174 1
+
+fl=(40)
+fn=(79)
+176 5
+
+fl=(40)
+fn=(79)
+177 1
+
+fl=(40)
+fn=(79)
+180 3
+
+fl=(40)
+fn=(79)
+cfl=??
+cfn=(38)
+calls=1 0
+181 1
+
+fl=(40)
+fn=(79)
+181 2
+
+fl=(40)
+fn=(79)
+184 1
+
+fl=(40)
+fn=(79)
+185 1
+
+fl=(40)
+fn=(79)
+188 3
+
+fl=(40)
+fn=(79)
+199 1
+
+fl=(40)
+fn=(94) TexturemapRasterizer::texelDetermineUV
+202 11
+
+fl=(40)
+fn=(94)
+203 72
+
+fl=(40)
+fn=(94)
+204 23
+
+fl=(40)
+fn=(94)
+205 98
+
+fl=(40)
+fn=(94)
+206 86
+
+fl=(40)
+fn=(94)
+207 19
+
+fl=(40)
+fn=(94)
+209 14
+
+fl=(40)
+fn=(87)
+211 21
+
+fl=(40)
+fn=(87)
+cfl=(32)
+cfn=(95) Triangle::getLightDimAmount
+calls=14 119
+214 14
+
+fl=(40)
+fn=(87)
+214 126
+
+fl=(40)
+fn=(87)
+cfl=(32)
+cfn=(95)
+calls=2 118
+214 2
+
+fl=(40)
+fn=(87)
+cfl=(32)
+cfn=(95)
+calls=11 119
+215 11
+
+fl=(40)
+fn=(87)
+215 109
+
+fl=(40)
+fn=(87)
+216 111
+
+fl=(40)
+fn=(87)
+cfl=(32)
+cfn=(95)
+calls=12 119
+216 12
+
+fl=(40)
+fn=(87)
+217 18
+
+fl=(40)
+fn=(88)
+221 22
+
+fl=(40)
+fn=(88)
+cfl=??
+cfn=(27)
+calls=55 0
+231 55
+
+fl=(40)
+fn=(88)
+cfl=(41) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/render/SDLTextureBlit.cpp
+cfn=(96) SDL_Texture_Blit::inPixelRange
+calls=17 53
+231 17
+
+fl=(40)
+fn=(88)
 cfl=(41)
-cfn=(127)
-calls=1 501
-1289 1
+cfn=(97) SDL_Texture_Blit::blit
+calls=9 26
+231 9
 
-fl=(41)
-fn=(127)
-cfl=(39)
-cfn=(113)
-calls=1 398
-492 1
+fl=(40)
+fn=(88)
+cfl=(41)
+cfn=(97)
+calls=58 24
+231 58
 
-fl=(41)
-fn=(127)
-501 1
+fl=(40)
+fn=(88)
+231 35
 
-fl=(12)
-fn=(17)
-159 1
+fl=(40)
+fn=(88)
+cfl=(41)
+cfn=(97)
+calls=22 29
+231 22
 
-fl=(12)
-fn=(46)
+fl=(40)
+fn=(88)
+cfl=(41)
+cfn=(97)
+calls=6 0
+231 6
+
+fl=(40)
+fn=(88)
+cfl=(41)
+cfn=(97)
+calls=17 27
+231 17
+
+fl=(40)
+fn=(88)
+cfl=(41)
+cfn=(96)
+calls=7 60
+231 7
+
+fl=(40)
+fn=(88)
+cfl=??
+cfn=(98) SDL_MapRGBA
+calls=10 0
+231 10
+
+fl=(40)
+fn=(88)
+cfl=(41)
+cfn=(97)
+calls=100 25
+231 100
+
+fl=(40)
+fn=(88)
+cfl=??
+cfn=(39)
+calls=5 0
+231 5
+
+fl=(40)
+fn=(88)
+233 11
+
+fl=(40)
+fn=(99) TexturemapRasterizer::scanlineDetermineDist
+238 4
+
+fl=(40)
+fn=(91)
+242 11
+
+fl=(40)
+fn=(91)
+244 9
+
+fl=(40)
+fn=(91)
+247 51
+
+fl=(40)
+fn=(91)
+249 13
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(93)
+calls=1 150
 254 1
 
-fl=(37)
-fn=(128) __gnu_debug::__get_distance
-cfl=(38)
-cfn=(108)
-calls=1 1337
-96 1
+fl=(40)
+fn=(80)
+260 2
 
-fl=(37)
-fn=(128)
-cfl=(37)
-cfn=(128)
-calls=1 96
-115 1
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(79)
+calls=3 181
+262 3
 
-fl=(37)
-fn=(129) __gnu_debug::__valid_range_aux
-172 1
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(79)
+calls=3 180
+262 3
 
-fl=(37)
-fn=(129)
-cfl=(37)
-cfn=(129)
-calls=1 172
-208 1
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(79)
+calls=1 0
+262 1
 
-fl=(37)
-fn=(129)
-cfl=(37)
-cfn=(128)
-calls=1 115
-212 1
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(79)
+calls=1 184
+262 1
 
-fl=(37)
-fn=(129)
-212 1
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(79)
+calls=1 185
+262 1
 
-fl=(37)
-fn=(129)
-229 1
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(79)
+calls=1 199
+262 1
 
-fl=(37)
-fn=(104)
-cfl=(37)
-cfn=(129)
-calls=1 208
-243 1
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(79)
+calls=1 177
+262 1
 
-fl=(37)
-fn=(104)
-cfl=(37)
-cfn=(129)
-calls=1 229
-243 1
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(79)
+calls=3 188
+262 3
 
-fl=(37)
-fn=(104)
-cfl=(37)
-cfn=(129)
-calls=2 212
-243 2
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(79)
+calls=5 176
+262 5
 
-fl=(42) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/safe_base.h
-fn=(130) __gnu_debug::_Safe_sequence_base::_Safe_sequence_base
-205 1
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(99)
+calls=1 238
+265 1
 
-fl=(43) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/safe_container.h
-fn=(131) __gnu_debug::_Safe_container::~_Safe_container
-41 1
+fl=(40)
+fn=(80)
+270 11
 
-fl=(43)
-fn=(132) __gnu_debug::_Safe_container::_Safe_container
-cfl=(44) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/safe_sequence.h
-cfn=(133) __gnu_debug::_Safe_sequence::_Safe_sequence
-calls=1 108
-52 1
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(91)
+calls=6 242
+273 6
 
-fl=(23)
-fn=(134) __gnu_debug::_Safe_iterator::_Safe_iterator
-cfl=(45) /usr/src/debug/gcc/gcc/libstdc++-v3/src/c++11/shared_ptr.cc
-cfn=(135) __gnu_internal::get_mutex
-calls=1 48
-162 1
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(91)
+calls=22 247
+273 22
 
-fl=(23)
-fn=(55)
-cfl=(1)
-cfn=(2)
-calls=2 241
-329 2
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(91)
+calls=5 249
+273 5
 
-fl=(23)
-fn=(55)
+fl=(40)
+fn=(80)
+273 3
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(91)
+calls=4 244
+273 4
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(94)
+calls=40 205
+276 40
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(94)
+calls=5 209
+276 5
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(94)
+calls=39 206
+276 39
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(94)
+calls=31 203
+276 31
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(94)
+calls=6 202
+276 6
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(94)
+calls=11 207
+276 11
+
+fl=(40)
+fn=(80)
+276 9
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(94)
+calls=9 204
+276 9
+
+fl=(40)
+fn=(80)
+cfl=(32)
+cfn=(86)
+calls=3 95
+279 3
+
+fl=(40)
+fn=(80)
+cfl=(32)
+cfn=(86)
+calls=19 96
+279 19
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=23 131
+281 23
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=2 119
+281 2
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=6 111
+281 6
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=3 107
+281 3
+
+fl=(40)
+fn=(80)
+cfl=(21)
+cfn=(40)
+calls=10 254
+281 10
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=4 102
+281 4
+
+fl=(40)
+fn=(80)
+cfl=??
+cfn=(27)
+calls=59 0
+281 59
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=65 100
+281 65
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=25 115
+281 25
+
+fl=(40)
+fn=(80)
+cfl=??
+cfn=(100) SDL_GetRGB
+calls=4 0
+281 4
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=4 114
+281 4
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=1 105
+281 1
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=16 96
+281 16
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=10 123
+281 10
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=5 141
+281 5
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=36 112
+281 36
+
+fl=(40)
+fn=(80)
+cfl=??
+cfn=(39)
+calls=10 0
+281 10
+
+fl=(40)
+fn=(80)
+cfl=(21)
+cfn=(41)
+calls=1 159
+281 1
+
+fl=(40)
+fn=(80)
+281 16
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=9 0
+281 9
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=50 133
+281 50
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=22 138
+281 22
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=8 99
+281 8
+
+fl=(40)
+fn=(80)
+cfl=(20)
+cfn=(37)
+calls=39 103
+281 39
+
+fl=(40)
+fn=(80)
+285 12
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(87)
+calls=64 214
+285 64
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(87)
+calls=71 215
+285 71
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(87)
+calls=54 216
+285 54
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(87)
+calls=10 217
+285 10
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(87)
+calls=6 211
+285 6
+
+fl=(40)
+fn=(80)
+cfl=(32)
+cfn=(95)
+calls=8 118
+285 8
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(88)
+calls=6 233
+288 6
+
+fl=(40)
+fn=(80)
+cfl=(41)
+cfn=(97)
+calls=3 24
+288 3
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(88)
+calls=174 231
+288 174
+
+fl=(40)
+fn=(80)
+cfl=(40)
+cfn=(88)
+calls=8 221
+288 8
+
+fl=(40)
+fn=(101) TexturemapRasterizer::drawFB_Scanline_prep
+302 1
+
+fl=(40)
+fn=(101)
+304 5
+
+fl=(40)
+fn=(101)
+305 4
+
+fl=(40)
+fn=(101)
+308 2
+
+fl=(40)
+fn=(101)
+cfl=??
+cfn=(38)
+calls=1 0
+308 1
+
+fl=(40)
+fn=(101)
+cfl=??
+cfn=(38)
+calls=2 0
+309 2
+
+fl=(40)
+fn=(101)
+312 1
+
+fl=(40)
+fn=(101)
+313 3
+
+fl=(40)
+fn=(101)
+316 3
+
+fl=(40)
+fn=(101)
+317 1
+
+fl=(40)
+fn=(101)
+318 1
+
+fl=(40)
+fn=(101)
+323 1
+
+fl=(40)
+fn=(101)
+327 1
+
+fl=(40)
+fn=(101)
 330 1
 
-fl=(23)
-fn=(34)
-cfl=(38)
-cfn=(106)
-calls=1 1163
-493 1
+fl=(40)
+fn=(81)
+cfl=(21)
+cfn=(41)
+calls=1 159
+340 1
 
-fl=(23)
-fn=(34)
-cfl=(38)
-cfn=(107)
-calls=1 1244
-493 1
+fl=(40)
+fn=(81)
+343 2
 
-fl=(23)
-fn=(134)
-cfl=(23)
-cfn=(134)
-calls=1 162
-539 1
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=2 309
+345 2
 
-fl=(23)
-fn=(55)
-cfl=(23)
-cfn=(55)
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=3 316
+345 3
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=1 312
+345 1
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=1 317
+345 1
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=1 318
+345 1
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=1 302
+345 1
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
 calls=1 330
-594 1
+345 1
 
-fl=(23)
-fn=(55)
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=3 308
+345 3
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=5 304
+345 5
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=1 323
+345 1
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=4 305
+345 4
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=3 313
+345 3
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(101)
+calls=1 327
+345 1
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(99)
+calls=3 238
+348 3
+
+fl=(40)
+fn=(81)
+353 6
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(91)
+calls=4 242
+356 4
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(91)
+calls=5 244
+356 5
+
+fl=(40)
+fn=(81)
+356 6
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(91)
+calls=6 249
+356 6
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(91)
+calls=29 247
+356 29
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(94)
+calls=5 202
+358 5
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(94)
+calls=8 207
+358 8
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(94)
+calls=58 205
+358 58
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(94)
+calls=14 204
+358 14
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(94)
+calls=47 206
+358 47
+
+fl=(40)
+fn=(81)
+358 6
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(94)
+calls=41 203
+358 41
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(94)
+calls=9 209
+358 9
+
+fl=(40)
+fn=(81)
+cfl=(32)
+cfn=(86)
+calls=23 96
+360 23
+
+fl=(40)
+fn=(81)
+cfl=(32)
+cfn=(86)
+calls=5 95
+360 5
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=2 105
+362 2
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=21 138
+362 21
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=2 107
+362 2
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=11 96
+362 11
+
+fl=(40)
+fn=(81)
+cfl=(21)
+cfn=(40)
+calls=4 254
+362 4
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=3 119
+362 3
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=18 131
+362 18
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=55 100
+362 55
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=9 111
+362 9
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=5 123
+362 5
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=30 112
+362 30
+
+fl=(40)
+fn=(81)
+cfl=??
+cfn=(27)
+calls=57 0
+362 57
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=33 103
+362 33
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=5 102
+362 5
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=8 141
+362 8
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=49 133
+362 49
+
+fl=(40)
+fn=(81)
+cfl=??
+cfn=(100)
+calls=6 0
+362 6
+
+fl=(40)
+fn=(81)
+cfl=??
+cfn=(39)
+calls=4 0
+362 4
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=6 114
+362 6
+
+fl=(40)
+fn=(81)
+362 8
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=2 99
+362 2
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=23 115
+362 23
+
+fl=(40)
+fn=(81)
+cfl=(21)
+cfn=(41)
+calls=1 159
+362 1
+
+fl=(40)
+fn=(81)
+cfl=(20)
+cfn=(37)
+calls=4 0
+362 4
+
+fl=(40)
+fn=(81)
+cfl=(32)
+cfn=(95)
+calls=11 118
+366 11
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(87)
+calls=8 217
+366 8
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(87)
+calls=49 215
+366 49
+
+fl=(40)
+fn=(81)
+366 7
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(87)
+calls=69 216
+366 69
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(87)
+calls=78 214
+366 78
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(87)
+calls=6 211
+366 6
+
+fl=(40)
+fn=(81)
+369 12
+
+fl=(40)
+fn=(81)
+cfl=(41)
+cfn=(97)
+calls=3 24
+375 3
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(88)
+calls=3 221
+375 3
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(88)
+calls=167 231
+375 167
+
+fl=(40)
+fn=(81)
+cfl=(40)
+cfn=(88)
+calls=4 233
+375 4
+
+fl=(14)
+fn=(102) Renderer::drawFilledTriangle2d
+0 1
+
+fl=(14)
+fn=(102)
+cfl=(32)
+cfn=(92)
+calls=1 92
+133 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=1 109
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=1 59
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=1 51
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=406 135
+147 406
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=2 127
+147 2
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=297 88
+147 297
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=427 121
+147 427
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=1 68
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=1 110
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=375 134
+147 375
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=1 116
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=317 100
+147 317
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=474 120
+147 474
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=1 71
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=1 47
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=1 60
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=1 54
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=1 72
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(40)
+cfn=(83)
+calls=2 58
+147 2
+
+fl=(14)
+fn=(102)
+cfl=(36)
+cfn=(103) operator+
+calls=1 38
+147 1
+
+fl=(14)
+fn=(102)
+cfl=(9)
+cfn=(20)
+calls=5 175
+149 5
+
+fl=(14)
+fn=(104) Renderer::projectTriangle3d
+cfl=(32)
+cfn=(62)
+calls=7 11
+155 7
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(62)
+calls=4 12
+155 4
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(62)
+calls=1 0
+155 1
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(62)
+calls=10 7
+155 10
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(62)
+calls=9 9
+155 9
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(62)
+calls=1 10
+155 1
+
+fl=(14)
+fn=(104)
+cfl=(33)
+cfn=(63)
+calls=1 9
+156 1
+
+fl=(14)
+fn=(104)
+cfl=(33)
+cfn=(63)
+calls=1 9
+157 1
+
+fl=(14)
+fn=(104)
+cfl=(33)
+cfn=(63)
+calls=1 9
+158 1
+
+fl=(14)
+fn=(104)
+cfl=(33)
+cfn=(63)
+calls=2 25
+162 2
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(105) Triangle::getTrianglePoint
+calls=1 136
+162 1
+
+fl=(14)
+fn=(104)
+cfl=(33)
+cfn=(63)
+calls=2 26
+162 2
+
+fl=(14)
+fn=(104)
+cfl=(33)
+cfn=(63)
+calls=1 27
+162 1
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(106) Triangle::setUnitNormalFromPoints
+calls=3 107
+166 3
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(106)
+calls=2 110
+166 2
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(106)
+calls=1 108
+166 1
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(106)
+calls=4 111
+166 4
+
+fl=(14)
+fn=(104)
+cfl=(33)
+cfn=(90)
+calls=2 67
+171 2
+
+fl=(14)
+fn=(104)
+cfl=(34)
+cfn=(107) VectorMathService::getUnitVector
+calls=4 31
+172 4
+
+fl=(14)
+fn=(104)
+173 1
+
+fl=(14)
+fn=(104)
+cfl=(34)
+cfn=(108) VectorMathService::MultiplyMatrixVector
+calls=2 41
+177 2
+
+fl=(14)
+fn=(104)
+cfl=(34)
+cfn=(108)
+calls=1 39
+177 1
+
+fl=(14)
+fn=(104)
+cfl=(34)
+cfn=(108)
+calls=2 38
+179 2
+
+fl=(14)
+fn=(104)
+cfl=(34)
+cfn=(108)
+calls=1 39
+179 1
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(109) Triangle::setTrianglePoint
+calls=1 66
+179 1
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(106)
+calls=2 110
+182 2
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(106)
+calls=1 111
+182 1
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(110) Triangle::setUVPoint
+calls=1 70
+187 1
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(111) Triangle::setTexture
+calls=1 76
+194 1
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(92)
+calls=3 92
+194 3
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=13 29
+197 13
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=1 20
+197 1
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=6 66
+197 6
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=8 52
+197 8
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=4 50
+197 4
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=1 54
+197 1
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=17 25
+197 17
+
+fl=(14)
+fn=(104)
+cfl=(7)
+cfn=(43)
+calls=11 212
+197 11
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=15 49
+197 15
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=19 33
+197 19
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=8 42
+197 8
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=17 73
+197 17
+
+fl=(14)
+fn=(104)
+cfl=(2)
+cfn=(71)
+calls=1 653
+197 1
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=21 57
+197 21
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=9 60
+197 9
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=21 24
+197 21
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=8 36
+197 8
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=6 58
+197 6
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=14 41
+197 14
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=13 44
+197 13
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=17 26
+197 17
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=17 34
+197 17
+
+fl=(14)
+fn=(104)
+cfl=(31)
+cfn=(60)
+calls=15 65
+197 15
+
+fl=(14)
+fn=(104)
+cfl=(33)
+cfn=(112) operator*
+calls=1 64
+203 1
+
+fl=(14)
+fn=(104)
+cfl=(34)
+cfn=(107)
+calls=1 31
+206 1
+
+fl=(14)
+fn=(104)
+cfl=(34)
+cfn=(107)
+calls=1 32
+206 1
+
+fl=(14)
+fn=(104)
+209 1
+
+fl=(14)
+fn=(104)
+213 1
+
+fl=(14)
+fn=(104)
+214 1
+
+fl=(14)
+fn=(104)
+cfl=(7)
+cfn=(70)
+calls=1 300
+219 1
+
+fl=(14)
+fn=(104)
+cfl=(2)
+cfn=(5)
+calls=1 298
+219 1
+
+fl=(14)
+fn=(104)
+219 1
+
+fl=(14)
+fn=(104)
+cfl=(2)
+cfn=(71)
+calls=1 653
+219 1
+
+fl=(14)
+fn=(104)
+cfl=(2)
+cfn=(67)
+calls=1 493
+219 1
+
+fl=(14)
+fn=(104)
+cfl=(7)
+cfn=(69)
+calls=4 310
+219 4
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(62)
+calls=2 52
+219 2
+
+fl=(14)
+fn=(104)
+cfl=(35)
+cfn=(113) __gnu_debug::_Safe_iterator_base::_M_singular
+calls=1 493
+219 1
+
+fl=(14)
+fn=(104)
+cfl=(34)
+cfn=(108)
+calls=1 38
+226 1
+
+fl=(14)
+fn=(104)
+cfl=(33)
+cfn=(114) operator/
+calls=1 54
+229 1
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(109)
+calls=1 67
+244 1
+
+fl=(14)
+fn=(104)
+265 1
+
+fl=(14)
+fn=(104)
+cfl=(32)
+cfn=(110)
+calls=1 71
+265 1
+
+fl=(14)
+fn=(104)
+cfl=(9)
+cfn=(20)
+calls=1 175
+274 1
+
+fl=(14)
+fn=(104)
+cfl=(7)
+cfn=(50)
+calls=6 497
+288 6
+
+fl=(14)
+fn=(104)
+cfl=(7)
+cfn=(18)
+calls=4 230
+290 4
+
+fl=(14)
+fn=(104)
+cfl=(8)
+cfn=(19)
+calls=3 14
+291 3
+
+fl=(14)
+fn=(26)
+cfl=(41)
+cfn=(115) SDL_Texture_Blit::lock
+calls=1 14
+302 1
+
+fl=(14)
+fn=(26)
+cfl=(29)
+cfn=(57)
+calls=1 29
+308 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=2 171
+311 2
+
+fl=(14)
+fn=(26)
+cfl=(29)
+cfn=(59)
+calls=1 86
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=3 182
+311 3
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=3 177
+311 3
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 213
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(2)
+cfn=(67)
+calls=1 491
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 156
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(32)
+cfn=(62)
+calls=1 54
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=4 172
+311 4
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 173
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=2 206
+311 2
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 274
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=6 288
+311 6
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=10 166
+311 10
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=4 290
+311 4
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 209
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(32)
+cfn=(62)
+calls=1 57
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 158
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 214
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(32)
+cfn=(62)
+calls=5 61
+311 5
+
+fl=(14)
+fn=(26)
+cfl=(2)
+cfn=(2)
+calls=10 748
+311 10
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 229
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=4 179
+311 4
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=4 194
+311 4
+
+fl=(14)
+fn=(26)
+cfl=(2)
+cfn=(5)
+calls=3 298
+311 3
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=12 219
+311 12
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=32 155
+311 32
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=261 197
+311 261
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 203
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 244
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(7)
+cfn=(18)
+calls=3 230
+311 3
+
+fl=(14)
+fn=(26)
+cfl=(13)
+cfn=(116) TrianglePipeline::getTrianglePipeline
+calls=12 31
+311 12
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 157
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(32)
+cfn=(62)
+calls=4 52
+311 4
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=2 265
+311 2
+
+fl=(14)
+fn=(26)
+cfl=(8)
+cfn=(19)
+calls=3 14
+311 3
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 226
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=3 291
+311 3
+
+fl=(14)
+fn=(26)
+cfl=(32)
+cfn=(62)
+calls=2 55
+311 2
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=6 162
+311 6
+
+fl=(14)
+fn=(26)
+cfl=(32)
+cfn=(106)
+calls=1 112
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(104)
+calls=1 187
+311 1
+
+fl=(14)
+fn=(26)
+cfl=(2)
+cfn=(67)
+calls=2 493
+311 2
+
+fl=(14)
+fn=(26)
+cfl=(13)
+cfn=(117) TrianglePipeline::setPipelineFromTriangles
+calls=4 23
+314 4
+
+fl=(14)
+fn=(26)
+cfl=(7)
+cfn=(43)
+calls=1 212
+314 1
+
+fl=(14)
+fn=(26)
+cfl=(13)
+cfn=(118) TrianglePipeline::orderPipelineByZ
+calls=104 27
+315 104
+
+fl=(14)
+fn=(26)
+cfl=(13)
+cfn=(116)
+calls=3 31
+318 3
+
+fl=(14)
+fn=(26)
+cfl=(2)
+cfn=(5)
+calls=2 298
+319 2
+
+fl=(14)
+fn=(26)
+cfl=(2)
+cfn=(2)
+calls=1 748
+319 1
+
+fl=(14)
+fn=(26)
+cfl=(2)
+cfn=(67)
+calls=1 492
+319 1
+
+fl=(14)
+fn=(26)
+cfl=(32)
+cfn=(62)
+calls=1 62
+319 1
+
+fl=(14)
+fn=(26)
+cfl=(32)
+cfn=(62)
+calls=1 52
+321 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(102)
+calls=1 0
+321 1
+
+fl=(14)
+fn=(26)
+cfl=(32)
+cfn=(95)
+calls=1 119
+321 1
+
+fl=(14)
+fn=(26)
+cfl=(32)
+cfn=(62)
+calls=1 61
+321 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(102)
+calls=5 149
+321 5
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(102)
+calls=2312 147
+321 2312
+
+fl=(14)
+fn=(26)
+cfl=??
+cfn=(27)
+calls=1 0
+321 1
+
+fl=(14)
+fn=(26)
+cfl=(14)
+cfn=(102)
+calls=1 133
+321 1
+
+fl=(14)
+fn=(26)
+cfl=(33)
+cfn=(63)
+calls=1 18
+321 1
+
+fl=(41)
+fn=(96)
+0 1
+
+fl=(41)
+fn=(97)
+0 6
+
+fl=(41)
+fn=(115)
+14 1
+
+fl=(41)
+fn=(97)
+24 64
+
+fl=(41)
+fn=(97)
+cfl=(41)
+cfn=(96)
+calls=7 56
+25 7
+
+fl=(41)
+fn=(97)
+cfl=(41)
+cfn=(96)
+calls=11 53
+25 11
+
+fl=(41)
+fn=(97)
+cfl=(41)
+cfn=(96)
+calls=26 54
+25 26
+
+fl=(41)
+fn=(97)
+cfl=(41)
+cfn=(96)
+calls=1 0
+25 1
+
+fl=(41)
+fn=(97)
+cfl=(41)
+cfn=(96)
+calls=12 55
+25 12
+
+fl=(41)
+fn=(97)
+25 26
+
+fl=(41)
+fn=(97)
+cfl=(41)
+cfn=(96)
+calls=3 57
+25 3
+
+fl=(41)
+fn=(97)
+cfl=(41)
+cfn=(96)
+calls=4 58
+25 4
+
+fl=(41)
+fn=(97)
+cfl=(41)
+cfn=(96)
+calls=10 60
+25 10
+
+fl=(41)
+fn=(97)
+26 9
+
+fl=(41)
+fn=(97)
+27 17
+
+fl=(41)
+fn=(97)
+29 22
+
+fl=(41)
+fn=(96)
+53 28
+
+fl=(41)
+fn=(96)
+54 26
+
+fl=(41)
+fn=(96)
+55 12
+
+fl=(41)
+fn=(96)
+56 7
+
+fl=(41)
+fn=(96)
+57 3
+
+fl=(41)
+fn=(96)
+58 4
+
+fl=(41)
+fn=(96)
+60 17
+
+fl=(13)
+fn=(25)
+0 1
+
+fl=(13)
+fn=(25)
 cfl=(23)
+cfn=(45)
+calls=18 16
+15 18
+
+fl=(13)
+fn=(25)
+cfl=(2)
+cfn=(2)
+calls=1 747
+16 1
+
+fl=(13)
+fn=(25)
+cfl=(33)
+cfn=(63)
+calls=1 9
+16 1
+
+fl=(13)
+fn=(25)
+16 1
+
+fl=(13)
+fn=(25)
+cfl=(32)
+cfn=(62)
+calls=4 61
+16 4
+
+fl=(13)
+fn=(25)
+cfl=(2)
+cfn=(67)
+calls=1 493
+16 1
+
+fl=(13)
+fn=(25)
+cfl=(32)
+cfn=(62)
+calls=8 52
+16 8
+
+fl=(13)
+fn=(25)
+cfl=(2)
+cfn=(5)
+calls=4 298
+16 4
+
+fl=(13)
+fn=(25)
+cfl=(2)
+cfn=(2)
+calls=10 748
+16 10
+
+fl=(13)
+fn=(25)
+cfl=(7)
+cfn=(50)
+calls=4 496
+17 4
+
+fl=(13)
+fn=(25)
+cfl=(7)
+cfn=(50)
+calls=2 500
+17 2
+
+fl=(13)
+fn=(25)
+cfl=(7)
+cfn=(50)
+calls=1 498
+17 1
+
+fl=(13)
+fn=(25)
+cfl=(7)
+cfn=(50)
+calls=33 497
+17 33
+
+fl=(13)
+fn=(25)
+cfl=(8)
+cfn=(19)
+calls=2 14
+18 2
+
+fl=(13)
+fn=(25)
+cfl=(23)
+cfn=(46)
+calls=1 16
+19 1
+
+fl=(13)
+fn=(117)
+cfl=(7)
+cfn=(119) std::__debug::vector::operator=
+calls=4 239
+23 4
+
+fl=(13)
+fn=(118)
+cfl=(42) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_algo.h
+cfn=(120) std::sort
+calls=104 4894
+27 104
+
+fl=(13)
+fn=(116)
+cfl=(7)
+cfn=(43)
+calls=15 212
+31 15
+
+fl=(30)
+fn=(121) Mat4x4::Mat4x4
+12 1
+
+fl=(30)
+fn=(58)
+cfl=(30)
+cfn=(121)
+calls=1 12
+200 1
+
+fl=(11)
+fn=(122) Mesh_Pipeline::~Mesh_Pipeline
+cfl=(7)
+cfn=(18)
+calls=2 230
+21 2
+
+fl=(11)
+fn=(22)
+cfl=(24)
+cfn=(47)
+calls=19 22
+44 19
+
+fl=(32)
+fn=(62)
+0 2
+
+fl=(32)
+fn=(62)
+7 3
+
+fl=(32)
+fn=(62)
+cfl=(36)
+cfn=(72)
+calls=5 3
+7 5
+
+fl=(32)
+fn=(62)
+cfl=(33)
+cfn=(63)
+calls=8 9
+7 8
+
+fl=(32)
+fn=(62)
+cfl=(9)
+cfn=(123) std::shared_ptr::shared_ptr
+calls=4 202
+7 4
+
+fl=(32)
+fn=(62)
+cfl=(36)
+cfn=(72)
+calls=1 3
+9 1
+
+fl=(32)
+fn=(62)
+cfl=(33)
+cfn=(63)
+calls=3 11
+9 3
+
+fl=(32)
+fn=(62)
+9 6
+
+fl=(32)
+fn=(62)
+cfl=(33)
+cfn=(63)
+calls=1 13
+9 1
+
+fl=(32)
+fn=(62)
+cfl=(33)
+cfn=(63)
+calls=1 11
+10 1
+
+fl=(32)
+fn=(62)
+10 2
+
+fl=(32)
+fn=(62)
+cfl=(36)
+cfn=(72)
+calls=1 3
+11 1
+
+fl=(32)
+fn=(62)
+11 4
+
+fl=(32)
+fn=(62)
+cfl=(33)
+cfn=(63)
+calls=1 15
+11 1
+
+fl=(32)
+fn=(62)
+cfl=(33)
+cfn=(63)
+calls=1 13
+11 1
+
+fl=(32)
+fn=(62)
+cfl=(33)
+cfn=(63)
+calls=1 11
+11 1
+
+fl=(32)
+fn=(62)
+12 5
+
+fl=(32)
+fn=(62)
+cfl=(36)
+cfn=(72)
+calls=1 6
+12 1
+
+fl=(32)
+fn=(62)
+cfl=(36)
+cfn=(72)
+calls=1 7
+12 1
+
+fl=(32)
+fn=(62)
+cfl=(36)
+cfn=(72)
+calls=1 8
+14 1
+
+fl=(32)
+fn=(62)
+14 1
+
+fl=(32)
+fn=(62)
+cfl=(9)
+cfn=(123)
+calls=1 202
+39 1
+
+fl=(32)
+fn=(62)
+cfl=(33)
+cfn=(63)
+calls=1 9
+39 1
+
+fl=(32)
+fn=(62)
+52 20
+
+fl=(32)
+fn=(62)
+cfl=(9)
+cfn=(123)
+calls=8 202
+52 8
+
+fl=(32)
+fn=(62)
+cfl=(33)
+cfn=(63)
+calls=36 9
+52 36
+
+fl=(32)
+fn=(62)
+cfl=(17)
+cfn=(124) std::__shared_ptr::__shared_ptr
+calls=2 1464
+52 2
+
+fl=(32)
+fn=(62)
+cfl=(36)
+cfn=(72)
+calls=26 3
+52 26
+
+fl=(32)
+fn=(62)
+53 3
+
+fl=(32)
+fn=(62)
+54 2
+
+fl=(32)
+fn=(62)
+55 5
+
+fl=(32)
+fn=(62)
+56 1
+
+fl=(32)
+fn=(62)
+57 1
+
+fl=(32)
+fn=(62)
+58 1
+
+fl=(32)
+fn=(62)
+59 1
+
+fl=(32)
+fn=(62)
+cfl=(9)
+cfn=(56)
+calls=57 414
+61 57
+
+fl=(32)
+fn=(62)
+62 3
+
+fl=(32)
+fn=(109)
+66 1
+
+fl=(32)
+fn=(109)
+67 1
+
+fl=(32)
+fn=(110)
+70 1
+
+fl=(32)
+fn=(110)
+71 1
+
+fl=(32)
+fn=(111)
+cfl=(9)
+cfn=(56)
+calls=1 414
+76 1
+
+fl=(32)
+fn=(92)
+cfl=(9)
+cfn=(123)
+calls=5 204
+92 5
+
+fl=(32)
+fn=(86)
+95 20
+
+fl=(32)
+fn=(86)
+96 18
+
+fl=(32)
+fn=(86)
+cfl=(17)
+cfn=(125) std::__shared_ptr::get
+calls=24 1666
+96 24
+
+fl=(32)
+fn=(106)
+cfl=(33)
+cfn=(90)
+calls=3 67
+107 3
+
+fl=(32)
+fn=(106)
+108 1
+
+fl=(32)
+fn=(106)
+cfl=(34)
+cfn=(126) VectorMathService::crossProduct
+calls=4 14
+110 4
+
+fl=(32)
+fn=(106)
+cfl=(34)
+cfn=(107)
+calls=4 31
+111 4
+
+fl=(32)
+fn=(106)
+cfl=(34)
+cfn=(107)
+calls=1 32
+111 1
+
+fl=(32)
+fn=(106)
+112 1
+
+fl=(32)
+fn=(95)
+118 21
+
+fl=(32)
+fn=(95)
+119 38
+
+fl=(32)
+fn=(105)
+135 2
+
+fl=(32)
+fn=(105)
+136 1
+
+fl=(32)
+fn=(84)
+138 1
+
+fl=(32)
+fn=(84)
+139 1
+
+fl=(32)
+fn=(127) Triangle::getTriangleZCenter
+147 1
+
+fl=(36)
+fn=(72)
+3 64
+
+fl=(36)
+fn=(72)
+6 1
+
+fl=(36)
+fn=(72)
+7 1
+
+fl=(36)
+fn=(72)
+8 1
+
+fl=(36)
+fn=(72)
+12 1
+
+fl=(36)
+fn=(72)
+18 1
+
+fl=(36)
+fn=(72)
+19 2
+
+fl=(36)
+fn=(72)
+20 1
+
+fl=(36)
+fn=(103)
+38 1
+
+fl=(36)
+fn=(90)
+cfl=(36)
+cfn=(72)
+calls=1 12
+39 1
+
+fl=(36)
+fn=(112)
+40 1
+
+fl=(33)
+fn=(63)
+9 36
+
+fl=(33)
+fn=(63)
+cfl=(36)
+cfn=(72)
+calls=16 3
+9 16
+
+fl=(33)
+fn=(63)
+11 2
+
+fl=(33)
+fn=(63)
+cfl=(36)
+cfn=(72)
+calls=9 3
+11 9
+
+fl=(33)
+fn=(63)
+12 1
+
+fl=(33)
+fn=(63)
+13 2
+
+fl=(33)
+fn=(63)
+15 1
+
+fl=(33)
+fn=(63)
+18 1
+
+fl=(33)
+fn=(63)
+25 7
+
+fl=(33)
+fn=(63)
+cfl=(36)
+cfn=(72)
+calls=3 3
+25 3
+
+fl=(33)
+fn=(63)
+26 6
+
+fl=(33)
+fn=(63)
+27 1
+
+fl=(33)
+fn=(63)
+29 1
+
+fl=(33)
+fn=(85)
+44 1
+
+fl=(33)
+fn=(85)
+45 2
+
+fl=(33)
+fn=(114)
+cfl=(33)
+cfn=(63)
+calls=1 11
+54 1
+
+fl=(33)
+fn=(103)
+58 1
+
+fl=(33)
+fn=(112)
+64 1
+
+fl=(33)
+fn=(90)
+cfl=(33)
+cfn=(63)
+calls=2 11
+67 2
+
+fl=(33)
+fn=(90)
+67 3
+
+fl=(33)
+fn=(90)
+cfl=(33)
+cfn=(63)
+calls=1 12
+67 1
+
+fl=(34)
+fn=(128) VectorMathService::dotProduct
+10 4
+
+fl=(34)
+fn=(126)
+cfl=(33)
+cfn=(63)
+calls=3 11
+14 3
+
+fl=(34)
+fn=(126)
+14 1
+
+fl=(34)
+fn=(129) VectorMathService::getInverseVectorLength
+cfl=(43) /home/daveg/Documents/3D_Engine_SDL/VS_Code_Project/src/utility/nonVector_Math_Service.cpp
+cfn=(130) nonVectorMathService::FastInvSqrt
+calls=9 18
+18 9
+
+fl=(34)
+fn=(129)
+cfl=(43)
+cfn=(130)
+calls=2 17
+18 2
+
+fl=(34)
+fn=(129)
+cfl=(43)
+cfn=(130)
+calls=1 14
+18 1
+
+fl=(34)
+fn=(129)
+18 10
+
+fl=(34)
+fn=(107)
+25 1
+
+fl=(34)
+fn=(107)
+cfl=(34)
+cfn=(129)
+calls=22 18
+31 22
+
+fl=(34)
+fn=(107)
+32 6
+
+fl=(34)
+fn=(108)
+38 1
+
+fl=(34)
+fn=(108)
+cfl=(33)
+cfn=(63)
+calls=2 9
+38 2
+
+fl=(34)
+fn=(108)
+39 2
+
+fl=(34)
+fn=(108)
+41 2
+
+fl=(34)
+fn=(131) VectorMathService::vectorIntersectPlane
+cfl=(34)
+cfn=(107)
+calls=1 31
+48 1
+
+fl=(34)
+fn=(131)
+cfl=(34)
+cfn=(128)
+calls=1 10
+49 1
+
+fl=(34)
+fn=(131)
+cfl=(33)
+cfn=(103)
+calls=1 58
+56 1
+
+fl=(34)
+fn=(65)
+60 2
+
+fl=(34)
+fn=(65)
+cfl=(36)
+cfn=(72)
+calls=1 3
+61 1
+
+fl=(34)
+fn=(65)
+61 1
+
+fl=(34)
+fn=(65)
+cfl=(33)
+cfn=(63)
+calls=1 25
+61 1
+
+fl=(34)
+fn=(65)
+cfl=(33)
+cfn=(63)
+calls=1 26
+61 1
+
+fl=(34)
+fn=(65)
+cfl=(34)
+cfn=(107)
+calls=3 32
+62 3
+
+fl=(34)
+fn=(65)
+cfl=(34)
+cfn=(107)
+calls=9 31
+62 9
+
+fl=(34)
+fn=(65)
+cfl=(34)
+cfn=(128)
+calls=3 10
+63 3
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(107)
+calls=1 32
+69 1
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(107)
+calls=3 31
+69 3
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(65)
+calls=4 62
+82 4
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(65)
+calls=1 61
+82 1
+
+fl=(34)
+fn=(64)
+cfl=(33)
+cfn=(63)
+calls=1 25
+84 1
+
+fl=(34)
+fn=(64)
+cfl=(32)
+cfn=(105)
+calls=1 135
+84 1
+
+fl=(34)
+fn=(64)
+84 1
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(65)
+calls=2 61
+85 2
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(65)
+calls=2 62
+85 2
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(65)
+calls=2 63
+85 2
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(65)
+calls=6 62
+88 6
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(65)
+calls=1 61
+88 1
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(65)
+calls=1 63
+88 1
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(107)
+calls=1 25
+88 1
+
+fl=(34)
+fn=(64)
+cfl=(33)
+cfn=(63)
+calls=1 25
+93 1
+
+fl=(34)
+fn=(64)
+cfl=(33)
+cfn=(63)
+calls=1 26
+94 1
+
+fl=(34)
+fn=(64)
+cfl=(33)
+cfn=(63)
+calls=1 25
+94 1
+
+fl=(34)
+fn=(64)
+cfl=(33)
+cfn=(63)
+calls=1 29
+94 1
+
+fl=(34)
+fn=(64)
+cfl=(32)
+cfn=(105)
+calls=1 135
+95 1
+
+fl=(34)
+fn=(64)
+95 1
+
+fl=(34)
+fn=(64)
+cfl=(33)
+cfn=(63)
+calls=4 25
+95 4
+
+fl=(34)
+fn=(64)
+cfl=(36)
+cfn=(72)
+calls=1 19
+97 1
+
+fl=(34)
+fn=(64)
+cfl=(32)
+cfn=(84)
+calls=1 139
+98 1
+
+fl=(34)
+fn=(64)
+cfl=(36)
+cfn=(72)
+calls=1 18
+98 1
+
+fl=(34)
+fn=(64)
+cfl=(36)
+cfn=(72)
+calls=1 19
+98 1
+
+fl=(34)
+fn=(64)
+cfl=(36)
+cfn=(72)
+calls=1 20
+98 1
+
+fl=(34)
+fn=(64)
+111 3
+
+fl=(34)
+fn=(64)
+114 1
+
+fl=(34)
+fn=(64)
+cfl=(28)
 cfn=(55)
-calls=2 329
-594 2
+calls=1 14
+145 1
 
-fl=(23)
-fn=(134)
-cfl=(23)
-cfn=(134)
-calls=1 539
-687 1
+fl=(34)
+fn=(64)
+cfl=??
+cfn=(132) __nss_database_lookup@GLIBC_2.2.5
+calls=2 0
+145 2
 
-fl=(23)
-fn=(55)
-cfl=(23)
-cfn=(55)
-calls=3 594
-748 3
+fl=(34)
+fn=(64)
+cfl=(9)
+cfn=(20)
+calls=1 175
+157 1
+
+fl=(34)
+fn=(64)
+cfl=(9)
+cfn=(20)
+calls=1 175
+199 1
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(131)
+calls=1 49
+214 1
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(131)
+calls=1 56
+214 1
+
+fl=(34)
+fn=(64)
+cfl=(36)
+cfn=(112)
+calls=1 40
+221 1
+
+fl=(34)
+fn=(64)
+cfl=(34)
+cfn=(131)
+calls=1 48
+230 1
+
+fl=(43)
+fn=(130)
+14 1
+
+fl=(43)
+fn=(130)
+17 2
+
+fl=(43)
+fn=(130)
+18 9
+
+fl=(44) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/alloc_traits.h
+fn=(133) std::allocator_traits::allocate[inline]
+cfl=??
+cfn=(134) operator new[]
+calls=3 0
+482 3
 
 fl=(44)
 fn=(133)
+cfl=(45) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/new_allocator.h
+cfn=(135) std::__new_allocator::allocate
+calls=12 147
+482 12
+
+fl=(44)
+fn=(136) std::allocator_traits::deallocate[inline]
+cfl=??
+cfn=(137) free
+calls=1 0
+516 1
+
+fl=(44)
+fn=(136)
+cfl=(45)
+cfn=(138) std::__new_allocator::deallocate
+calls=1 168
+516 1
+
+fl=(44)
+fn=(136)
+cfl=??
+cfn=(139) tcmalloc::ThreadCache::ListTooLong
+calls=1 0
+516 1
+
+fl=(44)
+fn=(140) std::allocator_traits::construct[inline]
+cfl=(45)
+cfn=(141) std::__new_allocator::construct[inline]
+calls=35 187
+537 35
+
+fl=(44)
+fn=(142) std::allocator_traits::max_size[inline]
+573 1
+
+fl=(44)
+fn=(140)
+cfl=(46) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_construct.h
+cfn=(143) std::_Construct
+calls=17 119
+660 17
+
+fl=(44)
+fn=(144) std::allocator_traits::destroy[inline]
+cfl=(46)
+cfn=(145) std::_Destroy
+calls=2 151
+674 2
+
+fl=(44)
+fn=(146) std::_Destroy[inline]
+cfl=(46)
+cfn=(145)
+calls=34 195
+947 34
+
+fl=(18)
+fn=(147) std::__cxx11::basic_string::_Alloc_hider::_Alloc_hider
+193 1
+
+fl=(18)
+fn=(148) std::__cxx11::basic_string::_M_set_length
+255 1
+
+fl=(18)
+fn=(149) std::__cxx11::basic_string::basic_string
+cfl=(18)
+cfn=(147)
+calls=1 193
+538 1
+
+fl=(18)
+fn=(149)
+cfl=(18)
+cfn=(148)
+calls=1 255
+686 1
+
+fl=(18)
+fn=(32)
+cfl=??
+cfn=(132)
+calls=1 0
+4159 1
+
+fl=(47) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/hashtable.h
+fn=(150) std::_Hashtable::end
+632 1
+
+fl=(47)
+fn=(150)
+cfl=(48) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/hashtable_policy.h
+cfn=(151) std::__detail::_Node_iterator::_Node_iterator
+calls=1 433
+632 1
+
+fl=(47)
+fn=(152) std::_Hashtable::_Hashtable
+cfl=(48)
+cfn=(153) std::__detail::_Hashtable_alloc::_M_node_allocator
+calls=1 1964
+1465 1
+
+fl=(47)
+fn=(154) std::_Hashtable::find
+cfl=(47)
+cfn=(150)
+calls=1 632
+1656 1
+
+fl=(48)
+fn=(155) std::__detail::_Hash_node_value_base::_M_valptr
+cfl=(49) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/ext/aligned_buffer.h
+cfn=(156) __gnu_cxx::__aligned_buffer::_M_ptr
+calls=1 117
+332 1
+
+fl=(48)
+fn=(157) std::__detail::_Hash_node_value_base::_M_v
+cfl=(48)
+cfn=(155)
+calls=1 332
+340 1
+
+fl=(48)
+fn=(151)
+433 1
+
+fl=(48)
+fn=(158) std::__detail::_Node_iterator::operator*
+cfl=(48)
+cfn=(157)
+calls=1 340
+437 1
+
+fl=(48)
+fn=(153)
+1964 1
+
+fl=(50) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/move.h
+fn=(159) std::swap
+cfl=(32)
+cfn=(62)
+calls=1 61
+197 1
+
+fl=(50)
+fn=(159)
+cfl=(32)
+cfn=(62)
+calls=1 52
+197 1
+
+fl=(50)
+fn=(159)
+cfl=(8)
+cfn=(19)
+calls=1 14
+200 1
+
+fl=(45)
+fn=(135)
+cfl=??
+cfn=(160) tcmalloc::ThreadCache::FetchFromCentralCache
+calls=11 0
+147 11
+
+fl=(45)
+fn=(135)
+cfl=??
+cfn=(161) tcmalloc::CentralFreeList::RemoveRange
+calls=1 0
+147 1
+
+fl=(45)
+fn=(138)
+cfl=??
+cfn=(162) tcmalloc::ThreadCache::IncreaseCacheLimitLocked
+calls=1 0
+168 1
+
+fl=(45)
+fn=(141)
+cfl=(32)
+cfn=(62)
+calls=19 52
+187 19
+
+fl=(45)
+fn=(141)
+cfl=(32)
+cfn=(62)
+calls=9 61
+187 9
+
+fl=(45)
+fn=(141)
+cfl=(32)
+cfn=(62)
+calls=1 56
+187 1
+
+fl=(45)
+fn=(141)
+cfl=(32)
+cfn=(62)
+calls=1 59
+187 1
+
+fl=(45)
+fn=(141)
+cfl=(32)
+cfn=(62)
+calls=1 58
+187 1
+
+fl=(45)
+fn=(141)
+cfl=(18)
+cfn=(149)
+calls=1 686
+187 1
+
+fl=(45)
+fn=(141)
+cfl=(36)
+cfn=(72)
+calls=1 3
+187 1
+
+fl=(45)
+fn=(141)
+187 1
+
+fl=(45)
+fn=(141)
+cfl=(18)
+cfn=(149)
+calls=1 538
+187 1
+
+fl=(51) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/predefined_ops.h
+fn=(163) __gnu_cxx::__ops::_Iter_comp_iter::operator
+cfl=(32)
+cfn=(62)
+calls=6 61
+158 6
+
+fl=(51)
+fn=(163)
+cfl=(8)
+cfn=(19)
+calls=4 14
+158 4
+
+fl=(51)
+fn=(163)
+cfl=(2)
+cfn=(5)
+calls=9 298
+158 9
+
+fl=(51)
+fn=(163)
+cfl=(32)
+cfn=(62)
+calls=11 52
+158 11
+
+fl=(51)
+fn=(163)
+cfl=(32)
+cfn=(62)
+calls=3 55
+158 3
+
+fl=(51)
+fn=(163)
+cfl=(32)
+cfn=(62)
+calls=1 53
+158 1
+
+fl=(51)
+fn=(164) __gnu_cxx::__ops::_Val_comp_iter::operator
+cfl=(2)
+cfn=(165) __gnu_debug::_Safe_iterator::_M_dereferenceable
+calls=1 384
+240 1
+
+fl=(51)
+fn=(164)
+240 1
+
+fl=(51)
+fn=(164)
+cfl=(32)
+cfn=(62)
+calls=13 52
+240 13
+
+fl=(51)
+fn=(164)
+cfl=(32)
+cfn=(62)
+calls=1 61
+240 1
+
+fl=(51)
+fn=(164)
+cfl=(2)
+cfn=(5)
+calls=4 298
+240 4
+
+fl=(51)
+fn=(164)
+cfl=(32)
+cfn=(127)
+calls=1 147
+240 1
+
+fl=(9)
+fn=(20)
+175 4
+
+fl=(9)
+fn=(20)
+cfl=(17)
+cfn=(166) std::__shared_count::~__shared_count
+calls=1 1069
+175 1
+
+fl=(9)
+fn=(20)
+cfl=(17)
+cfn=(167) std::__shared_ptr::~__shared_ptr
+calls=46 1524
+175 46
+
+fl=(9)
+fn=(123)
+cfl=(17)
+cfn=(168) std::__shared_count::__shared_count
+calls=1 909
+202 1
+
+fl=(9)
+fn=(123)
+cfl=(17)
+cfn=(124)
+calls=2 1464
+202 2
+
+fl=(9)
+fn=(123)
+202 4
+
+fl=(9)
+fn=(123)
+cfl=(17)
+cfn=(124)
+calls=7 1463
+202 7
+
+fl=(9)
+fn=(123)
+cfl=(17)
+cfn=(168)
+calls=1 1076
+204 1
+
+fl=(9)
+fn=(123)
+cfl=(17)
+cfn=(124)
+calls=4 1522
+204 4
+
+fl=(9)
+fn=(56)
+414 1
+
+fl=(9)
+fn=(56)
+cfl=(17)
+cfn=(169) std::__shared_ptr::operator=
+calls=62 1523
+414 62
+
+fl=(9)
+fn=(123)
+cfl=(17)
+cfn=(124)
+calls=17 1712
+464 17
+
+fl=(9)
+fn=(36)
+cfl=(9)
+cfn=(123)
+calls=17 464
+1009 17
+
+fl=(17)
+fn=(170) std::__shared_count::operator=
+0 3
+
+fl=(17)
+fn=(171) std::_Sp_counted_base::_M_add_ref_copy
+152 6
+
+fl=(17)
+fn=(171)
+cfl=(52) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/ext/atomicity.h
+cfn=(172) __gnu_cxx::__atomic_add_dispatch[inline]
+calls=35 111
+152 35
+
+fl=(17)
+fn=(173) std::_Sp_counted_base::_M_release
+328 1
+
+fl=(17)
+fn=(173)
+337 8
+
+fl=(17)
+fn=(173)
+cfl=??
+cfn=(137)
+calls=3 0
+346 3
+
+fl=(17)
+fn=(173)
+cfl=(27)
+cfn=(54)
+calls=1 46
+346 1
+
+fl=(17)
+fn=(173)
+cfl=(17)
+cfn=(174) std::_Sp_counted_ptr::_M_dispose
+calls=8 428
+346 8
+
+fl=(17)
+fn=(173)
+cfl=(17)
+cfn=(175) std::_Sp_counted_ptr_inplace::_M_dispose
+calls=2 613
+346 2
+
+fl=(17)
+fn=(173)
+cfl=(52)
+cfn=(176) __gnu_cxx::__exchange_and_add_dispatch[inline]
+calls=1 98
+350 1
+
+fl=(17)
+fn=(173)
+cfl=(52)
+cfn=(176)
+calls=1 102
+350 1
+
+fl=(17)
+fn=(173)
+cfl=(52)
+cfn=(176)
+calls=14 101
+350 14
+
+fl=(17)
+fn=(173)
+350 1
+
+fl=(17)
+fn=(174)
+cfl=(6)
+cfn=(17)
+calls=4 17
+428 4
+
+fl=(17)
+fn=(174)
+cfl=(11)
+cfn=(122)
+calls=2 21
+428 2
+
+fl=(17)
+fn=(174)
+cfl=(40)
+cfn=(82)
+calls=2 11
+428 2
+
+fl=(17)
+fn=(177) std::_Sp_counted_ptr_inplace::_Sp_counted_ptr_inplace
+cfl=(44)
+cfn=(140)
+calls=17 660
+604 17
+
+fl=(17)
+fn=(175)
+cfl=(44)
+cfn=(144)
+calls=2 674
+613 2
+
+fl=(17)
+fn=(168)
+909 3
+
+fl=(17)
+fn=(168)
+cfl=(17)
+cfn=(177)
+calls=17 604
+972 17
+
+fl=(17)
+fn=(166)
+1069 1
+
+fl=(17)
+fn=(166)
+1070 3
+
+fl=(17)
+fn=(166)
+cfl=(17)
+cfn=(173)
+calls=8 337
+1071 8
+
+fl=(17)
+fn=(166)
+cfl=(17)
+cfn=(173)
+calls=12 346
+1071 12
+
+fl=(17)
+fn=(166)
+1071 2
+
+fl=(17)
+fn=(166)
+cfl=(17)
+cfn=(173)
+calls=1 328
+1071 1
+
+fl=(17)
+fn=(166)
+cfl=(17)
+cfn=(173)
+calls=17 350
+1071 17
+
+fl=(17)
+fn=(166)
+1072 1
+
+fl=(17)
+fn=(168)
+1076 1
+
+fl=(17)
+fn=(168)
+cfl=(17)
+cfn=(171)
+calls=2 152
+1078 2
+
+fl=(17)
+fn=(168)
+1079 1
+
+fl=(17)
+fn=(170)
+1085 1
+
+fl=(17)
+fn=(170)
+1087 1
+
+fl=(17)
+fn=(170)
+1088 1
+
+fl=(17)
+fn=(170)
+cfl=(17)
+cfn=(171)
+calls=35 152
+1088 35
+
+fl=(17)
+fn=(170)
+1093 1
+
+fl=(17)
+fn=(30)
+cfl=(17)
+cfn=(178) std::__shared_ptr_access::_M_get
+calls=1 1363
+1357 1
+
+fl=(17)
+fn=(178)
+cfl=(17)
+cfn=(125)
+calls=1 1666
+1363 1
+
+fl=(17)
+fn=(124)
+1463 5
+
+fl=(17)
+fn=(124)
+cfl=(17)
+cfn=(168)
+calls=2 909
+1463 2
+
+fl=(17)
+fn=(124)
+1464 4
+
+fl=(17)
+fn=(124)
+1522 1
+
+fl=(17)
+fn=(124)
+cfl=(17)
+cfn=(168)
+calls=2 1078
+1522 2
+
+fl=(17)
+fn=(124)
+cfl=(17)
+cfn=(168)
+calls=1 1079
+1522 1
+
+fl=(17)
+fn=(169)
+cfl=(17)
+cfn=(170)
+calls=36 1088
+1523 36
+
+fl=(17)
+fn=(169)
+cfl=(17)
+cfn=(170)
+calls=3 0
+1523 3
+
+fl=(17)
+fn=(169)
+cfl=(17)
+cfn=(170)
+calls=1 1085
+1523 1
+
+fl=(17)
+fn=(169)
+cfl=(17)
+cfn=(170)
+calls=1 1093
+1523 1
+
+fl=(17)
+fn=(169)
+cfl=(17)
+cfn=(171)
+calls=4 152
+1523 4
+
+fl=(17)
+fn=(169)
+cfl=(17)
+cfn=(170)
+calls=1 1087
+1523 1
+
+fl=(17)
+fn=(169)
+1523 9
+
+fl=(17)
+fn=(169)
+cfl=??
+cfn=(170)
+calls=7 0
+1523 7
+
+fl=(17)
+fn=(167)
+cfl=(17)
+cfn=(166)
+calls=3 1070
+1524 3
+
+fl=(17)
+fn=(167)
+cfl=(17)
+cfn=(166)
+calls=40 1071
+1524 40
+
+fl=(17)
+fn=(167)
+1524 2
+
+fl=(17)
+fn=(167)
+cfl=(17)
+cfn=(166)
+calls=1 1072
+1524 1
+
+fl=(17)
+fn=(125)
+1666 25
+
+fl=(17)
+fn=(124)
+cfl=(17)
+cfn=(168)
+calls=17 972
+1712 17
+
+fl=(42)
+fn=(179) std::__move_median_to_first
+cfl=(51)
+cfn=(163)
+calls=3 158
+88 3
+
+fl=(42)
+fn=(179)
+cfl=(51)
+cfn=(163)
+calls=1 158
+90 1
+
+fl=(42)
+fn=(179)
+cfl=(39)
+cfn=(180) std::iter_swap
+calls=1 185
+95 1
+
+fl=(42)
+fn=(181) std::__unguarded_linear_insert
+cfl=(32)
+cfn=(62)
+calls=1 61
+1796 1
+
+fl=(42)
+fn=(181)
+cfl=(32)
+cfn=(62)
+calls=1 52
+1796 1
+
+fl=(42)
+fn=(181)
+cfl=(2)
+cfn=(182) __gnu_debug::_Safe_iterator::operator--
+calls=1 775
+1798 1
+
+fl=(42)
+fn=(181)
+cfl=(2)
+cfn=(68)
+calls=3 694
+1799 3
+
+fl=(42)
+fn=(181)
+cfl=(51)
+cfn=(164)
+calls=21 240
+1799 21
+
+fl=(42)
+fn=(181)
+cfl=(28)
+cfn=(55)
+calls=1 14
+1801 1
+
+fl=(42)
+fn=(181)
+cfl=(2)
+cfn=(5)
+calls=4 298
+1801 4
+
+fl=(42)
+fn=(181)
+cfl=(2)
+cfn=(182)
+calls=1 775
+1803 1
+
+fl=(42)
+fn=(181)
+cfl=(28)
+cfn=(55)
+calls=3 14
+1805 3
+
+fl=(42)
+fn=(181)
+cfl=(2)
+cfn=(5)
+calls=1 298
+1805 1
+
+fl=(42)
+fn=(183) std::__insertion_sort
+cfl=(2)
+cfn=(184) __gnu_debug::operator+
+calls=1 934
+1823 1
+
+fl=(42)
+fn=(183)
 cfl=(42)
-cfn=(130)
-calls=1 205
+cfn=(181)
+calls=4 1799
+1827 4
+
+fl=(42)
+fn=(183)
+cfl=(42)
+cfn=(181)
+calls=1 1805
+1827 1
+
+fl=(42)
+fn=(185) std::__unguarded_insertion_sort
+cfl=(2)
+cfn=(2)
+calls=2 748
+1839 2
+
+fl=(42)
+fn=(185)
+cfl=(42)
+cfn=(181)
+calls=2 1796
+1840 2
+
+fl=(42)
+fn=(185)
+cfl=(42)
+cfn=(181)
+calls=20 1799
+1840 20
+
+fl=(42)
+fn=(185)
+cfl=(42)
+cfn=(181)
+calls=1 1798
+1840 1
+
+fl=(42)
+fn=(185)
+cfl=(42)
+cfn=(181)
+calls=3 1805
+1840 3
+
+fl=(42)
+fn=(185)
+cfl=(42)
+cfn=(181)
+calls=5 1801
+1840 5
+
+fl=(42)
+fn=(185)
+cfl=(2)
+cfn=(68)
+calls=1 695
+1840 1
+
+fl=(42)
+fn=(185)
+cfl=(42)
+cfn=(181)
+calls=1 1803
+1840 1
+
+fl=(42)
+fn=(186) std::__final_insertion_sort
+cfl=(42)
+cfn=(183)
+calls=5 1827
+1859 5
+
+fl=(42)
+fn=(186)
+cfl=(42)
+cfn=(183)
+calls=1 1823
+1859 1
+
+fl=(42)
+fn=(186)
+cfl=(42)
+cfn=(185)
+calls=2 1839
+1860 2
+
+fl=(42)
+fn=(186)
+cfl=(42)
+cfn=(185)
+calls=33 1840
+1860 33
+
+fl=(42)
+fn=(187) std::__unguarded_partition
+cfl=(51)
+cfn=(163)
+calls=16 158
+1877 16
+
+fl=(42)
+fn=(187)
+cfl=(2)
+cfn=(68)
+calls=5 694
+1877 5
+
+fl=(42)
+fn=(187)
+cfl=(2)
+cfn=(68)
+calls=1 695
+1877 1
+
+fl=(42)
+fn=(187)
+cfl=(2)
+cfn=(71)
+calls=3 653
+1877 3
+
+fl=(42)
+fn=(187)
+cfl=(2)
+cfn=(182)
+calls=1 775
+1879 1
+
+fl=(42)
+fn=(187)
+cfl=(51)
+cfn=(163)
+calls=14 158
+1880 14
+
+fl=(42)
+fn=(187)
+cfl=(2)
+cfn=(71)
+calls=1 653
+1880 1
+
+fl=(42)
+fn=(187)
+cfl=(2)
+cfn=(68)
+calls=1 694
+1880 1
+
+fl=(42)
+fn=(187)
+1880 1
+
+fl=(42)
+fn=(187)
+cfl=(2)
+cfn=(182)
+calls=1 775
+1881 1
+
+fl=(42)
+fn=(187)
+cfl=(2)
+cfn=(188) __gnu_debug::operator<
+calls=2 850
+1882 2
+
+fl=(42)
+fn=(187)
+cfl=(2)
+cfn=(68)
+calls=1 699
+1883 1
+
+fl=(42)
+fn=(187)
+cfl=(39)
+cfn=(180)
+calls=4 185
+1884 4
+
+fl=(42)
+fn=(187)
+cfl=(2)
+cfn=(2)
+calls=1 748
+1885 1
+
+fl=(42)
+fn=(187)
+cfl=(2)
+cfn=(2)
+calls=1 747
+1885 1
+
+fl=(42)
+fn=(189) std::__unguarded_partition_pivot
+cfl=(42)
+cfn=(179)
+calls=1 95
+1897 1
+
+fl=(42)
+fn=(189)
+cfl=(42)
+cfn=(179)
+calls=3 88
+1897 3
+
+fl=(42)
+fn=(189)
+cfl=(42)
+cfn=(179)
+calls=1 90
+1897 1
+
+fl=(42)
+fn=(189)
+cfl=(42)
+cfn=(187)
+calls=2 1885
+1899 2
+
+fl=(42)
+fn=(189)
+cfl=(42)
+cfn=(187)
+calls=25 1877
+1899 25
+
+fl=(42)
+fn=(189)
+cfl=(42)
+cfn=(187)
+calls=4 1884
+1899 4
+
+fl=(42)
+fn=(189)
+cfl=(42)
+cfn=(187)
+calls=1 1883
+1899 1
+
+fl=(42)
+fn=(189)
+cfl=(42)
+cfn=(187)
+calls=2 1882
+1899 2
+
+fl=(42)
+fn=(189)
+cfl=(42)
+cfn=(187)
+calls=1 1881
+1899 1
+
+fl=(42)
+fn=(189)
+cfl=(2)
+cfn=(68)
+calls=1 694
+1899 1
+
+fl=(42)
+fn=(189)
+cfl=(2)
+cfn=(71)
+calls=1 653
+1899 1
+
+fl=(42)
+fn=(189)
+cfl=(42)
+cfn=(187)
+calls=1 1879
+1899 1
+
+fl=(42)
+fn=(189)
+cfl=(42)
+cfn=(187)
+calls=17 1880
+1899 17
+
+fl=(42)
+fn=(190) std::__introsort_loop
+cfl=(2)
+cfn=(191) __gnu_debug::operator-
+calls=1 927
+1922 1
+
+fl=(42)
+fn=(190)
+cfl=(42)
+cfn=(189)
+calls=55 1899
+1931 55
+
+fl=(42)
+fn=(190)
+cfl=(42)
+cfn=(189)
+calls=5 1897
+1931 5
+
+fl=(42)
+fn=(190)
+cfl=(42)
+cfn=(190)
+calls=37 1932
+1932 37
+
+fl=(42)
+fn=(190)
+cfl=(42)
+cfn=(190)
+calls=1 1933
+1932 1
+
+fl=(42)
+fn=(190)
+cfl=(42)
+cfn=(190)
+calls=1 1922
+1932 1
+
+fl=(42)
+fn=(190)
+cfl=(42)
+cfn=(190)
+calls=1 1934
+1932 1
+
+fl=(42)
+fn=(190)
+cfl=(42)
+cfn=(190)
+calls=48 1931
+1932 48
+
+fl=(42)
+fn=(190)
+cfl=(2)
+cfn=(192) __gnu_debug::_Safe_iterator::operator=
+calls=1 719
+1933 1
+
+fl=(42)
+fn=(190)
+cfl=(2)
+cfn=(71)
+calls=1 653
+1934 1
+
+fl=(42)
+fn=(193) std::__sort
+cfl=(42)
+cfn=(190)
+calls=51 1932
+1947 51
+
+fl=(42)
+fn=(193)
+cfl=(42)
+cfn=(190)
+calls=12 1931
+1947 12
+
+fl=(42)
+fn=(193)
+cfl=(42)
+cfn=(186)
+calls=35 1860
+1950 35
+
+fl=(42)
+fn=(193)
+cfl=(42)
+cfn=(186)
+calls=6 1859
+1950 6
+
+fl=(42)
+fn=(120)
+cfl=(42)
+cfn=(193)
+calls=41 1950
+4894 41
+
+fl=(42)
+fn=(120)
+cfl=(42)
+cfn=(193)
+calls=63 1947
+4894 63
+
+fl=(39)
+fn=(180)
+cfl=(2)
+cfn=(5)
+calls=1 301
+185 1
+
+fl=(39)
+fn=(180)
+cfl=(2)
+cfn=(5)
+calls=1 298
+185 1
+
+fl=(39)
+fn=(180)
+cfl=(50)
+cfn=(159)
+calls=2 197
+185 2
+
+fl=(39)
+fn=(180)
+cfl=(50)
+cfn=(159)
+calls=1 200
+185 1
+
+fl=(39)
+fn=(76)
+258 1
+
+fl=(39)
+fn=(194) std::__copy_move_a2
+506 1
+
+fl=(39)
+fn=(195) std::__copy_move_a1
+cfl=(39)
+cfn=(194)
+calls=1 506
+533 1
+
+fl=(39)
+fn=(196) std::__copy_move_a
+cfl=(39)
+cfn=(195)
+calls=1 533
+541 1
+
+fl=(39)
+fn=(197) std::copy
+cfl=(53) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/helper_functions.h
+cfn=(198) __gnu_debug::__valid_range
+calls=2 243
+630 2
+
+fl=(39)
+fn=(197)
+cfl=(39)
+cfn=(196)
+calls=1 541
+632 1
+
+fl=(46)
+fn=(143)
+110 1
+
+fl=(46)
+fn=(143)
+cfl=(22)
+cfn=(42)
+calls=17 12
+119 17
+
+fl=(46)
+fn=(143)
+cfl=(32)
+cfn=(62)
+calls=2 62
+119 2
+
+fl=(46)
+fn=(143)
+cfl=(9)
+cfn=(123)
+calls=1 202
+119 1
+
+fl=(46)
+fn=(143)
+cfl=(32)
+cfn=(62)
+calls=24 52
+119 24
+
+fl=(46)
+fn=(143)
+cfl=(32)
+cfn=(62)
+calls=1 0
+119 1
+
+fl=(46)
+fn=(143)
+cfl=(32)
+cfn=(62)
+calls=1 53
+119 1
+
+fl=(46)
+fn=(143)
+cfl=(7)
+cfn=(43)
+calls=17 212
+119 17
+
+fl=(46)
+fn=(143)
+cfl=(32)
+cfn=(62)
+calls=1 54
+119 1
+
+fl=(46)
+fn=(143)
+cfl=(32)
+cfn=(62)
+calls=21 61
+119 21
+
+fl=(46)
+fn=(145)
+147 1
+
+fl=(46)
+fn=(145)
+cfl=(22)
+cfn=(44)
+calls=2 12
+151 2
+
+fl=(46)
+fn=(145)
+cfl=(8)
+cfn=(19)
+calls=25 14
+151 25
+
+fl=(46)
+fn=(145)
+cfl=(7)
+cfn=(18)
+calls=2 230
+151 2
+
+fl=(46)
+fn=(145)
+cfl=(23)
+cfn=(46)
+calls=2 16
+151 2
+
+fl=(46)
+fn=(199) std::_Destroy_aux::__destroy
+161 1
+
+fl=(46)
+fn=(199)
+cfl=(54) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_iterator.h
+cfn=(200) __gnu_cxx::__normal_iterator::operator++
+calls=1 1112
+162 1
+
+fl=(46)
+fn=(199)
+cfl=(46)
+cfn=(145)
+calls=29 151
+163 29
+
+fl=(46)
+fn=(199)
+163 1
+
+fl=(46)
+fn=(199)
+164 1
+
+fl=(46)
+fn=(145)
+cfl=(46)
+cfn=(145)
+calls=1 147
+195 1
+
+fl=(46)
+fn=(145)
+cfl=(46)
+cfn=(199)
+calls=1 161
+195 1
+
+fl=(46)
+fn=(145)
+cfl=(46)
+cfn=(199)
+calls=1 162
+195 1
+
+fl=(46)
+fn=(145)
+cfl=(46)
+cfn=(199)
+calls=30 163
+195 30
+
+fl=(46)
+fn=(145)
+cfl=(46)
+cfn=(199)
+calls=1 164
+195 1
+
+fl=(54)
+fn=(201) __gnu_cxx::__normal_iterator::__normal_iterator
+1077 4
+
+fl=(54)
+fn=(200)
+1112 1
+
+fl=(54)
+fn=(202) __gnu_cxx::__normal_iterator::base
+1163 7
+
+fl=(54)
+fn=(203) __gnu_cxx::operator==
+cfl=(54)
+cfn=(202)
+calls=2 1163
+1228 2
+
+fl=(54)
+fn=(203)
+1228 4
+
+fl=(54)
+fn=(204) __gnu_cxx::operator!=
+cfl=(54)
+cfn=(202)
+calls=2 1163
+1244 2
+
+fl=(54)
+fn=(204)
+1244 4
+
+fl=(54)
+fn=(205) __gnu_cxx::operator<
+1261 1
+
+fl=(54)
+fn=(206) __gnu_cxx::operator-
+1337 1
+
+fl=(55) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/stl_uninitialized.h
+fn=(207) std::__do_uninit_copy
+115 1
+
+fl=(55)
+fn=(207)
+119 1
+
+fl=(55)
+fn=(207)
+cfl=(54)
+cfn=(204)
+calls=1 1244
+119 1
+
+fl=(55)
+fn=(207)
+cfl=(46)
+cfn=(143)
+calls=68 119
+120 68
+
+fl=(55)
+fn=(208) std::__uninitialized_copy::__uninit_copy
+cfl=(46)
+cfn=(143)
+calls=1 110
+137 1
+
+fl=(55)
+fn=(208)
+cfl=(55)
+cfn=(207)
+calls=1 115
+137 1
+
+fl=(55)
+fn=(208)
+cfl=(55)
+cfn=(207)
+calls=2 119
+137 2
+
+fl=(55)
+fn=(208)
+cfl=(55)
+cfn=(207)
+calls=68 120
+137 68
+
+fl=(55)
+fn=(208)
+cfl=(39)
+cfn=(197)
+calls=2 630
+147 2
+
+fl=(55)
+fn=(208)
+cfl=(39)
+cfn=(197)
+calls=1 632
+147 1
+
+fl=(55)
+fn=(209) std::uninitialized_copy
+cfl=(55)
+cfn=(208)
+calls=3 147
+184 3
+
+fl=(55)
+fn=(209)
+cfl=(55)
+cfn=(208)
+calls=72 137
+184 72
+
+fl=(55)
+fn=(209)
+185 1
+
+fl=(55)
+fn=(210) std::__uninitialized_copy_a
+cfl=(55)
+cfn=(209)
+calls=75 184
+373 75
+
+fl=(55)
+fn=(210)
+cfl=(55)
+cfn=(209)
+calls=1 185
+373 1
+
+fl=(55)
+fn=(211) std::__uninitialized_move_if_noexcept_a
+cfl=(55)
+cfn=(210)
+calls=21 373
+398 21
+
+fl=(55)
+fn=(211)
+400 3
+
+fl=(55)
+fn=(212) std::__relocate_object_a
+cfl=(44)
+cfn=(140)
+calls=1 537
+1078 1
+
+fl=(55)
+fn=(213) std::__relocate_a_1
+cfl=(55)
+cfn=(212)
+calls=1 1078
+1106 1
+
+fl=(55)
+fn=(214) std::__relocate_a
+cfl=(55)
+cfn=(213)
+calls=1 1106
+1148 1
+
+fl=(38)
+fn=(78)
+0 1
+
+fl=(38)
+fn=(215) std::__cxx1998::vector::end
+0 1
+
+fl=(38)
+fn=(216) std::__cxx1998::_Vector_base::_Vector_impl_data::_Vector_impl_data
+100 4
+
+fl=(38)
+fn=(217) std::__cxx1998::_Vector_base::_Vector_impl::~_Vector_impl
+133 1
+
+fl=(38)
+fn=(218) std::__cxx1998::_Vector_base::_Vector_impl::_Vector_impl
+cfl=(38)
+cfn=(216)
+calls=4 100
+137 4
+
+fl=(38)
+fn=(218)
+145 1
+
+fl=(38)
+fn=(219) std::__cxx1998::_Vector_base::_M_get_Tp_allocator
+299 1
+
+fl=(38)
+fn=(220) std::__cxx1998::_Vector_base::_Vector_base
+312 1
+
+fl=(38)
+fn=(220)
+cfl=(38)
+cfn=(218)
+calls=4 137
+312 4
+
+fl=(38)
+fn=(220)
+cfl=(38)
+cfn=(221) std::__cxx1998::_Vector_base::_M_create_storage
+calls=12 395
+332 12
+
+fl=(38)
+fn=(222) std::__cxx1998::_Vector_base::~_Vector_base
+366 2
+
+fl=(38)
+fn=(222)
+cfl=(38)
+cfn=(223) std::__cxx1998::_Vector_base::_M_deallocate
+calls=1 384
+366 1
+
+fl=(38)
+fn=(222)
+cfl=(38)
+cfn=(223)
+calls=3 387
+366 3
+
+fl=(38)
+fn=(222)
+cfl=(38)
+cfn=(217)
+calls=1 133
+368 1
+
+fl=(38)
+fn=(78)
+cfl=(44)
+cfn=(133)
+calls=15 482
+378 15
+
+fl=(38)
+fn=(223)
+384 1
+
+fl=(38)
+fn=(223)
+cfl=(44)
+cfn=(136)
+calls=3 516
+387 3
+
+fl=(38)
+fn=(221)
+cfl=(38)
+cfn=(78)
+calls=12 378
+395 12
+
+fl=(38)
+fn=(224) std::__cxx1998::vector::_S_relocate
+cfl=(55)
+cfn=(214)
+calls=1 1148
+506 1
+
+fl=(38)
+fn=(225) std::__cxx1998::vector::vector
+cfl=(38)
+cfn=(220)
+calls=5 312
+528 5
+
+fl=(38)
+fn=(225)
+cfl=(38)
+cfn=(226) std::__cxx1998::vector::size
+calls=3 990
+599 3
+
+fl=(38)
+fn=(225)
+cfl=(38)
+cfn=(220)
+calls=12 332
+599 12
+
+fl=(38)
+fn=(225)
+599 1
+
+fl=(38)
+fn=(225)
+cfl=(38)
+cfn=(218)
+calls=1 145
+599 1
+
+fl=(38)
+fn=(225)
+601 1
+
+fl=(38)
+fn=(225)
+cfl=(55)
+cfn=(210)
+calls=55 373
+603 55
+
+fl=(38)
+fn=(225)
+cfl=(38)
+cfn=(215)
+calls=2 901
+603 2
+
+fl=(38)
+fn=(225)
+604 1
+
+fl=(38)
+fn=(227) std::__cxx1998::vector::~vector
+731 1
+
+fl=(38)
+fn=(227)
+cfl=(44)
+cfn=(146)
+calls=22 947
+732 22
+
+fl=(38)
+fn=(227)
+732 1
+
+fl=(38)
+fn=(227)
+733 2
+
+fl=(38)
+fn=(227)
+cfl=(38)
+cfn=(222)
+calls=6 366
+735 6
+
+fl=(38)
+fn=(227)
+cfl=(38)
+cfn=(222)
+calls=1 368
+735 1
+
+fl=(38)
+fn=(77)
+871 1
+
+fl=(38)
+fn=(215)
+891 10
+
+fl=(38)
+fn=(215)
+cfl=(54)
+cfn=(201)
+calls=2 1077
+891 2
+
+fl=(38)
+fn=(215)
+901 2
+
+fl=(38)
+fn=(226)
+990 33
+
+fl=(38)
+fn=(228) std::__cxx1998::vector::max_size
+cfl=(38)
+cfn=(229) std::__cxx1998::vector::_S_max_size
+calls=1 1920
+996 1
+
+fl=(38)
+fn=(228)
+996 1
+
+fl=(38)
+fn=(230) std::__cxx1998::vector::capacity
+1076 3
+
+fl=(38)
+fn=(231) std::__cxx1998::vector::push_back
+cfl=(44)
+cfn=(140)
+calls=18 537
+1283 18
+
+fl=(38)
+fn=(231)
+cfl=(56) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/vector.tcc
+cfn=(74)
+calls=1 520
+1289 1
+
+fl=(38)
+fn=(231)
+cfl=(31)
+cfn=(74)
+calls=4 459
+1289 4
+
+fl=(38)
+fn=(231)
+cfl=(56)
+cfn=(74)
+calls=1 480
+1289 1
+
+fl=(38)
+fn=(231)
+cfl=(31)
+cfn=(74)
+calls=2 458
+1289 2
+
+fl=(38)
+fn=(231)
+cfl=(38)
+cfn=(219)
+calls=1 299
+1289 1
+
+fl=(38)
+fn=(231)
+cfl=(56)
+cfn=(74)
+calls=8 517
+1289 8
+
+fl=(38)
+fn=(231)
+cfl=(56)
+cfn=(74)
+calls=4 499
+1289 4
+
+fl=(38)
+fn=(231)
+cfl=(31)
+cfn=(74)
+calls=8 455
+1289 8
+
+fl=(38)
+fn=(231)
+cfl=(56)
+cfn=(74)
+calls=21 492
+1289 21
+
+fl=(38)
+fn=(231)
+cfl=(56)
+cfn=(74)
+calls=16 468
+1289 16
+
+fl=(38)
+fn=(231)
+cfl=(31)
+cfn=(74)
+calls=1 453
+1289 1
+
+fl=(38)
+fn=(75)
+cfl=(38)
+cfn=(226)
+calls=2 990
+1895 2
+
+fl=(38)
+fn=(75)
+cfl=(38)
+cfn=(226)
+calls=1 990
+1898 1
+
+fl=(38)
+fn=(75)
+cfl=(38)
+cfn=(228)
+calls=2 996
+1899 2
+
+fl=(38)
+fn=(75)
+cfl=(38)
+cfn=(226)
+calls=2 990
+1899 2
+
+fl=(38)
+fn=(229)
+cfl=(44)
+cfn=(142)
+calls=1 573
+1920 1
+
+fl=(57) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/bits/unordered_map.h
+fn=(232) std::__cxx1998::unordered_map::unordered_map
+cfl=(47)
+cfn=(152)
+calls=1 1465
+188 1
+
+fl=(57)
+fn=(233) std::__cxx1998::unordered_map::end
+cfl=(47)
+cfn=(150)
+calls=1 632
+355 1
+
+fl=(57)
+fn=(234) std::__cxx1998::unordered_map::find
+cfl=(47)
+cfn=(154)
+calls=1 1656
+876 1
+
+fl=(56)
+fn=(235) std::__cxx1998::vector::operator=
+cfl=(44)
+cfn=(146)
+calls=4 947
+250 4
+
+fl=(56)
+fn=(74)
+cfl=(44)
+cfn=(140)
+calls=16 537
+468 16
+
+fl=(56)
+fn=(74)
+cfl=(38)
+cfn=(224)
+calls=1 506
+480 1
+
+fl=(56)
+fn=(74)
+cfl=(55)
+cfn=(211)
+calls=20 398
+492 20
+
+fl=(56)
+fn=(74)
+492 1
+
+fl=(56)
+fn=(74)
+cfl=(55)
+cfn=(211)
+calls=3 400
+499 3
+
+fl=(56)
+fn=(74)
+cfl=(55)
+cfn=(211)
+calls=1 398
+499 1
+
+fl=(56)
+fn=(74)
+cfl=(44)
+cfn=(146)
+calls=8 947
+517 8
+
+fl=(56)
+fn=(74)
+520 1
+
+fl=(21)
+fn=(41)
+159 14
+
+fl=(21)
+fn=(40)
+254 36
+
+fl=(53)
+fn=(236) __gnu_debug::__get_distance
+115 1
+
+fl=(53)
+fn=(237) __gnu_debug::__valid_range_aux
+cfl=(53)
+cfn=(236)
+calls=1 115
+212 1
+
+fl=(53)
+fn=(237)
+229 1
+
+fl=(53)
+fn=(198)
+cfl=(53)
+cfn=(237)
+calls=1 229
+243 1
+
+fl=(53)
+fn=(198)
+cfl=(53)
+cfn=(237)
+calls=1 212
+243 1
+
+fl=(58) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/safe_base.h
+fn=(238) __gnu_debug::_Safe_iterator_base::_Safe_iterator_base
+90 1
+
+fl=(58)
+fn=(238)
+91 4
+
+fl=(58)
+fn=(239) __gnu_debug::_Safe_iterator_base::~_Safe_iterator_base
+100 3
+
+fl=(58)
+fn=(240) __gnu_debug::_Safe_sequence_base::~_Safe_sequence_base
+221 3
+
+fl=(37)
+fn=(73)
+41 1
+
+fl=(37)
+fn=(73)
+cfl=(59) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/safe_sequence.h
+cfn=(241) __gnu_debug::_Safe_sequence::~_Safe_sequence
+calls=4 108
+41 4
+
+fl=(37)
+fn=(242) __gnu_debug::_Safe_container::operator=
+cfl=(60) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/safe_unordered_container.h
+cfn=(243) __gnu_debug::_Safe_unordered_container::_M_invalidate_all
+calls=2 169
+81 2
+
+fl=(2)
+fn=(67)
+0 1
+
+fl=(2)
+fn=(244) __gnu_debug::_BeforeBeginHelper::_S_Is
+77 1
+
+fl=(2)
+fn=(71)
+cfl=(35)
+cfn=(245) __gnu_debug::_Safe_iterator_base::_M_detach
+calls=1 452
+114 1
+
+fl=(2)
+fn=(71)
+cfl=??
+cfn=(39)
+calls=1 0
+114 1
+
+fl=(2)
+fn=(71)
+cfl=(61) /usr/src/debug/gcc/gcc/libstdc++-v3/src/c++11/shared_ptr.cc
+cfn=(246) __gnu_internal::get_mutex
+calls=1 48
+114 1
+
+fl=(2)
+fn=(71)
+cfl=(35)
+cfn=(245)
+calls=1 460
+114 1
+
+fl=(2)
+fn=(71)
+114 1
+
+fl=(2)
+fn=(71)
+cfl=(58)
+cfn=(239)
+calls=2 100
+114 2
+
+fl=(2)
+fn=(71)
+cfl=(61)
+cfn=(246)
+calls=1 47
+114 1
+
+fl=(2)
+fn=(71)
+cfl=(61)
+cfn=(246)
+calls=1 49
+114 1
+
+fl=(2)
+fn=(68)
+cfl=(35)
+cfn=(247) __gnu_debug::_Safe_sequence_base::_M_attach
+calls=1 382
+162 1
+
+fl=(2)
+fn=(68)
+cfl=(61)
+cfn=(246)
+calls=2 49
+162 2
+
+fl=(2)
+fn=(68)
+cfl=(58)
+cfn=(238)
+calls=1 90
+162 1
+
+fl=(2)
+fn=(68)
+cfl=(61)
+cfn=(246)
+calls=1 36
+162 1
+
+fl=(2)
+fn=(68)
+cfl=(35)
+cfn=(248) __gnu_debug::_Safe_iterator_base::_M_attach
+calls=1 422
+162 1
+
+fl=(2)
+fn=(68)
+cfl=(58)
+cfn=(238)
+calls=4 91
+162 4
+
+fl=(2)
+fn=(68)
+162 4
+
+fl=(2)
+fn=(68)
+cfl=(35)
+cfn=(247)
+calls=1 384
+162 1
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(249) __gnu_debug::_Safe_iterator::base
+calls=1 363
+169 1
+
+fl=(2)
+fn=(68)
+170 3
+
+fl=(2)
+fn=(68)
+cfl=(61)
+cfn=(246)
+calls=1 49
+178 1
+
+fl=(2)
+fn=(68)
+cfl=(35)
+cfn=(248)
+calls=1 422
+178 1
+
+fl=(2)
+fn=(68)
+cfl=(35)
+cfn=(247)
+calls=2 381
+178 2
+
+fl=(2)
+fn=(68)
+cfl=??
+cfn=(39)
+calls=1 0
+178 1
+
+fl=(2)
+fn=(68)
+187 1
+
+fl=(2)
+fn=(192)
+cfl=(1)
+cfn=(14)
+calls=1 241
+240 1
+
+fl=(2)
+fn=(5)
+cfl=(2)
+cfn=(165)
+calls=33 384
+298 33
+
+fl=(2)
+fn=(5)
+cfl=(35)
+cfn=(113)
+calls=2 493
+298 2
+
+fl=(2)
+fn=(5)
+298 2
+
+fl=(2)
+fn=(5)
+cfl=(2)
+cfn=(249)
+calls=2 363
+301 2
+
+fl=(2)
+fn=(5)
+cfl=(48)
+cfn=(158)
+calls=1 437
+301 1
+
+fl=(2)
+fn=(2)
+cfl=(35)
+cfn=(113)
+calls=3 493
+326 3
+
+fl=(2)
+fn=(2)
+cfl=??
+cfn=(39)
+calls=1 0
+326 1
+
+fl=(2)
+fn=(2)
+cfl=(2)
+cfn=(250) __gnu_debug::_Safe_iterator::_M_incrementable
+calls=6 401
+326 6
+
+fl=(2)
+fn=(2)
+326 2
+
+fl=(2)
+fn=(2)
+cfl=(1)
+cfn=(14)
+calls=10 241
+329 10
+
+fl=(2)
+fn=(2)
+329 1
+
+fl=(2)
+fn=(2)
+330 1
+
+fl=(2)
+fn=(2)
+cfl=(1)
+cfn=(15)
+calls=9 244
+332 9
+
+fl=(2)
+fn=(2)
+cfl=(2)
+cfn=(2)
+calls=1 326
+345 1
+
+fl=(2)
+fn=(249)
+363 7
+
+fl=(2)
+fn=(165)
+cfl=(2)
+cfn=(249)
+calls=1 363
+384 1
+
+fl=(2)
+fn=(165)
+cfl=(2)
+cfn=(251) __gnu_debug::_Safe_iterator::_M_is_before_begin
+calls=3 456
+384 3
+
+fl=(2)
+fn=(165)
+384 6
+
+fl=(2)
+fn=(165)
+cfl=(38)
+cfn=(215)
+calls=1 891
+384 1
+
+fl=(2)
+fn=(165)
+cfl=(2)
+cfn=(244)
+calls=1 77
+384 1
+
+fl=(2)
+fn=(165)
+cfl=(2)
+cfn=(252) __gnu_debug::_Safe_iterator::_M_is_end
+calls=22 450
+384 22
+
+fl=(2)
+fn=(250)
+401 3
+
+fl=(2)
+fn=(250)
+cfl=(2)
+cfn=(252)
+calls=3 450
+401 3
+
+fl=(2)
+fn=(253) __gnu_debug::_Safe_iterator::_M_get_sequence
+428 1
+
+fl=(2)
+fn=(252)
+450 4
+
+fl=(2)
+fn=(252)
+cfl=(2)
+cfn=(249)
+calls=3 363
+450 3
+
+fl=(2)
+fn=(252)
+cfl=(57)
+cfn=(233)
+calls=1 355
+450 1
+
+fl=(2)
+fn=(252)
+cfl=(54)
+cfn=(202)
+calls=1 1163
+450 1
+
+fl=(2)
+fn=(252)
+cfl=(38)
+cfn=(215)
+calls=8 891
+450 8
+
+fl=(2)
+fn=(252)
+cfl=(54)
+cfn=(203)
+calls=6 1228
+450 6
+
+fl=(2)
+fn=(252)
+cfl=(2)
+cfn=(253)
+calls=1 428
+450 1
+
+fl=(2)
+fn=(252)
+cfl=(54)
+cfn=(201)
+calls=1 1077
+450 1
+
+fl=(2)
+fn=(251)
+456 3
+
+fl=(2)
+fn=(67)
+491 2
+
+fl=(2)
+fn=(67)
+492 6
+
+fl=(2)
+fn=(67)
+cfl=(54)
+cfn=(204)
+calls=5 1244
+493 5
+
+fl=(2)
+fn=(67)
+cfl=(54)
+cfn=(202)
+calls=2 1163
+493 2
+
+fl=(2)
+fn=(71)
+cfl=(2)
+cfn=(71)
+calls=9 114
+510 9
+
+fl=(2)
+fn=(71)
+510 1
+
+fl=(2)
+fn=(71)
+cfl=(58)
+cfn=(239)
+calls=1 100
+510 1
+
+fl=(2)
+fn=(68)
+539 1
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(68)
+calls=14 162
+539 14
+
+fl=(2)
+fn=(68)
+540 1
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(68)
+calls=5 178
+546 5
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(68)
+calls=1 170
+546 1
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(68)
+calls=1 169
+546 1
+
+fl=(2)
+fn=(68)
+547 1
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(68)
+calls=1 187
+551 1
+
+fl=(2)
+fn=(192)
+cfl=(2)
+cfn=(192)
+calls=1 240
+571 1
+
+fl=(2)
+fn=(2)
+593 1
+
+fl=(2)
+fn=(2)
+cfl=(2)
+cfn=(2)
+calls=1 330
+594 1
+
+fl=(2)
+fn=(2)
+cfl=(2)
+cfn=(2)
+calls=10 329
+594 10
+
+fl=(2)
+fn=(2)
+cfl=(2)
+cfn=(2)
+calls=9 332
+594 9
+
+fl=(2)
+fn=(2)
+cfl=(2)
+cfn=(2)
+calls=11 326
+594 11
+
+fl=(2)
+fn=(2)
+cfl=(35)
+cfn=(254) __gnu_debug::_Safe_sequence_base::_M_get_mutex
+calls=1 376
+594 1
+
+fl=(2)
+fn=(2)
+594 1
+
+fl=(2)
+fn=(182)
+620 1
+
+fl=(2)
+fn=(182)
+cfl=(35)
+cfn=(113)
+calls=1 493
+621 1
+
+fl=(2)
+fn=(182)
+cfl=(1)
+cfn=(14)
+calls=2 241
+624 2
+
+fl=(2)
+fn=(71)
+653 5
+
+fl=(2)
+fn=(71)
+cfl=(2)
+cfn=(71)
+calls=11 510
+653 11
+
+fl=(2)
+fn=(68)
+687 2
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(68)
+calls=1 540
+687 1
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(68)
+calls=15 539
+687 15
+
+fl=(2)
+fn=(68)
+688 3
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(68)
+calls=7 546
+694 7
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(68)
+calls=1 547
+694 1
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(68)
+calls=2 170
+694 2
+
+fl=(2)
+fn=(68)
+695 2
+
+fl=(2)
+fn=(68)
+cfl=(2)
+cfn=(68)
+calls=1 551
+699 1
+
+fl=(2)
+fn=(192)
+cfl=(2)
+cfn=(192)
+calls=1 571
+719 1
+
+fl=(2)
+fn=(2)
+747 2
+
+fl=(2)
+fn=(2)
+cfl=(2)
+cfn=(2)
+calls=33 594
+748 33
+
+fl=(2)
+fn=(2)
+cfl=(2)
+cfn=(2)
+calls=1 593
+748 1
+
+fl=(2)
+fn=(182)
+cfl=(2)
+cfn=(182)
+calls=1 620
+775 1
+
+fl=(2)
+fn=(182)
+cfl=(2)
+cfn=(182)
+calls=1 621
+775 1
+
+fl=(2)
+fn=(182)
+cfl=(2)
+cfn=(182)
+calls=2 624
+775 2
+
+fl=(2)
+fn=(188)
+cfl=(54)
+cfn=(255) __gnu_cxx::operator< 
+calls=1 1261
+850 1
+
+fl=(2)
+fn=(188)
+850 1
+
+fl=(2)
+fn=(191)
+cfl=(54)
+cfn=(206)
+calls=1 1337
+927 1
+
+fl=(2)
+fn=(184)
+cfl=(62) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/safe_iterator.tcc
+cfn=(256) __gnu_debug::_Safe_iterator::_M_can_advance
+calls=1 97
+934 1
+
+fl=(62)
+fn=(257) __gnu_debug::_Safe_iterator::_M_get_distance_to_end
+76 1
+
+fl=(62)
+fn=(256)
+cfl=(62)
+cfn=(257)
+calls=1 76
+97 1
+
+fl=(59)
+fn=(241)
+cfl=(58)
+cfn=(240)
+calls=3 221
+108 3
+
+fl=(59)
+fn=(241)
+cfl=(35)
+cfn=(258) __gnu_debug::_Safe_sequence_base::_M_detach_all
+calls=1 323
 108 1
 
-fl=(14)
-fn=(136) __gnu_debug::_Safe_vector::_Safe_vector
-cfl=(14)
-cfn=(137) __gnu_debug::_Safe_vector::_M_update_guaranteed_capacity
-calls=1 104
+fl=(60)
+fn=(243)
+cfl=(63) /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../include/c++/13.2.1/debug/safe_unordered_container.tcc
+cfn=(259) __gnu_debug::_Safe_unordered_container::_M_invalidate_if
+calls=2 43
+169 2
+
+fl=(63)
+fn=(259)
+cfl=(1)
+cfn=(14)
+calls=2 241
+43 2
+
+fl=(3)
+fn=(34)
+136 1
+
+fl=(3)
+fn=(34)
+cfl=(57)
+cfn=(232)
+calls=1 188
+136 1
+
+fl=(3)
+fn=(31)
+cfl=(37)
+cfn=(242)
+calls=2 81
+205 2
+
+fl=(3)
+fn=(7)
+cfl=(2)
+cfn=(68)
+calls=1 162
+240 1
+
+fl=(3)
+fn=(4)
+252 1
+
+fl=(3)
+fn=(8)
+cfl=(57)
+cfn=(234)
+calls=1 876
+666 1
+
+fl=(7)
+fn=(260) __gnu_debug::_Safe_vector::_M_update_guaranteed_capacity
+0 1
+
+fl=(7)
+fn=(261) __gnu_debug::_Safe_vector::_M_seq
+59 3
+
+fl=(7)
+fn=(262) __gnu_debug::_Safe_vector::_Safe_vector
+cfl=(7)
+cfn=(261)
+calls=2 59
+64 2
+
+fl=(7)
+fn=(262)
+cfl=(7)
+cfn=(260)
+calls=9 104
+64 9
+
+fl=(7)
+fn=(262)
+64 1
+
+fl=(7)
+fn=(262)
+cfl=(7)
+cfn=(261)
+calls=1 59
 68 1
 
-fl=(14)
-fn=(137)
-cfl=(40)
-cfn=(124)
-calls=1 990
-104 1
+fl=(7)
+fn=(262)
+cfl=(7)
+cfn=(260)
+calls=2 104
+68 2
 
-fl=(14)
-fn=(19)
-cfl=(43)
-cfn=(132)
-calls=1 52
-172 1
+fl=(7)
+fn=(263) __gnu_debug::_Safe_vector::_M_requires_reallocation
+99 2
 
-fl=(14)
-fn=(19)
-cfl=(40)
-cfn=(117)
-calls=1 332
+fl=(7)
+fn=(263)
+cfl=(7)
+cfn=(264) std::__debug::vector::capacity
+calls=3 420
+99 3
+
+fl=(7)
+fn=(260)
+cfl=(38)
+cfn=(226)
+calls=18 990
+104 18
+
+fl=(7)
+fn=(260)
+cfl=(38)
+cfn=(226)
+calls=3 990
+105 3
+
+fl=(7)
+fn=(43)
+cfl=(38)
+cfn=(225)
+calls=5 528
+172 5
+
+fl=(7)
+fn=(43)
+cfl=(7)
+cfn=(262)
+calls=12 64
+172 12
+
+fl=(7)
+fn=(43)
+cfl=(38)
+cfn=(225)
+calls=1 604
 212 1
 
-fl=(14)
-fn=(19)
-cfl=(14)
-cfn=(136)
-calls=1 68
+fl=(7)
+fn=(43)
+cfl=(7)
+cfn=(262)
+calls=3 68
+212 3
+
+fl=(7)
+fn=(43)
+cfl=(38)
+cfn=(225)
+calls=1 601
 212 1
 
-fl=(14)
-fn=(19)
-cfl=(40)
-cfn=(122)
-calls=38 603
-212 38
+fl=(7)
+fn=(43)
+cfl=(38)
+cfn=(225)
+calls=57 603
+212 57
 
-fl=(14)
-fn=(19)
-cfl=(40)
-cfn=(122)
+fl=(7)
+fn=(43)
+cfl=(38)
+cfn=(225)
 calls=17 599
 212 17
 
-fl=(14)
-fn=(21)
-cfl=(40)
-cfn=(123)
-calls=13 732
-230 13
+fl=(7)
+fn=(18)
+cfl=(38)
+cfn=(227)
+calls=23 732
+230 23
 
-fl=(14)
-fn=(21)
-cfl=(43)
-cfn=(131)
-calls=1 41
-230 1
+fl=(7)
+fn=(18)
+cfl=(38)
+cfn=(227)
+calls=7 735
+230 7
 
-fl=(14)
-fn=(21)
-cfl=(40)
-cfn=(123)
-calls=2 735
+fl=(7)
+fn=(18)
+cfl=(38)
+cfn=(227)
+calls=2 733
 230 2
 
-fl=(14)
-fn=(21)
-cfl=(40)
-cfn=(116)
-calls=1 299
+fl=(7)
+fn=(18)
+cfl=(37)
+cfn=(73)
+calls=4 41
+230 4
+
+fl=(7)
+fn=(18)
+cfl=(38)
+cfn=(227)
+calls=1 731
 230 1
 
-fl=(14)
-fn=(54)
-cfl=(23)
-cfn=(134)
-calls=1 687
-300 1
+fl=(7)
+fn=(119)
+cfl=(56)
+cfn=(235)
+calls=4 250
+239 4
 
-fl=(14)
-fn=(52)
+fl=(7)
+fn=(70)
+300 4
+
+fl=(7)
+fn=(70)
+cfl=(2)
+cfn=(68)
+calls=11 687
+300 11
+
+fl=(7)
+fn=(69)
+cfl=(38)
+cfn=(215)
+calls=3 891
+310 3
+
+fl=(7)
+fn=(69)
+cfl=(2)
+cfn=(68)
+calls=7 687
+310 7
+
+fl=(7)
+fn=(69)
+cfl=(38)
+cfn=(215)
+calls=1 0
 310 1
 
-fl=(14)
-fn=(28)
-cfl=(40)
-cfn=(125)
-calls=1 1126
-443 1
+fl=(7)
+fn=(69)
+cfl=(54)
+cfn=(201)
+calls=1 1077
+310 1
 
-fl=(14)
-fn=(30)
-cfl=(40)
-cfn=(126)
-calls=1 1283
-497 1
+fl=(7)
+fn=(69)
+cfl=(2)
+cfn=(68)
+calls=1 688
+310 1
 
-fl=(14)
-fn=(30)
-cfl=(40)
-cfn=(126)
-calls=2 1289
-497 2
+fl=(7)
+fn=(264)
+cfl=(38)
+cfn=(230)
+calls=3 1076
+420 3
+
+fl=(7)
+fn=(50)
+cfl=(38)
+cfn=(226)
+calls=4 990
+496 4
+
+fl=(7)
+fn=(50)
+cfl=(7)
+cfn=(263)
+calls=5 99
+496 5
+
+fl=(7)
+fn=(50)
+cfl=(38)
+cfn=(231)
+calls=66 1289
+497 66
+
+fl=(7)
+fn=(50)
+cfl=(38)
+cfn=(231)
+calls=17 1283
+497 17
+
+fl=(7)
+fn=(50)
+498 1
+
+fl=(7)
+fn=(50)
+cfl=(7)
+cfn=(260)
+calls=7 104
+500 7
+
+fl=(7)
+fn=(50)
+500 1
+
+fl=(7)
+fn=(50)
+cfl=(7)
+cfn=(260)
+calls=1 0
+500 1
+
+fl=(7)
+fn=(50)
+cfl=(7)
+cfn=(260)
+calls=3 105
+500 3
+
+fl=(7)
+fn=(61)
+731 1
+
+fl=(49)
+fn=(265) __gnu_cxx::__aligned_buffer::_M_addr
+105 1
+
+fl=(49)
+fn=(156)
+cfl=(49)
+cfn=(265)
+calls=1 105
+117 1
+
+fl=(52)
+fn=(266) __gnu_cxx::__is_single_threaded[inline]
+52 1
+
+fl=(52)
+fn=(267) __gnu_cxx::__exchange_and_add[inline]
+66 13
+
+fl=(52)
+fn=(268) __gnu_cxx::__atomic_add[inline]
+71 32
+
+fl=(52)
+fn=(176)
+cfl=(52)
+cfn=(266)
+calls=1 52
+98 1
+
+fl=(52)
+fn=(176)
+101 1
+
+fl=(52)
+fn=(176)
+cfl=(52)
+cfn=(267)
+calls=13 66
+101 13
+
+fl=(52)
+fn=(176)
+102 1
+
+fl=(52)
+fn=(172)
+111 3
+
+fl=(52)
+fn=(172)
+cfl=(52)
+cfn=(268)
+calls=32 71
+111 32
+
+fl=(5)
+fn=(10)
+752 3
+
+fl=(5)
+fn=(16)
+777 1
+
+fl=(64) /usr/src/debug/gcc/gcc-build/x86_64-pc-linux-gnu/libstdc++-v3/include/bits/locale_facets.tcc
+fn=(269) std::num_put::_M_insert_float
+992 1
+
+fl=(65) /usr/src/debug/gcc/gcc-build/x86_64-pc-linux-gnu/libstdc++-v3/include/debug/safe_base.h
+fn=(270) __gnu_debug::_Safe_iterator_base::_M_unlink[inline]
+157 1
+
+fl=(4)
+fn=(271) std::operator<<
+662 1
+
+fl=(66) /usr/src/debug/gcc/gcc-build/x86_64-pc-linux-gnu/libstdc++-v3/include/x86_64-pc-linux-gnu/bits/gthr-default.h
+fn=(272) __gnu_debug::_Safe_iterator_base::_M_detach[inline]
+749 1
 
 fl=(35)
-fn=(86)
-0 1
+fn=(258)
+323 1
 
-fl=(20)
-fn=(31)
-493 2
+fl=(35)
+fn=(254)
+376 2
 
-fl=(45)
-fn=(135)
+fl=(35)
+fn=(247)
+381 2
+
+fl=(35)
+fn=(247)
+382 1
+
+fl=(35)
+fn=(247)
+384 3
+
+fl=(35)
+fn=(273) __gnu_debug::_Safe_sequence_base::_M_attach_single
+392 1
+
+fl=(35)
+fn=(248)
+422 2
+
+fl=(35)
+fn=(248)
+428 2
+
+fl=(35)
+fn=(245)
+452 1
+
+fl=(35)
+fn=(245)
+460 1
+
+fl=(35)
+fn=(245)
+465 1
+
+fl=(35)
+fn=(274) __gnu_debug::_Safe_iterator_base::_M_detach_single
+470 1
+
+fl=(35)
+fn=(274)
+474 1
+
+fl=(35)
+fn=(275) __gnu_debug::_Safe_iterator_base::_M_reset
+486 1
+
+fl=(35)
+fn=(113)
+493 7
+
+fl=(35)
+fn=(66)
+498 1
+
+fl=(61)
+fn=(246)
+36 2
+
+fl=(61)
+fn=(246)
+47 2
+
+fl=(61)
+fn=(246)
 48 1
 
-fl=(45)
-fn=(135)
-49 1
+fl=(61)
+fn=(246)
+49 4
 
 fl=??
-fn=(138) _dl_rtld_di_serinfo@@GLIBC_PRIVATE
-0 1
+fn=(276) writev@@GLIBC_2.2.5
+0 142
 
 fl=??
-fn=(139) pthread_mutex_trylock@GLIBC_2.2.5
-0 1
-
-fl=??
-fn=(140) tcmalloc::CentralFreeList::RemoveRange
+fn=(277) tcmalloc::PageHeap::NewWithSizeClass
 cfl=??
-cfn=(141) tcmalloc::CentralFreeList::FetchFromOneSpansSafe
-calls=17 0
-0 17
-
-fl=??
-fn=(142) tcmalloc::ThreadCache::ReleaseToCentralCache
-cfl=??
-cfn=(143) tcmalloc::CentralFreeList::InsertRange
+cfn=(278) tcmalloc::PageHeap::NewLocked
 calls=1 0
 0 1
 
 fl=??
-fn=(144) _IO_vfprintf
-0 1
-
-fl=??
-fn=(145) tcmalloc::PageHeap::HandleUnlock
-cfl=??
-cfn=(146) tcmalloc::EnterStacktraceScope
-calls=1 0
-0 1
-
-fl=??
-fn=(79)
-cfl=??
-cfn=(140)
-calls=17 0
-0 17
-
-fl=??
-fn=(147) pthread_mutex_unlock@@GLIBC_2.2.5
-0 1
-
-fl=??
-fn=(148) tcmalloc::PageHeap::NewWithSizeClass
-cfl=??
-cfn=(145)
-calls=1 0
-0 1
-
-fl=??
-fn=(67)
-0 4
-
-fl=??
-fn=(149) _dl_audit_symbind_alt@@GLIBC_PRIVATE
-0 2
-
-fl=??
-fn=(143)
-cfl=??
-cfn=(150) tcmalloc::CentralFreeList::ReleaseListToSpans
-calls=1 0
-0 1
-
-fl=??
-fn=(151) _XimOpenIM
-0 2
-
-fl=??
-fn=(16)
+fn=(279) 0x00007f2e6a0af977
 0 3
 
 fl=??
-fn=(146)
+fn=(280) 0x00007f2e6a0af979
 0 1
 
 fl=??
-fn=(141)
+fn=(160)
 cfl=??
-cfn=(152) tcmalloc::CentralFreeList::Populate
-calls=17 0
+cfn=(161)
+calls=12 0
+0 12
+
+fl=??
+fn=(281) inflate
+0 1
+
+fl=??
+fn=(282) __lll_lock_wake_private@@GLIBC_PRIVATE
 0 17
 
 fl=??
-fn=(152)
+fn=(283) __poll@@GLIBC_2.2.5
+0 29
+
+fl=??
+fn=(284) _XrmInternalStringToQuark
+0 1
+
+fl=??
+fn=(285) __nptl_death_event@@GLIBC_PRIVATE
+0 195
+
+fl=??
+fn=(286) tcmalloc::CentralFreeList::FetchFromOneSpansSafe
 cfl=??
-cfn=(148)
+cfn=(287) tcmalloc::CentralFreeList::Populate
+calls=12 0
+0 12
+
+fl=??
+fn=(288) XkbUpdateMapFromCore
+0 1
+
+fl=??
+fn=(289) 0x00007f2e6a0af980
+0 2
+
+fl=??
+fn=(290) 0x00007f2e6a669c35
+0 1
+
+fl=??
+fn=(291) pthread_cond_signal@@GLIBC_2.3.2
+0 55
+
+fl=??
+fn=(292) XFreeModifiermap
+0 1
+
+fl=??
+fn=(293) 0x00007f2e6a0af965
+0 1
+
+fl=??
+fn=(100)
+0 10
+
+fl=??
+fn=(294) _XimLcctstowcs
+0 1
+
+fl=??
+fn=(278)
+cfl=??
+cfn=(295) tcmalloc::PageHeap::SearchFreeAndLargeLists
 calls=1 0
 0 1
 
 fl=??
-fn=(153) memcpy@GLIBC_2.2.5
+fn=(296) 0x000000200000000b
+cfl=??
+cfn=(297) llvm::FoldingSetBase::FindNodeOrInsertPos@@LLVM_16
+calls=1 0
 0 1
 
 fl=??
-fn=(154) __driDriverGetExtensions_swrast
+fn=(298) pthread_cond_broadcast@@GLIBC_2.3.2
+0 3
+
+fl=??
+fn=(299) __glDispatchCheckMultithreaded
+0 2
+
+fl=??
+fn=(300) __libc_alloca_cutoff@@GLIBC_PRIVATE
 0 1
 
 fl=??
-fn=(152)
-0 16
-
-fl=??
-fn=(155) nouveau_drm_screen_create
+fn=(301) pthread_sigmask@@GLIBC_2.32
 0 1
 
 fl=??
-fn=(156) writev@@GLIBC_2.2.5
-0 8
+fn=(137)
+0 4
 
 fl=??
-fn=(157) inflate
+fn=(38)
+0 39
+
+fl=??
+fn=(302) 0x00007f2e6a30e360
+0 1
+
+fl=??
+fn=(303) 0x00007f2e6b24e090
+0 1
+
+fl=??
+fn=(287)
+cfl=??
+cfn=(277)
+calls=1 0
+0 1
+
+fl=??
+fn=(304) parse_printf_format@@GLIBC_2.2.5
+0 3
+
+fl=??
+fn=(139)
+0 1
+
+fl=??
+fn=(305) pthread_kill_other_threads_np@GLIBC_2.2.5
+0 1
+
+fl=??
+fn=(306) 0x00007f2e6a0af95f
+0 2
+
+fl=??
+fn=(307) _XOpenLC
+0 1
+
+fl=??
+fn=(308) 0x00007f2e6b34c330
+0 1
+
+fl=??
+fn=(162)
+0 1
+
+fl=??
+fn=(170)
+0 7
+
+fl=??
+fn=(132)
+0 6
+
+fl=??
+fn=(309) tc_malloc
+0 1
+
+fl=??
+fn=(310) operator
+0 3
+
+fl=??
+fn=(311) 0x00007f2e6b34c0c9
 0 1
 
 fl=??
 fn=(39)
-0 9
+0 33
 
 fl=??
-fn=(158) write
+fn=(312) 0x00007f2e6a0af97c
 0 3
 
 fl=??
-fn=(159) _dl_mcount@@GLIBC_2.2.5
-0 2
+fn=(313) recvmsg@@GLIBC_2.2.5
+0 10
 
 fl=??
-fn=(44)
-0 2
-
-fl=??
-fn=(160) _XimLcctstowcs
-0 1
-
-fl=??
-fn=(161) pthread_mutex_lock@@GLIBC_2.2.5
-0 1
-
-fl=??
-fn=(162) llseek
-0 1
-
-fl=??
-fn=(163) ioctl@@GLIBC_2.2.5
-0 16
-
-fl=??
-fn=(164) __poll@@GLIBC_2.2.5
-0 2
-
-fl=??
-fn=(80)
+fn=(161)
 cfl=??
-cfn=(142)
-calls=1 0
+cfn=(286)
+calls=12 0
+0 12
+
+fl=??
+fn=(314) 0x00007f2e6a123fbc
 0 1
 
 fl=??
-fn=(165) tcmalloc::CentralFreeList::ReleaseToSpans
+fn=(315) 0x00007f2e6a0af956
+0 2
+
+fl=??
+fn=(13)
+0 38
+
+fl=??
+fn=(316) 0x00007f2e6a0af968
 0 1
 
 fl=??
-fn=(150)
-cfl=??
-cfn=(165)
-calls=1 0
+fn=(89)
+0 8
+
+fl=??
+fn=(98)
+0 10
+
+fl=??
+fn=(295)
 0 1
 
 fl=??
-fn=(166) read@@GLIBC_2.2.5
+fn=(317) 0x00007f2e6a6d8d18
 0 1
+
+fl=??
+fn=(318) tc_calloc
+0 1
+
+fl=??
+fn=(319) XrmPutResource
+0 1
+
+fl=??
+fn=(320) _dl_mcount@@GLIBC_2.2.5
+0 1
+
+fl=??
+fn=(321) 0x00007f2e6a6e3361
+0 1
+
+fl=??
+fn=(322) 0x00007f2e6a3e679f
+0 1
+
+fl=??
+fn=(323) 0x00007f2e6a0ae0ef
+0 1
+
+fl=??
+fn=(324) pthread_mutex_unlock@@GLIBC_2.2.5
+0 5
+
+fl=??
+fn=(27)
+0 244
+
+fl=??
+fn=(325) 0x00007f2e6a5ad2c0
+0 1
+
+fl=??
+fn=(326) 0x00007f2e6a0af950
+0 1
+
+fl=??
+fn=(33)
+0 1
+
+fl=??
+fn=(327) __lll_lock_wait_private@@GLIBC_PRIVATE
+0 23
+
+fl=??
+fn=(328) 0x00007f2e6a190c9b
+0 1
+
+fl=??
+fn=(329) _XSetLastRequestRead
+0 1
+
+fl=??
+fn=(330) 0x00007f2e6a0af954
+0 3
+
+fl=??
+fn=(331) 0x00007f2e6a6d3046
+0 1
+
+fl=??
+fn=(332) write
+0 23
+
+fl=??
+fn=(333) 0x00007f2e6a0af970
+0 1
+
+fl=??
+fn=(287)
+0 11
+
+fl=??
+fn=(161)
+0 1
+
+fl=??
+fn=(334) 0x00007f2e6b34c575
+0 1
+
+fl=??
+fn=(335) 0x00007f2e6a0af95c
+0 2
+
+fl=??
+fn=(336) xcb_get_setup
+0 3
+
+fl=??
+fn=(337) memcpy@GLIBC_2.2.5
+0 1
+
+fl=??
+fn=(297)
+0 1
+
+fl=??
+fn=(338) 0x00007f2e6a0af96b
+0 2
+
+fl=??
+fn=(11)
+0 52
 
