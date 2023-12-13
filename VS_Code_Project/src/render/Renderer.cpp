@@ -298,7 +298,7 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);	
-	//SDL_LockTexture(this->framebuffer, NULL, (void **) &this->framebufferpixels, &this->framebufferpitch);
+	
 	this->textureBlit->lock(); // prepare framebuffer for write only operation
 
 	// start with empty triangle buffer to rasterize each frame
@@ -324,10 +324,11 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	}
 	this->textureBlit->unlock(); // pixel write complete, ready to render
 
-	//SDL_UnlockTexture(this->framebuffer);
-	SDL_Texture *this_tex = this->textureBlit->getFrameBuffer();
-	SDL_RenderCopy(renderer, this_tex, NULL, NULL); // Copy texture pixel buffer to renderer
-	//SDL_RenderCopy(renderer, this->framebuffer, NULL, NULL);
+	
+	this->textureBlit->RenderCopy();
+	//SDL_Texture *this_tex = this->textureBlit->getFrameBuffer();
+	//SDL_RenderCopy(renderer, this_tex, NULL, NULL); // Copy texture pixel buffer to renderer
+	
 	//drawReticle();
 
 	// Flip video page to screen
