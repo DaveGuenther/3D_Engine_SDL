@@ -37,7 +37,7 @@ void ITriangleRasterizer::pixelBlit(const int &r, const int &g, const int&b, con
     
 }
 
-TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Texture_Blit* myTexBlit){
+TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, I_SDL_Texture_Blit* myTexBlit){
     this->renderer=my_renderer;
     this->textureBlit = myTexBlit;
     this->inv_max_visible_z_depth=1/this->max_visible_z_depth;

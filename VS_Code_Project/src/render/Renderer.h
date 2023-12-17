@@ -31,7 +31,7 @@ class Renderer{
         //SDL_Texture *framebuffer;
         //uint8_t *framebufferpixels = NULL;
         //int framebufferpitch;
-        SDL_Texture_Blit *textureBlit = NULL;
+        I_SDL_Texture_Blit *textureBlit = NULL;
 
         int SCREEN_W;
         int SCREEN_H;

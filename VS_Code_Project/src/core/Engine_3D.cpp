@@ -30,7 +30,7 @@ Engine_3D::Engine_3D(void){
     int SCREEN_H = 225;
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     isRunning = true;
-    float max_draw_dist = 10.0f;
+    float max_draw_dist = 20.0f;
     float aspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);  
     std::shared_ptr<Camera> player_camera(new Camera(aspectRatio, max_draw_dist));
     std::cout << player_camera->getMaxDrawDist() << std::endl;
@@ -76,9 +76,9 @@ Engine_3D::~Engine_3D(){
 void Engine_3D::load_meshes(){
     // Eventually allow this function to read a list of mesh file referenes and load them
     //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("rainbow_cube(zFor_yUp).obj", Vec3d(0,2,3), Vec3d(0,0,0));
-    mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("pirate_cave.obj", Vec3d(0,0,0), Vec3d(0,0,0));
+    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("pirate_cave.obj", Vec3d(0,0,0), Vec3d(0,0,0));
     //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("Compass.obj", Vec3d(-20,0,0), Vec3d(0,0,0));
-    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("control_room.obj", Vec3d(0,0,0), Vec3d(0,0,0));
+    mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("control_room.obj", Vec3d(0,0,0), Vec3d(0,0,0));
     
 
 }

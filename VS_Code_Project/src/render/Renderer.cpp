@@ -382,7 +382,7 @@ const int Renderer::getWindowWidth()const { return SCREEN_W; }
 const int Renderer::getWindowHeight()const { return SCREEN_H; }
 
 void Renderer::shutdown(){
-	delete(this->textureBlit);
+	//delete(this->textureBlit);
 	this->textureBlit=NULL;
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
