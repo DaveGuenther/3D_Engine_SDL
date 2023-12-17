@@ -14,7 +14,7 @@ class ITriangleRasterizer{
         
         //Renderer* my_renderer;
         SDL_Renderer *renderer;
-        I_SDL_Texture_Blit *textureBlit = NULL;
+        SDL_Texture_Blit *textureBlit = NULL;
 
         float max_visible_z_depth = 5.0f;  // distance from the camera at which things are no lonver visible
         float inv_max_visible_z_depth;
@@ -45,7 +45,7 @@ class ITriangleRasterizer{
 
 class TexturemapRasterizer:public ITriangleRasterizer{
     public:
-        TexturemapRasterizer(SDL_Renderer* my_renderer, I_SDL_Texture_Blit* myTexBlit);
+        TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Texture_Blit* myTexBlit);
         void drawTriangle(Triangle& this_triangle);
         
     private:
