@@ -3,11 +3,6 @@
 #include <iostream>
 
 
-
-
-
-
-
 void I_SDL_Texture_Blit::lock(){
     if(SDL_LockTexture(this->texture, NULL, (void **)&this->framebufferpixels, &this->pitch))
     {
@@ -19,7 +14,6 @@ void I_SDL_Texture_Blit::lock(){
     this->tex_head=this->p;
     
 }
-
 
 
 void I_SDL_Texture_Blit::unlock(){
@@ -126,5 +120,6 @@ void SDL_Texture_LineBlit::blitAdvance(uint8_t r, uint8_t g, uint8_t b, uint8_t 
     if (this->validStartPos && this->inX_Range(x)){
         *p = SDL_MapRGBA(this->pixelFormat, r, g, b, a);
         this->p++;
+        this->x++;;
     }
 }
