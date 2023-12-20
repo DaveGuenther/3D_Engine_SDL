@@ -40,7 +40,6 @@ class I_SDL_Texture_Blit{
         int getTex_h();
 
         SDL_Texture* getFrameBuffer(); // use this returned pointer to call SDL_RenderCopy(renderer, <frameBuffer>, NULL, NULL); outside this class
-        
 
 };
 

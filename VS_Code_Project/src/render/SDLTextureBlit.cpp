@@ -15,14 +15,6 @@ void I_SDL_Texture_Blit::lock(){
     
 }
 
-int I_SDL_Texture_Blit::getTex_w(){
-    return this->tex_w;
-}
-
-int I_SDL_Texture_Blit::getTex_h(){
-    return this->tex_h;
-}
-
 void I_SDL_Texture_Blit::unlock(){
     SDL_UnlockTexture(this->texture);
 }
@@ -31,11 +23,17 @@ void I_SDL_Texture_Blit::RenderCopy(){
     SDL_RenderCopy(this->renderer, this->texture, NULL, NULL);
 }
 
+int I_SDL_Texture_Blit::getTex_h(){
+    return this->tex_h;
+}
+
+int I_SDL_Texture_Blit::getTex_w(){
+    return this->tex_w;
+}
+
 SDL_Texture* I_SDL_Texture_Blit::getFrameBuffer(){
     return this->texture;
 }
-
-
 
 bool I_SDL_Texture_Blit::inPixelRange(const int &x, const int &y){
     
@@ -44,7 +42,6 @@ bool I_SDL_Texture_Blit::inPixelRange(const int &x, const int &y){
     if (y<0) {return false;}
     if (x<0) {return false;}
     return true;
-    
 
 }
 
@@ -128,6 +125,6 @@ void SDL_Texture_LineBlit::blitAdvance(uint8_t r, uint8_t g, uint8_t b, uint8_t 
     if (this->validStartPos && this->inX_Range(x)){
         *p = SDL_MapRGBA(this->pixelFormat, r, g, b, a);
         this->p++;
-        this->x++;;
+        this->x++;
     }
 }
