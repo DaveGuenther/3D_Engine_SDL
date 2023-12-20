@@ -247,69 +247,43 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
     this->drawFT_CalcSlopes(this_triangle);
     this->scanlineCalcStartEnd(this_triangle);
 
-    
-
-
-        
-
-    
-    //if (this->y_start<0) {this->y_start=0;}
-    //if (this->y_end>=this->tex_h) {this->y_end=this->tex_h;}
-
-    
 
     // 3. Loop through each y scanline (but don't do the last one)
-    for (this->y = this->y_start; this->y < this->y_end; this->y++){
+    for (this->y = this->y_start; this->y < this->y_end; this->y++){ 
 
-        if (this->y>=0 && y<this->tex_h){
-
+        this->drawFT_Scanline_prep(this_triangle); 
         
-            if (this->y==0) {
-                std::cout << "y:  " << this->y << std::endl;
-            }        
+        // determine scanline dist
+        scanlineDetermineDist();
+        
 
-            this->drawFT_Scanline_prep(this_triangle); 
+        // Set the TextureBlit class instance to the current line for blitting
+        this->textureBlit->setXY_Start(this->x_start, this->y);
+
+        // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
+        //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
+        for (this->x = this->x_start; this->x < this->x_end; this->x++){ 
+
+            // determine alpha_scan
+            texelDetermineAlphaX();
             
-            if (this->x_start<0) {
-                this->x_start=0;
+            // determine Vec2d(U,V)
+            texelDetermineUV(this_triangle);
+
+            // sample texture color at (U/V)
+            if (this_triangle.getTextureRawPtr()!=NULL){
+                // There is a texture associated with this triangle
+                this->this_texture->getPixelAtSurfaceUV(this->UVx_scan, this->UVy_scan, this->col);
             }
-
-            // determine scanline dist
-            scanlineDetermineDist();
             
-
-            // Set the TextureBlit class instance to the current line for blitting
-            this->textureBlit->setXY_Start(this->x_start, this->y);
-
-            // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
-            //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
-            for (this->x = this->x_start; this->x < this->x_end; this->x++){ 
-
-                if (this->y==0 && this->x==0) {
-                    std::cout << "x: " << this->x << "    y: " << this->y << std::endl;
-                }
-                if (this->x>=0 && this->x<this->tex_w){
+            // apply depth dimmer
+            texelDimPixel(this_triangle);
             
-                    // determine alpha_scan
-                    texelDetermineAlphaX();
-                    
-                    // determine Vec2d(U,V)
-                    texelDetermineUV(this_triangle);
-
-                    // sample texture color at (U/V)
-                    if (this_triangle.getTextureRawPtr()!=NULL){
-                        // There is a texture associated with this triangle
-                        this->this_texture->getPixelAtSurfaceUV(this->UVx_scan, this->UVy_scan, this->col);
-                    }
-                    
-                    // apply depth dimmer
-                    texelDimPixel(this_triangle);
-                    
-                    //Draw Point
-                    texelDrawUV_Point();
-                }
-            }
+            //Draw Point
+            texelDrawUV_Point();
+        
         }
+        
     }
 }
 

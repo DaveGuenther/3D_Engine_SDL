@@ -42,7 +42,6 @@ bool I_SDL_Texture_Blit::inPixelRange(const int &x, const int &y){
     if (y<0) {return false;}
     if (x<0) {return false;}
     return true;
-    
 
 }
 
