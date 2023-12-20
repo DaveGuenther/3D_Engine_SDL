@@ -36,6 +36,9 @@ class I_SDL_Texture_Blit{
         void lock(); // Do this before blitting
         void unlock(); // do this when all the pixel blits are done for the frame
         void RenderCopy(); // Copies the unlocked terxture to the renderer
+        int getTex_w();
+        int getTex_h();
+
         SDL_Texture* getFrameBuffer(); // use this returned pointer to call SDL_RenderCopy(renderer, <frameBuffer>, NULL, NULL); outside this class
         
 
