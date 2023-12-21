@@ -3,6 +3,7 @@
 
 #include "../utility/Mat4x4.h"
 #include "../utility/Vector_Math_Service.h"
+#include "../render/AspectRatio.h"
 
 const float PI_by_180 = 3.14159265/180.0;
 
@@ -136,7 +137,7 @@ Mat4x4 Mat4x4::matrixMakeTranslation(float x, float y, float z){
 }
 
 Mat4x4 Mat4x4::matrixMakeProjection(float fFOV, int SCREEN_W, int SCREEN_H, float fNear, float fFar){
-
+    //float fAspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);
 	float fAspectRatio = (float)SCREEN_H/(float)SCREEN_W;
 	float fFOV_rad = 1.0/(SDL_tanf((fFOV/2)*(PI_by_180)));
     Mat4x4 matProj;

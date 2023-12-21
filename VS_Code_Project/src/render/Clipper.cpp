@@ -3,7 +3,7 @@
 #include "../utility/Vector_Math_Service.h"
 #include "../utility/Triangle.h"
 
-Clipper::Clipper(std::shared_ptr<Camera> thisCamera):thisCameraFrustum(thisCamera->cameraViewFrustum){
+Clipper::Clipper(std::shared_ptr<Camera> thisCamera, float fFOV):thisCameraFrustum(thisCamera->cameraViewFrustum),fFOV(fFOV){
     this->frustum_bottom_plane_normal = this->thisCameraFrustum->getFrustumBottomPlaneNormal();
     this->frustum_front_plane_normal = this->thisCameraFrustum->getFrustumFrontPlaneNormal();
     this->frustum_front_point = this->thisCameraFrustum->getFrustumFrontPoint();

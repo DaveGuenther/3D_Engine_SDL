@@ -19,7 +19,7 @@
 #include "../globals.h"
 
 
-Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera) {
+Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera, float FOV) {
     // SDL and Screen initializing
 	this->SCREEN_W = SCREEN_W;
     this->SCREEN_H = SCREEN_H;
@@ -34,7 +34,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	// Projection Matrix
 	fNear = 0.1f;
 	fFar = 500.0f;
-	fFOV=90.0f;
+	this->fFOV=FOV;
 	this->fAspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);
 	matProj = Mat4x4::matrixMakeProjection(fFOV, SCREEN_W, SCREEN_H, fNear, fFar);
 	this->max_visible_z_depth = player_camera->getMaxDrawDist();
@@ -45,7 +45,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 
 	this->player_camera = player_camera;
-	std::shared_ptr<Clipper> thisFrustumClipper(new Clipper(player_camera));
+	std::shared_ptr<Clipper> thisFrustumClipper(new Clipper(player_camera, fFOV));
 	this->thisFrustumClipper = thisFrustumClipper;
 
 	this->min_blue_value = 255*this->min_visible_color_modifier;

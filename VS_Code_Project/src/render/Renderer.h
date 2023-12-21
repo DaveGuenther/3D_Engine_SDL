@@ -105,7 +105,7 @@ class Renderer{
 
     public:
 
-        Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera);
+        Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera, float FOV);
         ~Renderer();
         /**
          * @brief This function will reset the mouse X and Y values to the center of the window.  It requires the window object to call so must occur in the Renderer class

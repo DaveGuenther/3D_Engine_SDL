@@ -31,11 +31,12 @@ Engine_3D::Engine_3D(void){
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     isRunning = true;
     float max_draw_dist = 20.0f;
+    float fFOV=60.0f;
     float aspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);  
-    std::shared_ptr<Camera> player_camera(new Camera(aspectRatio, max_draw_dist));
+    std::shared_ptr<Camera> player_camera(new Camera(aspectRatio, max_draw_dist, fFOV));
     std::cout << player_camera->getMaxDrawDist() << std::endl;
     //player_camera = player_camera;
-    std::shared_ptr<Renderer> this_Renderer(new Renderer(SCREEN_W, SCREEN_H, player_camera));
+    std::shared_ptr<Renderer> this_Renderer(new Renderer(SCREEN_W, SCREEN_H, player_camera, fFOV));
     this->Engine_Renderer=this_Renderer;
     this_Renderer->setColorFrustumClippedTris(false); // don't show RGB clipped tris.  Instead show intended color
 

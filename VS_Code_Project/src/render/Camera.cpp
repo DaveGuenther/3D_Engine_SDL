@@ -5,10 +5,10 @@
 #include "Frustum.h"
 
 
-Camera::Camera(float aspectRatio, float max_draw_dist):camera(Vec3d(0.0f, 0.0f, 0.0f)), 
+Camera::Camera(float aspectRatio, float max_draw_dist, float FOV):camera(Vec3d(0.0f, 0.0f, 0.0f)), 
                                 lookVector(Vec3d(0.0f, 0.0f, 1.0f)),
                                 vTarget(Vec3d(0.0f, 0.0f, 1.0f)), 
-                                cameraViewFrustum(new Frustum(aspectRatio, max_draw_dist)){
+                                cameraViewFrustum(new Frustum(aspectRatio, max_draw_dist, FOV)){
     //this->camera = Vec3d(0.0f, 0.0f, 0.0f);
     //this->lookVector = Vec3d(0.0f, 0.0f, 1.0f);
     //this->vTarget = Vec3d(0.0f,0.0f,1.0f);

@@ -31,7 +31,7 @@ class Frustum{
          * 
          * @param aspectRatio - this variable is required to define the left and right frustum edges
          */
-        Frustum(float aspectRatio, float max_draw_dist);
+        Frustum(float aspectRatio, float max_draw_dist, float fFOV);
 
         const Vec3d& getFrustumFrontPlaneNormal();
         const Vec3d& getFrustumFrontPoint();
