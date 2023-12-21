@@ -48,7 +48,7 @@ class SDL_Texture_Blit:public I_SDL_Texture_Blit{
         SDL_Texture_Blit(SDL_Renderer* renderer, int SCREEN_W, int SCREEN_H);
         SDL_Texture_Blit(SDL_Renderer* renderer, SDL_Texture* existingBuffer);
         ~SDL_Texture_Blit();    
-        void blit(uint x, uint y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+        void blit(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 };
 
 
@@ -63,12 +63,12 @@ class SDL_Texture_LineBlit:public I_SDL_Texture_Blit{
         SDL_Texture_LineBlit(SDL_Renderer* renderer, SDL_Texture* existingBuffer);
         ~SDL_Texture_LineBlit();
         void blitAdvance(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
-        void setXY_Start(uint x, uint y);
+        void setXY_Start(uint16_t x, uint16_t y);
 
     private:
         bool inX_Range(const int &x);
         bool validStartPos = false;
-        uint x;
+        uint16_t x;
 };
 
 

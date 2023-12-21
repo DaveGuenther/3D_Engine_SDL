@@ -72,7 +72,7 @@ SDL_Texture_Blit::~SDL_Texture_Blit(){
     
 }
 
-void SDL_Texture_Blit::blit(uint x, uint y, uint8_t r, uint8_t g, uint8_t b, uint8_t a){
+void SDL_Texture_Blit::blit(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a){
     //if ((y>=0 && y<this->tex_h) && (x>=0 && x<this->tex_w)){
     //if(this->inPixelRange(x, y)){
     this->p = this->tex_head+(this->adjusted_pitch*y)+x;
@@ -113,7 +113,7 @@ bool SDL_Texture_LineBlit::inX_Range(const int &x){
     return true;
 }
 
-void SDL_Texture_LineBlit::setXY_Start(uint x, uint y){
+void SDL_Texture_LineBlit::setXY_Start(uint16_t x, uint16_t y){
     this->validStartPos = this->inPixelRange(x,y);
     if (this->validStartPos==true){
         this->p = this->tex_head+(this->adjusted_pitch*y)+x;
