@@ -27,7 +27,33 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	this->HALF_SCREEN_H = SCREEN_H/2;
 	window = SDL_CreateWindow("3D Engine", HALF_SCREEN_W,HALF_SCREEN_H, SCREEN_W, SCREEN_H, screen_mode);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    //this->framebufferpitch = SCREEN_W*4;
+
+	// Show display mode information
+	static int display_in_use = 0;
+	int i, display_mode_count;
+	SDL_DisplayMode mode;
+	Uint32 f;
+	display_mode_count = SDL_GetNumDisplayModes(display_in_use);
+	for (i = 0; i < display_mode_count; ++i) {
+		SDL_GetDisplayMode(display_in_use, i, &mode);
+		f = mode.format;
+		std::cout << i << SDL_BITSPERPIXEL(f) << SDL_GetPixelFormatName(f) << mode.w << mode.h << std::endl;
+	}
+	
+
+	//SDL_DisplayMode this_mode;
+	//this_mode.format=0;
+	mode.h=this->SCREEN_H;
+	mode.w=this->SCREEN_W;
+	//this_mode.refresh_rate=60;
+	//this_mode.driverdata=0;
+	if(SDL_SetWindowDisplayMode(window, &mode)!=0){
+		std::cout << "Cannott set display mode" << std::endl;
+	}
+	//SDL_SetWindowFullscreen( window, SDL_TRUE );
+	//SDL_RenderSetLogicalSize(renderer, SCREEN_W, SCREEN_H);
+
+    
 	this->textureBlit = new SDL_Texture_LineBlit(renderer, this->SCREEN_W, this->SCREEN_H);
 
 
@@ -383,7 +409,7 @@ const int Renderer::getWindowWidth()const { return SCREEN_W; }
 const int Renderer::getWindowHeight()const { return SCREEN_H; }
 
 void Renderer::shutdown(){
-	//delete(this->textureBlit);
+	delete(this->textureBlit);
 	this->textureBlit=NULL;
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
