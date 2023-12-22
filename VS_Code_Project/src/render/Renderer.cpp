@@ -51,7 +51,7 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 		std::cout << "Cannott set display mode" << std::endl;
 	}
 	//SDL_SetWindowFullscreen( window, SDL_TRUE );
-	//SDL_RenderSetLogicalSize(renderer, SCREEN_W, SCREEN_H);
+	SDL_RenderSetLogicalSize(renderer, SCREEN_W, SCREEN_H);
 
     
 	this->textureBlit = new SDL_Texture_LineBlit(renderer, this->SCREEN_W, this->SCREEN_H);

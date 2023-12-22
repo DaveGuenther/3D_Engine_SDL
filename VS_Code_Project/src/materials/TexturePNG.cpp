@@ -27,6 +27,7 @@ TexturePNG::TexturePNG(const char* filename){
     SDL_Color this_col;
     Uint8 *r, *g, *b, *a= NULL;
     uint8_t red, green, blue, alpha=0;
+    this->Bpp = this->image->format->BytesPerPixel;
     std::cout << SDL_GetPixelFormatName(pixelFormat->format)<< std::endl;
     // Get the size of the texture.
     int w, h;
@@ -120,7 +121,7 @@ void TexturePNG::getPixelAtSurfaceUV(const float &U, const float &V, SDL_Color &
     }    
 
 	// Bytes per pixel
-	const Uint8 Bpp = this->image->format->BytesPerPixel;
+	//const Uint8 Bpp = this->image->format->BytesPerPixel;
 
 	/*
 	Retrieve the address to a specific pixel
@@ -128,9 +129,9 @@ void TexturePNG::getPixelAtSurfaceUV(const float &U, const float &V, SDL_Color &
 	pSurface->pitch		= the length of a row of pixels (in bytes)
 	X and Y				= the offset on where on the image to retrieve the pixel, (0, 0) is in the upper left corner of the image
 	*/
-	Uint8* pPixel = (Uint8*)this->image->pixels + y * this->image->pitch + x * Bpp;
+	//Uint8* pPixel = (Uint8*)this->image->pixels + y * this->image->pitch + x * Bpp;
 
-	Uint32 PixelData = *(Uint32*)pPixel;
+	Uint32 PixelData = *(Uint32*)((Uint8*)this->image->pixels + y * this->image->pitch + x * Bpp);
 
 	//col = {0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE};
 

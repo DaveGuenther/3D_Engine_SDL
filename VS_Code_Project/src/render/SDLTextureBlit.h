@@ -38,6 +38,9 @@ class I_SDL_Texture_Blit{
         void RenderCopy(); // Copies the unlocked terxture to the renderer
         int getTex_w();
         int getTex_h();
+        Uint32* getPixelPointer();
+        SDL_PixelFormat* getPixelFormat();
+        
 
         SDL_Texture* getFrameBuffer(); // use this returned pointer to call SDL_RenderCopy(renderer, <frameBuffer>, NULL, NULL); outside this class
 

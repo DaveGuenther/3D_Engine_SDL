@@ -246,7 +246,8 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
     this->drawTriangleInitializer(this_triangle);
     this->drawFT_CalcSlopes(this_triangle);
     this->scanlineCalcStartEnd(this_triangle);
-
+    Uint32* p=0;
+    SDL_PixelFormat* pixelFormat = textureBlit->getPixelFormat();
 
     // 3. Loop through each y scanline (but don't do the last one)
     for (this->y = this->y_start; this->y < this->y_end; this->y++){ 
@@ -259,6 +260,7 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
 
         // Set the TextureBlit class instance to the current line for blitting
         this->textureBlit->setXY_Start(this->x_start, this->y);
+        p = this->textureBlit->getPixelPointer();
 
         // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
         //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
@@ -282,7 +284,9 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
             texelDimPixel(this_triangle);
             
             //Draw Point
-            texelDrawUV_Point();
+            //texelDrawUV_Point();
+            *p = SDL_MapRGB(pixelFormat, this->col.r, this->col.g, this->col.b);
+            p++;
         
         }
         
@@ -336,6 +340,8 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
     // 2. Determine y_start and y_end pixels for the triangle
     scanlineCalcStartEnd(this_triangle);
+    Uint32* p=0;
+    SDL_PixelFormat* pixelFormat = textureBlit->getPixelFormat();
 
     // 3. Loop through each y scanline (but don't do the last one)
     for (this->y = this->y_start; this->y < this->y_end; this->y++){
@@ -347,6 +353,7 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
         // Set the TextureBlit class instance to the current line for blitting
         this->textureBlit->setXY_Start(this->x_start, this->y);
+        p = this->textureBlit->getPixelPointer();
 
         // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
         //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
@@ -366,13 +373,15 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
             texelDimPixel(this_triangle);
             
             // Set Color
-            SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
+            //SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
 
             // draw point at (x,)
             //SDL_RenderDrawPoint(this->renderer,x, y); 
 
             //Draw Point
-            texelDrawUV_Point();
+            //texelDrawUV_Point();
+            *p = SDL_MapRGB(pixelFormat, this->col.r, this->col.g, this->col.b);
+            p++;            
             
         }
         

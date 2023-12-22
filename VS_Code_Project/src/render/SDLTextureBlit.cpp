@@ -45,6 +45,14 @@ bool I_SDL_Texture_Blit::inPixelRange(uint16_t x, uint16_t y){
 
 }
 
+Uint32* I_SDL_Texture_Blit::getPixelPointer(){
+    return this->p;
+}
+
+SDL_PixelFormat* I_SDL_Texture_Blit::getPixelFormat(){
+    return this->pixelFormat;
+}
+
 SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, int SCREEN_W, int SCREEN_H){
     
     this->renderer = renderer;
@@ -122,7 +130,7 @@ void SDL_Texture_LineBlit::setXY_Start(uint16_t x, uint16_t y){
 }
 
 void SDL_Texture_LineBlit::blitAdvance(uint8_t r, uint8_t g, uint8_t b){
-    if (this->validStartPos && this->inX_Range(x)){
+    if (this->validStartPos && (x<this->tex_w) && (x>=0)){
         *p = SDL_MapRGB(this->pixelFormat, r, g, b);
         this->p++;
         this->x++;

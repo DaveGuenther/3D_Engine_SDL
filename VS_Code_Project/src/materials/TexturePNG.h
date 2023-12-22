@@ -58,7 +58,7 @@ class TexturePNG{
         int width, height;
         std::vector<std::vector<SDL_Color>> pixel_array;
         SDL_Surface *image;
-
+        Uint8 Bpp=0;
 };
 
 #endif
