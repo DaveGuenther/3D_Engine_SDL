@@ -246,8 +246,8 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
     this->drawTriangleInitializer(this_triangle);
     this->drawFT_CalcSlopes(this_triangle);
     this->scanlineCalcStartEnd(this_triangle);
-    Uint32* p=0;
-    SDL_PixelFormat* pixelFormat = textureBlit->getPixelFormat();
+    uint32_t* p=0;
+    //SDL_PixelFormat* pixelFormat = textureBlit->getPixelFormat();
 
     // 3. Loop through each y scanline (but don't do the last one)
     for (this->y = this->y_start; this->y < this->y_end; this->y++){ 
@@ -285,7 +285,8 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
             
             //Draw Point
             //texelDrawUV_Point();
-            *p = SDL_MapRGB(pixelFormat, this->col.r, this->col.g, this->col.b);
+            *p = /*uint32_t(255 << 24) |*/ uint32_t(col.r << 16) | uint32_t(col.g << 8) | uint32_t(col.b);
+            //*p = SDL_MapRGB(pixelFormat, this->col.r, this->col.g, this->col.b);
             p++;
         
         }
@@ -340,8 +341,8 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
     // 2. Determine y_start and y_end pixels for the triangle
     scanlineCalcStartEnd(this_triangle);
-    Uint32* p=0;
-    SDL_PixelFormat* pixelFormat = textureBlit->getPixelFormat();
+    uint32_t* p=0;
+    //SDL_PixelFormat* pixelFormat = textureBlit->getPixelFormat();
 
     // 3. Loop through each y scanline (but don't do the last one)
     for (this->y = this->y_start; this->y < this->y_end; this->y++){
@@ -380,7 +381,8 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
             //Draw Point
             //texelDrawUV_Point();
-            *p = SDL_MapRGB(pixelFormat, this->col.r, this->col.g, this->col.b);
+            *p = /*uint32_t(255 << 24) |*/ uint32_t(col.r << 16) | uint32_t(col.g << 8) | uint32_t(col.b);
+            //*p = SDL_MapRGB(pixelFormat, this->col.r, this->col.g, this->col.b);
             p++;            
             
         }
