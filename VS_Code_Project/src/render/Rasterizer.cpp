@@ -221,7 +221,7 @@ void TexturemapRasterizer::texelDimPixel(Triangle& this_triangle){
 
 
 void TexturemapRasterizer::texelDrawUV_Point(){
-    this->textureBlit->blitAdvance(this->col.r, this->col.g, this->col.b, this->col.a);
+    this->textureBlit->blitAdvance(this->col.r, this->col.g, this->col.b);
 }
 
 void TexturemapRasterizer::scanlineDetermineDist(){

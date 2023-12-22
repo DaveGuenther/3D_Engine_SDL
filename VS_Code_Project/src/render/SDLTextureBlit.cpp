@@ -35,7 +35,7 @@ SDL_Texture* I_SDL_Texture_Blit::getFrameBuffer(){
     return this->texture;
 }
 
-bool I_SDL_Texture_Blit::inPixelRange(const int &x, const int &y){
+bool I_SDL_Texture_Blit::inPixelRange(uint16_t x, uint16_t y){
     
     if (y>=this->tex_h) {return false;}
     if (x>=this->tex_w) {return false;}
@@ -83,15 +83,15 @@ void SDL_Texture_Blit::blit(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_
 SDL_Texture_LineBlit::SDL_Texture_LineBlit(SDL_Renderer* renderer, int SCREEN_W, int SCREEN_H){
     
     this->renderer = renderer;
-    this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
-    this->texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_STREAMING, SCREEN_W, SCREEN_H);
+    this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGB888);
+    this->texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888,SDL_TEXTUREACCESS_STREAMING, SCREEN_W, SCREEN_H);
     SDL_QueryTexture(this->texture, &this->textureFormat, NULL, &this->tex_w, &this->tex_h);
     
 }
 
 SDL_Texture_LineBlit::SDL_Texture_LineBlit(SDL_Renderer* renderer, SDL_Texture* existingBuffer){
     this->renderer=renderer;
-    this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+    this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGB888);
     this->texture=existingBuffer;
     SDL_QueryTexture(this->texture, &this->textureFormat, NULL, &this->tex_w, &this->tex_h);
 }
@@ -107,7 +107,7 @@ SDL_Texture_LineBlit::~SDL_Texture_LineBlit(){
     
 }
 
-bool SDL_Texture_LineBlit::inX_Range(const int &x){
+bool SDL_Texture_LineBlit::inX_Range(uint16_t x){
     if (x>=this->tex_w) {return false;}
     if (x<0) {return false;}
     return true;
@@ -121,9 +121,9 @@ void SDL_Texture_LineBlit::setXY_Start(uint16_t x, uint16_t y){
     }
 }
 
-void SDL_Texture_LineBlit::blitAdvance(uint8_t r, uint8_t g, uint8_t b, uint8_t a){
+void SDL_Texture_LineBlit::blitAdvance(uint8_t r, uint8_t g, uint8_t b){
     if (this->validStartPos && this->inX_Range(x)){
-        *p = SDL_MapRGBA(this->pixelFormat, r, g, b, a);
+        *p = SDL_MapRGB(this->pixelFormat, r, g, b);
         this->p++;
         this->x++;
     }

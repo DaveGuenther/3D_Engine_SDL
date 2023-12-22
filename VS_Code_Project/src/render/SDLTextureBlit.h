@@ -18,7 +18,7 @@ The instance of this class should be destroyed when the calling object goes out 
 class I_SDL_Texture_Blit{
     protected:
 
-        bool inPixelRange(const int &x, const int &y);
+        bool inPixelRange(uint16_t x, uint16_t y);
         
         SDL_Renderer *renderer=NULL;
         SDL_PixelFormat *pixelFormat=NULL;
@@ -62,11 +62,11 @@ class SDL_Texture_LineBlit:public I_SDL_Texture_Blit{
         SDL_Texture_LineBlit(SDL_Renderer* renderer, int SCREEN_W, int SCREEN_H);
         SDL_Texture_LineBlit(SDL_Renderer* renderer, SDL_Texture* existingBuffer);
         ~SDL_Texture_LineBlit();
-        void blitAdvance(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+        void blitAdvance(uint8_t r, uint8_t g, uint8_t b);
         void setXY_Start(uint16_t x, uint16_t y);
 
     private:
-        bool inX_Range(const int &x);
+        bool inX_Range(uint16_t x);
         bool validStartPos = false;
         uint16_t x;
 };

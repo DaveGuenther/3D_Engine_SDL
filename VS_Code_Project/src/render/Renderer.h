@@ -37,7 +37,7 @@ class Renderer{
         int SCREEN_H;
         int HALF_SCREEN_W;
         int HALF_SCREEN_H;
-        int screen_mode=1;  // 0 for Windowed, 1 for Fullscreen, 128 for full screen maximized, SDL_WINDOW_RESIZABLE
+        int screen_mode=0;  // 0 for Windowed, 1 for Fullscreen, 128 for full screen maximized, SDL_WINDOW_RESIZABLE
 
         // Projection Matrix
         float fNear;
