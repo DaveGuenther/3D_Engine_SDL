@@ -131,12 +131,15 @@ void TexturePNG::getPixelAtSurfaceUV(const float &U, const float &V, SDL_Color &
 	*/
 	//Uint8* pPixel = (Uint8*)this->image->pixels + y * this->image->pitch + x * Bpp;
 
-	Uint32 PixelData = *(Uint32*)((Uint8*)this->image->pixels + y * this->image->pitch + x * Bpp);
+	uint32_t* PixelData = (uint32_t*)((Uint8*)this->image->pixels + y * this->image->pitch + x * Bpp);
 
 	//col = {0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE};
 
 	// Retrieve the RGB values of the specific pixel
-	SDL_GetRGB(PixelData, this->image->format, &col.r, &col.g, &col.b);
+	SDL_GetRGB(*PixelData, this->image->format, &col.r, &col.g, &col.b);
+    //col.r = *(uint8_t*)(PixelData);
+    ///col.g = *((uint8_t*)(PixelData)+1);
+    //col.b = *((uint8_t*)(PixelData)+2);
 
 	
 }
