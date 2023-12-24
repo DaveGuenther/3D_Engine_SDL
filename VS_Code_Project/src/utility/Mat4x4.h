@@ -24,7 +24,7 @@ class Mat4x4{
 		static Mat4x4 matrixMakeRotationY(float y_degs);
 		static Mat4x4 matrixMakeRotationZ(float z_degs);
 		static Mat4x4 matrixMakeTranslation(float x, float y, float z);
-		static Mat4x4 matrixMakeProjection(float fFOV, int SCREEN_W, int SCREEN_H, float fNear, float fFar);
+		static Mat4x4 matrixMakeProjection(float fFOV_rad, uint32_t SCREEN_W, uint32_t SCREEN_H, float fNear, float fFar);
 		static Mat4x4 matrixMatrixMultiplication(Mat4x4& m1, Mat4x4& m2);
 		static Mat4x4 matrixPointAt(Vec3d& pos, Vec3d& target, Vec3d& up);
 		static Mat4x4 matrixLookAt(Mat4x4& m);

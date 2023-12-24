@@ -11,12 +11,14 @@
  * 
  *                      Frustum                                                     Frustum
  *                   Top Down View                                                 Side View
+ *                                frustum_back_plane
+ *                               /
  *                  ---------------                                                   /|    
  *                  \             / --frustum_right_plane              top_plane -- /  |
  *       frustum_  -- \         /                                                 /|   |
  *        left_plane    \-----/                           frustum_origin_point-- * |   |
- *                        \ / \                                                   \|   |
- *                         *   frustum_front_plane                   bottom_plane --\  |
+ *                        \ / \                                                   \|   | \
+ *                         *   frustum_front_plane                   bottom_plane --\  |  frustum_back_plane
  *                         |                                                          \|
  *      frustum_origin_point
  *      
@@ -29,7 +31,7 @@ class Frustum{
          * 
          * @param aspectRatio - this variable is required to define the left and right frustum edges
          */
-        Frustum(float aspectRatio, float max_draw_dist);
+        Frustum(float aspectRatio, float max_draw_dist, float fFOV);
 
         const Vec3d& getFrustumFrontPlaneNormal();
         const Vec3d& getFrustumFrontPoint();

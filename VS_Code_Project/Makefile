@@ -22,12 +22,13 @@ OBJ_core_LIST= $(OBJ)/core/Engine_3D.o $(OBJ)/core/Frame_Rate_Manager.o $(OBJ)/c
 OBJ_input_LIST= $(OBJ)/input/Event_Scanner.o $(OBJ)/input/Input_Parser.o $(OBJ)/input/KeyBindings.o
 OBJ_materials_LIST = $(OBJ)/materials/MaterialMapper.o $(OBJ)/materials/MTL.o $(OBJ)/materials/TextureList.o $(OBJ)/materials/TexturePNG.o
 OBJ_objects_LIST = $(OBJ)/objects/OBJ_Chunk.o $(OBJ)/objects/OBJ_Lex_normal.o $(OBJ)/objects/OBJ_Lex_textureCoord.o $(OBJ)/objects/OBJ_Lex_triFace.o $(OBJ)/objects/OBJ_Lex_vertex.o $(OBJ)/objects/OBJ.o
-OBJ_render_LIST = $(OBJ)/render/AspectRatio.o $(OBJ)/render/Camera.o $(OBJ)/render/Clipper.o $(OBJ)/render/Frustum.o $(OBJ)/render/Rasterizer.o $(OBJ)/render/Renderer.o $(OBJ)/render/TrianglePipeline.o
+OBJ_render_LIST = $(OBJ)/render/SDLTextureBlit.o $(OBJ)/render/AspectRatio.o $(OBJ)/render/Camera.o $(OBJ)/render/Clipper.o $(OBJ)/render/Frustum.o $(OBJ)/render/Rasterizer.o $(OBJ)/render/Renderer.o $(OBJ)/render/TrianglePipeline.o 
 OBJ_utility_LIST = $(OBJ)/utility/Mat4x4.o $(OBJ)/utility/Mesh_Pipeline.o $(OBJ)/utility/Mesh.o $(OBJ)/utility/nonVector_Math_Service.o $(OBJ)/utility/Triangle_Modifier.o $(OBJ)/utility/Triangle.o $(OBJ)/utility/Vec2d.o $(OBJ)/utility/Vec3d.o $(OBJ)/utility/Vector_Math_Service.o
 
 all: $(BUILD)/game
 
 .PHONY: release
+release: CXXFLAGS += -O3 -fno-inline-functions
 release: clean
 release: $(BUILD)/game
 
@@ -252,6 +253,11 @@ Vector_Math_Service_SRC= $(SRC)/utility/Vector_Math_Service.cpp $(SRC)/utility/V
 $(OBJ)/utility/Vector_Math_Service.o: $(Vector_Math_Service_SRC)
 	$(info ***** Building Vector_Math_Service.o *****)
 	$(CC) $(CXXFLAGS) $(SRC)/utility/Vector_Math_Service.cpp -o $(OBJ)/utility/Vector_Math_Service.o
+
+SDLTextureBlit_SRC= $(SRC)/render/SDLTextureBlit.cpp $(SRC)/render/SDLTextureBlit.h  
+$(OBJ)/render/SDLTextureBlit.o: $(SDLTextureBlit_SRC)
+	$(info ***** Building SDLTextureBlit.o *****)
+	$(CC) $(CXXFLAGS) $(SRC)/render/SDLTextureBlit.cpp -o $(OBJ)/render/SDLTextureBlit.o
 
 $(OBJ)/preprocessor.o: $(SRC)/preprocessor.cpp 
 	$(info ***** Building Crossplatform Preprocessor (preprocessor.o) *****)

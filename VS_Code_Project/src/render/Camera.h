@@ -25,7 +25,7 @@ class Camera{
          * 
          * @param aspectRatio is required to build the frustum 
          */
-        Camera(float aspectRatio, float max_draw_dist);
+        Camera(float aspectRatio, float max_draw_dist, float FOV);
         Mat4x4 buildViewMatrix();
         
         

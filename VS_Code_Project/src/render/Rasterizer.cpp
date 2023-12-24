@@ -1,10 +1,16 @@
 
-#include "Rasterizer.h"
 #include <iostream>
 #include <math.h>
+#include "Rasterizer.h"
+
+#include "../render/SDLTextureBlit.h"
 #include "../materials/TextureList.h"
 #include "../materials/TexturePNG.h"
 #include "../globals.h"
+
+ITriangleRasterizer::~ITriangleRasterizer(){
+
+}
 
 void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
     float z_center = this_tri.getTriangleZCenter();
@@ -19,13 +25,24 @@ void ITriangleRasterizer::applyDepthDimmer(Triangle& this_tri, SDL_Color &col){
     draw_col.g= col.g*color_modifier;
     draw_col.b= col.b*color_modifier;
     draw_col.a=255;
-    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_SetRenderDrawColor(this->renderer, draw_col.r, draw_col.g, draw_col.b, SDL_ALPHA_OPAQUE);
+    //SDL_SetRenderDrawColor(this->renderer, draw_col.r, draw_col.g, draw_col.b, SDL_ALPHA_OPAQUE);
+    
 }
 
-TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer){
+void ITriangleRasterizer::resetTexturePtr(){
+
+}
+
+void ITriangleRasterizer::pixelBlit(const int &r, const int &g, const int&b, const int &a){
+    
+}
+
+TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Texture_LineBlit* myTexBlit){
     this->renderer=my_renderer;
+    this->textureBlit = myTexBlit;
     this->inv_max_visible_z_depth=1/this->max_visible_z_depth;
+    this->tex_h=this->textureBlit->getTex_h();
+    this->tex_w=this->textureBlit->getTex_w();
 }
 
 
@@ -201,12 +218,10 @@ void TexturemapRasterizer::texelDimPixel(Triangle& this_triangle){
     this->col.b=col.b*this_triangle.getLightDimAmount();
 }
 
-void TexturemapRasterizer::texelDrawUV_Point(){
-    // Set Color
-    SDL_SetRenderDrawColor(this->renderer, this->col.r, this->col.g, this->col.b, this->col.a);
 
-    // draw point at (x,)
-    SDL_RenderDrawPoint(this->renderer,this->x, this->y); 
+
+void TexturemapRasterizer::texelDrawUV_Point(){
+    this->textureBlit->blitAdvance(this->col.r, this->col.g, this->col.b);
 }
 
 void TexturemapRasterizer::scanlineDetermineDist(){
@@ -231,24 +246,31 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
     this->drawTriangleInitializer(this_triangle);
     this->drawFT_CalcSlopes(this_triangle);
     this->scanlineCalcStartEnd(this_triangle);
-    
+    uint32_t* p=0;
+    //SDL_PixelFormat* pixelFormat = textureBlit->getPixelFormat();
 
-    
     // 3. Loop through each y scanline (but don't do the last one)
-    for (this->y = this->y_start; this->y < this->y_end; this->y++){
+    for (this->y = this->y_start; this->y < this->y_end; this->y++){ 
 
-        drawFT_Scanline_prep(this_triangle);
+        this->drawFT_Scanline_prep(this_triangle); 
         
         // determine scanline dist
         scanlineDetermineDist();
         
+
+        // Set the TextureBlit class instance to the current line for blitting
+        this->textureBlit->setXY_Start(this->x_start, this->y);
+        p = this->textureBlit->getPixelPointer();
+
         // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
         //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
         for (this->x = this->x_start; this->x < this->x_end; this->x++){ 
-            
+
             // determine alpha_scan
             texelDetermineAlphaX();
             
+
+                  
             // determine Vec2d(U,V)
             texelDetermineUV(this_triangle);
 
@@ -262,9 +284,13 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
             texelDimPixel(this_triangle);
             
             //Draw Point
-            texelDrawUV_Point();
-
+            //texelDrawUV_Point();
+            *p = /*uint32_t(255 << 24) |*/ uint32_t(col.r << 16) | uint32_t(col.g << 8) | uint32_t(col.b);
+            //*p = SDL_MapRGB(pixelFormat, this->col.r, this->col.g, this->col.b);
+            p++;
+        
         }
+        
     }
 }
 
@@ -315,18 +341,23 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
     // 2. Determine y_start and y_end pixels for the triangle
     scanlineCalcStartEnd(this_triangle);
-
-
+    uint32_t* p=0;
+    //SDL_PixelFormat* pixelFormat = textureBlit->getPixelFormat();
 
     // 3. Loop through each y scanline (but don't do the last one)
     for (this->y = this->y_start; this->y < this->y_end; this->y++){
-        
+
         drawFB_Scanline_prep(this_triangle);
 
         // determine scanline dist
         scanlineDetermineDist();
 
+        // Set the TextureBlit class instance to the current line for blitting
+        this->textureBlit->setXY_Start(this->x_start, this->y);
+        p = this->textureBlit->getPixelPointer();
+
         // c. draw a line between x_start and x_end or draw pixels between them (don't include the pixed for x_end )
+        //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
         for (this->x = this->x_start; this->x < this->x_end; this->x++){ 
 
             // determine alpha_scan
@@ -338,19 +369,24 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
                 // There is a texture associated with this triangle
                 this->this_texture->getPixelAtSurfaceUV(this->UVx_scan, this->UVy_scan, this->col);
             }
-           
+        
             // apply depth dimmer
             texelDimPixel(this_triangle);
             
             // Set Color
-            SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
+            //SDL_SetRenderDrawColor(this->renderer, col.r, col.g, col.b, col.a);
 
             // draw point at (x,)
-            SDL_RenderDrawPoint(this->renderer,x, y); 
+            //SDL_RenderDrawPoint(this->renderer,x, y); 
+
+            //Draw Point
+            //texelDrawUV_Point();
+            *p = /*uint32_t(255 << 24) |*/ uint32_t(col.r << 16) | uint32_t(col.g << 8) | uint32_t(col.b);
+            //*p = SDL_MapRGB(pixelFormat, this->col.r, this->col.g, this->col.b);
+            p++;            
             
         }
-        //SDL_RenderDrawLine(this->renderer,x_start,y,x_end-1,y);
-
+        
     }
 }
 
