@@ -26,8 +26,12 @@
 #include "../render/AspectRatio.h"
 
 Engine_3D::Engine_3D(void){
-    int SCREEN_W = 400; // 1280X800  640x380   //480x225    320x190  //256x160
-    int SCREEN_H = 225;
+    uint32_t SCREEN_W = 400; // 1280X800  640x380   //480x225    320x190  //256x160 400x225   800x450   
+    uint32_t SCREEN_H = 225;
+    uint32_t WINDOW_W = 800;
+    uint32_t WINDOW_H = 450;
+    const float PI_by_180 = 3.14159265/180.0;;
+
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     isRunning = true;
     float max_draw_dist = 20.0f;
@@ -36,7 +40,7 @@ Engine_3D::Engine_3D(void){
     std::shared_ptr<Camera> player_camera(new Camera(aspectRatio, max_draw_dist, fFOV));
     std::cout << player_camera->getMaxDrawDist() << std::endl;
     //player_camera = player_camera;
-    std::shared_ptr<Renderer> this_Renderer(new Renderer(SCREEN_W, SCREEN_H, player_camera, fFOV));
+    std::shared_ptr<Renderer> this_Renderer(new Renderer(SCREEN_W, SCREEN_H, WINDOW_W, WINDOW_H, player_camera, fFOV));
     this->Engine_Renderer=this_Renderer;
     this_Renderer->setColorFrustumClippedTris(false); // don't show RGB clipped tris.  Instead show intended color
 
@@ -77,9 +81,9 @@ Engine_3D::~Engine_3D(){
 void Engine_3D::load_meshes(){
     // Eventually allow this function to read a list of mesh file referenes and load them
     //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("rainbow_cube(zFor_yUp).obj", Vec3d(0,0,1.5), Vec3d(0,0,0));
-    mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("pirate_cave.obj", Vec3d(0,0,0), Vec3d(0,0,0));
+    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("pirate_cave.obj", Vec3d(0,0,0), Vec3d(0,0,0));
     //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("Compass.obj", Vec3d(-20,0,0), Vec3d(0,0,0));
-    //mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("control_room.obj", Vec3d(0,0,0), Vec3d(0,0,0));
+    mesh_pipeline->Add_OBJ_Mesh_to_Pipeline("control_room.obj", Vec3d(0,0,0), Vec3d(0,0,0));
     
 
 }

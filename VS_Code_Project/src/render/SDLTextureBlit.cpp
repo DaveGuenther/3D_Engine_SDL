@@ -2,6 +2,19 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 
+SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H){
+    
+    this->renderer = renderer;
+    this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+    this->texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_STREAMING, SCREEN_W, SCREEN_H);
+    SDL_QueryTexture(this->texture, &this->textureFormat, NULL, &this->tex_w, &this->tex_h);
+
+    this->windowRect.x=0;
+    this->windowRect.y=0;
+    this->windowRect.w=WINDOW_W;
+    this->windowRect.h=WINDOW_H;
+
+}
 
 void I_SDL_Texture_Blit::lock(){
     if(SDL_LockTexture(this->texture, NULL, (void **)&this->framebufferpixels, &this->pitch))
@@ -20,7 +33,10 @@ void I_SDL_Texture_Blit::unlock(){
 }
 
 void I_SDL_Texture_Blit::RenderCopy(){
-    SDL_RenderCopy(this->renderer, this->texture, NULL, NULL);
+    //std::cout << (this->windowRect.w) <<  (this->windowRect.h) << std::endl; 
+
+
+    SDL_RenderCopy(this->renderer, this->texture, NULL, &this->windowRect);
 }
 
 int I_SDL_Texture_Blit::getTex_h(){
@@ -53,20 +69,14 @@ SDL_PixelFormat* I_SDL_Texture_Blit::getPixelFormat(){
     return this->pixelFormat;
 }
 
-SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, int SCREEN_W, int SCREEN_H){
-    
-    this->renderer = renderer;
-    this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
-    this->texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_STREAMING, SCREEN_W, SCREEN_H);
-    SDL_QueryTexture(this->texture, &this->textureFormat, NULL, &this->tex_w, &this->tex_h);
-    
-}
+
 
 SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, SDL_Texture* existingBuffer){
     this->renderer=renderer;
     this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
     this->texture=existingBuffer;
     SDL_QueryTexture(this->texture, &this->textureFormat, NULL, &this->tex_w, &this->tex_h);
+
 }
 
 SDL_Texture_Blit::~SDL_Texture_Blit(){
@@ -88,13 +98,16 @@ void SDL_Texture_Blit::blit(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_
     //}
 }
 
-SDL_Texture_LineBlit::SDL_Texture_LineBlit(SDL_Renderer* renderer, int SCREEN_W, int SCREEN_H){
+SDL_Texture_LineBlit::SDL_Texture_LineBlit(SDL_Renderer* renderer, uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H){
     
     this->renderer = renderer;
     this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGB888);
     this->texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888,SDL_TEXTUREACCESS_STREAMING, SCREEN_W, SCREEN_H);
     SDL_QueryTexture(this->texture, &this->textureFormat, NULL, &this->tex_w, &this->tex_h);
-    
+    this->windowRect.x=0;
+    this->windowRect.y=0;
+    this->windowRect.w=WINDOW_W;
+    this->windowRect.h=WINDOW_H;
 }
 
 SDL_Texture_LineBlit::SDL_Texture_LineBlit(SDL_Renderer* renderer, SDL_Texture* existingBuffer){

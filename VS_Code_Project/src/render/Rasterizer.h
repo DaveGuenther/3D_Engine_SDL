@@ -19,7 +19,7 @@ class ITriangleRasterizer{
         float max_visible_z_depth = 5.0f;  // distance from the camera at which things are no lonver visible
         float inv_max_visible_z_depth;
         float min_visible_color_modifier = 0.1f; // minimum scalar for triangle colors (R, G, B) values are multiplied by this in order to dim a color
-        int tex_h, tex_w=0;
+        uint32_t tex_h, tex_w=0;
 
         void pixelBlit(const int &r, const int &g, const int&b, const int &a);
         void resetTexturePtr();

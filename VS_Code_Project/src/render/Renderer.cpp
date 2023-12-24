@@ -18,15 +18,31 @@
 #include "../render/SDLTextureBlit.h"
 #include "../globals.h"
 
+const float PI_by_180 = 3.14159265/180.0;
 
-Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera, float FOV) {
+Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV) {
     // SDL and Screen initializing
-	this->SCREEN_W = SCREEN_W;
-    this->SCREEN_H = SCREEN_H;
-	this->HALF_SCREEN_W = SCREEN_W/2;
-	this->HALF_SCREEN_H = SCREEN_H/2;
-	window = SDL_CreateWindow("3D Engine", HALF_SCREEN_W,HALF_SCREEN_H, SCREEN_W, SCREEN_H, screen_mode);
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	this->rendererData.SCREEN_W = SCREEN_W;
+    this->rendererData.SCREEN_H = SCREEN_H;
+	this->rendererData.HALF_SCREEN_W = SCREEN_W/2;
+	this->rendererData.HALF_SCREEN_H = SCREEN_H/2;
+	this->rendererData.WINDOW_W = WINDOW_W;
+    this->rendererData.WINDOW_H = WINDOW_H;
+	this->rendererData.HALF_WINDOW_W = WINDOW_W/2;
+	this->rendererData.HALF_WINDOW_H = WINDOW_H/2;
+	this->rendererData.window_mode=0;  // 0 for Windowed, 1 for Fullscreen, 128 for full screen maximized, SDL_WINDOW_RESIZABLE
+
+
+	this->rendererData.fFOV=FOV;
+	this->rendererData.fAspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);
+	this->rendererData.fFOV_rad = 1.0/(SDL_tanf((this->rendererData.fFOV/2)*(PI_by_180)));
+    this->rendererData.windowRect.x=0;
+	this->rendererData.windowRect.y=0;
+	this->rendererData.windowRect.w=this->rendererData.WINDOW_W;
+	this->rendererData.windowRect.h=this->rendererData.WINDOW_H;
+
+	this->rendererData.window = SDL_CreateWindow("3D Engine", this->rendererData.HALF_WINDOW_W, this->rendererData.HALF_WINDOW_H, this->rendererData.WINDOW_W, this->rendererData.WINDOW_H, this->rendererData.window_mode);
+	this->rendererData.renderer = SDL_CreateRenderer(this->rendererData.window, -1, SDL_RENDERER_ACCELERATED);
 
 	// Show display mode information
 	static int display_in_use = 0;
@@ -37,41 +53,47 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 	for (i = 0; i < display_mode_count; ++i) {
 		SDL_GetDisplayMode(display_in_use, i, &mode);
 		f = mode.format;
-		std::cout << i << SDL_BITSPERPIXEL(f) << SDL_GetPixelFormatName(f) << mode.w << mode.h << std::endl;
+		std::cout << "Display mode: " << i << "   BPP: " << SDL_BITSPERPIXEL(f) << " "<< SDL_GetPixelFormatName(f) << " Res: " << mode.w << "x" << mode.h << std::endl;
 	}
 	
 
-	//SDL_DisplayMode this_mode;
-	//this_mode.format=0;
-	mode.h=this->SCREEN_H;
+	/*mode.h=this->SCREEN_H;
 	mode.w=this->SCREEN_W;
-	//this_mode.refresh_rate=60;
-	//this_mode.driverdata=0;
 	if(SDL_SetWindowDisplayMode(window, &mode)!=0){
-		std::cout << "Cannott set display mode" << std::endl;
-	}
-	//SDL_SetWindowFullscreen( window, SDL_TRUE );
-	SDL_RenderSetLogicalSize(renderer, SCREEN_W, SCREEN_H);
+		std::cout << "Cannot set display mode" << std::endl;
+	}*/
+	//SDL_DestroyRenderer(renderer);
+	int win_h; 
+	int win_w;
+	
+	//SDL_SetWindowSize(window, 400, 225);
+	
+	//SDL_SetWindowFullscreen( window, SDL_WINDOW_FULLSCREEN );
+	//renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
+/*	SDL_RenderSetLogicalSize(renderer, SCREEN_W, SCREEN_H);
+	
+*/
+	SDL_GetWindowSize(this->rendererData.window, &win_w, &win_h);
 
-    
-	this->textureBlit = new SDL_Texture_LineBlit(renderer, this->SCREEN_W, this->SCREEN_H);
+	std::cout << "Window Fullscreen Size: " << win_w << win_h << std::endl;
+    this->rendererData.textureBlit = new SDL_Texture_LineBlit(this->rendererData.renderer, this->rendererData.SCREEN_W, this->rendererData.SCREEN_H, this->rendererData.WINDOW_W, this->rendererData.WINDOW_H);
+	
 
 
 	// Projection Matrix
 	fNear = 0.1f;
 	fFar = 500.0f;
-	this->fFOV=FOV;
-	this->fAspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);
-	matProj = Mat4x4::matrixMakeProjection(fFOV, SCREEN_W, SCREEN_H, fNear, fFar);
+	
+	matProj = Mat4x4::matrixMakeProjection(this->rendererData.fFOV_rad, SCREEN_W, SCREEN_H, fNear, fFar);
 	this->max_visible_z_depth = player_camera->getMaxDrawDist();
 	this->inv_max_visible_z_depth = 1/this->max_visible_z_depth;  
 
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(this->rendererData.renderer, 0, 0, 0, 255);
+	SDL_RenderClear(this->rendererData.renderer);
 	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
 
 	this->player_camera = player_camera;
-	std::shared_ptr<Clipper> thisFrustumClipper(new Clipper(player_camera, fFOV));
+	std::shared_ptr<Clipper> thisFrustumClipper(new Clipper(player_camera, this->rendererData.fFOV));
 	this->thisFrustumClipper = thisFrustumClipper;
 
 	this->min_blue_value = 255*this->min_visible_color_modifier;
@@ -82,11 +104,11 @@ Renderer::Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_ca
 
 void Renderer::setWindowTitle(std::string title){
 	char* c = const_cast<char*>(title.c_str());
-	SDL_SetWindowTitle(this->window, c);
+	SDL_SetWindowTitle(this->rendererData.window, c);
 }
 
 void Renderer::resetMouseXY(){
-	SDL_WarpMouseInWindow(this->window, HALF_SCREEN_W, HALF_SCREEN_H);
+	SDL_WarpMouseInWindow(this->rendererData.window, this->rendererData.HALF_SCREEN_W, this->rendererData.HALF_SCREEN_H);
 }
 
 SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri){
@@ -132,19 +154,19 @@ float Renderer::applyDepthDimmerModifier(Triangle& this_tri){
 void Renderer::drawWireFrameTriangle2d(Triangle this_triangle)
 {
 	SDL_Color col = this_triangle.getColor();
-	SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
+	SDL_SetRenderDrawColor(this->rendererData.renderer, col.r, col.g, col.b, col.a);
 	Vec2d vert1, vert2, vert3;
 	vert1 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(0).x, this_triangle.getTrianglePoint(0).y));
 	vert2 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(1).x, this_triangle.getTrianglePoint(1).y));
 	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).x, this_triangle.getTrianglePoint(2).y));
-	SDL_RenderDrawLineF(renderer, vert1.x, vert1.y, vert2.x, vert2.y);
-	SDL_RenderDrawLineF(renderer, vert2.x, vert2.y, vert3.x, vert3.y);
-	SDL_RenderDrawLineF(renderer, vert3.x, vert3.y, vert1.x, vert1.y);
+	SDL_RenderDrawLineF(this->rendererData.renderer, vert1.x, vert1.y, vert2.x, vert2.y);
+	SDL_RenderDrawLineF(this->rendererData.renderer, vert2.x, vert2.y, vert3.x, vert3.y);
+	SDL_RenderDrawLineF(this->rendererData.renderer, vert3.x, vert3.y, vert1.x, vert1.y);
 }
 
 void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 	SDL_Color col = this_triangle.getColor();
-	SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
+	SDL_SetRenderDrawColor(this->rendererData.renderer, col.r, col.g, col.b, col.a);
     
 	//convert triangle x and y coords to pixel screen coords
 	Vec2d vert1, vert2, vert3;
@@ -170,7 +192,7 @@ void Renderer::drawFilledTriangle2d(Triangle this_triangle){
 
 	
 	// Here goes TextureMapping!
-	std::shared_ptr<ITriangleRasterizer> this_texturemap_rasterizer(new TexturemapRasterizer(renderer, this->textureBlit));
+	std::shared_ptr<ITriangleRasterizer> this_texturemap_rasterizer(new TexturemapRasterizer(this->rendererData.renderer, this->rendererData.textureBlit));
 	this_texturemap_rasterizer->drawTriangle(screenTri);
 
 }
@@ -323,10 +345,10 @@ void Renderer::setColorFrustumClippedTris(bool value){
 
 void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);	
+	SDL_SetRenderDrawColor(this->rendererData.renderer, 0, 0, 0, 255);
+	SDL_RenderClear(this->rendererData.renderer);	
 	
-	this->textureBlit->lock(); // prepare framebuffer for write only operation
+	this->rendererData.textureBlit->lock(); // prepare framebuffer for write only operation
 
 	// start with empty triangle buffer to rasterize each frame
 	this->trianglesToRasterize.clear();
@@ -349,22 +371,22 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 		//drawWireFrameTriangle2d(tri);
 		
 	}
-	this->textureBlit->unlock(); // pixel write complete, ready to render
+	this->rendererData.textureBlit->unlock(); // pixel write complete, ready to render
 
 	
-	this->textureBlit->RenderCopy();
+	this->rendererData.textureBlit->RenderCopy();
 	//SDL_Texture *this_tex = this->textureBlit->getFrameBuffer();
 	//SDL_RenderCopy(renderer, this_tex, NULL, NULL); // Copy texture pixel buffer to renderer
 	
 	//drawReticle();
 
 	// Flip video page to screen
-	SDL_RenderPresent(renderer);
+	SDL_RenderPresent(this->rendererData.renderer);
 
 } 
 
 void Renderer::drawReticle(){
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_SetRenderDrawColor(this->rendererData.renderer, 255, 255, 255, 255);
 	
 	// Draw Reticle
 	Vec2d single_point;
@@ -374,7 +396,7 @@ void Renderer::drawReticle(){
 
 	float x = single_point.x;
 	float y = single_point.y;
-	SDL_RenderDrawPointF(renderer, x, y);
+	SDL_RenderDrawPointF(this->rendererData.renderer, x, y);
 }
 
 
@@ -382,37 +404,37 @@ void Renderer::drawReticle(){
 //Private Methods
 void Renderer::cartesianToScreen_inplace(Vec2d& this_point)
 {
-	float HALF_SCREEN_W = (SCREEN_W)/2;
+	float HALF_SCREEN_W = (this->rendererData.SCREEN_W)/2;
 	float scaled_x = this_point.x*(HALF_SCREEN_W);
 	this_point.x=scaled_x+(HALF_SCREEN_W);
 
-	float HALF_SCREEN_H = (SCREEN_H)/2;
+	float HALF_SCREEN_H = (this->rendererData.SCREEN_H)/2;
 	float scaled_y = this_point.y*(HALF_SCREEN_H);
-	this_point.y=SCREEN_H-(scaled_y+(HALF_SCREEN_H));
+	this_point.y=this->rendererData.SCREEN_H-(scaled_y+(HALF_SCREEN_H));
 } 
 
 
 Vec2d Renderer::cartesianToScreen(Vec2d this_point)
 {
 	//float HALF_SCREEN_W = (SCREEN_W)*.5;
-	float scaled_x = this_point.x*(this->HALF_SCREEN_W);
-	this_point.x=scaled_x+(this->HALF_SCREEN_W);
+	float scaled_x = this_point.x*(this->rendererData.HALF_SCREEN_W);
+	this_point.x=scaled_x+(this->rendererData.HALF_SCREEN_W);
 
 	//float HALF_SCREEN_H = (SCREEN_H)*.5;
-	float scaled_y = this_point.y*(this->HALF_SCREEN_H);
-	this_point.y=SCREEN_H-(scaled_y+(this->HALF_SCREEN_H));
+	float scaled_y = this_point.y*(this->rendererData.HALF_SCREEN_H);
+	this_point.y=this->rendererData.SCREEN_H-(scaled_y+(this->rendererData.HALF_SCREEN_H));
 	return this_point;
 } 
 
 
-const int Renderer::getWindowWidth()const { return SCREEN_W; }
-const int Renderer::getWindowHeight()const { return SCREEN_H; }
+const int Renderer::getWindowWidth()const { return this->rendererData.SCREEN_W; }
+const int Renderer::getWindowHeight()const { return this->rendererData.SCREEN_H; }
 
 void Renderer::shutdown(){
-	delete(this->textureBlit);
-	this->textureBlit=NULL;
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
+	delete(this->rendererData.textureBlit);
+	this->rendererData.textureBlit=NULL;
+	SDL_DestroyRenderer(this->rendererData.renderer);
+	SDL_DestroyWindow(this->rendererData.window);
 	
 }
 

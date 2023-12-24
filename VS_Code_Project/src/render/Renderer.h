@@ -25,26 +25,43 @@
  */
 class Renderer{
     private:
+        typedef struct {
+            SDL_Window *window;
+            SDL_Renderer *renderer;
+            
+            // Variables for the Window itself that we associate with the Renderer
+            uint32_t WINDOW_W; // This is the width of the window that we want to render the image to
+            uint32_t WINDOW_H; // This is the height of the window that we want to render the image to
+            uint32_t HALF_WINDOW_W; // Half the window width -- used to place a window in the middle of the desktop
+            uint32_t HALF_WINDOW_H; // Half the window height -- used to place a window in the middle of the desktop
+            uint32_t window_mode=0;  // 0 for Windowed, 1 for Fullscreen, 128 for full screen maximized, SDL_WINDOW_RESIZABLE
+            SDL_Rect windowRect; // This rectangle is used during SDL_RenderCopy()
+
+            // Variables for the rendering area (frame Buffer) that we'll draw on and stretch to the window size when we copy it to the renderer
+            SDL_Texture_LineBlit *textureBlit = NULL;
+            uint32_t SCREEN_W; // This is the width of the framebuffer we want to draw to
+            uint32_t SCREEN_H; // This is the width of the framebuffer we want to draw to
+            uint32_t HALF_SCREEN_W; // This half the width of the framebuffer we want to draw to 
+            uint32_t HALF_SCREEN_H; // This half the height of the framebuffer we want to draw to
+            uint32_t fFOV;
+            uint32_t fAspectRatio;  // Screen Height/Width
+            float fFOV_rad; // This is the FOV in radians
+            
+        } rendererStruct;
+        
         // SDL Objects
-        SDL_Window *window;
-        SDL_Renderer *renderer;
-        //SDL_Texture *framebuffer;
-        //uint8_t *framebufferpixels = NULL;
-        //int framebufferpitch;
-        SDL_Texture_LineBlit *textureBlit = NULL;
+        rendererStruct rendererData;
+        
 
-        int SCREEN_W;
-        int SCREEN_H;
-        int HALF_SCREEN_W;
-        int HALF_SCREEN_H;
-        int screen_mode=0;  // 0 for Windowed, 1 for Fullscreen, 128 for full screen maximized, SDL_WINDOW_RESIZABLE
+        
 
+        
         // Projection Matrix
         float fNear;
         float fFar;
-        float fFOV;
-        float fAspectRatio;
-        float fFOV_rad;
+        //float fFOV;
+        //float fAspectRatio;
+        //float fFOV_rad;
 
         std::shared_ptr<Camera> player_camera;
         std::shared_ptr<Clipper> thisFrustumClipper;
@@ -104,8 +121,8 @@ class Renderer{
 
 
     public:
-
-        Renderer(int SCREEN_W, int SCREEN_H, std::shared_ptr<Camera> player_camera, float FOV);
+        
+        Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV);
         ~Renderer();
         /**
          * @brief This function will reset the mouse X and Y values to the center of the window.  It requires the window object to call so must occur in the Renderer class

@@ -30,6 +30,7 @@ class I_SDL_Texture_Blit{
         int pitch=0; // size of one row in bytes
         int adjusted_pitch=0; // this is the pitch of a single row in pixels (not bytes)
         Uint32 *p=NULL; // this will be the pixel pointer to a specific pixel in the buffer
+        SDL_Rect windowRect;
  
 
     public:
@@ -48,7 +49,7 @@ class I_SDL_Texture_Blit{
 
 class SDL_Texture_Blit:public I_SDL_Texture_Blit{
     public:
-        SDL_Texture_Blit(SDL_Renderer* renderer, int SCREEN_W, int SCREEN_H);
+        SDL_Texture_Blit(SDL_Renderer* renderer, uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H);
         SDL_Texture_Blit(SDL_Renderer* renderer, SDL_Texture* existingBuffer);
         ~SDL_Texture_Blit();    
         void blit(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
@@ -62,7 +63,7 @@ class SDL_Texture_Blit:public I_SDL_Texture_Blit{
 */
 class SDL_Texture_LineBlit:public I_SDL_Texture_Blit{
     public:
-        SDL_Texture_LineBlit(SDL_Renderer* renderer, int SCREEN_W, int SCREEN_H);
+        SDL_Texture_LineBlit(SDL_Renderer* renderer, uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H);
         SDL_Texture_LineBlit(SDL_Renderer* renderer, SDL_Texture* existingBuffer);
         ~SDL_Texture_LineBlit();
         void blitAdvance(uint8_t r, uint8_t g, uint8_t b);
