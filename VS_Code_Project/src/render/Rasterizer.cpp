@@ -37,7 +37,7 @@ void ITriangleRasterizer::pixelBlit(const int &r, const int &g, const int&b, con
     
 }
 
-TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Texture_LineBlit* myTexBlit){
+TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Texture_Blit* myTexBlit){
     this->renderer=my_renderer;
     this->textureBlit = myTexBlit;
     this->inv_max_visible_z_depth=1/this->max_visible_z_depth;
@@ -221,7 +221,7 @@ void TexturemapRasterizer::texelDimPixel(Triangle& this_triangle){
 
 
 void TexturemapRasterizer::texelDrawUV_Point(){
-    this->textureBlit->blitAdvance(this->col.r, this->col.g, this->col.b);
+    //this->textureBlit->blitSequential(this->col.r, this->col.g, this->col.b);
 }
 
 void TexturemapRasterizer::scanlineDetermineDist(){

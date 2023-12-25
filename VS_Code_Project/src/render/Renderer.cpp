@@ -76,7 +76,7 @@ Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint
 	SDL_GetWindowSize(this->rendererData.window, &win_w, &win_h);
 
 	std::cout << "Window Fullscreen Size: " << win_w << win_h << std::endl;
-    this->rendererData.textureBlit = new SDL_Texture_LineBlit(this->rendererData.renderer, this->rendererData.SCREEN_W, this->rendererData.SCREEN_H, this->rendererData.WINDOW_W, this->rendererData.WINDOW_H);
+    this->rendererData.textureBlit = new SDL_Texture_Blit(this->rendererData.renderer, this->rendererData.SCREEN_W, this->rendererData.SCREEN_H, this->rendererData.WINDOW_W, this->rendererData.WINDOW_H);
 	
 
 
@@ -153,15 +153,23 @@ float Renderer::applyDepthDimmerModifier(Triangle& this_tri){
 
 void Renderer::drawWireFrameTriangle2d(Triangle this_triangle)
 {
-	SDL_Color col = this_triangle.getColor();
-	SDL_SetRenderDrawColor(this->rendererData.renderer, col.r, col.g, col.b, col.a);
+	//SDL_Color col = this_triangle.getColor();
+	SDL_Color col;
+	col.r=255;
+	col.g=255;
+	col.b=255;
+	//SDL_SetRenderDrawColor(this->rendererData.renderer, col.r, col.g, col.b, col.a);
 	Vec2d vert1, vert2, vert3;
 	vert1 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(0).x, this_triangle.getTrianglePoint(0).y));
 	vert2 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(1).x, this_triangle.getTrianglePoint(1).y));
 	vert3 = cartesianToScreen(Vec2d(this_triangle.getTrianglePoint(2).x, this_triangle.getTrianglePoint(2).y));
-	SDL_RenderDrawLineF(this->rendererData.renderer, vert1.x, vert1.y, vert2.x, vert2.y);
-	SDL_RenderDrawLineF(this->rendererData.renderer, vert2.x, vert2.y, vert3.x, vert3.y);
-	SDL_RenderDrawLineF(this->rendererData.renderer, vert3.x, vert3.y, vert1.x, vert1.y);
+	this->rendererData.textureBlit->blitLine(vert1.x, vert1.y, vert2.x, vert2.y, col);
+	this->rendererData.textureBlit->blitLine(vert2.x, vert2.y, vert3.x, vert3.y, col);
+	this->rendererData.textureBlit->blitLine(vert3.x, vert3.y, vert1.x, vert1.y, col);
+	
+	//SDL_RenderDrawLineF(this->rendererData.renderer, vert1.x, vert1.y, vert2.x, vert2.y);
+	//SDL_RenderDrawLineF(this->rendererData.renderer, vert2.x, vert2.y, vert3.x, vert3.y);
+	//SDL_RenderDrawLineF(this->rendererData.renderer, vert3.x, vert3.y, vert1.x, vert1.y);
 }
 
 void Renderer::drawFilledTriangle2d(Triangle this_triangle){
@@ -368,7 +376,7 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	for (auto tri: this->trianglesToRasterize)
 	{
 		drawFilledTriangle2d(tri);
-		//drawWireFrameTriangle2d(tri);
+		drawWireFrameTriangle2d(tri);
 		
 	}
 	this->rendererData.textureBlit->unlock(); // pixel write complete, ready to render
