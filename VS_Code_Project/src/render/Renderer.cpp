@@ -20,7 +20,7 @@
 
 const float PI_by_180 = 3.14159265/180.0;
 
-Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV) {
+Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV, ConsoleData* console_data) {
     // SDL and Screen initializing
 	this->rendererData.SCREEN_W = SCREEN_W;
     this->rendererData.SCREEN_H = SCREEN_H;
@@ -30,7 +30,7 @@ Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint
     this->rendererData.WINDOW_H = WINDOW_H;
 	this->rendererData.HALF_WINDOW_W = WINDOW_W/2;
 	this->rendererData.HALF_WINDOW_H = WINDOW_H/2;
-	this->rendererData.window_mode=0;  // 0 for Windowed, 1 for Fullscreen, 128 for full screen maximized, SDL_WINDOW_RESIZABLE
+	this->rendererData.window_mode=SDL_WINDOW_FULLSCREEN_DESKTOP;  // 0 for Windowed, 1 for Fullscreen ((Use SDL_WINDOW_FULLSCREEN_DESTOP)) 128 for full screen maximized, SDL_WINDOW_RESIZABLE
 
 
 	this->rendererData.fFOV=FOV;
@@ -42,8 +42,9 @@ Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint
 	this->rendererData.windowRect.h=this->rendererData.WINDOW_H;
 
 	this->rendererData.window = SDL_CreateWindow("3D Engine", this->rendererData.HALF_WINDOW_W, this->rendererData.HALF_WINDOW_H, this->rendererData.WINDOW_W, this->rendererData.WINDOW_H, this->rendererData.window_mode);
-	this->rendererData.renderer = SDL_CreateRenderer(this->rendererData.window, -1, SDL_RENDERER_ACCELERATED);
+	this->rendererData.renderer = SDL_CreateRenderer(this->rendererData.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
+	this->consoleData = console_data;
 	// Show display mode information
 	static int display_in_use = 0;
 	int i, display_mode_count;
@@ -62,21 +63,21 @@ Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint
 	if(SDL_SetWindowDisplayMode(window, &mode)!=0){
 		std::cout << "Cannot set display mode" << std::endl;
 	}*/
-	//SDL_DestroyRenderer(renderer);
+	//SDL_DestroyRenderer(rendererData.renderer);
 	int win_h; 
 	int win_w;
 	
-	//SDL_SetWindowSize(window, 400, 225);
+	//SDL_SetWindowSize(rendererData.window, rendererData.WINDOW_W, rendererData.WINDOW_H);
 	
-	//SDL_SetWindowFullscreen( window, SDL_WINDOW_FULLSCREEN );
-	//renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
+	//SDL_SetWindowFullscreen( rendererData.window, SDL_WINDOW_FULLSCREEN_DESKTOP );
+	//rendererData.renderer = SDL_CreateRenderer(rendererData.window, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
 /*	SDL_RenderSetLogicalSize(renderer, SCREEN_W, SCREEN_H);
 	
 */
 	SDL_GetWindowSize(this->rendererData.window, &win_w, &win_h);
 
 	std::cout << "Window Fullscreen Size: " << win_w << win_h << std::endl;
-    this->rendererData.textureBlit = new SDL_Texture_Blit(this->rendererData.renderer, this->rendererData.SCREEN_W, this->rendererData.SCREEN_H, this->rendererData.WINDOW_W, this->rendererData.WINDOW_H);
+    this->rendererData.textureBlit = new SDL_Texture_Blit(this->rendererData.renderer, this->rendererData.SCREEN_W, this->rendererData.SCREEN_H, this->rendererData.WINDOW_W, this->rendererData.WINDOW_H, this->consoleData);
 	
 
 
@@ -90,7 +91,7 @@ Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint
 
 	SDL_SetRenderDrawColor(this->rendererData.renderer, 0, 0, 0, 255);
 	SDL_RenderClear(this->rendererData.renderer);
-	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);
+	//SDL_WarpMouseInWindow(this->window, SCREEN_W/2, SCREEN_H/2);  //comment this out whem debugging
 
 	this->player_camera = player_camera;
 	std::shared_ptr<Clipper> thisFrustumClipper(new Clipper(player_camera, this->rendererData.fFOV));

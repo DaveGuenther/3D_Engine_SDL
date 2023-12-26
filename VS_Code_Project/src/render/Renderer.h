@@ -14,6 +14,7 @@
 #include "../render/TrianglePipeline.h"
 #include "../render/Camera.h"
 #include "../render/Clipper.h"
+#include "../core/Console_Variables.h"
 
 
 
@@ -25,6 +26,7 @@
  */
 class Renderer{
     private:
+        ConsoleData* consoleData;
         typedef struct {
             SDL_Window *window;
             SDL_Renderer *renderer;
@@ -122,7 +124,7 @@ class Renderer{
 
     public:
         
-        Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV);
+        Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV, ConsoleData* console_data);
         ~Renderer();
         /**
          * @brief This function will reset the mouse X and Y values to the center of the window.  It requires the window object to call so must occur in the Renderer class

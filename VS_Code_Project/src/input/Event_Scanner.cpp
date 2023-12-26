@@ -13,8 +13,8 @@ Event_Scanner::Event_Scanner(SDL_Event &my_event, std::shared_ptr<Renderer> my_r
     SCREEN_W=my_renderer->getWindowWidth();
     this->my_renderer = my_renderer;
     SDL_PollEvent( &event );
-    my_renderer->resetMouseXY();
-    captureMouseMovement(); // Has to be called once to handle mouse locking to center of screen without forcing a huge rotation action.
+    //my_renderer->resetMouseXY();
+    //captureMouseMovement(); // Has to be called once to handle mouse locking to center of screen without forcing a huge rotation action.
     prev_range_input_matrix=curr_range_input_matrix;
 
 }
@@ -35,7 +35,7 @@ void Event_Scanner::captureMouseMovement(){
 }
 
 void Event_Scanner::scanInput(){
-    my_renderer->resetMouseXY();     
+    //my_renderer->resetMouseXY();     
     prev_key_matrix=curr_key_matrix;
     prev_range_input_matrix=curr_range_input_matrix;
     //if (!prev_key_matrix.empty() && !curr_key_matrix.empty()) { prev_key_matrix=curr_key_matrix; }
@@ -56,18 +56,18 @@ void Event_Scanner::scanInput(){
                 break;
 
             case SDL_MOUSEMOTION:
-                captureMouseMovement();
+                //captureMouseMovement();
                 break;
 
             case SDL_MOUSEBUTTONDOWN:{
-                int button_value=0;
-                button_value= event.button.button;
-                curr_key_matrix.insert_or_assign("MOUSE:"+std::to_string(event.button.button), true);
+                //int button_value=0;
+                //button_value= event.button.button;
+                //curr_key_matrix.insert_or_assign("MOUSE:"+std::to_string(event.button.button), true);
                 
                 break;
             }
             case SDL_MOUSEBUTTONUP:
-               curr_key_matrix.erase("MOUSE:"+std::to_string(event.button.button));
+               //curr_key_matrix.erase("MOUSE:"+std::to_string(event.button.button));
                 break; 
 
             default:

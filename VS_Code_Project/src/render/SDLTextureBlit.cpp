@@ -1,8 +1,10 @@
 #include "SDLTextureBlit.h"
+#include "../globals.h"
+#include "../core/Console_Variables.h"
 #include <SDL2/SDL.h>
 #include <iostream>
 
-SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H){
+SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, ConsoleData* console_data){
     
     this->renderer = renderer;
     this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGB888);
@@ -13,6 +15,8 @@ SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, uint32_t SCREEN_W, ui
     this->windowRect.y=0;
     this->windowRect.w=WINDOW_W;
     this->windowRect.h=WINDOW_H;
+
+    this->consoleData = console_data;
 }
 
 SDL_Texture_Blit::~SDL_Texture_Blit(){
@@ -41,7 +45,14 @@ void SDL_Texture_Blit::unlock(){
 
 void SDL_Texture_Blit::RenderCopy(){
     //std::cout << (this->windowRect.w) <<  (this->windowRect.h) << std::endl; 
-    SDL_RenderCopy(this->renderer, this->texture, NULL, &this->windowRect);
+    //SDL_RenderCopy(this->renderer, this->texture, NULL, &this->windowRect);
+    
+    if (consoleData->renderer.renderScreenType!=WINDOW_FULLSCREEN && consoleData->renderer.renderScreenType!=WINDOW_FULLSCREEN_DESKTOP){
+        SDL_RenderCopy(this->renderer, this->texture, NULL, &this->windowRect);
+    }
+    else{
+        SDL_RenderCopy(this->renderer, this->texture, NULL, NULL);
+    }
 }
 
 Uint32 SDL_Texture_Blit::getTex_h(){

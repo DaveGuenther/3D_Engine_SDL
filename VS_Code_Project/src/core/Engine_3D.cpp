@@ -8,6 +8,7 @@
 #include "../core/Engine_3D.h"
 #include "../core/Frame_Rate_Manager.h"
 #include "../core/GameState_Observer_Pattern.h"
+#include "../core/Console_Variables.h"
 
 #include "../input/Event_Scanner.h"
 #include "../input/KeyBindings.h"
@@ -28,20 +29,24 @@
 Engine_3D::Engine_3D(void){
     uint32_t SCREEN_W = 400; // 1280X800  640x380   //480x225    320x190  //256x160 400x225   800x450   
     uint32_t SCREEN_H = 225;
-    uint32_t WINDOW_W = 800;
-    uint32_t WINDOW_H = 450;
+    uint32_t WINDOW_W = 400;
+    uint32_t WINDOW_H = 225;
     const float PI_by_180 = 3.14159265/180.0;;
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     isRunning = true;
     float max_draw_dist = 20.0f;
     float fFOV=60.0f;
+    
+    std::shared_ptr<ConsoleData> this_consoleData(new ConsoleData());
+    this->consoleData = this_consoleData;
     float aspectRatio = AspectRatio::getAspectRatio(SCREEN_W, SCREEN_H);  
     std::shared_ptr<Camera> player_camera(new Camera(aspectRatio, max_draw_dist, fFOV));
     std::cout << player_camera->getMaxDrawDist() << std::endl;
     //player_camera = player_camera;
-    std::shared_ptr<Renderer> this_Renderer(new Renderer(SCREEN_W, SCREEN_H, WINDOW_W, WINDOW_H, player_camera, fFOV));
+    std::shared_ptr<Renderer> this_Renderer(new Renderer(SCREEN_W, SCREEN_H, WINDOW_W, WINDOW_H, player_camera, fFOV, consoleData.get()));
     this->Engine_Renderer=this_Renderer;
+
     this_Renderer->setColorFrustumClippedTris(false); // don't show RGB clipped tris.  Instead show intended color
 
 

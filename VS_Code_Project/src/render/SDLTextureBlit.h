@@ -2,6 +2,7 @@
 #define SDL_TEXTURE_BLIT_H
 
 #include <SDL2/SDL.h>
+#include "../core/Console_Variables.h"
 
 /*
 How to use:
@@ -22,6 +23,8 @@ class SDL_Texture_Blit{
         SDL_Renderer *renderer=NULL;
         SDL_PixelFormat *pixelFormat=NULL;
         SDL_Texture *texture=NULL;
+
+        ConsoleData* consoleData;
         int tex_w, tex_h;
         uint8_t *framebufferpixels=NULL;
         Uint32 *tex_head=NULL;
@@ -34,7 +37,7 @@ class SDL_Texture_Blit{
         Uint32 x;
 
     public:
-        SDL_Texture_Blit(SDL_Renderer* renderer, uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H);
+        SDL_Texture_Blit(SDL_Renderer* renderer, uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, ConsoleData* console_data);
         SDL_Texture_Blit(SDL_Renderer* renderer, SDL_Texture* existingBuffer);
         ~SDL_Texture_Blit();    
         void blitPixel(Uint32 x, Uint32 y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
