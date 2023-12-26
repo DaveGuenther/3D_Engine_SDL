@@ -14,7 +14,7 @@ class ITriangleRasterizer{
         
         //Renderer* my_renderer;
         SDL_Renderer *renderer;
-        SDL_Texture_LineBlit *textureBlit = NULL;
+        SDL_Texture_Blit *textureBlit = NULL;
 
         float max_visible_z_depth = 5.0f;  // distance from the camera at which things are no lonver visible
         float inv_max_visible_z_depth;
@@ -47,7 +47,7 @@ class ITriangleRasterizer{
 
 class TexturemapRasterizer:public ITriangleRasterizer{
     public:
-        TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Texture_LineBlit* myTexBlit);
+        TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Texture_Blit* myTexBlit);
         void drawTriangle(Triangle& this_triangle);
         
     private:
@@ -82,10 +82,10 @@ class TexturemapRasterizer:public ITriangleRasterizer{
         Vec3d p0, p1, p2;
         Vec2d uv0, uv1, uv2;
         float left_slope, right_slope, inv_left_slope_denom, inv_right_slope_demon;
-        int y_start, y_end;
+        Uint32 y_start, y_end;
 
         //vertical scanline vars
-        int y, x_start, x_end;
+        Uint32 y, x_start, x_end;
         float p_start, p_end, alpha_start, alpha_end, UVx_start, UVy_start, UVz_start, UVx_end, UVy_end, UVz_end, inv_scanline_dist;
 
         //pixel vars

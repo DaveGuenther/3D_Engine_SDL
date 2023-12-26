@@ -18,7 +18,7 @@ BUILD = build
 
 OBJ_LIST = $(OBJ)/game.o $(OBJ)/preprocessor.o $(OBJ)/Globals.o $(OBJ_actions_LIST) $(OBJ_core_LIST) $(OBJ_input_LIST) $(OBJ_materials_LIST) $(OBJ_objects_LIST) $(OBJ_render_LIST) $(OBJ_utility_LIST)
 OBJ_actions_LIST = $(OBJ)/actions/Action_Interface.o $(OBJ)/actions/Action_Updater.o 
-OBJ_core_LIST= $(OBJ)/core/Engine_3D.o $(OBJ)/core/Frame_Rate_Manager.o $(OBJ)/core/GameState_Observer_Pattern.o 
+OBJ_core_LIST= $(OBJ)/core/Engine_3D.o $(OBJ)/core/Frame_Rate_Manager.o $(OBJ)/core/GameState_Observer_Pattern.o $(OBJ)/core/Console_Variables.o
 OBJ_input_LIST= $(OBJ)/input/Event_Scanner.o $(OBJ)/input/Input_Parser.o $(OBJ)/input/KeyBindings.o
 OBJ_materials_LIST = $(OBJ)/materials/MaterialMapper.o $(OBJ)/materials/MTL.o $(OBJ)/materials/TextureList.o $(OBJ)/materials/TexturePNG.o
 OBJ_objects_LIST = $(OBJ)/objects/OBJ_Chunk.o $(OBJ)/objects/OBJ_Lex_normal.o $(OBJ)/objects/OBJ_Lex_textureCoord.o $(OBJ)/objects/OBJ_Lex_triFace.o $(OBJ)/objects/OBJ_Lex_vertex.o $(OBJ)/objects/OBJ.o
@@ -92,6 +92,11 @@ Engine_3D_SRC = $(SRC)/core/Engine_3D.cpp $(SRC)/core/Engine_3D.h
 $(OBJ)/core/Engine_3D.o: $(Engine_3D_SRC)
 	$(info ***** Building Engine_3D.o *****)
 	$(CC) $(CXXFLAGS) $(SRC)/core/Engine_3D.cpp -o $(OBJ)/core/Engine_3D.o
+
+Console_Variables_SRC = $(SRC)/core/Console_Variables.cpp $(SRC)/core/Console_Variables.h  
+$(OBJ)/core/Console_Variables.o: $(Console_Variables_SRC)
+	$(info ***** Building Console_Variables.o *****)
+	$(CC) $(CXXFLAGS) $(SRC)/core/Console_Variables.cpp -o $(OBJ)/core/Console_Variables.o
 
 Frame_Rate_Manager_SRC = $(SRC)/core/Frame_Rate_Manager.cpp $(SRC)/core/Frame_Rate_Manager.h  
 $(OBJ)/core/Frame_Rate_Manager.o: $(SRC)/core/Frame_Rate_Manager.h

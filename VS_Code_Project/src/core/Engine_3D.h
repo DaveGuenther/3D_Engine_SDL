@@ -11,6 +11,7 @@
 #include "../materials/TextureList.h"
 #include "../render/Renderer.h"
 #include "../render/Camera.h"
+#include "../core/Console_Variables.h"
 
 /**
  * @brief This is the base class of the 3D engine.  It initializes the other key systems like Renderer and Input classes.  It manages updates of the various subsystems.
@@ -64,6 +65,7 @@ class Engine_3D{
 
         std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater;
 
+        std::shared_ptr<ConsoleData> consoleData;
 
         float FPS;
         std::shared_ptr<Frame_Rate_Manager> VariableFrameRate;

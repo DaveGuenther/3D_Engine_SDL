@@ -14,6 +14,7 @@
 #include "../render/TrianglePipeline.h"
 #include "../render/Camera.h"
 #include "../render/Clipper.h"
+#include "../core/Console_Variables.h"
 
 
 
@@ -25,6 +26,7 @@
  */
 class Renderer{
     private:
+        ConsoleData* consoleData;
         typedef struct {
             SDL_Window *window;
             SDL_Renderer *renderer;
@@ -38,7 +40,7 @@ class Renderer{
             SDL_Rect windowRect; // This rectangle is used during SDL_RenderCopy()
 
             // Variables for the rendering area (frame Buffer) that we'll draw on and stretch to the window size when we copy it to the renderer
-            SDL_Texture_LineBlit *textureBlit = NULL;
+            SDL_Texture_Blit *textureBlit = NULL;
             uint32_t SCREEN_W; // This is the width of the framebuffer we want to draw to
             uint32_t SCREEN_H; // This is the width of the framebuffer we want to draw to
             uint32_t HALF_SCREEN_W; // This half the width of the framebuffer we want to draw to 
@@ -46,7 +48,7 @@ class Renderer{
             uint32_t fFOV;
             uint32_t fAspectRatio;  // Screen Height/Width
             float fFOV_rad; // This is the FOV in radians
-            
+
         } rendererStruct;
         
         // SDL Objects
@@ -122,7 +124,7 @@ class Renderer{
 
     public:
         
-        Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV);
+        Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV, ConsoleData* console_data);
         ~Renderer();
         /**
          * @brief This function will reset the mouse X and Y values to the center of the window.  It requires the window object to call so must occur in the Renderer class
