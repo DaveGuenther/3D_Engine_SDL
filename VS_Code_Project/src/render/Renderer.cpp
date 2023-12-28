@@ -16,12 +16,15 @@
 #include "../render/Frustum.h"
 #include "../render/AspectRatio.h"
 #include "../render/SDLTextureBlit.h"
+#include "../render/Renderer_Observer.h"
+#include "../render/Font.h"
+#include "../3rd_party/bitmap_font.h"
 #include "../globals.h"
-#include "Renderer_Observer.h"
+
 
 const float PI_by_180 = 3.14159265/180.0;
 
-Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV, ConsoleData* console_data) {
+Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV, std::shared_ptr<Frame_Rate_Manager> my_framerate, ConsoleData* console_data) {
     // SDL and Screen initializing
 	this->rendererData.SCREEN_W = SCREEN_W;
     this->rendererData.SCREEN_H = SCREEN_H;
@@ -31,7 +34,7 @@ Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint
     this->rendererData.WINDOW_H = WINDOW_H;
 	this->rendererData.HALF_WINDOW_W = WINDOW_W/2;
 	this->rendererData.HALF_WINDOW_H = WINDOW_H/2;
-	this->rendererData.window_mode=SDL_WINDOW_FULLSCREEN_DESKTOP;  // 0 for Windowed, 1 for Fullscreen ((Use SDL_WINDOW_FULLSCREEN_DESTOP)) 128 for full screen maximized, SDL_WINDOW_RESIZABLE
+	this->rendererData.window_mode=SDL_WINDOW_FULLSCREEN_DESKTOP;  // 0 for Windowed, 1 for Fullscreen ((Use SDL_WINDOW_FULLSCREEN_DESKTOP)) 128 for full screen maximized, SDL_WINDOW_RESIZABLE
 
 
 	this->rendererData.fFOV=FOV;
@@ -47,6 +50,8 @@ Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint
 	this->rendererData.window = SDL_CreateWindow("3D Engine", this->rendererData.HALF_WINDOW_W, this->rendererData.HALF_WINDOW_H, this->rendererData.WINDOW_W, this->rendererData.WINDOW_H, this->rendererData.window_mode);
 	this->rendererData.renderer = SDL_CreateRenderer(this->rendererData.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	
+	this->VariableFrameRate = my_framerate;
+
 	std::shared_ptr<RendererSubject> rendererSubject(new RendererSubject(rendererData.renderer));
 	this->rendererSubject=rendererSubject;
 
@@ -67,6 +72,9 @@ Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint
 		std::cout << "Display mode: " << i << "   BPP: " << SDL_BITSPERPIXEL(f) << " "<< SDL_GetPixelFormatName(f) << " Res: " << mode.w << "x" << mode.h << std::endl;
 	}
 	
+	std::shared_ptr<Font> bitmapFont(new Font(this->rendererSubject,"Fonts/stone_term.png", "Fonts/stone_term.csv",50));
+    this->bitmapFont=bitmapFont;
+    this->gameFont=bitmapFont->getBitmapFontPtr();
 
 	/*mode.h=this->SCREEN_H;
 	mode.w=this->SCREEN_W;
@@ -124,6 +132,10 @@ void Renderer::resetMouseXY(){
 
 std::shared_ptr<RendererSubject> Renderer::getRendererSubject(){
 	return this->rendererSubject;
+}
+
+BitmapFont* Renderer::getBitmapFontPtr(){
+	return this->gameFont;
 }
 
 SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri){
@@ -391,7 +403,8 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	for (auto tri: this->trianglesToRasterize)
 	{
 		drawFilledTriangle2d(tri);
-		drawWireFrameTriangle2d(tri);
+		if (consoleData->rasterizer.drawPolyEdges){ drawWireFrameTriangle2d(tri); }
+		
 		
 	}
 	this->rendererData.textureBlit->unlock(); // pixel write complete, ready to render
@@ -402,6 +415,8 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	//SDL_RenderCopy(renderer, this_tex, NULL, NULL); // Copy texture pixel buffer to renderer
 	
 	//drawReticle();
+	std::string this_FPS = "FPS: "+ std::to_string(int(VariableFrameRate->getMeasuredFPS()));
+	this->gameFont->placeStringAtXY(this_FPS ,10, 10, 30);
 
 	// Flip video page to screen
 	SDL_RenderPresent(this->rendererData.renderer);

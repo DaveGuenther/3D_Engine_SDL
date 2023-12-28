@@ -15,9 +15,11 @@
 #include "../render/Camera.h"
 #include "../render/Clipper.h"
 #include "../core/Console_Variables.h"
+#include "../core/Frame_Rate_Manager.h"
+#include "../3rd_party/bitmap_font.h"
+#include "../render/Font.h"
+
 #include "Renderer_Observer.h"
-
-
 
 
 /**
@@ -56,7 +58,9 @@ class Renderer{
         std::shared_ptr<RendererSubject> rendererSubject;
         std::shared_ptr<Renderer_Observer> rendererObserver;
         
-
+        // Font objects
+        std::shared_ptr<Font> bitmapFont;
+        BitmapFont* gameFont;
         
         // Projection Matrix
         float fNear;
@@ -65,6 +69,7 @@ class Renderer{
         //float fAspectRatio;
         //float fFOV_rad;
 
+        std::shared_ptr<Frame_Rate_Manager> VariableFrameRate;
         std::shared_ptr<Camera> player_camera;
         std::shared_ptr<Clipper> thisFrustumClipper;
         //Clipper* thisFrustumClipper;
@@ -88,6 +93,7 @@ class Renderer{
 
         float applyDepthDimmerModifier(Triangle& this_tri);
         SDL_Color applyDepthDimmer(Triangle& this_tri);
+        
 
         /**
          * @brief Engine_3D operates in a 3D Cartesian coordinate space with 0,0,0 being the true center spot of the world.  Likewise, 0,0 would be the true center of the screen in cartesian space.  This method will convert cartesian coordinates to screen coordinates factoring in the screen resolution.
@@ -124,7 +130,7 @@ class Renderer{
 
     public:
         
-        Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV, ConsoleData* console_data);
+        Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, std::shared_ptr<Camera> player_camera, float FOV, std::shared_ptr<Frame_Rate_Manager> my_framerate, ConsoleData* console_data);
         ~Renderer();
         /**
          * @brief This function will reset the mouse X and Y values to the center of the window.  It requires the window object to call so must occur in the Renderer class
@@ -133,7 +139,7 @@ class Renderer{
         void resetMouseXY();
         std::shared_ptr<RendererSubject> getRendererSubject();
         void setWindowTitle(std::string title);
-        
+        BitmapFont* getBitmapFontPtr();
         /**
          * @brief This method directs the projection operations over the entire mesh pipeline.  It iterates through each mesh and it's tris in order to apply projections and direct screen page drawing
          * 

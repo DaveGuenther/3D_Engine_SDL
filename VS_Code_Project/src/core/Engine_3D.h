@@ -63,7 +63,7 @@ class Engine_3D{
 
         std::shared_ptr<Input_Parser> INWORLD_Input_Parser;
         
-
+        BitmapFont* gameFont;
         std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater;
 
         std::shared_ptr<ConsoleData> consoleData;
@@ -71,6 +71,7 @@ class Engine_3D{
         float FPS;
         std::shared_ptr<Frame_Rate_Manager> VariableFrameRate;
 
+        
 
         SDL_Event event;
 

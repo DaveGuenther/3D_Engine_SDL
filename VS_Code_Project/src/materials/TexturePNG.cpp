@@ -3,7 +3,6 @@
 #include <string>
 #include <math.h>
 #include <SDL2/SDL.h>
-//#include <SDL2/SDL_image.h>
 #include "TexturePNG.h"
 #include "../render/Renderer_Observer.h"
 
@@ -15,29 +14,33 @@ TexturePNG::TexturePNG(std::shared_ptr<RendererSubject> this_renderer_subject, c
     this->renderer = this->rendererObserver->getSDLRendererPointer();
     //uint8_t* pixels;
     int pitch;
-    std::cout << "Loading: '" << filename << "' into VRAM...";
+    std::cout << "Loading: '" << filename << "'...";
     
     std::shared_ptr<stbimageTexture> stbimageData(new stbimageTexture(this->renderer, filename));
     this->stbimage_texture = stbimageData;
 
     //Surface specific
-    this->surface = stbimageData->getSurface();
-    this->surface = SDL_ConvertSurfaceFormat(surface,SDL_PIXELFORMAT_RGB24,0);
-    this->pixels = (uint8_t*)this->surface->pixels;
-    this->Bpp = this->surface->format->BytesPerPixel;
-    this->width = this->surface->w;
-    this->height = this->surface->h;
+    this->surface = stbimageData->getSurface(); //Surface
+    this->surface = SDL_ConvertSurfaceFormat(surface,SDL_PIXELFORMAT_RGB24,0);//Surface
+    this->pixels = (uint8_t*)this->surface->pixels;//Surface
+    this->Bpp = this->surface->format->BytesPerPixel;//Surface
+    this->width = this->surface->w;//Surface
+    this->height = this->surface->h;//Surface
+    this->pixelFormat=this->stbimage_texture->getSurface()->format; //Surface
+    
     // End Surface Specific
     
-    /*this->stbimage_texture->convertToTextureSTREAMING();
-    this->texture = this->stbimage_texture->getTextureSTREAMING();
-    
+    //Texture Specific
+    /*this->stbimage_texture->convertToTextureSTREAMING(); //Texture
+    this->texture = this->stbimage_texture->getTextureSTREAMING(); //Texture
     if(!this->texture) {
         throw std::runtime_error(std::string("TexturePNG::TexturePNG - Could not open file: ")+filename);
     }    
-    SDL_QueryTexture(this->texture, &this->textureFormat, NULL, &this->width, &this->height);
+    SDL_QueryTexture(this->texture, &this->textureFormat, NULL, &this->width, &this->height); //Texture
+    SDL_PixelFormat* tex_format = SDL_AllocFormat(SDL_PIXELFORMAT_RGB24); // Texture
+    this->pixelFormat = tex_format;
     */
-    this->pixelFormat=this->stbimage_texture->getSurface()->format;
+    // End Texture Specific
     std::cout << "finished!" << std::endl;
 }
 
@@ -62,7 +65,7 @@ void TexturePNG::unlock(){
 
 void TexturePNG::destroyTexture(){
     //IMG_Quit();
-    //SDL_FreeSurface(image);
+    SDL_FreeSurface(surface);
     //SDL_DestroyTexture(this->texture);  // I don't think I need this because it's done in bittmap_font.h
 }
 
@@ -90,8 +93,8 @@ void TexturePNG::getPixelAtUV(const float &U, const float &V, SDL_Color &col)
         y = (this->height-1)-(V*(this->height-1));
     }    
 
-    //this->p = this->tex_head+(this->adjusted_pitch*y)+x; // Texture Specific Method
-
+    //this->p = this->tex_head+(this->adjusted_pitch*y)+(x*3); // Texture Specific Method
+    
 	uint32_t* PixelData = (uint32_t*)((Uint8*)this->surface->pixels + y * this->surface->pitch + x * Bpp);  // Surface Specific Method
 
 
@@ -99,9 +102,11 @@ void TexturePNG::getPixelAtUV(const float &U, const float &V, SDL_Color &col)
 	// Retrieve the RGB values of the specific pixel
 	//SDL_GetRGB(*p, this->pixelFormat, &col.r, &col.g, &col.b);  // Texture Specific Method
     SDL_GetRGB(*PixelData, this->surface->format, &col.r, &col.g, &col.b);  // Surface Specific Method
-    //col.r = *(uint8_t*)(PixelData);
-    ///col.g = *((uint8_t*)(PixelData)+1);
-    //col.b = *((uint8_t*)(PixelData)+2);
+    
+    
+    //col.r = *(uint8_t*)(new_p);
+    //col.g = *((uint8_t*)(new_p)+1);
+    //col.b = *((uint8_t*)(new_p)+2);
 
 	
 }

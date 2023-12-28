@@ -7,7 +7,7 @@ ifeq ($(OS), Windows_NT) # we should only use make release for windows builds.  
 	LDFLAGS =  -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -lSDL2main -lSDL2 -lSDL2_image
 else
 	CXXFLAGS = -c -std=c++17 -Wall $(shell sdl2-config --cflags)
-	LDFLAGS = -lstdc++fs  $(shell sdl2-config --libs) -lSDL2_image 
+	LDFLAGS = -lstdc++fs  $(shell sdl2-config --libs) 
 endif	
 
 # Makefile settings 
@@ -22,7 +22,7 @@ OBJ_core_LIST= $(OBJ)/core/Engine_3D.o $(OBJ)/core/Frame_Rate_Manager.o $(OBJ)/c
 OBJ_input_LIST= $(OBJ)/input/Event_Scanner.o $(OBJ)/input/Input_Parser.o $(OBJ)/input/KeyBindings.o
 OBJ_materials_LIST = $(OBJ)/materials/MaterialMapper.o $(OBJ)/materials/MTL.o $(OBJ)/materials/TextureList.o $(OBJ)/materials/TexturePNG.o
 OBJ_objects_LIST = $(OBJ)/objects/OBJ_Chunk.o $(OBJ)/objects/OBJ_Lex_normal.o $(OBJ)/objects/OBJ_Lex_textureCoord.o $(OBJ)/objects/OBJ_Lex_triFace.o $(OBJ)/objects/OBJ_Lex_vertex.o $(OBJ)/objects/OBJ.o
-OBJ_render_LIST = $(OBJ)/render/SDLTextureBlit.o $(OBJ)/render/AspectRatio.o $(OBJ)/render/Camera.o $(OBJ)/render/Clipper.o $(OBJ)/render/Frustum.o $(OBJ)/render/Rasterizer.o $(OBJ)/render/Renderer.o $(OBJ)/render/Renderer_Observer.o $(OBJ)/render/TrianglePipeline.o 
+OBJ_render_LIST = $(OBJ)/render/SDLTextureBlit.o $(OBJ)/render/AspectRatio.o $(OBJ)/render/Camera.o $(OBJ)/render/Clipper.o $(OBJ)/render/Frustum.o $(OBJ)/render/Rasterizer.o $(OBJ)/render/Renderer.o $(OBJ)/render/Renderer_Observer.o $(OBJ)/render/TrianglePipeline.o $(OBJ)/render/Font.o
 OBJ_utility_LIST = $(OBJ)/utility/Mat4x4.o $(OBJ)/utility/Mesh_Pipeline.o $(OBJ)/utility/Mesh.o $(OBJ)/utility/nonVector_Math_Service.o $(OBJ)/utility/Triangle_Modifier.o $(OBJ)/utility/Triangle.o $(OBJ)/utility/Vec2d.o $(OBJ)/utility/Vec3d.o $(OBJ)/utility/Vector_Math_Service.o
 
 all: $(BUILD)/game
@@ -142,6 +142,11 @@ Renderer_Observer_SRC= $(SRC)/render/Renderer_Observer.cpp $(SRC)/render/Rendere
 $(OBJ)/render/Renderer_Observer.o: $(Renderer_Observer_SRC)
 	$(info ***** Building Renderer_Observer.o *****)
 	$(CC) $(CXXFLAGS) $(SRC)/render/Renderer_Observer.cpp -o $(OBJ)/render/Renderer_Observer.o
+
+Font_SRC= $(SRC)/render/Font.cpp $(SRC)/render/Font.h  
+$(OBJ)/render/Font.o: $(Font_SRC)
+	$(info ***** Building Font.o *****)
+	$(CC) $(CXXFLAGS) $(SRC)/render/Font.cpp -o $(OBJ)/render/Font.o
 
 TexturePNG_SRC= $(SRC)/materials/TexturePNG.cpp $(SRC)/materials/TexturePNG.h  
 $(OBJ)/materials/TexturePNG.o: $(TexturePNG_SRC)

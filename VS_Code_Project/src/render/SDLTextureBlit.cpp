@@ -132,14 +132,18 @@ void SDL_Texture_Blit::blitLine( float x1, float y1, float x2, float y2, const S
 
     const int maxX = (int)x2;
 
+    
+
     for(int x=(int)x1; x<maxX; x++)
     {
         if(steep)
         {
+            if (x>this->tex_h){ x = tex_h-1;}
             this->blitPixel(y,x, color.r, color.g, color.b, 255);
         }
         else
         {
+            if (y>this->tex_h){ y = tex_h-1;}
             this->blitPixel(x,y, color.r, color.g, color.b, 255);
         }
 

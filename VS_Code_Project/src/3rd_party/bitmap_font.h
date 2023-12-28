@@ -67,42 +67,54 @@ class stbimageTexture{
 
         // Convert the SDL_Surface to a new SDL_Texture but with STREAMING texture access for pixel addressing
         void convertToTextureSTREAMING(){
-            SDL_Surface *rgb_image = SDL_ConvertSurfaceFormat(image,SDL_PIXELFORMAT_RGB888,0);
+            SDL_Surface *rgb_image = SDL_ConvertSurfaceFormat(image,SDL_PIXELFORMAT_RGB24,0);
             
             // Set up STREAMING texture for pixel access
-            this->textureImageSTREAMING = SDL_CreateTexture(this->renderer, SDL_PIXELFORMAT_RGB888,SDL_TEXTUREACCESS_STREAMING, rgb_image->w, rgb_image->h);
-            SDL_PixelFormat* tex_format = SDL_AllocFormat(SDL_PIXELFORMAT_RGB888);
+            this->textureImageSTREAMING = SDL_CreateTexture(this->renderer, SDL_PIXELFORMAT_RGB24,SDL_TEXTUREACCESS_STREAMING, rgb_image->w, rgb_image->h);
+            SDL_PixelFormat* tex_format = SDL_AllocFormat(SDL_PIXELFORMAT_RGB24);
 
             uint8_t* tex_pixels = (uint8_t*)rgb_image->pixels;
             int tex_pitch;
-            uint32_t* tex_p;
+            uint8_t* tex_p;
             if(SDL_LockTexture(this->textureImageSTREAMING, NULL, (void **)&tex_pixels, &tex_pitch))
             {
                 // if return status is non-zero we have an error and want to show it here
                 std::cout << "Error Locking Texture: " << SDL_GetError() << std::endl;
             }
-            tex_p = (Uint32 *)(tex_pixels); // cast for a pointer increments by 4 bytes.(RGBA)
-            uint32_t* tex_head=tex_p;
-            uint32_t* tex_tail = (uint32_t*)((Uint8*)tex_head +(rgb_image->h)*tex_pitch);
+            tex_p = (Uint8 *)(tex_pixels); // cast for a pointer increments by 4 bytes.(RGBA)
+            uint8_t* tex_head=tex_p;
+            uint8_t* tex_tail = (uint8_t*)((Uint8*)tex_head +(rgb_image->h)*tex_pitch);
 
 
             // Set up surface for pixel access
             uint8_t* sur_pixels = (uint8_t*)rgb_image->pixels;
             int sur_pitch=rgb_image->pitch;
             Uint8 sur_Bpp=rgb_image->format->BytesPerPixel;
-            uint32_t* sur_tail = (uint32_t*)((Uint8*)rgb_image->pixels +(rgb_image->h)*this->image->pitch);
-            uint32_t* sur_head = (uint32_t*)((Uint8*)rgb_image->pixels);
-            uint32_t* sur_p=NULL;
+            uint8_t* sur_tail = (uint8_t*)((Uint8*)rgb_image->pixels +(rgb_image->h)*this->image->pitch);
+            uint8_t* sur_head = (uint8_t*)((Uint8*)rgb_image->pixels);
+            uint8_t* sur_p=NULL;
             //uint32_t* PixelData = (uint32_t*)((Uint8*)rgb_image->pixels + y * this->image->pitch + x * Bpp); 
-            for (sur_p=sur_head; sur_p<sur_tail; sur_p++ ){
+            sur_p=sur_head;
+            while (sur_p<sur_tail){
                 SDL_Color col;
-                col.r=0;
-                col.g=0;
-                col.b=0;
-                col.a=255;
-                SDL_GetRGB(*sur_p, this->image->format, &col.r, &col.g, &col.b);
-                *tex_p = SDL_MapRGB(tex_format, col.b, col.g, col.r); // If I don't switch r and b, their bytes get swapped..  ??
-                tex_p++;
+                
+                col.r = *(uint8_t*)(sur_p);
+                sur_p = (sur_p+1);
+                col.g = *(uint8_t*)(sur_p);
+                sur_p = (sur_p+1);
+                col.b = *(uint8_t*)(sur_p);
+                sur_p = (sur_p+1);
+                //SDL_GetRGB(*sur_p, this->image->format, &col.r, &col.g, &col.b);
+                
+                *tex_p = col.r;
+                tex_p = (tex_p+1);
+                *tex_p = col.g;
+                tex_p = (tex_p+1);
+                *tex_p = col.b;
+                tex_p = (tex_p+1);
+                //*tex_p = SDL_MapRGB(tex_format, col.b, col.g, col.r); // If I don't switch r and b, their bytes get swapped..  ??
+                
+                //tex_p++;
 
             }
             SDL_UnlockTexture(this->textureImageSTREAMING);
