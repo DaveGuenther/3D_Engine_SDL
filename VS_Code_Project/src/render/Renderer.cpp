@@ -17,6 +17,7 @@
 #include "../render/AspectRatio.h"
 #include "../render/SDLTextureBlit.h"
 #include "../globals.h"
+#include "Renderer_Observer.h"
 
 const float PI_by_180 = 3.14159265/180.0;
 
@@ -41,8 +42,17 @@ Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint
 	this->rendererData.windowRect.w=this->rendererData.WINDOW_W;
 	this->rendererData.windowRect.h=this->rendererData.WINDOW_H;
 
+
+
 	this->rendererData.window = SDL_CreateWindow("3D Engine", this->rendererData.HALF_WINDOW_W, this->rendererData.HALF_WINDOW_H, this->rendererData.WINDOW_W, this->rendererData.WINDOW_H, this->rendererData.window_mode);
 	this->rendererData.renderer = SDL_CreateRenderer(this->rendererData.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	
+	std::shared_ptr<RendererSubject> rendererSubject(new RendererSubject(rendererData.renderer));
+	this->rendererSubject=rendererSubject;
+
+	std::shared_ptr<Renderer_Observer> rendererObserver(new Renderer_Observer(*rendererSubject));
+    this->rendererObserver=rendererObserver;
+
 
 	this->consoleData = console_data;
 	// Show display mode information
@@ -110,6 +120,10 @@ void Renderer::setWindowTitle(std::string title){
 
 void Renderer::resetMouseXY(){
 	SDL_WarpMouseInWindow(this->rendererData.window, this->rendererData.HALF_SCREEN_W, this->rendererData.HALF_SCREEN_H);
+}
+
+std::shared_ptr<RendererSubject> Renderer::getRendererSubject(){
+	return this->rendererSubject;
 }
 
 SDL_Color Renderer::applyDepthDimmer(Triangle& this_tri){

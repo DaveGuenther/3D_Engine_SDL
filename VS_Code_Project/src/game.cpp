@@ -4,14 +4,16 @@
 	#pragma message("WinMain")
 #endif
 
+
+
 #include <SDL2/SDL.h>
+#define SDL_STBIMAGE_IMPLEMENTATION // Required for SDL_stbimage.h and bitmap_font.h  Place in main.cpp JUST AFTER #include <SDL2/SDL.h>.  Place the other .h files in other parts of the engine, but not here.
 #include <iostream>
-
-
+#include "core/Engine_3D.h"
 
 
 //#if defined(PREDEF_PLATFORM_UNIX)
-#	include "core/Engine_3D.h"
+
 //#endif
 
 

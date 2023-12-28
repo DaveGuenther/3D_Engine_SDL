@@ -12,6 +12,7 @@
 #include "../render/Renderer.h"
 #include "../render/Camera.h"
 #include "../core/Console_Variables.h"
+#include "../3rd_party/bitmap_font.h"
 
 /**
  * @brief This is the base class of the 3D engine.  It initializes the other key systems like Renderer and Input classes.  It manages updates of the various subsystems.

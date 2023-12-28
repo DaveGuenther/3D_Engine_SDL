@@ -15,7 +15,7 @@
 #include "../render/Camera.h"
 #include "../render/Clipper.h"
 #include "../core/Console_Variables.h"
-
+#include "Renderer_Observer.h"
 
 
 
@@ -53,8 +53,8 @@ class Renderer{
         
         // SDL Objects
         rendererStruct rendererData;
-        
-
+        std::shared_ptr<RendererSubject> rendererSubject;
+        std::shared_ptr<Renderer_Observer> rendererObserver;
         
 
         
@@ -131,7 +131,7 @@ class Renderer{
          * 
          */
         void resetMouseXY();
-    
+        std::shared_ptr<RendererSubject> getRendererSubject();
         void setWindowTitle(std::string title);
         
         /**

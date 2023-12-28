@@ -63,7 +63,7 @@ Engine_3D::Engine_3D(void){
     this->FPS=60.0f;
     std::shared_ptr<Frame_Rate_Manager> VariableFrameRate(new Frame_Rate_Manager(FPS));
     this->VariableFrameRate = VariableFrameRate;
-    std::shared_ptr<TextureList> texture_list(new TextureList());
+    std::shared_ptr<TextureList> texture_list(new TextureList(this->Engine_Renderer->getRendererSubject()));
     this->texture_list = texture_list;
     std::shared_ptr<Mesh_Pipeline> local_mesh_pipeline(new Mesh_Pipeline(texture_list));
     this->mesh_pipeline = local_mesh_pipeline;

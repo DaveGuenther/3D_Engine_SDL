@@ -6,8 +6,8 @@ ifeq ($(OS), Windows_NT) # we should only use make release for windows builds.  
 	CXXFLAGS = -c -std=c++17 -Wall -I /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/include -I /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/include
 	LDFLAGS =  -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -lSDL2main -lSDL2 -lSDL2_image
 else
-	CXXFLAGS = -c -std=c++17 -Wall
-	LDFLAGS = -lstdc++fs -lSDL2main -lSDL2 -lSDL2_image -I /usr/include/SDL2
+	CXXFLAGS = -c -std=c++17 -Wall $(shell sdl2-config --cflags)
+	LDFLAGS = -lstdc++fs  $(shell sdl2-config --libs) -lSDL2_image 
 endif	
 
 # Makefile settings 
@@ -22,7 +22,7 @@ OBJ_core_LIST= $(OBJ)/core/Engine_3D.o $(OBJ)/core/Frame_Rate_Manager.o $(OBJ)/c
 OBJ_input_LIST= $(OBJ)/input/Event_Scanner.o $(OBJ)/input/Input_Parser.o $(OBJ)/input/KeyBindings.o
 OBJ_materials_LIST = $(OBJ)/materials/MaterialMapper.o $(OBJ)/materials/MTL.o $(OBJ)/materials/TextureList.o $(OBJ)/materials/TexturePNG.o
 OBJ_objects_LIST = $(OBJ)/objects/OBJ_Chunk.o $(OBJ)/objects/OBJ_Lex_normal.o $(OBJ)/objects/OBJ_Lex_textureCoord.o $(OBJ)/objects/OBJ_Lex_triFace.o $(OBJ)/objects/OBJ_Lex_vertex.o $(OBJ)/objects/OBJ.o
-OBJ_render_LIST = $(OBJ)/render/SDLTextureBlit.o $(OBJ)/render/AspectRatio.o $(OBJ)/render/Camera.o $(OBJ)/render/Clipper.o $(OBJ)/render/Frustum.o $(OBJ)/render/Rasterizer.o $(OBJ)/render/Renderer.o $(OBJ)/render/TrianglePipeline.o 
+OBJ_render_LIST = $(OBJ)/render/SDLTextureBlit.o $(OBJ)/render/AspectRatio.o $(OBJ)/render/Camera.o $(OBJ)/render/Clipper.o $(OBJ)/render/Frustum.o $(OBJ)/render/Rasterizer.o $(OBJ)/render/Renderer.o $(OBJ)/render/Renderer_Observer.o $(OBJ)/render/TrianglePipeline.o 
 OBJ_utility_LIST = $(OBJ)/utility/Mat4x4.o $(OBJ)/utility/Mesh_Pipeline.o $(OBJ)/utility/Mesh.o $(OBJ)/utility/nonVector_Math_Service.o $(OBJ)/utility/Triangle_Modifier.o $(OBJ)/utility/Triangle.o $(OBJ)/utility/Vec2d.o $(OBJ)/utility/Vec3d.o $(OBJ)/utility/Vector_Math_Service.o
 
 all: $(BUILD)/game
@@ -68,7 +68,7 @@ $(BUILD)/game: $(OBJ_LIST)
 	$(info ***** Linking objects and building target *****)
 	$(CC) -std=c++17 -Wall -g $(OBJ_LIST) -o $(BUILD)/game $(LDFLAGS)
 
-$(OBJ)/game.o: $(SRC)/game.cpp $(SRC)/core/Engine_3D.cpp $(SRC)/core/Engine_3D.h  
+$(OBJ)/game.o: $(SRC)/game.cpp $(SRC)/core/Engine_3D.cpp $(SRC)/core/Engine_3D.h 
 	$(info ***** Building game.o *****)
 	echo $(OS)
 	$(CC) $(CXXFLAGS) $(SRC)/game.cpp -o $(OBJ)/game.o
@@ -88,7 +88,7 @@ $(OBJ)/actions/Action_Updater.o: $(Action_Updater_SRC)
 	$(info ***** Building Action_Updater.o *****)
 	$(CC) $(CXXFLAGS) $(SRC)/actions/Action_Updater.cpp -o $(OBJ)/actions/Action_Updater.o
 
-Engine_3D_SRC = $(SRC)/core/Engine_3D.cpp $(SRC)/core/Engine_3D.h  
+Engine_3D_SRC = $(SRC)/core/Engine_3D.cpp $(SRC)/core/Engine_3D.h 
 $(OBJ)/core/Engine_3D.o: $(Engine_3D_SRC)
 	$(info ***** Building Engine_3D.o *****)
 	$(CC) $(CXXFLAGS) $(SRC)/core/Engine_3D.cpp -o $(OBJ)/core/Engine_3D.o
@@ -133,11 +133,15 @@ $(OBJ)/materials/MTL.o: $(MTL_SRC)
 	$(info ***** Building MTL.o *****)
 	$(CC) $(CXXFLAGS) $(SRC)/materials/MTL.cpp -o $(OBJ)/materials/MTL.o
 
-TextureList_SRC= $(SRC)/materials/TextureList.cpp $(SRC)/materials/TextureList.h  
+TextureList_SRC= $(SRC)/materials/TextureList.cpp $(SRC)/materials/TextureList.h 
 $(OBJ)/materials/TextureList.o: $(TextureList_SRC)
 	$(info ***** Building TextureList.o *****)
 	$(CC) $(CXXFLAGS) $(SRC)/materials/TextureList.cpp -o $(OBJ)/materials/TextureList.o
 
+Renderer_Observer_SRC= $(SRC)/render/Renderer_Observer.cpp $(SRC)/render/Renderer_Observer.h  
+$(OBJ)/render/Renderer_Observer.o: $(Renderer_Observer_SRC)
+	$(info ***** Building Renderer_Observer.o *****)
+	$(CC) $(CXXFLAGS) $(SRC)/render/Renderer_Observer.cpp -o $(OBJ)/render/Renderer_Observer.o
 
 TexturePNG_SRC= $(SRC)/materials/TexturePNG.cpp $(SRC)/materials/TexturePNG.h  
 $(OBJ)/materials/TexturePNG.o: $(TexturePNG_SRC)
@@ -201,10 +205,11 @@ $(OBJ)/render/Rasterizer.o: $(Rasterizer_SRC)
 	$(info ***** Building Rasterizer.o *****)
 	$(CC) $(CXXFLAGS) $(SRC)/render/Rasterizer.cpp -o $(OBJ)/render/Rasterizer.o
 
-Renderer_SRC= $(SRC)/render/Renderer.cpp $(SRC)/render/Renderer.h  
+Renderer_SRC= $(SRC)/render/Renderer.cpp $(SRC)/render/Renderer.h 
 $(OBJ)/render/Renderer.o: $(Renderer_SRC)
 	$(info ***** Building Renderer.o *****)
 	$(CC) $(CXXFLAGS) $(SRC)/render/Renderer.cpp -o $(OBJ)/render/Renderer.o
+
 
 TrianglePipeline_SRC= $(SRC)/render/TrianglePipeline.cpp $(SRC)/render/TrianglePipeline.h  
 $(OBJ)/render/TrianglePipeline.o: $(TrianglePipeline_SRC)

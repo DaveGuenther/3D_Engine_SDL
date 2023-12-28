@@ -47,7 +47,8 @@ TexturemapRasterizer::TexturemapRasterizer(SDL_Renderer* my_renderer, SDL_Textur
 
 
 void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
-
+    this->this_texture = this_triangle.getTextureRawPtr();
+    //this->this_texture->lock(); // Get Triangle texture ready for pixel query
     SDL_Color col;
     // get points of triangle
     Vec3d p0 = this_triangle.getTrianglePoint(0);
@@ -140,7 +141,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
         }
 
     }
-
+    //this->this_texture->unlock(); // Get Triangle texture ready for pixel query
 
 }
 
@@ -148,7 +149,7 @@ void TexturemapRasterizer::drawTriangle(Triangle& this_triangle){
 
 void TexturemapRasterizer::drawTriangleInitializer(Triangle &this_triangle){
     //std::shared_ptr<TexturePNG> 
-    this->this_texture = this_triangle.getTextureRawPtr();
+    
     this->p0 = this_triangle.getTrianglePoint(0);
     this->uv0 = this_triangle.getUVPoint(0);
     this->p1 = this_triangle.getTrianglePoint(1);
@@ -277,7 +278,7 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
             // sample texture color at (U/V)
             if (this_triangle.getTextureRawPtr()!=NULL){
                 // There is a texture associated with this triangle
-                this->this_texture->getPixelAtSurfaceUV(this->UVx_scan, this->UVy_scan, this->col);
+                this->this_texture->getPixelAtUV(this->UVx_scan, this->UVy_scan, this->col);
             }
             
             // apply depth dimmer
@@ -367,7 +368,7 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
             if (this_triangle.getTextureRawPtr()!=NULL){
                 // There is a texture associated with this triangle
-                this->this_texture->getPixelAtSurfaceUV(this->UVx_scan, this->UVy_scan, this->col);
+                this->this_texture->getPixelAtUV(this->UVx_scan, this->UVy_scan, this->col);
             }
         
             // apply depth dimmer

@@ -16,7 +16,7 @@
  */
 class TextureList{
     public:
-        TextureList();
+        TextureList(std::shared_ptr<RendererSubject> this_renderer_subject);
         ~TextureList();
         void destroyTextureList();
         /**
@@ -46,6 +46,7 @@ class TextureList{
          * 
          */
         std::unordered_map<std::string, TexturePNG> this_texture_list;
+        std::shared_ptr<RendererSubject> rendererSubject;
 
 };
 
