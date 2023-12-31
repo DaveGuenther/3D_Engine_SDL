@@ -27,10 +27,16 @@ class ConsoleRasterizerData{
         ambient_light_type ambientLightingType;
 };
 
+class Log{
+    public:
+        bool inputLogs;
+};
+
 class ConsoleData{
     public:
         ConsoleRenderData renderer;
         ConsoleRasterizerData rasterizer;
+        Log logMessages;
         ConsoleData();
 
 

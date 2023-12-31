@@ -9,6 +9,7 @@
 #include "../utility/Triangle_Modifier.h"
 #include "../utility/Mesh_Pipeline.h"
 #include "../render/Camera.h"
+#include "../core/Console_Variables.h"
 
 
 class IAction_Updater{
@@ -24,6 +25,7 @@ class IAction_Updater{
     std::unordered_map<std::string,bool> input_tactile_map;
     std::unordered_map<std::string,float> input_range_map;
     bool didRangeInputChange;
+    ConsoleData* consoleData;
 
 
 };
@@ -31,7 +33,7 @@ class IAction_Updater{
 class InGame_Action_Updater: public IAction_Updater{
     public:
 
-    InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh_pipeline, std::shared_ptr<Camera> this_camera, int FPS, GameStateSubject &subject);
+    InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh_pipeline, std::shared_ptr<Camera> this_camera, int FPS, GameStateSubject &subject, ConsoleData* my_console_data);
     std::vector<std::shared_ptr<Triangle_Modifier>> getModifications() const; // This should be the Mesh_Pipeline actiually
     void update();
 
@@ -40,6 +42,7 @@ class InGame_Action_Updater: public IAction_Updater{
     std::vector<std::shared_ptr<Triangle_Modifier>> modifications;  
     std::shared_ptr<Mesh_Pipeline> mesh_pipeline;
     std::shared_ptr<Camera> this_camera;
+    
     
 
 };

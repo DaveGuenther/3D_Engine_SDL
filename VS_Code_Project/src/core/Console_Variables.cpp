@@ -15,4 +15,7 @@ ConsoleData::ConsoleData(){
     this->rasterizer.drawPolyEdges = false;
     this->rasterizer.colorFrustumClippedTris = false;    
     this->rasterizer.ambientLightingType = DEPTH_POLY;
+
+    // Initial Log settings
+    this->logMessages.inputLogs = false;
 }

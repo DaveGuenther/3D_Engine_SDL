@@ -1,6 +1,7 @@
 
 #include "Action_Interface.h"
 #include "../core/GameState_Observer_Pattern.h"
+#include "../core/Console_Variables.h"
 #include "../render/Camera.h"
 #include "../globals.h"
 #include <string>
@@ -23,7 +24,7 @@ std::shared_ptr<Triangle_Modifier> IAction::getMeshModification() const{
     return mesh_modification;
 }
 
-TurnAction::TurnAction(std::string command_name, std::shared_ptr<Camera> this_camera, Vec3d direction_unit_vector){
+TurnAction::TurnAction(std::string command_name, std::shared_ptr<Camera> this_camera, Vec3d direction_unit_vector, ConsoleData* my_console_data){
     this->command_name=command_name;
     this->is_key_pressed=false;
     this->is_running=false;
@@ -31,6 +32,7 @@ TurnAction::TurnAction(std::string command_name, std::shared_ptr<Camera> this_ca
     this->mesh_modification = NULL;
     this->this_camera = this_camera;
     this->direction_unit_vector = direction_unit_vector;
+    this->consoleData=my_console_data;
 }
 
 void TurnAction::update(bool key_pressed){
@@ -38,7 +40,7 @@ void TurnAction::update(bool key_pressed){
     if (key_pressed){ is_running=true; } else { is_running=false; }
     if (is_running){
 
-        std::cout << "Turning By Keys!";
+        if (this->consoleData->logMessages.inputLogs==true) { std::cout << "Turning By Keys!"; }
         this->direction_unit_vector = this->direction_unit_vector*1.0f;
         this_camera->rotateCamera(direction_unit_vector);
     }
@@ -47,12 +49,13 @@ void TurnAction::update(bool key_pressed){
 
 }
 
-GameStateAction::GameStateAction(std::string command_name, GameStateSubject &subject): subject(subject){
+GameStateAction::GameStateAction(std::string command_name, GameStateSubject &subject, ConsoleData* my_console_data): subject(subject){
     this->is_key_pressed=false;
     this->is_running=false;
     this->readyToDestroy=false;
     this->mesh_modification = NULL;
     this->command_name = command_name;
+    this->consoleData = my_console_data;
 }
 
 void GameStateAction::update(bool key_pressed){
@@ -68,13 +71,14 @@ void GameStateAction::update(bool key_pressed){
     is_running=false;
 }
 
-UseAction::UseAction(std::string command_name, std::shared_ptr<Camera> this_camera){
+UseAction::UseAction(std::string command_name, std::shared_ptr<Camera> this_camera, ConsoleData* my_console_data){
     this->command_name=command_name;
     this->is_key_pressed=false;
     this->is_running=false;
     this->readyToDestroy=false;
     this->mesh_modification = NULL;
     this->this_camera = this_camera;
+    this->consoleData = my_console_data;
 }
 
 void UseAction::update(bool key_pressed){
@@ -82,7 +86,7 @@ void UseAction::update(bool key_pressed){
     if (key_pressed){ is_running=true; } else { is_running=false; }
     if (is_running){
 
-        std::cout << "Use Pressed!";
+        if (this->consoleData->logMessages.inputLogs==true) { std::cout << "Use Pressed!"; }
         //Vec3d rotation_vector;
         keyboardbreak=true;
 
@@ -96,7 +100,7 @@ void UseAction::update(bool key_pressed){
 }
 
 
-JumpAction::JumpAction(std::string command_name, std::shared_ptr<Camera> this_camera){
+JumpAction::JumpAction(std::string command_name, std::shared_ptr<Camera> this_camera, ConsoleData* my_console_data){
     //passthrough
     this->command_name=command_name;
     this->is_key_pressed=false;
@@ -104,6 +108,7 @@ JumpAction::JumpAction(std::string command_name, std::shared_ptr<Camera> this_ca
     this->readyToDestroy=false;
     this->mesh_modification = NULL;
     this->this_camera=this_camera;
+    this->consoleData = my_console_data;
 }
 
 void JumpAction::update(bool key_pressed){
@@ -111,7 +116,7 @@ void JumpAction::update(bool key_pressed){
     if (key_pressed){ is_running=true; } else { is_running=false; }
     if (is_running){
 
-        std::cout << "Jump Pressed!";
+        if (this->consoleData->logMessages.inputLogs==true) { std::cout << "Jump Pressed!"; }
         Vec3d translation_vector;
         translation_vector.x=0.0f;
         translation_vector.y=0.01f;
@@ -123,18 +128,19 @@ void JumpAction::update(bool key_pressed){
     this->readyToDestroy=true;
 }
 
-TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, std::shared_ptr<Camera> this_camera, float x_range, float y_range):x_range(x_range),y_range(y_range){    
+TwoAxisRangeCommand::TwoAxisRangeCommand(std::string command_name, std::shared_ptr<Camera> this_camera, float x_range, float y_range, ConsoleData* my_console_data):x_range(x_range),y_range(y_range){    
     this->command_name = command_name;
     is_running=true;
     this->mesh_modification = NULL;
     this->this_camera = this_camera;
+    this->consoleData = my_console_data;
 }
 
 
 void TwoAxisRangeCommand::update(bool key_pressed){
     if (this->mesh_modification!=NULL){ this->mesh_modification->clearMeshAssignments();}
     if (is_running){
-        std::cout<< "  Applying TwoAxisMovement X: " << x_range << " Y: " << y_range;
+        if (this->consoleData->logMessages.inputLogs==true) { std::cout<< "  Applying TwoAxisMovement X: " << x_range << " Y: " << y_range; }
         Vec3d rotation_vector;
         float mouse_sensitivity=360.0f;
         rotation_vector.x=-y_range*mouse_sensitivity;
@@ -159,7 +165,7 @@ TwoAxisRangeCommand::~TwoAxisRangeCommand(){
 
 
 
-MoveAction::MoveAction(std::string command_name, std::shared_ptr<Camera> this_camera, Vec3d direction, float attack, float release, float max_speed, float FPS){
+MoveAction::MoveAction(std::string command_name, std::shared_ptr<Camera> this_camera, Vec3d direction, float attack, float release, float max_speed, float FPS, ConsoleData* my_console_data){
     this->speed=0;
     this->is_running=false;
     this->FPS=FPS;
@@ -175,6 +181,7 @@ MoveAction::MoveAction(std::string command_name, std::shared_ptr<Camera> this_ca
     this-> direction = direction;
     this->mesh_modification = NULL;
     this->this_camera = this_camera;
+    this->consoleData=my_console_data;
 
 }
 
@@ -245,26 +252,26 @@ void MoveAction::update(bool key_pressed){
         break;
     }
     case TRIG_ATTACK:{
-        std::cout << "TRIG_ATTACK  ";
+        if (this->consoleData->logMessages.inputLogs==true) { std::cout << "TRIG_ATTACK  "; }
         is_running=true;
         break;
     }
     case ATTACK:{
-        std::cout << "ATTACK  ";
+        if (this->consoleData->logMessages.inputLogs==true) { std::cout << "ATTACK  "; }
         speed+=attack_speed_delta;
         break;
     }
     case SUSTAIN:{
-        std::cout << "SUSTAIN  ";
+        if (this->consoleData->logMessages.inputLogs==true) { std::cout << "SUSTAIN  "; }
         speed=speed;
         break;
     }
     case TRIG_RELEASE:
-        std::cout << "TRIG_RELEASE  ";
+        if (this->consoleData->logMessages.inputLogs==true) { std::cout << "TRIG_RELEASE  ";  }
         //Place Holder
         break;
     case RELEASE:{
-        std::cout << "RELEASE  ";
+        if (this->consoleData->logMessages.inputLogs==true) { std::cout << "RELEASE  "; }
         speed-=release_speed_delta;
         break;
     }
@@ -283,7 +290,7 @@ void MoveAction::update(bool key_pressed){
         //Vec3d newCameraPos = Vec3d(currCameraPos.getX()*speed, currCameraPos.getY()*speed, currCameraPos.getZ()*speed);
 
 	    this->this_camera->setCameraPos(translation_vector);
-        std::cout << "    " << command_name << ": " << translation_vector.x << "," << translation_vector.y << ", " << translation_vector.z << ": " << this->speed;
+        if (this->consoleData->logMessages.inputLogs==true) { std::cout << "    " << command_name << ": " << translation_vector.x << "," << translation_vector.y << ", " << translation_vector.z << ": " << this->speed;}
         
         /*        
         

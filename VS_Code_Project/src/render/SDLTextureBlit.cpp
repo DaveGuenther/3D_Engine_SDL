@@ -3,6 +3,7 @@
 #include "../core/Console_Variables.h"
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <cmath>
 
 SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, ConsoleData* console_data){
     

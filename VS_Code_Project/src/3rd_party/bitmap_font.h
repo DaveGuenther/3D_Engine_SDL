@@ -38,6 +38,7 @@
 #include <memory>
 #include <list>
 #include <stdexcept>
+#include <cmath>
 
 #include <SDL2/SDL.h>
 

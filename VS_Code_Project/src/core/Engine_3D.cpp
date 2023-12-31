@@ -28,11 +28,11 @@
 #include "../render/Font.h"
 
 Engine_3D::Engine_3D(void){
-    uint32_t SCREEN_W = 800; // 1280X800  640x380   //480x225    320x190  //256x160 400x225   800x450   
-    uint32_t SCREEN_H = 450;
-    uint32_t WINDOW_W = 800;
-    uint32_t WINDOW_H = 450;
-    const float PI_by_180 = 3.14159265/180.0;;
+    uint32_t SCREEN_W = 400; // 1280X800  640x380   //480x225    320x190  //256x160 400x225   800x450   
+    uint32_t SCREEN_H = 225;
+    uint32_t WINDOW_W = 400;
+    uint32_t WINDOW_H = 225;
+    const float PI_by_180 = 3.14159265/180.0;
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     isRunning = true;
@@ -72,7 +72,7 @@ Engine_3D::Engine_3D(void){
 
 
 
-    std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater(new InGame_Action_Updater(this->mesh_pipeline, player_camera, FPS, game_state_subject));
+    std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater(new InGame_Action_Updater(this->mesh_pipeline, player_camera, FPS, game_state_subject, this->consoleData.get()));
     this->INWORLD_Action_Updater = INWORLD_Action_Updater;
       
     game_state_subject.setState(IN_WORLD);
@@ -113,9 +113,13 @@ void Engine_3D::engine_update(){
         case IN_WORLD:{
             //SDL_SetRelativeMouseMode(SDL_TRUE);
             
-            INWORLD_Input_Parser->scanInput();
+            INWORLD_Input_Parser->scanInput(); // Build input maps for this engine state frame
+
+            // Pass imput maps to action updater
             INWORLD_Action_Updater->AddTactileInputMap(INWORLD_Input_Parser->getCurrentCommands());
             INWORLD_Action_Updater->AddRangeInputMap(INWORLD_Input_Parser->getRangeInput(), INWORLD_Input_Parser->didRangeInputChange());
+            
+            // Update engine objects for this frame
             INWORLD_Action_Updater->update();
             mesh_pipeline->Apply_Modifications(INWORLD_Action_Updater->getModifications());
             break;

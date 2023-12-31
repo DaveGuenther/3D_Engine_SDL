@@ -34,7 +34,7 @@ Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint
     this->rendererData.WINDOW_H = WINDOW_H;
 	this->rendererData.HALF_WINDOW_W = WINDOW_W/2;
 	this->rendererData.HALF_WINDOW_H = WINDOW_H/2;
-	this->rendererData.window_mode=SDL_WINDOW_FULLSCREEN_DESKTOP;  // 0 for Windowed, 1 for Fullscreen ((Use SDL_WINDOW_FULLSCREEN_DESKTOP)) 128 for full screen maximized, SDL_WINDOW_RESIZABLE
+	this->rendererData.window_mode=0;  // 0 for Windowed, 1 for Fullscreen ((Use SDL_WINDOW_FULLSCREEN_DESKTOP)) 128 for full screen maximized, SDL_WINDOW_RESIZABLE
 
 
 	this->rendererData.fFOV=FOV;
@@ -416,7 +416,7 @@ void Renderer::refreshScreen(std::shared_ptr<TrianglePipeline> my_pre_renderer){
 	
 	//drawReticle();
 	std::string this_FPS = "FPS: "+ std::to_string(int(VariableFrameRate->getMeasuredFPS()));
-	this->gameFont->placeStringAtXY(this_FPS ,10, 10, 30);
+	this->gameFont->placeStringAtXY(this_FPS ,10, 10, 12);
 
 	// Flip video page to screen
 	SDL_RenderPresent(this->rendererData.renderer);

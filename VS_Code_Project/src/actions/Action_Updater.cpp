@@ -33,24 +33,25 @@ int IAction_Updater::numberOfActiveCommands(const std::unordered_map<std::string
 
 
 
-InGame_Action_Updater::InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh_pipeline, std::shared_ptr<Camera> this_camera, int FPS, GameStateSubject &subject){
+InGame_Action_Updater::InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh_pipeline, std::shared_ptr<Camera> this_camera, int FPS, GameStateSubject &subject, ConsoleData* my_console_data){
+    this->consoleData = my_console_data;
     this->this_camera= this_camera;
-    action_map.insert_or_assign("MOVE_FORWARD", new MoveAction("MOVE_FORWARD", this_camera, Vec3d{0,0,1}, 1.0f, 1.0f, 0.1f, FPS));
-    action_map.insert_or_assign("MOVE_BACKWARD", new MoveAction("MOVE_BACKWARD", this_camera, Vec3d{0,0,-1}, 1.0f, 1.0f, 0.1f, FPS));
-    action_map.insert_or_assign("STRAFE_LEFT", new MoveAction("STRAFE_LEFT", this_camera, Vec3d{-1,0,0}, 1.0f, 1.0f, 0.1f, FPS));
-    action_map.insert_or_assign("STRAFE_RIGHT", new MoveAction("STRAFE_RIGHT", this_camera, Vec3d{1,0,0}, 1.0f, 1.0f, 0.1f, FPS));
-    action_map.insert_or_assign("LOOK_LEFT",new TurnAction("LOOK_LEFT",this_camera, Vec3d(0,-1,0)));
-    action_map.insert_or_assign("LOOK_RIGHT",new TurnAction("LOOK_RIGHT",this_camera, Vec3d(0,1,0)));
-    action_map.insert_or_assign("LOOK_UP",new TurnAction("LOOK_UP",this_camera, Vec3d(-1,0,0)));
-    action_map.insert_or_assign("LOOK_DOWN",new TurnAction("LOOK_DOWN",this_camera, Vec3d(1,0,0)));
-    action_map.insert_or_assign("USE", new UseAction("USE", this_camera));
-    action_map.insert_or_assign("QUIT", new GameStateAction("QUIT",subject));
+    action_map.insert_or_assign("MOVE_FORWARD", new MoveAction("MOVE_FORWARD", this_camera, Vec3d{0,0,1}, 1.0f, 1.0f, 0.1f, FPS, my_console_data));
+    action_map.insert_or_assign("MOVE_BACKWARD", new MoveAction("MOVE_BACKWARD", this_camera, Vec3d{0,0,-1}, 1.0f, 1.0f, 0.1f, FPS, my_console_data));
+    action_map.insert_or_assign("STRAFE_LEFT", new MoveAction("STRAFE_LEFT", this_camera, Vec3d{-1,0,0}, 1.0f, 1.0f, 0.1f, FPS, my_console_data));
+    action_map.insert_or_assign("STRAFE_RIGHT", new MoveAction("STRAFE_RIGHT", this_camera, Vec3d{1,0,0}, 1.0f, 1.0f, 0.1f, FPS, my_console_data));
+    action_map.insert_or_assign("LOOK_LEFT",new TurnAction("LOOK_LEFT",this_camera, Vec3d(0,-1,0), my_console_data));
+    action_map.insert_or_assign("LOOK_RIGHT",new TurnAction("LOOK_RIGHT",this_camera, Vec3d(0,1,0), my_console_data));
+    action_map.insert_or_assign("LOOK_UP",new TurnAction("LOOK_UP",this_camera, Vec3d(-1,0,0), my_console_data));
+    action_map.insert_or_assign("LOOK_DOWN",new TurnAction("LOOK_DOWN",this_camera, Vec3d(1,0,0), my_console_data));
+    action_map.insert_or_assign("USE", new UseAction("USE", this_camera, my_console_data));
+    action_map.insert_or_assign("QUIT", new GameStateAction("QUIT",subject, my_console_data));
     //action_map.insert_or_assign("LOOK_LEFT", new TwoAxisRangeCommand("LOOK_LEFT", this_camera, -0.1f,0.0f));
-    action_map.insert_or_assign("JUMP", new MoveAction("JUMP", this_camera, Vec3d{0,1,0}, 1.0f, 1.0f, 0.5f, FPS));
-    action_map.insert_or_assign("CROUCH", new MoveAction("CROUCH", this_camera, Vec3d{0,-1,0}, 1.0f, 1.0f, 0.5f, FPS));
+    action_map.insert_or_assign("JUMP", new MoveAction("JUMP", this_camera, Vec3d{0,1,0}, 1.0f, 1.0f, 0.5f, FPS, my_console_data));
+    action_map.insert_or_assign("CROUCH", new MoveAction("CROUCH", this_camera, Vec3d{0,-1,0}, 1.0f, 1.0f, 0.5f, FPS, my_console_data));
     //std::shared_ptr<Mesh_Pipeline> local_mesh_pipeline()
     this->mesh_pipeline = mesh_pipeline;  // I know this is bad coding practice and tightly couples code..  Not sure how else to do it yet.  I might eventually try some kind of observer where ActionUpdater is the subject and mesh_pipeline is the observer, updating itself when the time comes...
-
+    
 }
 
 void InGame_Action_Updater::update(){
@@ -70,7 +71,7 @@ void InGame_Action_Updater::update(){
     if (this->didRangeInputChange){
         
         
-        action_map.insert_or_assign("LOOK_XY", new TwoAxisRangeCommand("LOOK_XY", this_camera, range_x, range_y));
+        action_map.insert_or_assign("LOOK_XY", new TwoAxisRangeCommand("LOOK_XY", this_camera, range_x, range_y, this->consoleData));
     }
     prev_mouse_x=mouse_x;
     prev_mouse_y=mouse_y;
