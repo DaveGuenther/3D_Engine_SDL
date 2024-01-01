@@ -63,8 +63,13 @@ void GameStateAction::update(bool key_pressed){
         this->subject.setState(QUIT);
         std::cout << "Goodbye!" << std::endl;   
     }else if (this->command_name=="CONSOLE"){
+        SDL_StartTextInput();
         this->subject.setState(CONSOLE);
         std::cout << "Going to Console" << std::endl;
+    }else if (this->command_name=="BACK_TO_GAME"){
+        SDL_StopTextInput();
+        this->subject.setState(IN_WORLD);
+        std::cout << "Back to Game" << std::endl;
     }
     
     

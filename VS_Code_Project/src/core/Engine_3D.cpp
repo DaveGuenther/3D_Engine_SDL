@@ -62,6 +62,8 @@ Engine_3D::Engine_3D(void){
     this->MENU_Input_Parser = MENU_Input_Parser;
     std::shared_ptr<Input_Parser> INWORLD_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "in_game_bindings.cfg"));
     this->INWORLD_Input_Parser = INWORLD_Input_Parser;
+    std::shared_ptr<Input_Parser> CONSOLE_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "console_bindings.cfg"));
+    this->CONSOLE_Input_Parser = CONSOLE_Input_Parser;
 
     game_state_subject.setState(MENU);
 
@@ -74,7 +76,10 @@ Engine_3D::Engine_3D(void){
 
     std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater(new InGame_Action_Updater(this->mesh_pipeline, player_camera, FPS, game_state_subject, this->consoleData.get()));
     this->INWORLD_Action_Updater = INWORLD_Action_Updater;
-      
+
+    std::shared_ptr<Console_Action_Updater> CONSOLE_Action_Updater(new Console_Action_Updater(game_state_subject, this->consoleData.get()));
+    this->CONSOLE_Action_Updater = CONSOLE_Action_Updater;
+
     game_state_subject.setState(IN_WORLD);
 
     this->gameFont=Engine_Renderer->getBitmapFontPtr();
@@ -108,11 +113,16 @@ void Engine_3D::engine_update(){
         case QUIT:
             isRunning=false;
             break;
-        case CONSOLE:
+        case CONSOLE:{
+            SDL_StartTextInput();
+            CONSOLE_Input_Parser->scanInput(); // Build input maps for this engine state frame
+            CONSOLE_Action_Updater->AddTactileInputMap(CONSOLE_Input_Parser->getCurrentCommands());
+            CONSOLE_Action_Updater->update();
             break;
+        }
         case IN_WORLD:{
             //SDL_SetRelativeMouseMode(SDL_TRUE);
-            
+            SDL_StopTextInput();
             INWORLD_Input_Parser->scanInput(); // Build input maps for this engine state frame
 
             // Pass imput maps to action updater
@@ -125,6 +135,7 @@ void Engine_3D::engine_update(){
             break;
         }
         case MENU:{
+            SDL_StartTextInput();
             MENU_Input_Parser->scanInput();
             break;
         }

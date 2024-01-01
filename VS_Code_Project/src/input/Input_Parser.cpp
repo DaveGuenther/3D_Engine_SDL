@@ -5,7 +5,7 @@ Input_Parser::Input_Parser(GameStateSubject &subject, std::shared_ptr<Renderer> 
     this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
     bindings.loadBinding(binding_filename);
     //bindings.loadBinding("in_game_bindings.cfg");
-    std::shared_ptr<Event_Scanner> input_events(new Event_Scanner(event, my_renderer ));
+    std::shared_ptr<Event_Scanner> input_events(new Event_Scanner(subject, event, my_renderer ));
     this->input_events = input_events;
     rangeInputChanged=false;
 

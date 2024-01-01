@@ -50,6 +50,7 @@ InGame_Action_Updater::InGame_Action_Updater(std::shared_ptr<Mesh_Pipeline> mesh
     action_map.insert_or_assign("JUMP", new MoveAction("JUMP", this_camera, Vec3d{0,1,0}, 1.0f, 1.0f, 0.5f, FPS, my_console_data));
     action_map.insert_or_assign("CROUCH", new MoveAction("CROUCH", this_camera, Vec3d{0,-1,0}, 1.0f, 1.0f, 0.5f, FPS, my_console_data));
     //std::shared_ptr<Mesh_Pipeline> local_mesh_pipeline()
+    action_map.insert_or_assign("CONSOLE", new GameStateAction("CONSOLE", subject, my_console_data));
     this->mesh_pipeline = mesh_pipeline;  // I know this is bad coding practice and tightly couples code..  Not sure how else to do it yet.  I might eventually try some kind of observer where ActionUpdater is the subject and mesh_pipeline is the observer, updating itself when the time comes...
     
 }
@@ -123,4 +124,52 @@ void InGame_Action_Updater::update(){
 
 std::vector<std::shared_ptr<Triangle_Modifier>> InGame_Action_Updater::getModifications() const{
     return this->modifications;
+}
+
+Console_Action_Updater::Console_Action_Updater(GameStateSubject &subject, ConsoleData* my_console_data){
+    this->consoleData = my_console_data;
+    action_map.insert_or_assign("BACK_TO_GAME", new GameStateAction("BACK_TO_GAME", subject, my_console_data));
+}
+
+void Console_Action_Updater::update(){
+    
+    //  Translate lexd input to input commands
+    for (auto input:input_tactile_map){ 
+        
+        action_map.at(input.first)->trigger(); 
+    
+    } // Tactile Input
+    
+
+    // for each active command, update the command's action loop
+    int num_commands_active = numberOfActiveCommands(action_map);
+    if (num_commands_active>0){
+        std::vector<std::string> destroyable_commands;
+        for (auto command:action_map){
+            if (command.second->isRunning()) { 
+                // Find a way to look through input_map.first to find out if command.first is MISSING from it  If so, command.second->release().  
+                // Then update.  It's the only way to identify that a key release occurred
+                std::string command_to_find = command.first;
+                if (input_tactile_map.find(command_to_find) != input_tactile_map.end()) { 
+                    // Key for command is still pressed
+                    command.second->update(true);  
+                } else { 
+                    // key for command is no longer pressed
+                    command.second->update(false); 
+                }                        
+            }
+            if (command.second->isReadyToDestroy()) { 
+                destroyable_commands.push_back(command.second->getName()); 
+            }
+            
+        }
+        std::cout << std::endl;
+        
+        // clean up action_map and destroy completed objects;
+        for (auto this_command_name:destroyable_commands){
+            action_map.erase(this_command_name);
+        }           
+        
+    }
+
 }

@@ -8,8 +8,8 @@
 SDL_Texture_Blit::SDL_Texture_Blit(SDL_Renderer* renderer, uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint32_t WINDOW_H, ConsoleData* console_data){
     
     this->renderer = renderer;
-    this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGB888);
-    this->texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888,SDL_TEXTUREACCESS_STREAMING, SCREEN_W, SCREEN_H);
+    this->pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+    this->texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_STREAMING, SCREEN_W, SCREEN_H);
     SDL_QueryTexture(this->texture, &this->textureFormat, NULL, &this->tex_w, &this->tex_h);
 
     this->windowRect.x=0;
@@ -102,7 +102,7 @@ void SDL_Texture_Blit::setXY_Start(Uint32 x, Uint32 y){
 
 void SDL_Texture_Blit::blitSequential(uint8_t r, uint8_t g, uint8_t b){
     if (this->validStartPos && (x<this->tex_w) && (x>=0)){
-        *p = SDL_MapRGB(this->pixelFormat, r, g, b);
+        *p = SDL_MapRGBA(this->pixelFormat, r, g, b, 255);
         this->p++;
         this->x++;
     }

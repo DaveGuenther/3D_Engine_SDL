@@ -60,11 +60,12 @@ class Engine_3D{
 
         float fTheta, tTheta;
         std::shared_ptr<Input_Parser> MENU_Input_Parser;
-
+        std::shared_ptr<Input_Parser> CONSOLE_Input_Parser;
         std::shared_ptr<Input_Parser> INWORLD_Input_Parser;
         
         BitmapFont* gameFont;
         std::shared_ptr<InGame_Action_Updater> INWORLD_Action_Updater;
+        std::shared_ptr<Console_Action_Updater> CONSOLE_Action_Updater;
 
         std::shared_ptr<ConsoleData> consoleData;
 

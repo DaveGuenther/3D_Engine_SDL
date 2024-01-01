@@ -286,7 +286,7 @@ void TexturemapRasterizer::drawFlatTopTri(Triangle& this_triangle){
             
             //Draw Point
             //texelDrawUV_Point();
-            *p = /*uint32_t(255 << 24) |*/ uint32_t(col.r << 16) | uint32_t(col.g << 8) | uint32_t(col.b);
+            *p =  uint32_t(col.r << 24) | uint32_t(col.g << 16) | uint32_t(col.b<< 8);// |uint32_t(col.a);
             //*p = SDL_MapRGB(pixelFormat, this->col.r, this->col.g, this->col.b);
             p++;
         
@@ -382,7 +382,7 @@ void TexturemapRasterizer::drawFlatBottomTri(Triangle& this_triangle){
 
             //Draw Point
             //texelDrawUV_Point();
-            *p = /*uint32_t(255 << 24) |*/ uint32_t(col.r << 16) | uint32_t(col.g << 8) | uint32_t(col.b);
+            *p = /*uint32_t(255 << 24) |*/ uint32_t(col.r << 24) | uint32_t(col.g << 16) | uint32_t(col.b<<8);
             //*p = SDL_MapRGB(pixelFormat, this->col.r, this->col.g, this->col.b);
             p++;            
             

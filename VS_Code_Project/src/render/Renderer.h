@@ -42,7 +42,8 @@ class Renderer{
             SDL_Rect windowRect; // This rectangle is used during SDL_RenderCopy()
 
             // Variables for the rendering area (frame Buffer) that we'll draw on and stretch to the window size when we copy it to the renderer
-            SDL_Texture_Blit *textureBlit = NULL;
+            SDL_Texture_Blit *textureBlit = NULL; // inworld pixel buffer
+            SDL_Texture_Blit *consoleBlit = NULL; // console pixel buffer
             uint32_t SCREEN_W; // This is the width of the framebuffer we want to draw to
             uint32_t SCREEN_H; // This is the width of the framebuffer we want to draw to
             uint32_t HALF_SCREEN_W; // This half the width of the framebuffer we want to draw to 

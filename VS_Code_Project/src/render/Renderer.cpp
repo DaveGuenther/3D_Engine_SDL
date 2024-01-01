@@ -96,7 +96,7 @@ Renderer::Renderer(uint32_t SCREEN_W, uint32_t SCREEN_H, uint32_t WINDOW_W, uint
 
 	std::cout << "Window Fullscreen Size: " << win_w << win_h << std::endl;
     this->rendererData.textureBlit = new SDL_Texture_Blit(this->rendererData.renderer, this->rendererData.SCREEN_W, this->rendererData.SCREEN_H, this->rendererData.WINDOW_W, this->rendererData.WINDOW_H, this->consoleData);
-	
+	this->rendererData.consoleBlit = new SDL_Texture_Blit(this->rendererData.renderer, this->rendererData.SCREEN_W, this->rendererData.SCREEN_H, this->rendererData.WINDOW_W, this->rendererData.WINDOW_H, this->consoleData);
 
 
 	// Projection Matrix
@@ -470,7 +470,9 @@ const int Renderer::getWindowHeight()const { return this->rendererData.SCREEN_H;
 
 void Renderer::shutdown(){
 	delete(this->rendererData.textureBlit);
+	delete(this->rendererData.consoleBlit);
 	this->rendererData.textureBlit=NULL;
+	this->rendererData.consoleBlit=NULL;
 	SDL_DestroyRenderer(this->rendererData.renderer);
 	SDL_DestroyWindow(this->rendererData.window);
 	

@@ -2,7 +2,9 @@
 #include "Event_Scanner.h"
 #include "../render/Renderer.h"
 
-Event_Scanner::Event_Scanner(SDL_Event &my_event, std::shared_ptr<Renderer> my_renderer){
+Event_Scanner::Event_Scanner(GameStateSubject &subject, SDL_Event &my_event, std::shared_ptr<Renderer> my_renderer):game_state_subject(subject){
+    
+    this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
     event=my_event;
     curr_mouse_x=0;
     curr_mouse_y=0;
@@ -38,6 +40,9 @@ void Event_Scanner::scanInput(){
     //my_renderer->resetMouseXY();     
     prev_key_matrix=curr_key_matrix;
     prev_range_input_matrix=curr_range_input_matrix;
+    //if (this->Engine_State->getGameState()==CONSOLE) {
+    //    SDL_StartTextInput();
+    //}
     //if (!prev_key_matrix.empty() && !curr_key_matrix.empty()) { prev_key_matrix=curr_key_matrix; }
     while( SDL_PollEvent( &event ) ){
         
@@ -70,9 +75,15 @@ void Event_Scanner::scanInput(){
                //curr_key_matrix.erase("MOUSE:"+std::to_string(event.button.button));
                 break; 
 
+            case SDL_TEXTINPUT:
+                this->current_string.append(event.text.text);
+                std::cout << current_string << std::endl;
+                break;
+
             default:
                 break;
         }
+
     }    
      
 }

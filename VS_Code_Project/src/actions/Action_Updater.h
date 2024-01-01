@@ -42,9 +42,18 @@ class InGame_Action_Updater: public IAction_Updater{
     std::vector<std::shared_ptr<Triangle_Modifier>> modifications;  
     std::shared_ptr<Mesh_Pipeline> mesh_pipeline;
     std::shared_ptr<Camera> this_camera;
-    
-    
 
+};
+
+class Console_Action_Updater: public IAction_Updater{
+    public:
+
+    Console_Action_Updater(GameStateSubject &subject, ConsoleData* my_console_data);
+    void update();
+
+    private:
+    ConsoleData* consoleData;
+    
 };
 
 #endif
