@@ -129,6 +129,9 @@ std::vector<std::shared_ptr<Triangle_Modifier>> InGame_Action_Updater::getModifi
 Console_Action_Updater::Console_Action_Updater(GameStateSubject &subject, ConsoleData* my_console_data){
     this->consoleData = my_console_data;
     action_map.insert_or_assign("BACK_TO_GAME", new GameStateAction("BACK_TO_GAME", subject, my_console_data));
+    action_map.insert_or_assign("PREV_COMMAND", new ConsoleNavAction("PREV_COMMAND",subject, my_console_data));
+    action_map.insert_or_assign("NEXT_COMMAND", new ConsoleNavAction("NEXT_COMMAND",subject, my_console_data));
+    action_map.insert_or_assign("EXECUTE_COMMAND", new ConsoleExecuteAction("EXECUTE_COMMAND", subject, my_console_data));
 }
 
 void Console_Action_Updater::update(){

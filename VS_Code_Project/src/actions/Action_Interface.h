@@ -98,6 +98,18 @@ class GameStateAction:public IAction{
 
 };
 
+class ConsoleNavAction:public IAction{
+    public:
+        ConsoleNavAction(std::string command_name, GameStateSubject &subject, ConsoleData* my_console_data);
+        void update(bool key_pressed);   
+};
+
+class ConsoleExecuteAction:public IAction{
+    public:
+        ConsoleExecuteAction(std::string command_name, GameStateSubject &subject, ConsoleData* my_console_data);
+        void update(bool key_pressed);   
+};
+
 class UseAction:public IAction{
     public:
     UseAction(std::string command_name, std::shared_ptr<Camera> this_camera, ConsoleData* my_console_data);

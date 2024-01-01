@@ -93,7 +93,7 @@ void UseAction::update(bool key_pressed){
 
         if (this->consoleData->logMessages.inputLogs==true) { std::cout << "Use Pressed!"; }
         //Vec3d rotation_vector;
-        keyboardbreak=true;
+        //keyboardbreak=true;
 
         //rotation_vector.setX(1.0f);
         //rotation_vector.setY(0.0f);
@@ -311,5 +311,22 @@ void MoveAction::update(bool key_pressed){
 
 MoveAction::~MoveAction(){
     //delete mesh_modification;
+    
+}
+
+
+ConsoleNavAction::ConsoleNavAction(std::string command_name, GameStateSubject &subject, ConsoleData* my_console_data){
+
+}
+
+void ConsoleNavAction::update(bool key_pressed){
+
+}
+
+ConsoleExecuteAction::ConsoleExecuteAction(std::string command_name, GameStateSubject &subject, ConsoleData* my_console_data){
+
+}
+
+void ConsoleExecuteAction::update(bool key_pressed){
     
 }
