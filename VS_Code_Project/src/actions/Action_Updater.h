@@ -49,10 +49,12 @@ class Console_Action_Updater: public IAction_Updater{
     public:
 
     Console_Action_Updater(GameStateSubject &subject, ConsoleData* my_console_data);
+    void logConsoleCommand(std::string my_command);
     void update();
 
     private:
     ConsoleData* consoleData;
+    std::string console_command;
     
 };
 

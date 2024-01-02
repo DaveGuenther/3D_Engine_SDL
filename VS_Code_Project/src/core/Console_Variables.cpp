@@ -18,4 +18,8 @@ ConsoleData::ConsoleData(){
 
     // Initial Log settings
     this->logMessages.inputLogs = false;
+
+    this->consoleCommandLog.historyPtr=0;
+    this->consoleCommandLog.currentCommand="";
+    
 }

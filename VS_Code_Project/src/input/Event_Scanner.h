@@ -6,6 +6,7 @@
 #include <memory>
 #include "../render/Renderer.h"
 #include "../core/GameState_Observer_Pattern.h"
+#include "../core/Console_Variables.h"
 
 enum input_map{PREVIOUS_MAP, CURRENT_MAP, MOUSE_BUTTON_MAP};
 
@@ -22,7 +23,10 @@ class Event_Scanner{
     GameStateSubject &game_state_subject;
 
     std::string current_string="";
-    std::vector<std::string> command__history;
+    std::vector<std::string> command_history;
+
+    ConsoleData* consoleData;
+
     /**
      * @brief This map contain four elements with keys: "MOUSE_X", "MOUSE_Y", "MOUSE_X_DELTA", "MOUSE_Y_DELTA" for the CURRENT input frame. 
      * MOUSE_X, MOUSE_Y, MOUSE_X_DELTA, and MOUSE_Y_DELTA range are all [-1.0, 1.0] unit scale
@@ -38,6 +42,8 @@ class Event_Scanner{
     std::unordered_map<std::string, float> prev_range_input_matrix;
 
     float curr_mouse_x, curr_mouse_y, prev_mouse_x, prev_mouse_y, delta_mouse_x, delta_mouse_y;
+
+    
 
     int SCREEN_W, SCREEN_H;
     std::shared_ptr<Renderer> my_renderer;
@@ -59,8 +65,10 @@ class Event_Scanner{
      * @param my_event 
      * @param my_renderer Used in order to capture the SCREEN_W and SCREEN_H values in order to get Mouse delta values on a [-1.0,1.0] unit scale
      */
-    Event_Scanner(GameStateSubject &subject, SDL_Event &my_event, std::shared_ptr<Renderer> my_renderer);
+    Event_Scanner(GameStateSubject &subject, SDL_Event &my_event, std::shared_ptr<Renderer> my_renderer, ConsoleData* my_console_data);
     
+    //std::string getConsoleCommand();
+
     /**
      * @brief This method is used to capture updates to the current and previous range and tactile input maps
      * 

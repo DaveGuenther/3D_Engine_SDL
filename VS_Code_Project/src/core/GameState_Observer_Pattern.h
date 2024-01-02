@@ -2,6 +2,7 @@
 #define GAMESTATE_OBSERVER_PATTERN_H
 
 #include <vector>
+#include "../core/TimeDelay.h"
 
 
 enum game_state {IN_WORLD, MENU, QUIT, CONSOLE };
@@ -54,12 +55,14 @@ class GameStateSubject:IGameStateObservableSubject{
      * @param state This is an enumerated datatype
      */
     void setState(game_state state);
+    bool canStateSwitch();
     game_state getState();
     void addSubscriber(IGameStateObserver *observer);
     void removeSubscriber(IGameStateObserver *observer);
 
     private:
     game_state state;
+    TimeDelay state_change_timer; // We only want a state change once every second.
     std::vector<IGameStateObserver *> subscriber_list;  
 };
 

@@ -5,6 +5,7 @@
 #include <memory>
 #include <SDL2/SDL.h>
 #include "../core/GameState_Observer_Pattern.h"
+#include "../core/Console_Variables.h"
 #include "../input/Event_Scanner.h"
 #include "../input/KeyBindings.h"
 
@@ -20,6 +21,7 @@ class Input_Parser{
         std::unordered_map<std::string,float> curr_range_input;
         std::unordered_map<std::string,bool> prev_commands;
         bool rangeInputChanged;
+        ConsoleData* consoleData;
         
         /**
          * @brief This function is not actively used.  It prints out the state of the command map
@@ -29,8 +31,10 @@ class Input_Parser{
         void print_map(const std::unordered_map<std::string,bool> this_map);
         
     public: 
-        Input_Parser(GameStateSubject &subject, std::shared_ptr<Renderer> my_renderer, std::string binding_filename);
+        Input_Parser(GameStateSubject &subject, std::shared_ptr<Renderer> my_renderer, std::string binding_filename, ConsoleData* my_console_data);
         
+        //std::string getConsoleCommand();
+
         /**
          * @brief Get the Current Commands object
          * 

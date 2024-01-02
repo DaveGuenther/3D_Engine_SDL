@@ -8,6 +8,7 @@
 #include "../core/Console_Variables.h"
 #include "../utility/Triangle_Modifier.h"
 #include "../render/Camera.h"
+#include "../core/TimeDelay.h"
 
 enum ActionCommandState {OFF, TRIG_ATTACK, ATTACK, SUSTAIN, TRIG_RELEASE, RELEASE};
 
@@ -95,6 +96,7 @@ class GameStateAction:public IAction{
         void update(bool key_pressed);   
     private:
         GameStateSubject &subject;
+        TimeDelay state_switch_timer;
 
 };
 
@@ -108,6 +110,8 @@ class ConsoleExecuteAction:public IAction{
     public:
         ConsoleExecuteAction(std::string command_name, GameStateSubject &subject, ConsoleData* my_console_data);
         void update(bool key_pressed);   
+    private:
+        TimeDelay executeTimer;
 };
 
 class UseAction:public IAction{

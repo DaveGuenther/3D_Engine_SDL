@@ -2,7 +2,8 @@
 #include "Event_Scanner.h"
 #include "../render/Renderer.h"
 
-Event_Scanner::Event_Scanner(GameStateSubject &subject, SDL_Event &my_event, std::shared_ptr<Renderer> my_renderer):game_state_subject(subject){
+
+Event_Scanner::Event_Scanner(GameStateSubject &subject, SDL_Event &my_event, std::shared_ptr<Renderer> my_renderer, ConsoleData* my_console_data):game_state_subject(subject), consoleData(my_console_data){
     
     this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
     event=my_event;
@@ -76,8 +77,8 @@ void Event_Scanner::scanInput(){
                 break; 
 
             case SDL_TEXTINPUT:
-                this->current_string.append(event.text.text);
-                std::cout << current_string << std::endl;
+                this->consoleData->consoleCommandLog.currentCommand.append(event.text.text);
+                //std::cout << this->consoleData->consoleCommandLog.currentCommand << std::endl;
                 break;
 
             default:
@@ -101,3 +102,7 @@ const std::unordered_map<std::string,float>& Event_Scanner::getRangeMap(input_ma
     else if(this_map==PREVIOUS_MAP) { return prev_range_input_matrix;}
     else{ throw std::invalid_argument("Invalid arguement.  Possible values are PREVIOUS_MAP, CURRENT_MAP"); }
 }
+
+/*std::string Event_Scanner::getConsoleCommand(){
+    return this->current_string;
+}*/

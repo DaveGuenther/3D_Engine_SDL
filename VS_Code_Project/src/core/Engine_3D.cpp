@@ -58,14 +58,14 @@ Engine_3D::Engine_3D(void){
     std::shared_ptr<Game_Engine_State_Observer> Engine_State(new Game_Engine_State_Observer(game_state_subject));
     this->Engine_State=Engine_State;
     
-    std::shared_ptr<Input_Parser> MENU_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "menu_bindings.cfg"));
+    std::shared_ptr<Input_Parser> MENU_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "menu_bindings.cfg", this->consoleData.get()));
     this->MENU_Input_Parser = MENU_Input_Parser;
-    std::shared_ptr<Input_Parser> INWORLD_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "in_game_bindings.cfg"));
+    std::shared_ptr<Input_Parser> INWORLD_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "in_game_bindings.cfg", this->consoleData.get()));
     this->INWORLD_Input_Parser = INWORLD_Input_Parser;
-    std::shared_ptr<Input_Parser> CONSOLE_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "console_bindings.cfg"));
+    std::shared_ptr<Input_Parser> CONSOLE_Input_Parser(new Input_Parser(game_state_subject, Engine_Renderer, "console_bindings.cfg", this->consoleData.get()));
     this->CONSOLE_Input_Parser = CONSOLE_Input_Parser;
 
-    game_state_subject.setState(MENU);
+    //game_state_subject.setState(MENU);
 
     std::shared_ptr<TextureList> texture_list(new TextureList(this->Engine_Renderer->getRendererSubject()));
     this->texture_list = texture_list;
@@ -116,6 +116,7 @@ void Engine_3D::engine_update(){
         case CONSOLE:{
             SDL_StartTextInput();
             CONSOLE_Input_Parser->scanInput(); // Build input maps for this engine state frame
+            //CONSOLE_Action_Updater->logConsoleCommand(CONSOLE_Input_Parser->getConsoleCommand());
             CONSOLE_Action_Updater->AddTactileInputMap(CONSOLE_Input_Parser->getCurrentCommands());
             CONSOLE_Action_Updater->update();
             break;

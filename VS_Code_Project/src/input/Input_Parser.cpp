@@ -1,13 +1,15 @@
 #include <memory>
 #include "Input_Parser.h"
+#include "../core/Console_Variables.h"
 
-Input_Parser::Input_Parser(GameStateSubject &subject, std::shared_ptr<Renderer> my_renderer, std::string binding_filename) :game_state_subject(subject){
+Input_Parser::Input_Parser(GameStateSubject &subject, std::shared_ptr<Renderer> my_renderer, std::string binding_filename, ConsoleData* my_console_data) :game_state_subject(subject){
     this->Engine_State=new Game_Engine_State_Observer(game_state_subject);
     bindings.loadBinding(binding_filename);
     //bindings.loadBinding("in_game_bindings.cfg");
-    std::shared_ptr<Event_Scanner> input_events(new Event_Scanner(subject, event, my_renderer ));
+    std::shared_ptr<Event_Scanner> input_events(new Event_Scanner(subject, event, my_renderer, my_console_data ));
     this->input_events = input_events;
     rangeInputChanged=false;
+    this->consoleData=my_console_data;
 
 
 }
@@ -24,6 +26,10 @@ Input_Parser::~Input_Parser(void){
 const std::unordered_map<std::string,bool> Input_Parser::getCurrentCommands(){ 
         return curr_commands;
     }
+
+/*std::string Input_Parser::getConsoleCommand(){
+    return this->input_events->getConsoleCommand();
+}*/
 
 const std::unordered_map<std::string,float> Input_Parser::getRangeInput(){ return curr_range_input; }
 

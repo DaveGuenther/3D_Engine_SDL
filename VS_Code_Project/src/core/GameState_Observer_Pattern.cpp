@@ -1,12 +1,21 @@
 #include "GameState_Observer_Pattern.h"
 #include <algorithm> //std::find
+#include <iostream>
 
 void GameStateSubject::setState(game_state state){ 
-    this->state = state;
-    for (auto subscriber:this->subscriber_list){
-            subscriber->updateGameState(this->state);
-    }
-    
+    if(this->state_change_timer.isFinished()){
+        this->state = state;
+        for (auto subscriber:this->subscriber_list){
+                subscriber->updateGameState(this->state);
+        }
+        this->state_change_timer.setTimer(1000);
+        this->state_change_timer.startTimer();
+        //std::cout << "State Switch to " << state << std::endl;
+    }    
+}
+
+bool GameStateSubject::canStateSwitch(){
+    return this->state_change_timer.isFinished();
 }
 
 game_state GameStateSubject::getState() { return this->state; }

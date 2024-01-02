@@ -4,6 +4,7 @@
 #include "../core/Console_Variables.h"
 #include "../render/Camera.h"
 #include "../globals.h"
+#include "../core/TimeDelay.h"
 #include <string>
 #include <iostream>
 #include <memory>
@@ -63,13 +64,25 @@ void GameStateAction::update(bool key_pressed){
         this->subject.setState(QUIT);
         std::cout << "Goodbye!" << std::endl;   
     }else if (this->command_name=="CONSOLE"){
-        SDL_StartTextInput();
-        this->subject.setState(CONSOLE);
-        std::cout << "Going to Console" << std::endl;
+        
+        if (this->subject.canStateSwitch()){
+            SDL_StartTextInput();
+            this->subject.setState(CONSOLE);
+            std::cout << "Going to Console" << std::endl;
+            //this->state_switch_timer.setTimer(1000);
+            //this->state_switch_timer.startTimer();
+        }
+        
     }else if (this->command_name=="BACK_TO_GAME"){
-        SDL_StopTextInput();
-        this->subject.setState(IN_WORLD);
-        std::cout << "Back to Game" << std::endl;
+        if (this->subject.canStateSwitch()){
+            SDL_StopTextInput();
+            this->subject.setState(IN_WORLD);
+            std::cout << "Back to Game" << std::endl;
+            //this->state_switch_timer.setTimer(1000);
+            //this->state_switch_timer.startTimer();
+        }
+        
+        
     }
     
     
@@ -324,9 +337,26 @@ void ConsoleNavAction::update(bool key_pressed){
 }
 
 ConsoleExecuteAction::ConsoleExecuteAction(std::string command_name, GameStateSubject &subject, ConsoleData* my_console_data){
+    this->is_key_pressed=false;
+    this->consoleData=my_console_data;
 
 }
 
 void ConsoleExecuteAction::update(bool key_pressed){
-    
+    if (key_pressed){ is_running=true; } else { is_running=false; }
+    if(is_running){
+        if (this->executeTimer.isFinished()){
+            
+            std::cout << "EXECUTING  " << this->consoleData->consoleCommandLog.currentCommand << std::endl;
+            this->consoleData->consoleCommandLog.commandHistory.push_back(this->consoleData->consoleCommandLog.currentCommand);
+            this->consoleData->consoleCommandLog.currentCommand="";
+            
+            this->executeTimer.setTimer(500);
+            this->executeTimer.startTimer();
+        }
+
+        
+    }
+    is_running=false;
+    this->readyToDestroy=true;
 }
